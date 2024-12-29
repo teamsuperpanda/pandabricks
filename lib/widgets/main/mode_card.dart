@@ -16,7 +16,11 @@ class ModeCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Card(
-              color: mode == 'Easy' ? Colors.green : mode == 'Normal' ? Colors.blue : Colors.orange,
+              color: mode == 'Easy'
+                  ? Colors.green
+                  : mode == 'Normal'
+                      ? Colors.blue
+                      : Colors.orange,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -30,7 +34,7 @@ class ModeCard extends StatelessWidget {
                   children: [
                     Text(
                       '$mode Mode',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 24,
                         color: Colors.white,
@@ -39,10 +43,12 @@ class ModeCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      mode == 'Easy' ? 'A relaxed mode for beginners.' :
-                      mode == 'Normal' ? 'A balanced mode for average players.' :
-                      'A fast-paced mode for experts.',
-                      style: TextStyle(
+                      mode == 'Easy'
+                          ? 'A relaxed mode for beginners.'
+                          : mode == 'Normal'
+                              ? 'A balanced mode for average players.'
+                              : 'A fast-paced mode for experts.',
+                      style: const TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 16,
                         color: Colors.white,

@@ -6,50 +6,50 @@ import 'package:pandabricks/widgets/game/controls.dart';
 import 'package:pandabricks/models/mode_model.dart';
 
 class GameScreen extends StatelessWidget {
-    final ModeModel mode;
+  final ModeModel mode;
 
-    const GameScreen({super.key, required this.mode});
+  const GameScreen({super.key, required this.mode});
 
-    @override
-    Widget build(BuildContext context) {
-        return Scaffold(
-            body: Column(
-                children: [
-                    Expanded(
-                        flex: 8,
-                        child: Row(
-                            children: [
-                                Expanded(
-                                    flex: 8,
-                                    child: Column(
-                                        children: [
-                                            Score(mode: mode),
-                                            Expanded(child: Playfield(mode: mode)),
-                                        ],
-                                    ),
-                                ),
-                                Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                        color: Colors.black,
-                                        child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                                NextPiece(),
-                                                const Spacer(),
-                                            ],
-                                        ),
-                                    ),
-                                ),
-                            ],
-                        ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 8,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: Column(
+                    children: [
+                      Score(mode: mode),
+                      Expanded(child: Playfield(mode: mode)),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    color: Colors.black,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        NextPiece(),
+                        Spacer(),
+                      ],
                     ),
-                    Expanded(
-                        flex: 1,
-                        child: Controls(),
-                    ),
-                ],
+                  ),
+                ),
+              ],
             ),
-        );
-    }
+          ),
+          const Expanded(
+            flex: 1,
+            child: Controls(),
+          ),
+        ],
+      ),
+    );
+  }
 }

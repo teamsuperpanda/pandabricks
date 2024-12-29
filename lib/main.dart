@@ -39,7 +39,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
@@ -59,7 +59,7 @@ class MyHomePage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(
+                    const Center(
                       child: Text(
                         'Panda Bricks',
                         style: TextStyle(
@@ -81,7 +81,8 @@ class MyHomePage extends StatelessWidget {
                     ),
                     ModeCard(
                       mode: 'Bamboo Blitz',
-                      onTap: () => navigateToGameScreen(context, Modes.bambooblitz),
+                      onTap: () =>
+                          navigateToGameScreen(context, Modes.bambooblitz),
                     ),
                     const AudioToggles(),
                   ],
