@@ -6,6 +6,7 @@ import 'package:pandabricks/widgets/game/controls.dart';
 import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/logic/game_logic.dart';
 import 'dart:async';
+import 'package:pandabricks/dialog/game/game_over_dialog.dart';
 
 class GameScreen extends StatefulWidget {
   final ModeModel mode;
@@ -30,12 +31,51 @@ class GameScreenState extends State<GameScreen> {
     _startGame();
   }
 
+  void _moveLeft() {
+    setState(() {
+      gameLogic.movePiece(Direction.left);
+    });
+  }
+
+  void _moveRight() {
+    setState(() {
+      gameLogic.movePiece(Direction.right);
+    });
+  }
+
+  void _moveDown() {
+    setState(() {
+      gameLogic.movePiece(Direction.down);
+      gameLogic.updateGame();
+    });
+  }
+
+  void _rotate() {
+    setState(() {
+      gameLogic.rotatePiece();
+    });
+  }
+
   void _startGame() {
     _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       setState(() {
         gameLogic.updateGame();
+        if (gameLogic.isGameOver) {
+          _timer.cancel();
+          _showGameOverDialog();
+        }
       });
     });
+  }
+
+  void _showGameOverDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return GameOverDialog(mode: widget.mode);
+      },
+    );
   }
 
   @override
@@ -47,46 +87,65 @@ class GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            flex: 8,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 8,
-                  child: Column(
-                    children: [
-                      Score(mode: widget.mode),
-                      Expanded(
+      backgroundColor: Colors.grey[900],
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Score row
+            Score(mode: widget.mode),
+            // Main content row
+            Expanded(
+              child: Row(
+                children: [
+                  // Playfield column
+                  Expanded(
+                    flex: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: SizedBox(
+                          width: 300,
+                          height: 600,
                           child: Playfield(
-                        playfield: gameLogic.playfield,
-                        activePiece: gameLogic.currentPiece,
-                      )),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: Colors.black,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        NextPiece(),
-                        Spacer(),
-                      ],
+                            playfield: gameLogic.playfield,
+                            activePiece: gameLogic.currentPiece,
+                            flashingRows: gameLogic.flashingRows,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  // Next piece column
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.topCenter,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          if (gameLogic.nextPiece != null)
+                            Center(
+                              child: NextPiece(nextPiece: gameLogic.nextPiece!),
+                            ),
+                          const Spacer(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Expanded(
-            flex: 1,
-            child: Controls(),
-          ),
-        ],
+            // Controls with fixed height
+            Controls(
+              onLeft: _moveLeft,
+              onDown: _moveDown,
+              onRight: _moveRight,
+              onRotate: _rotate,
+            ),
+          ],
+        ),
       ),
     );
   }

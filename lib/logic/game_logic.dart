@@ -29,31 +29,50 @@ List<TetrisPiece> pieces = TetrisShapes.shapes
 class GameLogic {
   List<List<int>> playfield;
   TetrisPiece? currentPiece;
+  TetrisPiece? nextPiece;
+  bool isGameOver = false; // {{ Add isGameOver flag }}
+  List<int> flashingRows = []; // Add this to track which rows are flashing
 
   GameLogic(this.playfield) {
     spawnPiece();
+    if (checkCollision(currentPiece!.x, currentPiece!.y)) {
+      isGameOver = true;
+    }
   }
 
   void spawnPiece() {
-    currentPiece = pieces[Random().nextInt(pieces.length)];
-    currentPiece!.x = 4; // Set initial x position
-    currentPiece!.y = 0; // Set initial y position
+    currentPiece = nextPiece ?? pieces[Random().nextInt(pieces.length)];
+    currentPiece!.x = 4;
+    currentPiece!.y = 0;
+    if (checkCollision(currentPiece!.x, currentPiece!.y)) {
+      isGameOver = true;
+    }
+    nextPiece = pieces[Random().nextInt(pieces.length)];
   }
 
   void movePiece(Direction direction) {
     if (currentPiece != null) {
       switch (direction) {
         case Direction.left:
-          currentPiece!.x--;
+          if (!checkCollision(currentPiece!.x - 1, currentPiece!.y)) {
+            currentPiece!.x--;
+          }
           break;
         case Direction.right:
-          currentPiece!.x++;
+          if (!checkCollision(currentPiece!.x + 1, currentPiece!.y)) {
+            currentPiece!.x++;
+          }
           break;
         case Direction.down:
-          currentPiece!.y++;
+          if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
+            currentPiece!.y++;
+          } else {
+            placePiece();
+            clearLines();
+            spawnPiece();
+          }
           break;
       }
-      // Add collision detection logic here
     }
   }
 
@@ -66,66 +85,49 @@ class GameLogic {
   }
 
   void clearLines() {
+    flashingRows.clear(); // Clear previous flashing rows
+
     for (int y = playfield.length - 1; y >= 0; y--) {
       if (playfield[y].every((cell) => cell != 0)) {
+        flashingRows.add(y); // Add row to flash
+      }
+    }
+
+    // Only remove rows after showing flash animation
+    if (flashingRows.isNotEmpty) {
+      for (int y in flashingRows) {
         playfield.removeAt(y);
-        playfield.insert(
-            0,
-            List.filled(
-                playfield[0].length, 0)); // Add a new empty line at the top
-        y++; // Check the same line again
+        playfield.insert(0, List.filled(playfield[0].length, 0));
       }
     }
   }
 
   void updateGame() {
-    if (currentPiece != null) {
-      // Move the piece down
-      currentPiece!.y++;
-
-      // Check for collisions
-      if (checkCollision()) {
-        // If collision occurs, place the piece on the playfield
+    if (currentPiece != null && !isGameOver) {
+      // Check if moving down would cause a collision
+      if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
+        currentPiece!.y++;
+      } else {
+        // If collision detected, place the piece and spawn a new one
         placePiece();
-        clearLines(); // Clear completed lines
-        spawnPiece(); // Spawn a new piece
+        clearLines();
+        spawnPiece();
       }
     }
-  }
-
-  bool checkCollision() {
-    for (int y = 0; y < currentPiece!.shape.length; y++) {
-      for (int x = 0; x < currentPiece!.shape[y].length; x++) {
-        if (currentPiece!.shape[y][x] != 0) {
-          // If the cell is part of the piece
-          int newX = currentPiece!.x + x;
-          int newY = currentPiece!.y + y;
-
-          // Check if the new position is out of bounds or collides with another piece
-          if (newX < 0 ||
-              newX >= playfield[0].length ||
-              newY >= playfield.length ||
-              (newY >= 0 && playfield[newY][newX] != 0)) {
-            currentPiece!.y--; // Move the piece back up
-            return true; // Collision detected
-          }
-        }
-      }
-    }
-    return false; // No collision
   }
 
   void placePiece() {
     for (int y = 0; y < currentPiece!.shape.length; y++) {
       for (int x = 0; x < currentPiece!.shape[y].length; x++) {
         if (currentPiece!.shape[y][x] != 0) {
-          // If the cell is part of the piece
-          int newX = currentPiece!.x + x;
-          int newY = currentPiece!.y + y;
-          if (newY >= 0) {
-            // Only place if within bounds
-            playfield[newY][newX] = currentPiece!.colorIndex +
-                1; // Mark the cell with the color index
+          int worldY = currentPiece!.y + y;
+          int worldX = currentPiece!.x + x;
+
+          if (worldY >= 0 &&
+              worldY < playfield.length &&
+              worldX >= 0 &&
+              worldX < playfield[0].length) {
+            playfield[worldY][worldX] = currentPiece!.colorIndex + 1;
           }
         }
       }
@@ -141,5 +143,29 @@ class GameLogic {
         (i) =>
             List.generate(shape.length, (j) => shape[shape.length - j - 1][i]));
     return rotated;
+  }
+
+  bool checkCollision(int newX, int newY) {
+    for (int y = 0; y < currentPiece!.shape.length; y++) {
+      for (int x = 0; x < currentPiece!.shape[y].length; x++) {
+        if (currentPiece!.shape[y][x] != 0) {
+          int worldX = newX + x;
+          int worldY = newY + y;
+
+          // Check boundaries
+          if (worldX < 0 ||
+              worldX >= playfield[0].length ||
+              worldY >= playfield.length) {
+            return true;
+          }
+
+          // Check collision with placed pieces
+          if (worldY >= 0 && playfield[worldY][worldX] != 0) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }

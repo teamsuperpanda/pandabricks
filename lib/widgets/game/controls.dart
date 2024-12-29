@@ -1,22 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Controls extends StatelessWidget {
-  const Controls({super.key});
+  final VoidCallback onLeft;
+  final VoidCallback onDown;
+  final VoidCallback onRight;
+  final VoidCallback onRotate;
+
+  const Controls({
+    super.key,
+    required this.onLeft,
+    required this.onDown,
+    required this.onRight,
+    required this.onRotate,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black, // Background color for the controls
-      padding:
-          const EdgeInsets.symmetric(vertical: 8.0), // Reduced vertical padding
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ControlButton(icon: Icons.arrow_left),
-          ControlButton(icon: Icons.arrow_drop_down),
-          ControlButton(icon: Icons.arrow_right),
-          ControlButton(icon: Icons.rotate_right),
-        ],
+    return Focus(
+      autofocus: true,
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent) {
+          switch (event.logicalKey) {
+            case LogicalKeyboardKey.arrowLeft:
+              onLeft();
+              return KeyEventResult.handled;
+            case LogicalKeyboardKey.arrowRight:
+              onRight();
+              return KeyEventResult.handled;
+            case LogicalKeyboardKey.arrowDown:
+              onDown();
+              return KeyEventResult.handled;
+            case LogicalKeyboardKey.arrowUp:
+              onRotate();
+              return KeyEventResult.handled;
+          }
+        }
+        return KeyEventResult.ignored;
+      },
+      child: Container(
+        color: Colors.black,
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ControlButton(icon: Icons.arrow_left, onTap: onLeft),
+            ControlButton(icon: Icons.arrow_drop_down, onTap: onDown),
+            ControlButton(icon: Icons.arrow_right, onTap: onRight),
+            ControlButton(icon: Icons.rotate_right, onTap: onRotate),
+          ],
+        ),
       ),
     );
   }
@@ -24,36 +58,37 @@ class Controls extends StatelessWidget {
 
 class ControlButton extends StatelessWidget {
   final IconData icon;
+  final VoidCallback onTap;
 
-  const ControlButton({super.key, required this.icon});
+  const ControlButton({super.key, required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Handle button press
-      },
+      onTap: onTap,
       child: Container(
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
-          color: Colors.grey[800], // Darker button color
-          shape: BoxShape.circle, // Circular button shape
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white
-                  .withOpacity(0.5), // Change glow effect color to white
-              spreadRadius: 5,
-              blurRadius: 15,
-              offset: const Offset(0, 3), // Changes position of shadow
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20), // Padding inside the button
-          child: Icon(
-            icon,
-            size: 30,
-            color: Colors.white, // Change icon color to white
+          color: Colors.grey[850],
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.grey[800]!,
+            width: 2,
           ),
+          gradient: RadialGradient(
+            colors: [
+              Colors.grey[800]!,
+              Colors.grey[900]!,
+            ],
+            center: Alignment.topLeft,
+            radius: 1.5,
+          ),
+        ),
+        child: Icon(
+          icon,
+          size: 24,
+          color: Colors.grey[400],
         ),
       ),
     );
