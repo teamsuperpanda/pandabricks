@@ -3,9 +3,10 @@ import 'package:pandabricks/widgets/game/playfield.dart';
 import 'package:pandabricks/widgets/game/score.dart';
 import 'package:pandabricks/widgets/game/nextpiece.dart';
 import 'package:pandabricks/widgets/game/controls.dart';
+import 'package:pandabricks/models/mode_model.dart';
 
 class GameScreen extends StatelessWidget {
-    final String mode;
+    final ModeModel mode;
 
     const GameScreen({super.key, required this.mode});
 
@@ -23,7 +24,7 @@ class GameScreen extends StatelessWidget {
                                     child: Column(
                                         children: [
                                             Score(mode: mode),
-                                            Expanded(child: Playfield()),
+                                            Expanded(child: Playfield(mode: mode)),
                                         ],
                                     ),
                                 ),

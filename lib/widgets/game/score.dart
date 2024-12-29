@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:pandabricks/theme.dart';
+import 'package:pandabricks/models/mode_model.dart';
+import 'package:pandabricks/logic/modes/modes.dart';
 
 class Score extends StatelessWidget {
-    final String mode;
+    final ModeModel mode;
 
     const Score({Key? key, required this.mode}) : super(key: key);
 
     @override
     Widget build(BuildContext context) {
-        Color modeColor = AppTheme.modeColors[mode] ?? Colors.white;
-
         return Container(
             padding: EdgeInsets.all(16.0),
             color: Colors.black,
@@ -17,29 +16,14 @@ class Score extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                     Text(
-                        mode.toUpperCase(),
-                        style: TextStyle(
-                            color: modeColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            fontFamily: 'Fredoka',
-                        ),
+                        Modes.getModeName(mode),
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Fredoka'),
                     ),
                     Text(
                         '0',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontFamily: 'Fredoka',
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 24, fontFamily: 'Fredoka'),
                     ),
-                    IconButton(
-                        icon: Icon(Icons.pause, color: Colors.white),
-                        onPressed: () {
-                            // No logic for now
-                        },
-                        color: Colors.blue,
-                    ),
+                    Icon(Icons.pause, color: Colors.white),
                 ],
             ),
         );
