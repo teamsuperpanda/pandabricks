@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/models/mode_model.dart';
-import 'package:pandabricks/logic/modes/modes.dart';
+import 'package:pandabricks/constants/modes.dart';
 
 class Score extends StatelessWidget {
   final ModeModel mode;

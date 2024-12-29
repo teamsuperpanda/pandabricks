@@ -4,7 +4,7 @@ import 'widgets/main/mode_card.dart';
 import 'widgets/main/audio_toggles.dart';
 import 'screens/game_screen.dart';
 import 'models/mode_model.dart';
-import 'logic/modes/modes.dart';
+import 'constants/modes.dart';
 
 void main() {
   runApp(const MyApp());

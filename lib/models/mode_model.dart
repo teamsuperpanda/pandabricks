@@ -1,14 +1,13 @@
 class ModeModel {
-  final String name; // Add this line
-  final int speed; // Speed of the falling pieces
-  final int speedIncrease; // Speed increase after certain conditions
-  final int scoreThreshold; // Score threshold for level up
-  final int pandabrickSpawnPercentage; // Percentage chance of pandabrick spawn
-  final int
-      specialBlocksSpawnPercentage; // Percentage chance of special blocks spawn
+  final String name;
+  final int speed;
+  final int speedIncrease;
+  final int scoreThreshold;
+  final int pandabrickSpawnPercentage;
+  final int specialBlocksSpawnPercentage;
 
   ModeModel({
-    required this.name, // Add this line
+    required this.name,
     required this.speed,
     required this.speedIncrease,
     required this.scoreThreshold,

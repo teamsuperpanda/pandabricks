@@ -1,112 +1,145 @@
-import 'package:pandabricks/models/mode_model.dart';
+import 'dart:math';
+import 'package:pandabricks/constants/tetris_shapes.dart'; // Import Tetris shapes
 
+// Define the Direction enum
+enum Direction {
+  left,
+  right,
+  down,
+}
+
+// Define the Tetris piece class
+class TetrisPiece {
+  List<List<int>> shape; // 2D array representing the piece shape
+  int x; // Current x position
+  int y; // Current y position
+  int colorIndex; // Index to determine the color of the piece
+
+  TetrisPiece(this.shape, this.x, this.y, this.colorIndex);
+}
+
+// List of available pieces using TetrisShapes
+List<TetrisPiece> pieces = TetrisShapes.shapes
+    .asMap()
+    .entries
+    .map((entry) => TetrisPiece(entry.value, 0, 0, entry.key))
+    .toList();
+
+// Instead, implement GameLogic as a class
 class GameLogic {
-  final ModeModel mode;
-  List<List<int>> playfield; // 2D list to represent the playfield
-  int score; // Current score
-  int level; // Current level
-  List<int> currentPiece = []; // Initialize as an empty list
-  int currentPiecePosition = 0; // Initialize to 0
+  List<List<int>> playfield;
+  TetrisPiece? currentPiece;
 
-  GameLogic(this.mode)
-      : playfield =
-            List.generate(20, (_) => List.filled(10, 0)), // 20 rows, 10 columns
-        score = 0,
-        level = 1;
+  GameLogic(this.playfield) {
+    spawnPiece();
+  }
 
   void spawnPiece() {
-    // Logic to spawn a new piece
-    currentPiece = _getRandomPiece(); // Get a random piece
-    currentPiecePosition = 4; // Start position (middle of the playfield)
-    // Check if the piece can spawn
-    if (_checkCollision()) {
-      // Game over logic
+    currentPiece = pieces[Random().nextInt(pieces.length)];
+    currentPiece!.x = 4; // Set initial x position
+    currentPiece!.y = 0; // Set initial y position
+  }
+
+  void movePiece(Direction direction) {
+    if (currentPiece != null) {
+      switch (direction) {
+        case Direction.left:
+          currentPiece!.x--;
+          break;
+        case Direction.right:
+          currentPiece!.x++;
+          break;
+        case Direction.down:
+          currentPiece!.y++;
+          break;
+      }
+      // Add collision detection logic here
     }
-  }
-
-  List<int> _getRandomPiece() {
-    // Return a random piece representation (e.g., 1 for a square piece)
-    return [1]; // Placeholder for a piece
-  }
-
-  bool _checkCollision() {
-    // Check if the current piece collides with the walls or other pieces
-    return false; // Placeholder logic
-  }
-
-  void movePieceLeft() {
-    currentPiecePosition--;
-    if (_checkCollision()) {
-      currentPiecePosition++; // Revert if collision occurs
-    }
-  }
-
-  void movePieceRight() {
-    currentPiecePosition++;
-    if (_checkCollision()) {
-      currentPiecePosition--; // Revert if collision occurs
-    }
-  }
-
-  void movePieceDown() {
-    // Logic to move the current piece down
-    currentPiecePosition += 10; // Move down by one row
-    if (_checkCollision()) {
-      currentPiecePosition -= 10; // Revert if collision occurs
-      _placePiece(); // Place the piece on the playfield
-      spawnPiece(); // Spawn a new piece
-    }
-  }
-
-  void _placePiece() {
-    // Logic to place the current piece on the playfield
   }
 
   void rotatePiece() {
-    // Logic to rotate the current piece
-  }
-
-  void dropPiece() {
-    // Logic to drop the current piece to the bottom
-  }
-
-  void checkCollision() {
-    // Logic to check for collisions with walls and other pieces
+    if (currentPiece != null) {
+      // Rotate the piece shape (you may need to implement a proper rotation logic)
+      currentPiece!.shape = rotate(currentPiece!.shape);
+      // Add collision detection logic here
+    }
   }
 
   void clearLines() {
-    // Logic to clear completed lines and update score
+    for (int y = playfield.length - 1; y >= 0; y--) {
+      if (playfield[y].every((cell) => cell != 0)) {
+        playfield.removeAt(y);
+        playfield.insert(
+            0,
+            List.filled(
+                playfield[0].length, 0)); // Add a new empty line at the top
+        y++; // Check the same line again
+      }
+    }
   }
 
-  void updateSpeed() {
-    // Logic to update the speed of falling pieces based on the mode
+  void updateGame() {
+    if (currentPiece != null) {
+      // Move the piece down
+      currentPiece!.y++;
+
+      // Check for collisions
+      if (checkCollision()) {
+        // If collision occurs, place the piece on the playfield
+        placePiece();
+        clearLines(); // Clear completed lines
+        spawnPiece(); // Spawn a new piece
+      }
+    }
   }
 
-  bool shouldSpawnPandabrick() {
-    // Logic to determine if a pandabrick should spawn based on the mode's percentage
-    int chance = (DateTime.now().millisecondsSinceEpoch % 100);
-    return chance <
-        mode.pandabrickSpawnPercentage; // Check against the percentage
+  bool checkCollision() {
+    for (int y = 0; y < currentPiece!.shape.length; y++) {
+      for (int x = 0; x < currentPiece!.shape[y].length; x++) {
+        if (currentPiece!.shape[y][x] != 0) {
+          // If the cell is part of the piece
+          int newX = currentPiece!.x + x;
+          int newY = currentPiece!.y + y;
+
+          // Check if the new position is out of bounds or collides with another piece
+          if (newX < 0 ||
+              newX >= playfield[0].length ||
+              newY >= playfield.length ||
+              (newY >= 0 && playfield[newY][newX] != 0)) {
+            currentPiece!.y--; // Move the piece back up
+            return true; // Collision detected
+          }
+        }
+      }
+    }
+    return false; // No collision
   }
 
-  bool shouldSpawnSpecialBlock() {
-    // Logic to determine if a special block should spawn in Bamboo Blitz mode
-    int chance = (DateTime.now().millisecondsSinceEpoch % 100);
-    return chance <
-        mode.specialBlocksSpawnPercentage; // Check against the percentage
+  void placePiece() {
+    for (int y = 0; y < currentPiece!.shape.length; y++) {
+      for (int x = 0; x < currentPiece!.shape[y].length; x++) {
+        if (currentPiece!.shape[y][x] != 0) {
+          // If the cell is part of the piece
+          int newX = currentPiece!.x + x;
+          int newY = currentPiece!.y + y;
+          if (newY >= 0) {
+            // Only place if within bounds
+            playfield[newY][newX] = currentPiece!.colorIndex +
+                1; // Mark the cell with the color index
+          }
+        }
+      }
+    }
   }
 
-  void spawnPandabrick() {
-    // Logic to spawn a pandabrick
-    // This can include adding it to the playfield or creating a new piece
-  }
-
-  void spawnSpecialBlock() {
-    // Logic to spawn a special block
-    // This can include adding it to the playfield or creating a new piece
-  }
-
-  void resetGame() {
-    // Logic to reset the game state
+  // Helper function to rotate the piece shape
+  List<List<int>> rotate(List<List<int>> shape) {
+    // Implement rotation logic for the piece
+    // For example, transpose and reverse rows for clockwise rotation
+    List<List<int>> rotated = List.generate(
+        shape[0].length,
+        (i) =>
+            List.generate(shape.length, (j) => shape[shape.length - j - 1][i]));
+    return rotated;
   }
 }
