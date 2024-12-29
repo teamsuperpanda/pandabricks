@@ -1,0 +1,57 @@
+name: pandabricks
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.2.2
+  just_audio: ^0.9.36
+  logging: ^1.2.0
+  games_services: ^4.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_native_splash: ^2.4.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka-Regular.ttf
+        - asset: assets/fonts/Fredoka-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Fredoka-Bold.ttf
+          weight: 700
+
+  assets:
+    - assets/images/
+    - assets/audio/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#ADD8E6" # Pale blue background color
+  adaptive_icon_foreground: "assets/images/icon.png"
+
+flutter_native_splash:
+  android_12: 
+    image: assets/images/logo.png
+    branding: assets/images/branding.png
+  color: "#1A1A1A"
+  android: true
+  ios: true
