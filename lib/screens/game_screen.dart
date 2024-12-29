@@ -111,6 +111,11 @@ class GameScreenState extends State<GameScreen> {
                             playfield: gameLogic.playfield,
                             activePiece: gameLogic.currentPiece,
                             flashingRows: gameLogic.flashingRows,
+                            onAnimationComplete: () {
+                              setState(() {
+                                gameLogic.removeLines();
+                              });
+                            },
                           ),
                         ),
                       ),

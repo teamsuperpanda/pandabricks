@@ -50,7 +50,7 @@ class MyHomePage extends StatelessWidget {
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
               child: Container(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withAlpha(26),
               ),
             ),
             Center(

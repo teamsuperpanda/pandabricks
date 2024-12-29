@@ -30,89 +30,82 @@ class GameLogic {
   List<List<int>> playfield;
   TetrisPiece? currentPiece;
   TetrisPiece? nextPiece;
-  bool isGameOver = false; // {{ Add isGameOver flag }}
-  List<int> flashingRows = []; // Add this to track which rows are flashing
+  bool isGameOver = false;
+  List<int> flashingRows = [];
+  bool isClearing = false;
 
   GameLogic(this.playfield) {
     spawnPiece();
-    if (checkCollision(currentPiece!.x, currentPiece!.y)) {
-      isGameOver = true;
-    }
   }
 
   void spawnPiece() {
-    currentPiece = nextPiece ?? pieces[Random().nextInt(pieces.length)];
-    currentPiece!.x = 4;
-    currentPiece!.y = 0;
+    // Create a deep copy of the next piece or generate a new one
+    if (nextPiece == null) {
+      int randomIndex = Random().nextInt(pieces.length);
+      List<List<int>> shapeClone =
+          pieces[randomIndex].shape.map((row) => List<int>.from(row)).toList();
+      currentPiece = TetrisPiece(
+        shapeClone,
+        4,
+        0,
+        pieces[randomIndex].colorIndex,
+      );
+    } else {
+      currentPiece = TetrisPiece(
+        nextPiece!.shape.map((row) => List<int>.from(row)).toList(),
+        4,
+        0,
+        nextPiece!.colorIndex,
+      );
+    }
+
+    // Generate next piece with a deep copy of the shape
+    int nextIndex = Random().nextInt(pieces.length);
+    List<List<int>> nextShapeClone =
+        pieces[nextIndex].shape.map((row) => List<int>.from(row)).toList();
+    nextPiece = TetrisPiece(
+      nextShapeClone,
+      0,
+      0,
+      nextIndex,
+    );
+
     if (checkCollision(currentPiece!.x, currentPiece!.y)) {
       isGameOver = true;
     }
-    nextPiece = pieces[Random().nextInt(pieces.length)];
   }
 
   void movePiece(Direction direction) {
-    if (currentPiece != null) {
-      switch (direction) {
-        case Direction.left:
-          if (!checkCollision(currentPiece!.x - 1, currentPiece!.y)) {
-            currentPiece!.x--;
-          }
-          break;
-        case Direction.right:
-          if (!checkCollision(currentPiece!.x + 1, currentPiece!.y)) {
-            currentPiece!.x++;
-          }
-          break;
-        case Direction.down:
-          if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
-            currentPiece!.y++;
-          } else {
-            placePiece();
-            clearLines();
-            spawnPiece();
-          }
-          break;
-      }
-    }
-  }
+    if (currentPiece == null || isClearing || isGameOver) return;
 
-  void rotatePiece() {
-    if (currentPiece != null) {
-      // Rotate the piece shape (you may need to implement a proper rotation logic)
-      currentPiece!.shape = rotate(currentPiece!.shape);
-      // Add collision detection logic here
-    }
-  }
-
-  void clearLines() {
-    flashingRows.clear(); // Clear previous flashing rows
-
-    for (int y = playfield.length - 1; y >= 0; y--) {
-      if (playfield[y].every((cell) => cell != 0)) {
-        flashingRows.add(y); // Add row to flash
-      }
-    }
-
-    // Only remove rows after showing flash animation
-    if (flashingRows.isNotEmpty) {
-      for (int y in flashingRows) {
-        playfield.removeAt(y);
-        playfield.insert(0, List.filled(playfield[0].length, 0));
-      }
+    switch (direction) {
+      case Direction.left:
+        if (!checkCollision(currentPiece!.x - 1, currentPiece!.y)) {
+          currentPiece!.x--;
+        }
+        break;
+      case Direction.right:
+        if (!checkCollision(currentPiece!.x + 1, currentPiece!.y)) {
+          currentPiece!.x++;
+        }
+        break;
+      case Direction.down:
+        if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
+          currentPiece!.y++;
+        } else {
+          lockPiece();
+        }
+        break;
     }
   }
 
   void updateGame() {
-    if (currentPiece != null && !isGameOver) {
-      // Check if moving down would cause a collision
-      if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
-        currentPiece!.y++;
-      } else {
-        // If collision detected, place the piece and spawn a new one
-        placePiece();
-        clearLines();
-        spawnPiece();
-      }
+    if (currentPiece == null || isClearing || isGameOver) return;
+
+    if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
+      currentPiece!.y++;
+    } else {
+      lockPiece();
     }
   }
 
@@ -122,7 +115,6 @@ class GameLogic {
         if (currentPiece!.shape[y][x] != 0) {
           int worldY = currentPiece!.y + y;
           int worldX = currentPiece!.x + x;
-
           if (worldY >= 0 &&
               worldY < playfield.length &&
               worldX >= 0 &&
@@ -134,15 +126,62 @@ class GameLogic {
     }
   }
 
-  // Helper function to rotate the piece shape
+  void checkLines() {
+    if (isClearing) return;
+
+    flashingRows.clear();
+    // Check from bottom to top
+    for (int y = playfield.length - 1; y >= 0; y--) {
+      bool isRowFull = true;
+      for (int x = 0; x < playfield[y].length; x++) {
+        if (playfield[y][x] == 0) {
+          isRowFull = false;
+          break;
+        }
+      }
+      if (isRowFull) {
+        flashingRows.add(y);
+      }
+    }
+
+    if (flashingRows.isNotEmpty) {
+      isClearing = true;
+      flashingRows = List.from(flashingRows);
+    } else {
+      spawnPiece();
+    }
+  }
+
+  void removeLines() {
+    if (!isClearing || flashingRows.isEmpty) return;
+
+    // Sort rows in descending order to remove from bottom up
+    flashingRows.sort((a, b) => b.compareTo(a));
+
+    // Remove completed rows
+    for (int y in flashingRows) {
+      playfield.removeAt(y);
+      playfield.insert(0, List.filled(playfield[0].length, 0));
+    }
+
+    // Reset state
+    flashingRows = [];
+    isClearing = false;
+    spawnPiece();
+  }
+
+  void rotatePiece() {
+    if (currentPiece == null || isClearing || isGameOver) return;
+
+    List<List<int>> rotated = rotate(currentPiece!.shape);
+    currentPiece!.shape = rotated;
+  }
+
   List<List<int>> rotate(List<List<int>> shape) {
-    // Implement rotation logic for the piece
-    // For example, transpose and reverse rows for clockwise rotation
-    List<List<int>> rotated = List.generate(
+    return List.generate(
         shape[0].length,
         (i) =>
             List.generate(shape.length, (j) => shape[shape.length - j - 1][i]));
-    return rotated;
   }
 
   bool checkCollision(int newX, int newY) {
@@ -152,14 +191,12 @@ class GameLogic {
           int worldX = newX + x;
           int worldY = newY + y;
 
-          // Check boundaries
           if (worldX < 0 ||
               worldX >= playfield[0].length ||
               worldY >= playfield.length) {
             return true;
           }
 
-          // Check collision with placed pieces
           if (worldY >= 0 && playfield[worldY][worldX] != 0) {
             return true;
           }
@@ -167,5 +204,11 @@ class GameLogic {
       }
     }
     return false;
+  }
+
+  void lockPiece() {
+    placePiece();
+    currentPiece = null;
+    checkLines();
   }
 }

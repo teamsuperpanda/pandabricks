@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/constants/tetris_shapes.dart';
 import 'package:pandabricks/logic/game_logic.dart';
+import 'package:just_audio/just_audio.dart';
+import 'dart:math' show Random;
 
 class Playfield extends StatefulWidget {
   final List<List<int>> playfield;
   final TetrisPiece? activePiece;
   final List<int> flashingRows;
+  final VoidCallback? onAnimationComplete;
 
   const Playfield({
     super.key,
     required this.playfield,
     this.activePiece,
     required this.flashingRows,
+    this.onAnimationComplete,
   });
 
   @override
@@ -22,12 +26,14 @@ class _PlayfieldState extends State<Playfield>
     with SingleTickerProviderStateMixin {
   late AnimationController _flashController;
   late Animation<double> _flashAnimation;
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  final Random _random = Random();
 
   @override
   void initState() {
     super.initState();
     _flashController = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
@@ -42,21 +48,58 @@ class _PlayfieldState extends State<Playfield>
     _flashController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _flashController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        if (widget.flashingRows.isNotEmpty) {
+          widget.onAnimationComplete?.call();
+        }
       }
     });
+
+    _audioPlayer.setAsset('audio/sfx/laser-zap.mp3');
   }
 
   @override
   void dispose() {
     _flashController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  double _getRandomPitch() {
+    return 0.8 + (_random.nextDouble() * 0.4);
+  }
+
+  void _playSound() async {
+    if (widget.flashingRows.isNotEmpty) {
+      // Dispose old player
+      await _audioPlayer.dispose();
+
+      // Create new player
+      final player = AudioPlayer();
+      await player.setAsset('audio/sfx/laser-zap.mp3');
+
+      // Get and set random pitch
+      double pitch = _getRandomPitch();
+      player.setSpeed(pitch);
+
+      await player.play();
+
+      // Clean up after playing
+      player.playerStateStream.listen((state) {
+        if (state.processingState == ProcessingState.completed) {
+          player.dispose();
+        }
+      });
+    }
   }
 
   @override
   void didUpdateWidget(Playfield oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.flashingRows.isNotEmpty) {
+    if (widget.flashingRows.isNotEmpty &&
+        oldWidget.flashingRows != widget.flashingRows) {
       _flashController.forward(from: 0.0);
+      _playSound();
     }
   }
 
@@ -72,7 +115,7 @@ class _PlayfieldState extends State<Playfield>
             border: Border.all(color: Colors.white24, width: 2),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withAlpha(128),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -138,7 +181,7 @@ class _PlayfieldState extends State<Playfield>
                         boxShadow: cellColor != Colors.transparent
                             ? [
                                 BoxShadow(
-                                  color: cellColor.withOpacity(0.5),
+                                  color: cellColor.withAlpha(128),
                                   blurRadius: 4,
                                   spreadRadius: 1,
                                 ),
@@ -172,23 +215,8 @@ class ActivePiecePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double cellSize = size.width / 10;
     Paint paint = Paint()
-      ..color = TetrisShapes.colors[activePiece.colorIndex].withOpacity(0.9);
+      ..color = TetrisShapes.colors[activePiece.colorIndex].withAlpha(230);
 
-    // Remove or comment out grid lines for a cleaner look
-    /*
-    Paint gridPaint = Paint()
-      ..color = Colors.grey[800]!
-      ..strokeWidth = 1;
-
-    for (int i = 0; i <= 10; i++) {
-      canvas.drawLine(
-          Offset(i * cellSize, 0), Offset(i * cellSize, size.height), gridPaint);
-      canvas.drawLine(
-          Offset(0, i * cellSize), Offset(size.width, i * cellSize), gridPaint);
-    }
-    */
-
-    // Draw the active piece with rounded corners and shadows
     for (int y = 0; y < activePiece.shape.length; y++) {
       for (int x = 0; x < activePiece.shape[y].length; x++) {
         if (activePiece.shape[y][x] != 0) {
@@ -197,17 +225,6 @@ class ActivePiecePainter extends CustomPainter {
           Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
           RRect rRect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
           canvas.drawRRect(rRect, paint);
-
-          // Optional: Remove shadows for consistent appearance
-          // Uncomment below to keep shadows
-          /*
-          canvas.drawRRect(
-            rRect.shift(Offset(2, 2)),
-            Paint()
-              ..color = Colors.black26
-              ..style = PaintingStyle.fill,
-          );
-          */
         }
       }
     }
