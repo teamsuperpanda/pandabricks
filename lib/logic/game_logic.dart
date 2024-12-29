@@ -174,7 +174,83 @@ class GameLogic {
     if (currentPiece == null || isClearing || isGameOver) return;
 
     List<List<int>> rotated = rotate(currentPiece!.shape);
-    currentPiece!.shape = rotated;
+
+    // Create a temporary piece to check collision
+    TetrisPiece tempPiece = TetrisPiece(
+      rotated,
+      currentPiece!.x,
+      currentPiece!.y,
+      currentPiece!.colorIndex,
+    );
+
+    // Check if this is an I-piece (4x1 or 1x4 shape)
+    bool isIPiece =
+        currentPiece!.shape.length == 1 || currentPiece!.shape[0].length == 1;
+
+    // Try rotation at current position
+    if (!checkRotationCollision(tempPiece)) {
+      currentPiece!.shape = rotated;
+      return;
+    }
+
+    // Try shifting left
+    tempPiece.x--;
+    if (!checkRotationCollision(tempPiece)) {
+      currentPiece!.x--;
+      currentPiece!.shape = rotated;
+      return;
+    }
+    tempPiece.x++;
+
+    // Try shifting right
+    tempPiece.x++;
+    if (!checkRotationCollision(tempPiece)) {
+      currentPiece!.x++;
+      currentPiece!.shape = rotated;
+      return;
+    }
+    tempPiece.x--;
+
+    // Additional wall kicks for I-piece
+    if (isIPiece) {
+      // Try two spaces left
+      tempPiece.x -= 2;
+      if (!checkRotationCollision(tempPiece)) {
+        currentPiece!.x -= 2;
+        currentPiece!.shape = rotated;
+        return;
+      }
+      tempPiece.x += 2;
+
+      // Try two spaces right
+      tempPiece.x += 2;
+      if (!checkRotationCollision(tempPiece)) {
+        currentPiece!.x += 2;
+        currentPiece!.shape = rotated;
+        return;
+      }
+    }
+
+    // If no valid position found, don't rotate
+  }
+
+  bool checkRotationCollision(TetrisPiece piece) {
+    for (int y = 0; y < piece.shape.length; y++) {
+      for (int x = 0; x < piece.shape[y].length; x++) {
+        if (piece.shape[y][x] != 0) {
+          int worldX = piece.x + x;
+          int worldY = piece.y + y;
+
+          if (worldX < 0 ||
+              worldX >= playfield[0].length ||
+              worldY >= playfield.length ||
+              (worldY >= 0 && playfield[worldY][worldX] != 0)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   List<List<int>> rotate(List<List<int>> shape) {

@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
 
 class AudioToggles extends StatelessWidget {
-  const AudioToggles({super.key});
+  final bool isBackgroundMusicEnabled;
+  final ValueChanged<bool> onBackgroundMusicChanged;
+
+  const AudioToggles({
+    super.key,
+    required this.isBackgroundMusicEnabled,
+    required this.onBackgroundMusicChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0), // Same padding as ModeCard
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(4.0), // Padding around the content
+            padding: const EdgeInsets.all(4.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black, // Set background color to black
-                borderRadius: BorderRadius.circular(15), // Rounded corners
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(15),
               ),
-              child: Padding( // Added padding inside the container
-                padding: const EdgeInsets.all(12.0), // Inner padding for content
-                child: GestureDetector( // Make the entire area tappable
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: GestureDetector(
                   onTap: () {
-                    // Handle toggle change for background music
-                    // You can implement state management here to toggle the switch
+                    onBackgroundMusicChanged(!isBackgroundMusicEnabled);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,15 +36,13 @@ class AudioToggles extends StatelessWidget {
                         'Background Music',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Fredoka', // Use custom font
-                          color: Colors.white, // White text color
+                          fontFamily: 'Fredoka',
+                          color: Colors.white,
                         ),
                       ),
                       Switch(
-                        value: true, // Replace with your state management logic
-                        onChanged: (value) {
-                          // Handle toggle change for background music
-                        },
+                        value: isBackgroundMusicEnabled,
+                        onChanged: onBackgroundMusicChanged,
                       ),
                     ],
                   ),
@@ -47,38 +51,32 @@ class AudioToggles extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(4.0), // Padding around the content
+            padding: const EdgeInsets.all(4.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black, // Set background color to black
-                borderRadius: BorderRadius.circular(15), // Rounded corners
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(15),
               ),
-              child: Padding( // Added padding inside the container
-                padding: const EdgeInsets.all(12.0), // Inner padding for content
-                child: GestureDetector( // Make the entire area tappable
-                  onTap: () {
-                    // Handle toggle change for sound effects
-                    // You can implement state management here to toggle the switch
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Sound Effects',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Fredoka', // Use custom font
-                          color: Colors.white, // White text color
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Sound Effects',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'Fredoka',
+                        color: Colors.white,
                       ),
-                      Switch(
-                        value: true, // Replace with your state management logic
-                        onChanged: (value) {
-                          // Handle toggle change for sound effects
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                    Switch(
+                      value: true,
+                      onChanged: (value) {
+                        // Handle sound effects toggle
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
