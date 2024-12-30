@@ -1,6 +1,6 @@
 import 'dart:math' show max;
 import 'package:flutter/material.dart';
-import 'package:pandabricks/constants/tetris_shapes.dart';
+import 'package:pandabricks/logic/bricks_logic.dart';
 import 'package:pandabricks/logic/game_logic.dart';
 
 class NextPiece extends StatelessWidget {
@@ -44,7 +44,7 @@ class NextPiecePainter extends CustomPainter {
     double offsetY = (size.height - (nextPiece.shape.length * cellSize)) / 2;
 
     Paint paint = Paint()
-      ..color = TetrisShapes.colors[nextPiece.colorIndex]
+      ..color = BrickShapes.colors[nextPiece.colorIndex]
       ..style = PaintingStyle.fill;
 
     for (int y = 0; y < nextPiece.shape.length; y++) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/models/mode_model.dart';
-import 'package:pandabricks/constants/modes.dart';
+import 'package:pandabricks/logic/modes_logic.dart';
 import 'package:pandabricks/dialog/game/pause_dialog.dart';
 
 class Score extends StatelessWidget {
@@ -28,6 +28,19 @@ class Score extends StatelessWidget {
     );
   }
 
+  Color _getModeColor() {
+    switch (mode.name.toLowerCase()) {
+      case 'easy':
+        return Colors.green;
+      case 'normal':
+        return Colors.blue;
+      case 'bambooblitz':
+        return Colors.orange;
+      default:
+        return Colors.white;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,8 +51,11 @@ class Score extends StatelessWidget {
         children: [
           Text(
             Modes.getModeName(mode),
-            style: const TextStyle(
-                color: Colors.white, fontSize: 16, fontFamily: 'Fredoka'),
+            style: TextStyle(
+              color: _getModeColor(),
+              fontSize: 16,
+              fontFamily: 'Fredoka',
+            ),
           ),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),

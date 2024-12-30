@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TetrisShapes {
+class BrickShapes {
   static const List<List<List<int>>> shapes = [
     // I shape
     [

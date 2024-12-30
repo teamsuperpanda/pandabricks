@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pandabricks/constants/tetris_shapes.dart';
+import 'package:pandabricks/logic/bricks_logic.dart';
 import 'package:pandabricks/logic/game_logic.dart';
 import 'package:just_audio/just_audio.dart';
 import 'dart:math' show Random;
@@ -216,7 +216,7 @@ class _PlayfieldState extends State<Playfield>
 
                       if (widget.playfield[y][x] != 0) {
                         cellColor =
-                            TetrisShapes.colors[widget.playfield[y][x] - 1];
+                            BrickShapes.colors[widget.playfield[y][x] - 1];
                       }
 
                       // Add flash effect for clearing rows
@@ -341,7 +341,7 @@ class ActivePiecePainter extends CustomPainter {
             // Normal brick
             Paint paint = Paint()
               ..color =
-                  TetrisShapes.colors[activePiece.colorIndex].withAlpha(230);
+                  BrickShapes.colors[activePiece.colorIndex].withAlpha(230);
             Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
             RRect rRect =
                 RRect.fromRectAndRadius(rect, const Radius.circular(4));

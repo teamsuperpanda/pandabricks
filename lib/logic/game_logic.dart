@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'dart:async';
-import 'package:pandabricks/constants/tetris_shapes.dart'; // Import Tetris shapes
+import 'package:pandabricks/logic/bricks_logic.dart'; // Import Tetris shapes
 import 'package:pandabricks/services/audio_service.dart'; // Import AudioService
 import 'package:pandabricks/models/mode_model.dart'; // Import ModeModel
+import 'package:pandabricks/logic/score_logic.dart';
 
 // Define the Direction enum
 enum Direction {
@@ -22,7 +23,7 @@ class TetrisPiece {
 }
 
 // List of available pieces using TetrisShapes
-List<TetrisPiece> pieces = TetrisShapes.shapes
+List<TetrisPiece> pieces = BrickShapes.shapes
     .asMap()
     .entries
     .map((entry) => TetrisPiece(entry.value, 0, 0, entry.key))
@@ -41,13 +42,22 @@ class GameLogic {
   Timer? flashTimer;
   final AudioService audioService;
   final ModeModel mode;
-  int score = 0;
+  late final ScoreLogic scoreLogic;
   double currentSpeed;
+  final double speedIncrease;
+  final int scoreThreshold;
 
   GameLogic(this.playfield, this.audioService, this.mode)
-      : currentSpeed = mode.speed.toDouble() {
+      : currentSpeed = mode.speed.toDouble(),
+        speedIncrease = mode.speedIncrease.toDouble(),
+        scoreThreshold = mode.scoreThreshold {
+    scoreLogic = ScoreLogic(
+      rowClearScore: mode.rowClearScore,
+    );
     spawnPiece();
   }
+
+  int get score => scoreLogic.score;
 
   void spawnPiece() {
     if (nextPiece == null) {
@@ -174,8 +184,15 @@ class GameLogic {
   void removeLines() {
     if (!isClearing || flashingRows.isEmpty) return;
 
-    // Update score before removing lines
-    updateScore(flashingRows.length);
+    int basePoints = scoreLogic.updateScore(flashingRows.length);
+
+    // Check if we need to increase speed based on score threshold
+    if (scoreThreshold > 0 &&
+        scoreLogic.score > 0 &&
+        (scoreLogic.score / scoreThreshold).floor() >
+            ((scoreLogic.score - basePoints) / scoreThreshold).floor()) {
+      currentSpeed += speedIncrease;
+    }
 
     // Sort rows in descending order to remove from bottom up
     flashingRows.sort((a, b) => b.compareTo(a));
@@ -407,29 +424,5 @@ class GameLogic {
   void removePandaBrick() {
     // Play the disappear sound
     AudioService().playSound('panda_disappear');
-  }
-
-  void updateScore(int clearedLines) {
-    // Use standard Tetris scoring multipliers
-    final Map<int, int> scoreMultipliers = {
-      1: 100, // Single
-      2: 300, // Double
-      3: 500, // Triple
-      4: 800, // Tetris
-    };
-
-    // Calculate base points from number of lines cleared
-    int basePoints = (scoreMultipliers[clearedLines] ?? 0) * mode.rowClearScore;
-
-    // Add points to score
-    score += basePoints;
-
-    // Check if we need to increase speed based on score threshold
-    if (mode.scoreThreshold > 0 &&
-        score > 0 &&
-        (score / mode.scoreThreshold).floor() >
-            ((score - basePoints) / mode.scoreThreshold).floor()) {
-      currentSpeed += mode.speedIncrease;
-    }
   }
 }

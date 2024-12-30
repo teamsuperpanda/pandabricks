@@ -5,7 +5,7 @@ import 'widgets/main/mode_card.dart';
 import 'widgets/main/audio_toggles.dart';
 import 'screens/game_screen.dart';
 import 'models/mode_model.dart';
-import 'constants/modes.dart';
+import 'logic/modes_logic.dart';
 import 'services/audio_service.dart';
 
 void main() async {
