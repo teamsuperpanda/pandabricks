@@ -39,6 +39,9 @@ flutter:
   assets:
     - assets/images/
     - assets/audio/
+    - assets/audio/sfx/
+    - assets/audio/sfx/panda_disappear.mp3
+    - assets/audio/sfx/game_over.mp3
 
 flutter_launcher_icons:
   android: true

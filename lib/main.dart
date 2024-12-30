@@ -8,7 +8,12 @@ import 'models/mode_model.dart';
 import 'constants/modes.dart';
 import 'services/audio_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize the Audio Service
+  await AudioService().init();
+
   runApp(const MyApp());
 }
 

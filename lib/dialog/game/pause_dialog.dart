@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
+import 'package:pandabricks/services/audio_service.dart';
 
 class PauseDialog extends StatelessWidget {
   final VoidCallback onResume;
-  const PauseDialog({super.key, required this.onResume});
+
+  PauseDialog({super.key, required this.onResume}) {
+    AudioService().playSound('pause');
+  }
 
   @override
   Widget build(BuildContext context) {

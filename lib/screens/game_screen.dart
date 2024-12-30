@@ -27,25 +27,30 @@ class GameScreen extends StatefulWidget {
 
 class GameScreenState extends State<GameScreen> {
   late Timer _timer;
-  GameLogic gameLogic;
+  late GameLogic gameLogic;
   bool isPaused = false;
   final AudioService _audioService = AudioService();
 
-  GameScreenState()
-      : gameLogic = GameLogic(List.generate(20, (index) => List.filled(10, 0)));
+  GameScreenState() {
+    gameLogic = GameLogic(
+      List.generate(20, (index) => List.filled(10, 0)),
+      _audioService,
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    gameLogic.spawnPiece();
-    _startGame();
-    if (widget.isBackgroundMusicEnabled) {
-      _setupGameMusic();
-    }
+    _audioService.setSoundEffectsEnabled(widget.isSoundEffectsEnabled);
+    _initGame();
   }
 
-  Future<void> _setupGameMusic() async {
-    await _audioService.setupGameMusic();
+  Future<void> _initGame() async {
+    if (widget.isBackgroundMusicEnabled) {
+      await _audioService.setupGameMusic();
+    }
+    gameLogic.spawnPiece();
+    _startGame();
   }
 
   void _moveLeft() {
@@ -86,6 +91,15 @@ class GameScreenState extends State<GameScreen> {
   }
 
   void _showGameOverDialog() {
+    if (widget.isBackgroundMusicEnabled) {
+      _audioService.stopGameMusic();
+    }
+
+    // Add a small delay to ensure clean audio playback
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _audioService.playGameOverSound();
+    });
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -122,6 +136,12 @@ class GameScreenState extends State<GameScreen> {
   void _hardDrop() {
     setState(() {
       gameLogic.hardDrop();
+    });
+  }
+
+  void _forcePandaBrick() {
+    setState(() {
+      gameLogic.forceNextPandaBrick();
     });
   }
 
@@ -162,6 +182,7 @@ class GameScreenState extends State<GameScreen> {
                           child: Playfield(
                             playfield: gameLogic.playfield,
                             activePiece: gameLogic.currentPiece,
+                            isFlashing: gameLogic.isPandaFlashing,
                             flashingRows: gameLogic.flashingRows,
                             onAnimationComplete: () {
                               setState(() {
@@ -202,6 +223,7 @@ class GameScreenState extends State<GameScreen> {
               onRight: _moveRight,
               onRotate: _rotate,
               onHardDrop: _hardDrop,
+              onForcePanda: _forcePandaBrick,
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:pandabricks/constants/tetris_shapes.dart';
 import 'package:pandabricks/logic/game_logic.dart';
 import 'package:just_audio/just_audio.dart';
 import 'dart:math' show Random;
+import 'dart:async' show Timer;
 
 class Playfield extends StatefulWidget {
   final List<List<int>> playfield;
@@ -10,6 +11,7 @@ class Playfield extends StatefulWidget {
   final List<int> flashingRows;
   final VoidCallback? onAnimationComplete;
   final bool isSoundEffectsEnabled;
+  final bool isFlashing;
 
   const Playfield({
     super.key,
@@ -18,6 +20,7 @@ class Playfield extends StatefulWidget {
     required this.flashingRows,
     this.onAnimationComplete,
     required this.isSoundEffectsEnabled,
+    this.isFlashing = false,
   });
 
   @override
@@ -30,6 +33,7 @@ class _PlayfieldState extends State<Playfield>
   late Animation<double> _flashAnimation;
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Random _random = Random();
+  Timer? _flashingTimer;
 
   @override
   void initState() {
@@ -57,13 +61,14 @@ class _PlayfieldState extends State<Playfield>
       }
     });
 
-    _audioPlayer.setAsset('audio/sfx/laser-zap.mp3');
+    _audioPlayer.setAsset('audio/sfx/row_clear.mp3');
   }
 
   @override
   void dispose() {
     _flashController.dispose();
     _audioPlayer.dispose();
+    _flashingTimer?.cancel();
     super.dispose();
   }
 
@@ -78,7 +83,7 @@ class _PlayfieldState extends State<Playfield>
 
       // Create new player
       final player = AudioPlayer();
-      await player.setAsset('audio/sfx/laser-zap.mp3');
+      await player.setAsset('audio/sfx/row_clear.mp3');
 
       // Get and set random pitch
       double pitch = _getRandomPitch();
@@ -102,6 +107,20 @@ class _PlayfieldState extends State<Playfield>
         oldWidget.flashingRows != widget.flashingRows) {
       _flashController.forward(from: 0.0);
       _playSound();
+    }
+
+    // Start timer when flashing starts
+    if (widget.isFlashing && !oldWidget.isFlashing) {
+      _flashingTimer?.cancel();
+      _flashingTimer = Timer.periodic(const Duration(milliseconds: 16), (_) {
+        if (mounted) setState(() {});
+      });
+    }
+
+    // Stop timer when flashing ends
+    if (!widget.isFlashing && oldWidget.isFlashing) {
+      _flashingTimer?.cancel();
+      _flashingTimer = null;
     }
   }
 
@@ -196,7 +215,10 @@ class _PlayfieldState extends State<Playfield>
                 if (widget.activePiece != null)
                   Positioned.fill(
                     child: CustomPaint(
-                      painter: ActivePiecePainter(widget.activePiece!),
+                      painter: ActivePiecePainter(
+                        widget.activePiece!,
+                        isFlashing: widget.isFlashing,
+                      ),
                     ),
                   ),
               ],
@@ -210,30 +232,91 @@ class _PlayfieldState extends State<Playfield>
 
 class ActivePiecePainter extends CustomPainter {
   final TetrisPiece activePiece;
+  final bool isFlashing;
 
-  ActivePiecePainter(this.activePiece);
+  ActivePiecePainter(this.activePiece, {this.isFlashing = false});
 
   @override
   void paint(Canvas canvas, Size size) {
     double cellSize = size.width / 10;
-    Paint paint = Paint()
-      ..color = TetrisShapes.colors[activePiece.colorIndex].withAlpha(230);
 
     for (int y = 0; y < activePiece.shape.length; y++) {
       for (int x = 0; x < activePiece.shape[y].length; x++) {
         if (activePiece.shape[y][x] != 0) {
           double posX = (activePiece.x + x) * cellSize;
           double posY = (activePiece.y + y) * cellSize;
-          Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
-          RRect rRect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
-          canvas.drawRRect(rRect, paint);
+
+          if (activePiece.shape[y][x] == 8) {
+            // For panda brick
+            Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
+            RRect rRect =
+                RRect.fromRectAndRadius(rect, const Radius.circular(4));
+
+            if (isFlashing) {
+              // Draw glow effects first (behind the brick)
+              double glowIntensity =
+                  (DateTime.now().millisecondsSinceEpoch % 750) / 750.0;
+              double glowSize = 12.0 + (glowIntensity * 8.0);
+
+              // Multiple outer glows with vibrant colors
+              List<Color> glowColors = [
+                Colors.pink.shade300.withAlpha(
+                    (0.6 * glowIntensity * 255).round()), // Furthest back
+                Colors.purple.shade300
+                    .withAlpha((0.7 * glowIntensity * 255).round()), // Middle
+                Colors.blue.shade400.withAlpha(
+                    ((0.8 * (1.0 - glowIntensity)) * 255)
+                        .round()), // Closest to brick
+              ];
+
+              // Draw glow layers from back to front
+              for (int i = 0; i < glowColors.length; i++) {
+                Paint glowPaint = Paint()
+                  ..color = glowColors[i]
+                  ..maskFilter = MaskFilter.blur(
+                    BlurStyle.normal, // Changed from outer to normal
+                    glowSize + (i * 4.0),
+                  );
+                canvas.drawRRect(rRect, glowPaint);
+              }
+            }
+
+            // Draw solid white background on top of glow
+            Paint bgPaint = Paint()
+              ..color = Colors.white; // Removed transparency
+            canvas.drawRRect(rRect, bgPaint);
+
+            // Draw panda emoji on very top
+            TextPainter textPainter = TextPainter(
+              text: const TextSpan(
+                text: '🐼',
+                style: TextStyle(fontSize: 24),
+              ),
+              textDirection: TextDirection.ltr,
+            );
+            textPainter.layout();
+            textPainter.paint(
+              canvas,
+              Offset(
+                posX + (cellSize - textPainter.width) / 2,
+                posY + (cellSize - textPainter.height) / 2,
+              ),
+            );
+          } else {
+            // Normal brick
+            Paint paint = Paint()
+              ..color =
+                  TetrisShapes.colors[activePiece.colorIndex].withAlpha(230);
+            Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
+            RRect rRect =
+                RRect.fromRectAndRadius(rect, const Radius.circular(4));
+            canvas.drawRRect(rRect, paint);
+          }
         }
       }
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

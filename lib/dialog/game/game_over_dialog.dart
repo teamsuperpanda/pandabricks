@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/screens/game_screen.dart';
 import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
+import 'package:pandabricks/services/audio_service.dart';
 
 class GameOverDialog extends StatelessWidget {
   final ModeModel mode;
   final bool isSoundEffectsEnabled;
   final bool isBackgroundMusicEnabled;
 
-  const GameOverDialog({
+  GameOverDialog({
     super.key,
     required this.mode,
     required this.isSoundEffectsEnabled,
     required this.isBackgroundMusicEnabled,
-  });
+  }) {
+    AudioService().playSound('game_over');
+  }
 
   @override
   Widget build(BuildContext context) {

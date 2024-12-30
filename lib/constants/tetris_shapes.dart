@@ -36,6 +36,11 @@ class TetrisShapes {
       [1, 1, 0],
       [0, 1, 1],
     ],
+    // Panda shape (2x2)
+    [
+      [8, 8],
+      [8, 8],
+    ],
   ];
 
   static const List<Color> colors = [
@@ -46,5 +51,7 @@ class TetrisShapes {
     Colors.green, // S shape
     Colors.purple, // T shape
     Colors.red, // Z shape
+    Colors.white, // Panda shape (white while falling)
+    Colors.grey, // Panda shape when locked at bottom
   ];
 }

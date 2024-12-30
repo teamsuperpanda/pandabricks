@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'dart:async';
 import 'package:pandabricks/constants/tetris_shapes.dart'; // Import Tetris shapes
+import 'package:pandabricks/services/audio_service.dart'; // Import AudioService
 
 // Define the Direction enum
 enum Direction {
@@ -33,23 +35,30 @@ class GameLogic {
   bool isGameOver = false;
   List<int> flashingRows = [];
   bool isClearing = false;
+  bool isPandaBrick = false;
+  bool isPandaFlashing = false;
+  Timer? flashTimer;
+  final AudioService audioService;
 
-  GameLogic(this.playfield) {
+  GameLogic(this.playfield, this.audioService) {
     spawnPiece();
   }
 
   void spawnPiece() {
-    // Create a deep copy of the next piece or generate a new one
     if (nextPiece == null) {
-      int randomIndex = Random().nextInt(pieces.length);
+      // Random chance to spawn panda brick (e.g., 10%)
+      bool shouldSpawnPanda = Random().nextInt(100) < 10;
+      int randomIndex = shouldSpawnPanda ? 7 : Random().nextInt(7);
+
       List<List<int>> shapeClone =
           pieces[randomIndex].shape.map((row) => List<int>.from(row)).toList();
       currentPiece = TetrisPiece(
         shapeClone,
         4,
         0,
-        pieces[randomIndex].colorIndex,
+        randomIndex,
       );
+      isPandaBrick = shouldSpawnPanda;
     } else {
       currentPiece = TetrisPiece(
         nextPiece!.shape.map((row) => List<int>.from(row)).toList(),
@@ -57,10 +66,11 @@ class GameLogic {
         0,
         nextPiece!.colorIndex,
       );
+      isPandaBrick = nextPiece!.colorIndex == 7;
     }
 
-    // Generate next piece with a deep copy of the shape
-    int nextIndex = Random().nextInt(pieces.length);
+    // Generate next piece (exclude panda from next preview)
+    int nextIndex = Random().nextInt(7);
     List<List<int>> nextShapeClone =
         pieces[nextIndex].shape.map((row) => List<int>.from(row)).toList();
     nextPiece = TetrisPiece(
@@ -261,19 +271,34 @@ class GameLogic {
   }
 
   bool checkCollision(int newX, int newY) {
+    if (currentPiece == null) return false;
+
     for (int y = 0; y < currentPiece!.shape.length; y++) {
       for (int x = 0; x < currentPiece!.shape[y].length; x++) {
         if (currentPiece!.shape[y][x] != 0) {
           int worldX = newX + x;
           int worldY = newY + y;
 
-          if (worldX < 0 ||
-              worldX >= playfield[0].length ||
-              worldY >= playfield.length) {
+          // Check if reached bottom
+          if (worldY >= playfield.length) {
+            if (isPandaBrick) {
+              // Lock panda at bottom
+              currentPiece!.colorIndex = 8; // Grey color
+              return true;
+            }
             return true;
           }
 
+          // Check wall collisions
+          if (worldX < 0 || worldX >= playfield[0].length) {
+            return true;
+          }
+
+          // Check brick collisions
           if (worldY >= 0 && playfield[worldY][worldX] != 0) {
+            if (isPandaBrick && !isPandaFlashing) {
+              startPandaFlash();
+            }
             return true;
           }
         }
@@ -283,9 +308,23 @@ class GameLogic {
   }
 
   void lockPiece() {
-    placePiece();
-    currentPiece = null;
-    checkLines();
+    if (isPandaBrick) {
+      if (currentPiece!.y + 2 >= playfield.length) {
+        // Reached bottom, lock normally with grey color
+        currentPiece!.colorIndex = 8;
+        placePiece();
+        currentPiece = null;
+        checkLines();
+      } else if (!isPandaFlashing) {
+        // Start flash sequence if collided with other bricks
+        startPandaFlash();
+      }
+    } else {
+      // Normal piece locking
+      placePiece();
+      currentPiece = null;
+      checkLines();
+    }
   }
 
   void hardDrop() {
@@ -298,5 +337,63 @@ class GameLogic {
 
     // Lock the piece in place
     lockPiece();
+  }
+
+  void startPandaFlash() {
+    if (isPandaFlashing) return;
+
+    isPandaFlashing = true;
+    flashTimer?.cancel();
+
+    // Play stab sound when flash starts
+    audioService.playStabSound();
+
+    flashTimer = Timer(const Duration(milliseconds: 1500), () {
+      clearPandaArea();
+    });
+  }
+
+  void clearPandaArea() {
+    if (currentPiece == null) return;
+
+    // Get the positions before clearing
+    int startX = currentPiece!.x;
+    int startY = currentPiece!.y;
+
+    // Clear both the panda brick and the columns below it in one go
+    for (int x = startX; x < startX + 2; x++) {
+      // Clear from the panda brick position all the way down
+      for (int y = startY; y < playfield.length; y++) {
+        playfield[y][x] = 0;
+      }
+    }
+
+    // Reset state
+    isPandaFlashing = false;
+    currentPiece = null;
+    // Play sound before checking lines
+    AudioService().playSound('panda_disappear');
+    checkLines();
+  }
+
+  void dispose() {
+    flashTimer?.cancel();
+  }
+
+  void forceNextPandaBrick() {
+    // Create a panda brick as the next piece
+    List<List<int>> pandaShape =
+        pieces[7].shape.map((row) => List<int>.from(row)).toList();
+    nextPiece = TetrisPiece(
+      pandaShape,
+      0,
+      0,
+      7, // Index for panda brick
+    );
+  }
+
+  void removePandaBrick() {
+    // Play the disappear sound
+    AudioService().playSound('panda_disappear');
   }
 }
