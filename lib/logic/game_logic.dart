@@ -75,8 +75,11 @@ class GameLogic {
       isPandaBrick = nextPiece!.colorIndex == 7;
     }
 
-    // Generate next piece (exclude panda from next preview)
-    int nextIndex = Random().nextInt(7);
+    // Generate next piece - FIXED: Include panda chance for next piece too
+    bool shouldSpawnNextPanda =
+        Random().nextInt(100) < mode.pandabrickSpawnPercentage;
+    int nextIndex = shouldSpawnNextPanda ? 7 : Random().nextInt(7);
+
     List<List<int>> nextShapeClone =
         pieces[nextIndex].shape.map((row) => List<int>.from(row)).toList();
     nextPiece = TetrisPiece(
