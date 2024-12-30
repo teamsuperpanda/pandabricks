@@ -51,7 +51,7 @@ class GameLogic {
 
   void spawnPiece() {
     if (nextPiece == null) {
-      // Use mode's pandabrickSpawnPercentage instead of hardcoded 10
+      // Use mode's pandabrickSpawnPercentage instead of hardcoded value
       bool shouldSpawnPanda =
           Random().nextInt(100) < mode.pandabrickSpawnPercentage;
       int randomIndex = shouldSpawnPanda ? 7 : Random().nextInt(7);
