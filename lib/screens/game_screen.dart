@@ -31,6 +31,8 @@ class GameScreenState extends State<GameScreen> {
   bool isPaused = false;
   final AudioService _audioService = AudioService();
   bool _isGameInitialized = false;
+  Timer? _softDropTimer;
+  bool _isHardDropInProgress = false;
 
   @override
   void initState() {
@@ -117,7 +119,7 @@ class GameScreenState extends State<GameScreen> {
 
     // Play game over sound only once
     if (widget.isSoundEffectsEnabled) {
-      _audioService.playGameOverSound();
+      _audioService.playSound('game_over');
     }
 
     showDialog(
@@ -162,8 +164,15 @@ class GameScreenState extends State<GameScreen> {
   }
 
   void _hardDrop() {
+    if (_isHardDropInProgress) return;
+
     setState(() {
+      _isHardDropInProgress = true;
       gameLogic.hardDrop();
+      // Reset the flag after a short delay to prevent multiple drops
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _isHardDropInProgress = false;
+      });
     });
   }
 
@@ -173,8 +182,28 @@ class GameScreenState extends State<GameScreen> {
     });
   }
 
+  void _handleSoftDropStart() {
+    _softDropTimer?.cancel();
+    _softDropTimer = Timer.periodic(
+      const Duration(milliseconds: 75),
+      (_) {
+        if (!mounted || isPaused) return;
+        setState(() {
+          gameLogic.movePiece(Direction.down);
+          gameLogic.updateGame();
+        });
+      },
+    );
+  }
+
+  void _handleSoftDropEnd() {
+    _softDropTimer?.cancel();
+    _softDropTimer = null;
+  }
+
   @override
   void dispose() {
+    _softDropTimer?.cancel();
     _timer.cancel();
     _audioService.stopGameMusic();
     gameLogic.dispose();
@@ -220,6 +249,12 @@ class GameScreenState extends State<GameScreen> {
                               });
                             },
                             isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
+                            onTap: _rotate,
+                            onSwipeDown: _hardDrop,
+                            onSoftDropStart: _handleSoftDropStart,
+                            onSoftDropEnd: _handleSoftDropEnd,
+                            onSwipeLeft: _moveLeft,
+                            onSwipeRight: _moveRight,
                           ),
                         ),
                       ),

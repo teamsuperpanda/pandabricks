@@ -15,7 +15,7 @@ class AudioService {
   bool isSoundEffectsEnabled = true;
 
   final List<String> _gameSongs =
-      List.generate(6, (i) => 'assets/audio/music/game/song${i + 1}.mp3');
+      List.generate(5, (i) => 'assets/audio/music/game/song${i + 1}.mp3');
 
   final Random _random = Random();
   int _lastPlayedIndex = -1;
@@ -41,6 +41,7 @@ class AudioService {
         _gameOverSound.setAsset('assets/audio/sfx/gameover.mp3'),
       ]).catchError((e) {
         debugPrint('Error loading sound effects: $e');
+        return <Duration?>[];
       });
     } catch (e) {
       debugPrint('Error in _initializeAudioPlayers: $e');
@@ -62,6 +63,7 @@ class AudioService {
           await _player.setAsset('assets/audio/sfx/pause.mp3');
           break;
       }
+      await _player.seek(Duration.zero);
       await _player.play();
     } catch (e) {
       debugPrint('Error playing sound $soundName: $e');

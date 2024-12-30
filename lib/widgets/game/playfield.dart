@@ -12,6 +12,12 @@ class Playfield extends StatefulWidget {
   final VoidCallback? onAnimationComplete;
   final bool isSoundEffectsEnabled;
   final bool isFlashing;
+  final VoidCallback? onTap;
+  final VoidCallback? onSwipeDown;
+  final VoidCallback? onSoftDropStart;
+  final VoidCallback? onSoftDropEnd;
+  final VoidCallback? onSwipeLeft;
+  final VoidCallback? onSwipeRight;
 
   const Playfield({
     super.key,
@@ -21,6 +27,12 @@ class Playfield extends StatefulWidget {
     this.onAnimationComplete,
     required this.isSoundEffectsEnabled,
     this.isFlashing = false,
+    this.onTap,
+    this.onSwipeDown,
+    this.onSoftDropStart,
+    this.onSoftDropEnd,
+    this.onSwipeLeft,
+    this.onSwipeRight,
   });
 
   @override
@@ -129,99 +141,122 @@ class _PlayfieldState extends State<Playfield>
     return AnimatedBuilder(
       animation: _flashAnimation,
       builder: (context, child) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[850],
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.white24, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(128),
-                blurRadius: 10,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          child: AspectRatio(
-            aspectRatio: 0.5,
-            child: Stack(
-              children: [
-                // Grid background
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 10,
-                    childAspectRatio: 1,
+        return GestureDetector(
+          onTap: widget.onTap,
+          onLongPressStart: (_) => widget.onSoftDropStart?.call(),
+          onLongPressEnd: (_) => widget.onSoftDropEnd?.call(),
+          onHorizontalDragEnd: (details) {
+            // Move one column based on swipe direction
+            if (details.primaryVelocity != null) {
+              if (details.primaryVelocity! > 0) {
+                widget.onSwipeRight?.call();
+              } else if (details.primaryVelocity! < 0) {
+                widget.onSwipeLeft?.call();
+              }
+            }
+          },
+          onVerticalDragEnd: (details) {
+            if (details.primaryVelocity != null &&
+                details.primaryVelocity! > 1000) {
+              widget.onSwipeDown?.call();
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[850],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white24, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(128),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: AspectRatio(
+              aspectRatio: 0.5,
+              child: Stack(
+                children: [
+                  // Grid background
+                  GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 10,
+                      childAspectRatio: 1,
+                    ),
+                    itemCount:
+                        widget.playfield.length * widget.playfield[0].length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white10,
+                            width: 0.5,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  itemCount:
-                      widget.playfield.length * widget.playfield[0].length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.white10,
-                          width: 0.5,
+                  // Pieces
+                  GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 10,
+                      childAspectRatio: 1,
+                    ),
+                    itemCount:
+                        widget.playfield.length * widget.playfield[0].length,
+                    itemBuilder: (context, index) {
+                      int x = index % widget.playfield[0].length;
+                      int y = index ~/ widget.playfield[0].length;
+                      Color cellColor = Colors.transparent;
+
+                      if (widget.playfield[y][x] != 0) {
+                        cellColor =
+                            TetrisShapes.colors[widget.playfield[y][x] - 1];
+                      }
+
+                      // Add flash effect for clearing rows
+                      if (widget.flashingRows.contains(y)) {
+                        cellColor = Color.lerp(
+                          cellColor,
+                          Colors.white,
+                          _flashAnimation.value,
+                        )!;
+                      }
+
+                      return Container(
+                        margin: const EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                          color: cellColor,
+                          borderRadius: BorderRadius.circular(2),
+                          boxShadow: cellColor != Colors.transparent
+                              ? [
+                                  BoxShadow(
+                                    color: cellColor.withAlpha(128),
+                                    blurRadius: 4,
+                                    spreadRadius: 1,
+                                  ),
+                                ]
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
+                  if (widget.activePiece != null)
+                    Positioned.fill(
+                      child: CustomPaint(
+                        painter: ActivePiecePainter(
+                          widget.activePiece!,
+                          isFlashing: widget.isFlashing,
                         ),
                       ),
-                    );
-                  },
-                ),
-                // Pieces
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 10,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount:
-                      widget.playfield.length * widget.playfield[0].length,
-                  itemBuilder: (context, index) {
-                    int x = index % widget.playfield[0].length;
-                    int y = index ~/ widget.playfield[0].length;
-                    Color cellColor = Colors.transparent;
-
-                    if (widget.playfield[y][x] != 0) {
-                      cellColor =
-                          TetrisShapes.colors[widget.playfield[y][x] - 1];
-                    }
-
-                    // Add flash effect for clearing rows
-                    if (widget.flashingRows.contains(y)) {
-                      cellColor = Color.lerp(
-                        cellColor,
-                        Colors.white,
-                        _flashAnimation.value,
-                      )!;
-                    }
-
-                    return Container(
-                      margin: const EdgeInsets.all(1),
-                      decoration: BoxDecoration(
-                        color: cellColor,
-                        borderRadius: BorderRadius.circular(2),
-                        boxShadow: cellColor != Colors.transparent
-                            ? [
-                                BoxShadow(
-                                  color: cellColor.withAlpha(128),
-                                  blurRadius: 4,
-                                  spreadRadius: 1,
-                                ),
-                              ]
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-                if (widget.activePiece != null)
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: ActivePiecePainter(
-                        widget.activePiece!,
-                        isFlashing: widget.isFlashing,
-                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         );
