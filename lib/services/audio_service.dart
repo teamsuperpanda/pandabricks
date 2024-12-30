@@ -1,5 +1,6 @@
 import 'package:just_audio/just_audio.dart';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 
 class AudioService {
   static final AudioService _instance = AudioService._internal();
@@ -14,7 +15,7 @@ class AudioService {
   bool isSoundEffectsEnabled = true;
 
   final List<String> _gameSongs =
-      List.generate(6, (i) => 'audio/music/game/song${i + 1}.mp3');
+      List.generate(6, (i) => 'assets/audio/music/game/song${i + 1}.mp3');
 
   final Random _random = Random();
   int _lastPlayedIndex = -1;
@@ -22,37 +23,59 @@ class AudioService {
   final AudioPlayer _player = AudioPlayer();
 
   Future<void> init() async {
-    // Initialize with correct sound files
-    await _player.setAsset('audio/sfx/panda_disappear.mp3');
-    await _player.setAsset('audio/sfx/gameover.mp3');
-    await _player.setAsset('audio/sfx/pause.mp3');
-    await _player.setAsset('audio/sfx/row_clear.mp3');
-    await _player.setAsset('audio/sfx/flip.mp3');
+    try {
+      // Initialize with error handling
+      await _initializeAudioPlayers();
+    } catch (e) {
+      debugPrint('Audio initialization error: $e');
+      // Continue even if audio fails to initialize
+    }
+  }
+
+  Future<void> _initializeAudioPlayers() async {
+    try {
+      // Load all sound effects with proper error handling
+      await Future.wait([
+        _player.setAsset('assets/audio/sfx/panda_disappear.mp3'),
+        _flipSound.setAsset('assets/audio/sfx/flip.mp3'),
+        _gameOverSound.setAsset('assets/audio/sfx/gameover.mp3'),
+      ]).catchError((e) {
+        debugPrint('Error loading sound effects: $e');
+      });
+    } catch (e) {
+      debugPrint('Error in _initializeAudioPlayers: $e');
+    }
   }
 
   Future<void> playSound(String soundName) async {
     if (!isSoundEffectsEnabled) return;
 
-    switch (soundName) {
-      case 'panda_disappear':
-        await _player.setAsset('audio/sfx/panda_disappear.mp3');
-        await _player.play();
-        break;
-      case 'game_over':
-        await _player.setAsset('audio/sfx/gameover.mp3');
-        await _player.play();
-        break;
-      case 'pause':
-        await _player.setAsset('audio/sfx/pause.mp3');
-        await _player.play();
-        break;
+    try {
+      switch (soundName) {
+        case 'panda_disappear':
+          await _player.setAsset('assets/audio/sfx/panda_disappear.mp3');
+          break;
+        case 'game_over':
+          await _player.setAsset('assets/audio/sfx/gameover.mp3');
+          break;
+        case 'pause':
+          await _player.setAsset('assets/audio/sfx/pause.mp3');
+          break;
+      }
+      await _player.play();
+    } catch (e) {
+      debugPrint('Error playing sound $soundName: $e');
     }
   }
 
   // Initialize menu music
   Future<void> initMenuMusic() async {
-    await _menuMusic.setAsset('audio/music/menu.mp3');
-    await _menuMusic.setLoopMode(LoopMode.all);
+    try {
+      await _menuMusic.setAsset('assets/audio/music/menu.mp3');
+      await _menuMusic.setLoopMode(LoopMode.all);
+    } catch (e) {
+      debugPrint('Error initializing menu music: $e');
+    }
   }
 
   // Game music methods
@@ -74,14 +97,25 @@ class AudioService {
   }
 
   Future<void> _playNextGameSong() async {
-    int nextIndex;
-    do {
-      nextIndex = _random.nextInt(_gameSongs.length);
-    } while (nextIndex == _lastPlayedIndex);
+    try {
+      int nextIndex;
+      do {
+        nextIndex = _random.nextInt(_gameSongs.length);
+      } while (nextIndex == _lastPlayedIndex);
 
-    _lastPlayedIndex = nextIndex;
-    await _gameMusic.setAsset(_gameSongs[nextIndex]);
-    await _gameMusic.play();
+      _lastPlayedIndex = nextIndex;
+      String songPath = _gameSongs[nextIndex];
+      debugPrint('Attempting to play song: $songPath');
+      await _gameMusic.setAsset(songPath);
+      await _gameMusic.play();
+    } catch (e) {
+      debugPrint('Error playing next game song: $e');
+      // Try next song if current one fails
+      if (_lastPlayedIndex < _gameSongs.length - 1) {
+        _lastPlayedIndex++;
+        _playNextGameSong();
+      }
+    }
   }
 
   // Control methods
@@ -107,21 +141,29 @@ class AudioService {
 
   Future<void> playStabSound() async {
     if (!isSoundEffectsEnabled) return;
-    if (_flipSound.playing) {
-      await _flipSound.stop();
+    try {
+      if (_flipSound.playing) {
+        await _flipSound.stop();
+      }
+      await _flipSound.setAsset('assets/audio/sfx/flip.mp3');
+      await _flipSound.seek(Duration.zero);
+      await _flipSound.play();
+    } catch (e) {
+      debugPrint('Error playing stab sound: $e');
     }
-    await _flipSound.setAsset('audio/sfx/flip.mp3');
-    await _flipSound.seek(Duration.zero);
-    await _flipSound.play();
   }
 
   Future<void> playGameOverSound() async {
     if (!isSoundEffectsEnabled) return;
-    if (_gameOverSound.playing) {
-      await _gameOverSound.stop();
+    try {
+      if (_gameOverSound.playing) {
+        await _gameOverSound.stop();
+      }
+      await _gameOverSound.seek(Duration.zero);
+      await _gameOverSound.play();
+    } catch (e) {
+      debugPrint('Error playing game over sound: $e');
     }
-    await _gameOverSound.seek(Duration.zero);
-    await _gameOverSound.play();
   }
 
   void setSoundEffectsEnabled(bool enabled) {

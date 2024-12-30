@@ -11,8 +11,13 @@ import 'services/audio_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize the Audio Service
-  await AudioService().init();
+  try {
+    // Initialize the Audio Service
+    await AudioService().init();
+  } catch (e) {
+    debugPrint('Failed to initialize audio: $e');
+    // Continue app initialization even if audio fails
+  }
 
   runApp(const MyApp());
 }
