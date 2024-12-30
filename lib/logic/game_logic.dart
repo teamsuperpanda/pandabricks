@@ -287,4 +287,16 @@ class GameLogic {
     currentPiece = null;
     checkLines();
   }
+
+  void hardDrop() {
+    if (currentPiece == null || isClearing || isGameOver) return;
+
+    // Move piece down until collision
+    while (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
+      currentPiece!.y++;
+    }
+
+    // Lock the piece in place
+    lockPiece();
+  }
 }

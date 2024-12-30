@@ -1,12 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:just_audio/just_audio.dart';
 import 'widgets/main/mode_card.dart';
 import 'widgets/main/audio_toggles.dart';
 import 'screens/game_screen.dart';
 import 'models/mode_model.dart';
 import 'constants/modes.dart';
+import 'services/audio_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,8 +35,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final AudioPlayer _backgroundMusicPlayer = AudioPlayer();
+  final AudioService _audioService = AudioService();
   bool _isBackgroundMusicEnabled = false;
+  bool _isSoundEffectsEnabled = false;
 
   @override
   void initState() {
@@ -50,18 +51,20 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!prefs.containsKey('backgroundMusic')) {
       await prefs.setBool('backgroundMusic', true);
     }
+    if (!prefs.containsKey('soundEffects')) {
+      await prefs.setBool('soundEffects', true);
+    }
 
     setState(() {
       _isBackgroundMusicEnabled = prefs.getBool('backgroundMusic') ?? true;
+      _isSoundEffectsEnabled = prefs.getBool('soundEffects') ?? true;
     });
   }
 
   Future<void> _setupBackgroundMusic() async {
-    await _backgroundMusicPlayer.setAsset('audio/music/menu.mp3');
-    await _backgroundMusicPlayer.setLoopMode(LoopMode.all);
-
+    await _audioService.initMenuMusic();
     if (_isBackgroundMusicEnabled) {
-      _backgroundMusicPlayer.play();
+      _audioService.playMenuMusic();
     }
   }
 
@@ -74,27 +77,41 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     if (_isBackgroundMusicEnabled) {
-      _backgroundMusicPlayer.play();
+      _audioService.playMenuMusic();
     } else {
-      _backgroundMusicPlayer.pause();
+      _audioService.pauseMenuMusic();
     }
+  }
+
+  Future<void> _toggleSoundEffects(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('soundEffects', value);
+
+    setState(() {
+      _isSoundEffectsEnabled = value;
+    });
   }
 
   @override
   void dispose() {
-    _backgroundMusicPlayer.dispose();
+    _audioService.dispose();
     super.dispose();
   }
 
   void navigateToGameScreen(BuildContext context, ModeModel mode) {
-    _backgroundMusicPlayer.pause();
+    _audioService.pauseMenuMusic();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => GameScreen(mode: mode)),
+      MaterialPageRoute(
+        builder: (context) => GameScreen(
+          mode: mode,
+          isSoundEffectsEnabled: _isSoundEffectsEnabled,
+          isBackgroundMusicEnabled: _isBackgroundMusicEnabled,
+        ),
+      ),
     ).then((_) {
-      // Resume music when returning to main menu if it's enabled
       if (_isBackgroundMusicEnabled) {
-        _backgroundMusicPlayer.play();
+        _audioService.playMenuMusic();
       }
     });
   }
@@ -150,7 +167,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     AudioToggles(
                       isBackgroundMusicEnabled: _isBackgroundMusicEnabled,
+                      isSoundEffectsEnabled: _isSoundEffectsEnabled,
                       onBackgroundMusicChanged: _toggleBackgroundMusic,
+                      onSoundEffectsChanged: _toggleSoundEffects,
                     ),
                   ],
                 ),

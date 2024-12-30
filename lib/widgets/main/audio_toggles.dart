@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 
 class AudioToggles extends StatelessWidget {
   final bool isBackgroundMusicEnabled;
+  final bool isSoundEffectsEnabled;
   final ValueChanged<bool> onBackgroundMusicChanged;
+  final ValueChanged<bool> onSoundEffectsChanged;
 
   const AudioToggles({
     super.key,
     required this.isBackgroundMusicEnabled,
+    required this.isSoundEffectsEnabled,
     required this.onBackgroundMusicChanged,
+    required this.onSoundEffectsChanged,
   });
 
   @override
@@ -59,24 +63,27 @@ class AudioToggles extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Sound Effects',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'Fredoka',
-                        color: Colors.white,
+                child: GestureDetector(
+                  onTap: () {
+                    onSoundEffectsChanged(!isSoundEffectsEnabled);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Sound Effects',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Fredoka',
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Switch(
-                      value: true,
-                      onChanged: (value) {
-                        // Handle sound effects toggle
-                      },
-                    ),
-                  ],
+                      Switch(
+                        value: isSoundEffectsEnabled,
+                        onChanged: onSoundEffectsChanged,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

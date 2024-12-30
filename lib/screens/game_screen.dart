@@ -7,11 +7,19 @@ import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/logic/game_logic.dart';
 import 'dart:async';
 import 'package:pandabricks/dialog/game/game_over_dialog.dart';
+import 'package:pandabricks/services/audio_service.dart';
 
 class GameScreen extends StatefulWidget {
   final ModeModel mode;
+  final bool isSoundEffectsEnabled;
+  final bool isBackgroundMusicEnabled;
 
-  const GameScreen({super.key, required this.mode});
+  const GameScreen({
+    super.key,
+    required this.mode,
+    required this.isSoundEffectsEnabled,
+    required this.isBackgroundMusicEnabled,
+  });
 
   @override
   GameScreenState createState() => GameScreenState();
@@ -20,6 +28,8 @@ class GameScreen extends StatefulWidget {
 class GameScreenState extends State<GameScreen> {
   late Timer _timer;
   GameLogic gameLogic;
+  bool isPaused = false;
+  final AudioService _audioService = AudioService();
 
   GameScreenState()
       : gameLogic = GameLogic(List.generate(20, (index) => List.filled(10, 0)));
@@ -29,6 +39,13 @@ class GameScreenState extends State<GameScreen> {
     super.initState();
     gameLogic.spawnPiece();
     _startGame();
+    if (widget.isBackgroundMusicEnabled) {
+      _setupGameMusic();
+    }
+  }
+
+  Future<void> _setupGameMusic() async {
+    await _audioService.setupGameMusic();
   }
 
   void _moveLeft() {
@@ -73,14 +90,45 @@ class GameScreenState extends State<GameScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return GameOverDialog(mode: widget.mode);
+        return GameOverDialog(
+          mode: widget.mode,
+          isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
+          isBackgroundMusicEnabled: widget.isBackgroundMusicEnabled,
+        );
       },
     );
+  }
+
+  void _pauseGame() {
+    setState(() {
+      isPaused = true;
+      _timer.cancel();
+      if (widget.isBackgroundMusicEnabled) {
+        _audioService.pauseGameMusic();
+      }
+    });
+  }
+
+  void _resumeGame() {
+    setState(() {
+      isPaused = false;
+      _startGame();
+      if (widget.isBackgroundMusicEnabled) {
+        _audioService.playGameMusic();
+      }
+    });
+  }
+
+  void _hardDrop() {
+    setState(() {
+      gameLogic.hardDrop();
+    });
   }
 
   @override
   void dispose() {
     _timer.cancel();
+    _audioService.stopGameMusic();
     super.dispose();
   }
 
@@ -92,7 +140,11 @@ class GameScreenState extends State<GameScreen> {
         child: Column(
           children: [
             // Score row
-            Score(mode: widget.mode),
+            Score(
+              mode: widget.mode,
+              onPause: _pauseGame,
+              onResume: _resumeGame,
+            ),
             // Main content row
             Expanded(
               child: Row(
@@ -116,6 +168,7 @@ class GameScreenState extends State<GameScreen> {
                                 gameLogic.removeLines();
                               });
                             },
+                            isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
                           ),
                         ),
                       ),
@@ -148,6 +201,7 @@ class GameScreenState extends State<GameScreen> {
               onDown: _moveDown,
               onRight: _moveRight,
               onRotate: _rotate,
+              onHardDrop: _hardDrop,
             ),
           ],
         ),

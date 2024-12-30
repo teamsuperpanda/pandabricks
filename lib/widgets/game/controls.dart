@@ -6,6 +6,7 @@ class Controls extends StatelessWidget {
   final VoidCallback onDown;
   final VoidCallback onRight;
   final VoidCallback onRotate;
+  final VoidCallback onHardDrop;
 
   const Controls({
     super.key,
@@ -13,6 +14,7 @@ class Controls extends StatelessWidget {
     required this.onDown,
     required this.onRight,
     required this.onRotate,
+    required this.onHardDrop,
   });
 
   @override
@@ -33,6 +35,9 @@ class Controls extends StatelessWidget {
               return KeyEventResult.handled;
             case LogicalKeyboardKey.arrowUp:
               onRotate();
+              return KeyEventResult.handled;
+            case LogicalKeyboardKey.space:
+              onHardDrop();
               return KeyEventResult.handled;
           }
         }

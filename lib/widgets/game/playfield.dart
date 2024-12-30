@@ -9,6 +9,7 @@ class Playfield extends StatefulWidget {
   final TetrisPiece? activePiece;
   final List<int> flashingRows;
   final VoidCallback? onAnimationComplete;
+  final bool isSoundEffectsEnabled;
 
   const Playfield({
     super.key,
@@ -16,6 +17,7 @@ class Playfield extends StatefulWidget {
     this.activePiece,
     required this.flashingRows,
     this.onAnimationComplete,
+    required this.isSoundEffectsEnabled,
   });
 
   @override
@@ -70,7 +72,7 @@ class _PlayfieldState extends State<Playfield>
   }
 
   void _playSound() async {
-    if (widget.flashingRows.isNotEmpty) {
+    if (widget.flashingRows.isNotEmpty && widget.isSoundEffectsEnabled) {
       // Dispose old player
       await _audioPlayer.dispose();
 
