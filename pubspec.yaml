@@ -40,8 +40,18 @@ flutter:
     - assets/images/
     - assets/audio/
     - assets/audio/sfx/
+    - assets/audio/sfx/flip.mp3
+    - assets/audio/sfx/gameover.mp3
     - assets/audio/sfx/panda_disappear.mp3
-    - assets/audio/sfx/game_over.mp3
+    - assets/audio/sfx/pause.mp3
+    - assets/audio/sfx/row_clear.mp3
+    - assets/audio/music/menu.mp3
+    - assets/audio/music/game/song1.mp3
+    - assets/audio/music/game/song2.mp3
+    - assets/audio/music/game/song3.mp3
+    - assets/audio/music/game/song4.mp3
+    - assets/audio/music/game/song5.mp3
+    - assets/audio/music/game/song6.mp3
 
 flutter_launcher_icons:
   android: true

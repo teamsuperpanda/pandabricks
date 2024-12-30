@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:async';
 import 'package:pandabricks/constants/tetris_shapes.dart'; // Import Tetris shapes
 import 'package:pandabricks/services/audio_service.dart'; // Import AudioService
+import 'package:pandabricks/models/mode_model.dart'; // Import ModeModel
 
 // Define the Direction enum
 enum Direction {
@@ -39,15 +40,20 @@ class GameLogic {
   bool isPandaFlashing = false;
   Timer? flashTimer;
   final AudioService audioService;
+  final ModeModel mode;
+  int score = 0;
+  double currentSpeed;
 
-  GameLogic(this.playfield, this.audioService) {
+  GameLogic(this.playfield, this.audioService, this.mode)
+      : currentSpeed = mode.speed.toDouble() {
     spawnPiece();
   }
 
   void spawnPiece() {
     if (nextPiece == null) {
-      // Random chance to spawn panda brick (e.g., 10%)
-      bool shouldSpawnPanda = Random().nextInt(100) < 10;
+      // Use mode's pandabrickSpawnPercentage instead of hardcoded 10
+      bool shouldSpawnPanda =
+          Random().nextInt(100) < mode.pandabrickSpawnPercentage;
       int randomIndex = shouldSpawnPanda ? 7 : Random().nextInt(7);
 
       List<List<int>> shapeClone =
@@ -164,6 +170,9 @@ class GameLogic {
 
   void removeLines() {
     if (!isClearing || flashingRows.isEmpty) return;
+
+    // Update score before removing lines
+    updateScore(flashingRows.length);
 
     // Sort rows in descending order to remove from bottom up
     flashingRows.sort((a, b) => b.compareTo(a));
@@ -395,5 +404,18 @@ class GameLogic {
   void removePandaBrick() {
     // Play the disappear sound
     AudioService().playSound('panda_disappear');
+  }
+
+  void updateScore(int clearedLines) {
+    int points = clearedLines * mode.rowClearScore;
+    score += points;
+
+    // Check if we need to increase speed based on score threshold
+    if (mode.scoreThreshold > 0 &&
+        score > 0 &&
+        (score / mode.scoreThreshold).floor() >
+            ((score - points) / mode.scoreThreshold).floor()) {
+      currentSpeed += mode.speedIncrease;
+    }
   }
 }

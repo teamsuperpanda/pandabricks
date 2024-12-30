@@ -30,27 +30,40 @@ class GameScreenState extends State<GameScreen> {
   late GameLogic gameLogic;
   bool isPaused = false;
   final AudioService _audioService = AudioService();
-
-  GameScreenState() {
-    gameLogic = GameLogic(
-      List.generate(20, (index) => List.filled(10, 0)),
-      _audioService,
-    );
-  }
+  bool _isGameInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    gameLogic = GameLogic(
+      List.generate(20, (index) => List.filled(10, 0)),
+      _audioService,
+      widget.mode,
+    );
     _audioService.setSoundEffectsEnabled(widget.isSoundEffectsEnabled);
     _initGame();
   }
 
   Future<void> _initGame() async {
-    if (widget.isBackgroundMusicEnabled) {
-      await _audioService.setupGameMusic();
-    }
+    // Start game immediately
     gameLogic.spawnPiece();
     _startGame();
+    _isGameInitialized = true;
+
+    // Handle audio setup separately
+    if (widget.isBackgroundMusicEnabled) {
+      try {
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (!mounted) return;
+        await _audioService.setupGameMusic();
+        if (mounted && !isPaused && _isGameInitialized) {
+          _audioService.playGameMusic();
+        }
+      } catch (e) {
+        // Handle audio setup error gracefully
+        debugPrint('Audio setup error: $e');
+      }
+    }
   }
 
   void _moveLeft() {
@@ -79,26 +92,33 @@ class GameScreenState extends State<GameScreen> {
   }
 
   void _startGame() {
-    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      setState(() {
-        gameLogic.updateGame();
-        if (gameLogic.isGameOver) {
-          _timer.cancel();
-          _showGameOverDialog();
-        }
-      });
-    });
+    _timer = Timer.periodic(
+      Duration(milliseconds: (500 * (100 / gameLogic.currentSpeed)).round()),
+      (timer) {
+        if (!mounted) return;
+        setState(() {
+          gameLogic.updateGame();
+          if (gameLogic.isGameOver) {
+            _timer.cancel();
+            _showGameOverDialog();
+          }
+        });
+      },
+    );
   }
 
   void _showGameOverDialog() {
+    if (!mounted) return;
+
+    // Stop background music first
     if (widget.isBackgroundMusicEnabled) {
       _audioService.stopGameMusic();
     }
 
-    // Add a small delay to ensure clean audio playback
-    Future.delayed(const Duration(milliseconds: 100), () {
+    // Play game over sound only once
+    if (widget.isSoundEffectsEnabled) {
       _audioService.playGameOverSound();
-    });
+    }
 
     showDialog(
       context: context,
@@ -108,12 +128,19 @@ class GameScreenState extends State<GameScreen> {
           mode: widget.mode,
           isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
           isBackgroundMusicEnabled: widget.isBackgroundMusicEnabled,
+          finalScore: gameLogic.score,
         );
       },
-    );
+    ).then((_) {
+      // Ensure that the menu music is not playing when retrying
+      if (widget.isBackgroundMusicEnabled) {
+        _audioService.stopMenuMusic(); // Stop menu music if it's playing
+      }
+    });
   }
 
   void _pauseGame() {
+    if (!mounted) return;
     setState(() {
       isPaused = true;
       _timer.cancel();
@@ -124,10 +151,11 @@ class GameScreenState extends State<GameScreen> {
   }
 
   void _resumeGame() {
+    if (!mounted) return;
     setState(() {
       isPaused = false;
       _startGame();
-      if (widget.isBackgroundMusicEnabled) {
+      if (widget.isBackgroundMusicEnabled && _isGameInitialized) {
         _audioService.playGameMusic();
       }
     });
@@ -149,6 +177,7 @@ class GameScreenState extends State<GameScreen> {
   void dispose() {
     _timer.cancel();
     _audioService.stopGameMusic();
+    gameLogic.dispose();
     super.dispose();
   }
 
@@ -164,6 +193,7 @@ class GameScreenState extends State<GameScreen> {
               mode: widget.mode,
               onPause: _pauseGame,
               onResume: _resumeGame,
+              score: gameLogic.score,
             ),
             // Main content row
             Expanded(

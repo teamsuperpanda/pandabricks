@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:pandabricks/services/high_score_service.dart';
 
-class ModeCard extends StatelessWidget {
+class ModeCard extends StatefulWidget {
   final void Function() onTap;
   final String mode;
 
   const ModeCard({super.key, required this.onTap, required this.mode});
 
-  // Temporary hard-coded scores - this would normally come from storage/backend
-  int? get highScore {
-    switch (mode) {
-      case 'Normal':
-        return 1000;
-      case 'Bamboo Blitz':
-        return 1000;
-      default:
-        return null;
+  @override
+  State<ModeCard> createState() => _ModeCardState();
+}
+
+class _ModeCardState extends State<ModeCard> {
+  int? highScore;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHighScore();
+  }
+
+  Future<void> _loadHighScore() async {
+    final score = await HighScoreService.getHighScore(widget.mode);
+    if (score > 0) {
+      setState(() {
+        highScore = score;
+      });
     }
   }
 
@@ -24,13 +35,13 @@ class ModeCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => onTap(),
+          onTap: () => widget.onTap(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Card(
-              color: mode == 'Easy'
+              color: widget.mode == 'Easy'
                   ? Colors.green
-                  : mode == 'Normal'
+                  : widget.mode == 'Normal'
                       ? Colors.blue
                       : Colors.orange,
               shape: RoundedRectangleBorder(
@@ -48,7 +59,7 @@ class ModeCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '$mode Mode',
+                          '${widget.mode} Mode',
                           style: const TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 24,
@@ -89,9 +100,9 @@ class ModeCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      mode == 'Easy'
+                      widget.mode == 'Easy'
                           ? 'A relaxed mode for beginners.'
-                          : mode == 'Normal'
+                          : widget.mode == 'Normal'
                               ? 'A balanced mode for average players.'
                               : 'A fast-paced mode for experts.',
                       style: const TextStyle(

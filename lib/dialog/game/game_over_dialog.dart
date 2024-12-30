@@ -2,20 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/screens/game_screen.dart';
 import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
-import 'package:pandabricks/services/audio_service.dart';
+import 'package:pandabricks/services/high_score_service.dart';
 
-class GameOverDialog extends StatelessWidget {
+class GameOverDialog extends StatefulWidget {
   final ModeModel mode;
   final bool isSoundEffectsEnabled;
   final bool isBackgroundMusicEnabled;
+  final int finalScore;
 
-  GameOverDialog({
+  const GameOverDialog({
     super.key,
     required this.mode,
     required this.isSoundEffectsEnabled,
     required this.isBackgroundMusicEnabled,
-  }) {
-    AudioService().playSound('game_over');
+    required this.finalScore,
+  });
+
+  @override
+  State<GameOverDialog> createState() => _GameOverDialogState();
+}
+
+class _GameOverDialogState extends State<GameOverDialog> {
+  bool _isNewHighScore = false;
+  int _previousHighScore = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkHighScore();
+  }
+
+  Future<void> _checkHighScore() async {
+    _previousHighScore = await HighScoreService.getHighScore(widget.mode.name);
+    if (widget.finalScore > _previousHighScore) {
+      setState(() => _isNewHighScore = true);
+      await HighScoreService.updateHighScore(
+          widget.mode.name, widget.finalScore);
+    }
   }
 
   @override
@@ -83,6 +106,36 @@ class GameOverDialog extends StatelessWidget {
                 color: Colors.white70,
               ),
             ),
+            const SizedBox(height: 16),
+            Text(
+              'Final Score: ${widget.finalScore}',
+              style: const TextStyle(
+                fontFamily: 'Fredoka',
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
+            if (_isNewHighScore) ...[
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.star, color: Colors.yellow),
+                  const SizedBox(width: 8),
+                  Text(
+                    _previousHighScore > 0
+                        ? 'New High Score!\nPrevious: $_previousHighScore'
+                        : 'New High Score!',
+                    style: const TextStyle(
+                      fontFamily: 'Fredoka',
+                      fontSize: 16,
+                      color: Colors.yellow,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 30),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -101,9 +154,10 @@ class GameOverDialog extends StatelessWidget {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => GameScreen(
-                          mode: mode,
-                          isSoundEffectsEnabled: isSoundEffectsEnabled,
-                          isBackgroundMusicEnabled: isBackgroundMusicEnabled,
+                          mode: widget.mode,
+                          isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
+                          isBackgroundMusicEnabled:
+                              widget.isBackgroundMusicEnabled,
                         ),
                       ),
                     );

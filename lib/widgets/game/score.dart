@@ -7,12 +7,14 @@ class Score extends StatelessWidget {
   final ModeModel mode;
   final VoidCallback onPause;
   final VoidCallback onResume;
+  final int score;
 
   const Score({
     super.key,
     required this.mode,
     required this.onPause,
     required this.onResume,
+    required this.score,
   });
 
   void _showPauseDialog(BuildContext context) {
@@ -39,10 +41,27 @@ class Score extends StatelessWidget {
             style: const TextStyle(
                 color: Colors.white, fontSize: 16, fontFamily: 'Fredoka'),
           ),
-          const Text(
-            '0',
-            style: TextStyle(
-                color: Colors.white, fontSize: 24, fontFamily: 'Fredoka'),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return ScaleTransition(
+                scale: animation,
+                child: FadeTransition(
+                  opacity: animation,
+                  child: child,
+                ),
+              );
+            },
+            child: Text(
+              score.toString(),
+              key: ValueKey<int>(score),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontFamily: 'Fredoka',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.pause, color: Colors.white),
