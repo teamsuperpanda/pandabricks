@@ -73,7 +73,7 @@ class _PlayfieldState extends State<Playfield>
       }
     });
 
-    _audioPlayer.setAsset('audio/sfx/row_clear.mp3');
+    _audioPlayer.setAsset('assets/audio/sfx/row_clear.mp3');
   }
 
   @override
@@ -95,7 +95,7 @@ class _PlayfieldState extends State<Playfield>
 
       // Create new player
       final player = AudioPlayer();
-      await player.setAsset('audio/sfx/row_clear.mp3');
+      await player.setAsset('assets/audio/sfx/row_clear.mp3');
 
       // Get and set random pitch
       double pitch = _getRandomPitch();

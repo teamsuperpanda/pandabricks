@@ -407,14 +407,25 @@ class GameLogic {
   }
 
   void updateScore(int clearedLines) {
-    int points = clearedLines * mode.rowClearScore;
-    score += points;
+    // Use standard Tetris scoring multipliers
+    final Map<int, int> scoreMultipliers = {
+      1: 100, // Single
+      2: 300, // Double
+      3: 500, // Triple
+      4: 800, // Tetris
+    };
+
+    // Calculate base points from number of lines cleared
+    int basePoints = (scoreMultipliers[clearedLines] ?? 0) * mode.rowClearScore;
+
+    // Add points to score
+    score += basePoints;
 
     // Check if we need to increase speed based on score threshold
     if (mode.scoreThreshold > 0 &&
         score > 0 &&
         (score / mode.scoreThreshold).floor() >
-            ((score - points) / mode.scoreThreshold).floor()) {
+            ((score - basePoints) / mode.scoreThreshold).floor()) {
       currentSpeed += mode.speedIncrease;
     }
   }

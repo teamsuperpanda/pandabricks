@@ -7,27 +7,27 @@ class Modes {
     speedIncrease: 0,
     scoreThreshold: 0,
     pandabrickSpawnPercentage: 25,
-    rowClearScore: 100,
+    rowClearScore: 1,
     // specialBlocksSpawnPercentage: 0
   );
 
   static ModeModel normal = ModeModel(
     name: 'Normal',
     speed: 100,
-    speedIncrease: 1,
-    scoreThreshold: 1000,
+    speedIncrease: 5,
+    scoreThreshold: 2000,
     pandabrickSpawnPercentage: 5,
-    rowClearScore: 50,
+    rowClearScore: 1,
     // specialBlocksSpawnPercentage: 0
   );
 
   static ModeModel bambooblitz = ModeModel(
     name: 'Bambooblitz',
     speed: 100,
-    speedIncrease: 1,
-    scoreThreshold: 500,
+    speedIncrease: 10,
+    scoreThreshold: 1500,
     pandabrickSpawnPercentage: 5,
-    rowClearScore: 50,
+    rowClearScore: 2,
     // specialBlocksSpawnPercentage: 20
   );
 
