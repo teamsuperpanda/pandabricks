@@ -27,7 +27,7 @@ class Modes {
       pandabrickSpawnPercentage: 5,
       rowClearScore: 2,
       specialBlocksSpawnPercentage: 10,
-      flipThreshold: 1000);
+      flipThreshold: 3000);
 
   static String getModeName(ModeModel mode) {
     if (mode == easy) return 'Easy';
