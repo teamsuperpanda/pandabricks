@@ -2,24 +2,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/logic/score_logic.dart';
 
 void main() {
-  group('ScoreLogic', () {
-    test('updateScore correctly calculates points for different line clears',
-        () {
-      final scoreLogic = ScoreLogic(
-        rowClearScore: 1,
-      );
+  late ScoreLogic scoreLogic;
 
-      // Test single line clear (100 points)
-      expect(scoreLogic.updateScore(1), 100);
+  setUp(() {
+    scoreLogic = ScoreLogic(rowClearScore: 1);
+  });
+
+  group('Score Calculation Tests', () {
+    test('should calculate correct score for single line', () {
+      int points = scoreLogic.updateScore(1);
+      expect(points, 100);
       expect(scoreLogic.score, 100);
+    });
 
-      // Test double line clear (300 points)
-      expect(scoreLogic.updateScore(2), 300);
+    test('should calculate correct score for multiple lines', () {
+      int points = scoreLogic.updateScore(4); // Tetris
+      expect(points, 800);
+      expect(scoreLogic.score, 800);
+    });
+
+    test('should accumulate score correctly', () {
+      scoreLogic.updateScore(1); // 100 points
+      scoreLogic.updateScore(2); // 300 points
       expect(scoreLogic.score, 400);
-
-      // Test Tetris - four lines (800 points)
-      expect(scoreLogic.updateScore(4), 800);
-      expect(scoreLogic.score, 1200);
     });
   });
 }

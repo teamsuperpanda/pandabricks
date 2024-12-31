@@ -13,7 +13,7 @@ class Modes {
   static ModeModel normal = ModeModel(
       name: 'Normal',
       speed: 100,
-      speedIncrease: 1,
+      speedIncrease: 10,
       scoreThreshold: 1000,
       pandabrickSpawnPercentage: 5,
       rowClearScore: 1,
@@ -22,7 +22,7 @@ class Modes {
   static ModeModel bambooblitz = ModeModel(
       name: 'Bambooblitz',
       speed: 100,
-      speedIncrease: 2,
+      speedIncrease: 20,
       scoreThreshold: 500,
       pandabrickSpawnPercentage: 5,
       rowClearScore: 2,

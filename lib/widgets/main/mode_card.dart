@@ -31,6 +31,19 @@ class _ModeCardState extends State<ModeCard> {
 
   @override
   Widget build(BuildContext context) {
+    String getDescription() {
+      switch (widget.mode) {
+        case 'Easy':
+          return 'Relaxed gameplay with constant speed.';
+        case 'Normal':
+          return 'Classic mode that gradually speeds up.';
+        case 'Bamboo Blitz':
+          return 'Fast-paced with special bricks and board flips.';
+        default:
+          return '';
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -100,11 +113,7 @@ class _ModeCardState extends State<ModeCard> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      widget.mode == 'Easy'
-                          ? 'A relaxed mode for beginners.'
-                          : widget.mode == 'Normal'
-                              ? 'A balanced mode for average players.'
-                              : 'A fast-paced mode for experts.',
+                      getDescription(),
                       style: const TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 16,

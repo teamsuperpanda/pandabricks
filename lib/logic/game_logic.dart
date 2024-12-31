@@ -248,7 +248,7 @@ class GameLogic {
     if (isClearing) return;
 
     flashingRows.clear();
-    // Check from bottom to top
+    // Check all rows from bottom to top
     for (int y = playfield.length - 1; y >= 0; y--) {
       bool isRowFull = true;
       for (int x = 0; x < playfield[y].length; x++) {
@@ -264,7 +264,10 @@ class GameLogic {
 
     if (flashingRows.isNotEmpty) {
       isClearing = true;
+      // Create a new list to avoid modification issues
       flashingRows = List.from(flashingRows);
+      // Sort rows in descending order to handle removal properly
+      flashingRows.sort((a, b) => b.compareTo(a));
     } else {
       spawnPiece();
     }
@@ -283,10 +286,7 @@ class GameLogic {
       currentSpeed += speedIncrease;
     }
 
-    // Sort rows in descending order to remove from bottom up
-    flashingRows.sort((a, b) => b.compareTo(a));
-
-    // Remove completed rows
+    // Remove completed rows from bottom to top to avoid index shifting issues
     for (int y in flashingRows) {
       playfield.removeAt(y);
       playfield.insert(0, List.filled(playfield[0].length, 0));
@@ -295,7 +295,30 @@ class GameLogic {
     // Reset state
     flashingRows = [];
     isClearing = false;
-    spawnPiece();
+
+    // Check for any new lines that might have formed after the removal
+    bool hasMoreLines = false;
+    for (int y = playfield.length - 1; y >= 0; y--) {
+      bool isRowFull = true;
+      for (int x = 0; x < playfield[y].length; x++) {
+        if (playfield[y][x] == 0) {
+          isRowFull = false;
+          break;
+        }
+      }
+      if (isRowFull) {
+        hasMoreLines = true;
+        break;
+      }
+    }
+
+    if (hasMoreLines) {
+      // If there are more lines to clear, check them
+      checkLines();
+    } else {
+      // If no more lines to clear, spawn new piece
+      spawnPiece();
+    }
   }
 
   void rotatePiece() {
@@ -569,23 +592,23 @@ class GameLogic {
     executeFlip();
   }
 
-  void executeFlip() {
+  Future<void> executeFlip() async {
     isFlipping = true;
     lastFlipScore =
         (scoreLogic.score / flipThreshold!).floor() * flipThreshold!;
 
     // Let the animation complete before flipping the playfield
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      // Mirror the playfield vertically
-      List<List<int>> flippedField = [];
-      for (int i = playfield.length - 1; i >= 0; i--) {
-        flippedField.add(List.from(playfield[i]));
-      }
-      playfield = flippedField;
+    await Future.delayed(const Duration(milliseconds: 1000));
 
-      // Start letting pieces fall
-      letPiecesFall();
-    });
+    // Mirror the playfield vertically
+    List<List<int>> flippedField = [];
+    for (int i = playfield.length - 1; i >= 0; i--) {
+      flippedField.add(List.from(playfield[i]));
+    }
+    playfield = flippedField;
+
+    // Start letting pieces fall
+    letPiecesFall();
   }
 
   void letPiecesFall() {
@@ -606,10 +629,14 @@ class GameLogic {
       // Continue falling on next frame with a slight delay for visual effect
       Future.delayed(const Duration(milliseconds: 50), letPiecesFall);
     } else {
-      // Falling complete
+      // Falling complete - check for completed rows before spawning new piece
       isFlipping = false;
       shouldFlip = false;
-      spawnPiece();
+      checkLines(); // Add this line to check for completed rows
+      if (!isClearing) {
+        // Only spawn new piece if no rows need to be cleared
+        spawnPiece();
+      }
     }
   }
 }
