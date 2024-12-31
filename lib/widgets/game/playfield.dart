@@ -281,51 +281,34 @@ class ActivePiecePainter extends CustomPainter {
           double posX = (activePiece.x + x) * cellSize;
           double posY = (activePiece.y + y) * cellSize;
 
-          if (activePiece.shape[y][x] == 8) {
-            // For panda brick
-            Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
-            RRect rRect =
-                RRect.fromRectAndRadius(rect, const Radius.circular(4));
+          Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
+          RRect rRect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
 
-            if (isFlashing) {
-              // Draw glow effects first (behind the brick)
-              double glowIntensity =
-                  (DateTime.now().millisecondsSinceEpoch % 750) / 750.0;
-              double glowSize = 12.0 + (glowIntensity * 8.0);
+          // Add glow effect for special bricks
+          if (BrickShapes.isSpecialBrick(activePiece.colorIndex)) {
+            List<Color> glowColors =
+                BrickShapes.getGlowColors(activePiece.colorIndex);
 
-              // Multiple outer glows with vibrant colors
-              List<Color> glowColors = [
-                Colors.pink.shade300.withAlpha(
-                    (0.6 * glowIntensity * 255).round()), // Furthest back
-                Colors.purple.shade300
-                    .withAlpha((0.7 * glowIntensity * 255).round()), // Middle
-                Colors.blue.shade400.withAlpha(
-                    ((0.8 * (1.0 - glowIntensity)) * 255)
-                        .round()), // Closest to brick
-              ];
+            // Draw single glow layer
+            Paint glowPaint = Paint()
+              ..color = glowColors[0]
+              ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 3.0);
+            canvas.drawRRect(rRect, glowPaint);
+          }
 
-              // Draw glow layers from back to front
-              for (int i = 0; i < glowColors.length; i++) {
-                Paint glowPaint = Paint()
-                  ..color = glowColors[i]
-                  ..maskFilter = MaskFilter.blur(
-                    BlurStyle.normal, // Changed from outer to normal
-                    glowSize + (i * 4.0),
-                  );
-                canvas.drawRRect(rRect, glowPaint);
-              }
-            }
+          // Draw the base brick
+          Paint paint = Paint()
+            ..color = BrickShapes.colors[activePiece.colorIndex]
+            ..style = PaintingStyle.fill;
+          canvas.drawRRect(rRect, paint);
 
-            // Draw solid white background on top of glow
-            Paint bgPaint = Paint()
-              ..color = Colors.white; // Removed transparency
-            canvas.drawRRect(rRect, bgPaint);
-
-            // Draw panda emoji on very top
+          // Draw emoji if it's a special brick
+          String? emoji = BrickShapes.getEmojiForBrick(activePiece.shape[y][x]);
+          if (emoji != null) {
             TextPainter textPainter = TextPainter(
-              text: const TextSpan(
-                text: '🐼',
-                style: TextStyle(fontSize: 24),
+              text: TextSpan(
+                text: emoji,
+                style: const TextStyle(fontSize: 24),
               ),
               textDirection: TextDirection.ltr,
             );
@@ -337,15 +320,6 @@ class ActivePiecePainter extends CustomPainter {
                 posY + (cellSize - textPainter.height) / 2,
               ),
             );
-          } else {
-            // Normal brick
-            Paint paint = Paint()
-              ..color =
-                  BrickShapes.colors[activePiece.colorIndex].withAlpha(230);
-            Rect rect = Rect.fromLTWH(posX, posY, cellSize, cellSize);
-            RRect rRect =
-                RRect.fromRectAndRadius(rect, const Radius.circular(4));
-            canvas.drawRRect(rRect, paint);
           }
         }
       }

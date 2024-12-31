@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:async';
-import 'package:pandabricks/logic/bricks_logic.dart'; // Import Tetris shapes
-import 'package:pandabricks/services/audio_service.dart'; // Import AudioService
-import 'package:pandabricks/models/mode_model.dart'; // Import ModeModel
+import 'package:pandabricks/logic/bricks_logic.dart';
+import 'package:pandabricks/services/audio_service.dart';
+import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/logic/score_logic.dart';
 
 // Define the Direction enum
@@ -46,6 +46,17 @@ class GameLogic {
   double currentSpeed;
   final double speedIncrease;
   final int scoreThreshold;
+  bool isGhostBrick = false;
+  bool isCatBrick = false;
+  Timer? catMovementTimer;
+  bool isTornadoBrick = false;
+  Timer? tornadoRotationTimer;
+
+  static const List<int> specialBrickIndices = [
+    8,
+    9,
+    10
+  ]; // [Ghost, Cat, Tornado]
 
   GameLogic(this.playfield, this.audioService, this.mode)
       : currentSpeed = mode.speed.toDouble(),
@@ -61,34 +72,67 @@ class GameLogic {
 
   void spawnPiece() {
     if (nextPiece == null) {
-      // Use mode's pandabrickSpawnPercentage instead of hardcoded value
-      bool shouldSpawnPanda =
+      // Reset states
+      isGhostBrick = false;
+      isCatBrick = false;
+      isTornadoBrick = false;
+
+      // Check for special brick spawn in Bambooblitz
+      bool shouldSpawnSpecial = mode.name == 'Bambooblitz' &&
+          Random().nextInt(100) < mode.specialBlocksSpawnPercentage;
+
+      bool shouldSpawnPanda = !shouldSpawnSpecial &&
           Random().nextInt(100) < mode.pandabrickSpawnPercentage;
-      int randomIndex = shouldSpawnPanda ? 7 : Random().nextInt(7);
+
+      int randomIndex;
+      if (shouldSpawnSpecial) {
+        randomIndex =
+            specialBrickIndices[Random().nextInt(specialBrickIndices.length)];
+        isGhostBrick = randomIndex == 8;
+        isCatBrick = randomIndex == 9;
+        isTornadoBrick = randomIndex == 10;
+      } else if (shouldSpawnPanda) {
+        randomIndex = 7;
+      } else {
+        randomIndex = Random().nextInt(7);
+      }
 
       List<List<int>> shapeClone =
           pieces[randomIndex].shape.map((row) => List<int>.from(row)).toList();
       currentPiece = TetrisPiece(
         shapeClone,
-        4,
+        4, // Center the piece
         0,
         randomIndex,
       );
       isPandaBrick = shouldSpawnPanda;
     } else {
-      currentPiece = TetrisPiece(
-        nextPiece!.shape.map((row) => List<int>.from(row)).toList(),
-        4,
-        0,
-        nextPiece!.colorIndex,
-      );
+      currentPiece = nextPiece;
       isPandaBrick = nextPiece!.colorIndex == 7;
+      isGhostBrick = nextPiece!.colorIndex == 8;
+      isCatBrick = nextPiece!.colorIndex == 9;
+      isTornadoBrick = nextPiece!.colorIndex == 10;
+
+      if (isCatBrick) {
+        startCatMovement();
+      }
     }
 
-    // Generate next piece - FIXED: Include panda chance for next piece too
-    bool shouldSpawnNextPanda =
+    // Generate next piece
+    bool shouldSpawnNextSpecial = mode.name == 'Bambooblitz' &&
+        Random().nextInt(100) < mode.specialBlocksSpawnPercentage;
+    bool shouldSpawnNextPanda = !shouldSpawnNextSpecial &&
         Random().nextInt(100) < mode.pandabrickSpawnPercentage;
-    int nextIndex = shouldSpawnNextPanda ? 7 : Random().nextInt(7);
+
+    int nextIndex;
+    if (shouldSpawnNextSpecial) {
+      nextIndex =
+          specialBrickIndices[Random().nextInt(specialBrickIndices.length)];
+    } else if (shouldSpawnNextPanda) {
+      nextIndex = 7;
+    } else {
+      nextIndex = Random().nextInt(7);
+    }
 
     List<List<int>> nextShapeClone =
         pieces[nextIndex].shape.map((row) => List<int>.from(row)).toList();
@@ -107,6 +151,34 @@ class GameLogic {
   void movePiece(Direction direction) {
     if (currentPiece == null || isClearing || isGameOver) return;
 
+    // Handle reversed controls for ghost brick in Bamboo Blitz
+    if (isGhostBrick && currentPiece?.colorIndex == 8) {
+      switch (direction) {
+        case Direction.left:
+          // When player presses left, move right
+          if (!checkCollision(currentPiece!.x + 1, currentPiece!.y)) {
+            currentPiece!.x++;
+          }
+          break;
+        case Direction.right:
+          // When player presses right, move left
+          if (!checkCollision(currentPiece!.x - 1, currentPiece!.y)) {
+            currentPiece!.x--;
+          }
+          break;
+        case Direction.down:
+          // Down movement stays the same
+          if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
+            currentPiece!.y++;
+          } else {
+            lockPiece();
+          }
+          break;
+      }
+      return;
+    }
+
+    // Original movement code for normal pieces
     switch (direction) {
       case Direction.left:
         if (!checkCollision(currentPiece!.x - 1, currentPiece!.y)) {
@@ -133,6 +205,10 @@ class GameLogic {
 
     if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
       currentPiece!.y++;
+      // Rotate tornado piece when it moves down
+      if (isTornadoBrick) {
+        rotatePiece();
+      }
     } else {
       lockPiece();
     }
@@ -337,6 +413,12 @@ class GameLogic {
   }
 
   void lockPiece() {
+    if (isCatBrick) {
+      catMovementTimer?.cancel();
+    }
+    if (isTornadoBrick) {
+      tornadoRotationTimer?.cancel();
+    }
     if (isPandaBrick) {
       if (currentPiece!.y + 2 >= playfield.length) {
         // Reached bottom, lock normally with grey color
@@ -407,6 +489,7 @@ class GameLogic {
 
   void dispose() {
     flashTimer?.cancel();
+    catMovementTimer?.cancel();
   }
 
   void forceNextPandaBrick() {
@@ -424,5 +507,27 @@ class GameLogic {
   void removePandaBrick() {
     // Play the disappear sound
     AudioService().playSound('panda_disappear');
+  }
+
+  void startCatMovement() {
+    catMovementTimer?.cancel();
+    catMovementTimer = Timer.periodic(
+      BrickShapes.catMovementInterval,
+      (timer) {
+        if (currentPiece == null || !isCatBrick || isGameOver) {
+          timer.cancel();
+          return;
+        }
+
+        // Only handle horizontal movement, let natural gravity handle falling
+        int horizontalMove = Random().nextInt(3) - 1; // -1, 0, or 1
+        if (horizontalMove != 0) {
+          int newX = currentPiece!.x + horizontalMove;
+          if (!checkCollision(newX, currentPiece!.y)) {
+            currentPiece!.x = newX;
+          }
+        }
+      },
+    );
   }
 }

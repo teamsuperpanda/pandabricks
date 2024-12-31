@@ -1,19 +1,23 @@
 class ModeModel {
   final String name;
   final int speed;
-  final int speedIncrease;
+  final double speedIncrease;
   final int scoreThreshold;
-  final int pandabrickSpawnPercentage;
   final int rowClearScore;
-  // final int specialBlocksSpawnPercentage;
+  final int pandabrickSpawnPercentage;
+  final int specialBlocksSpawnPercentage;
 
   ModeModel({
     required this.name,
     required this.speed,
     required this.speedIncrease,
     required this.scoreThreshold,
-    required this.pandabrickSpawnPercentage,
     required this.rowClearScore,
-    // required this.specialBlocksSpawnPercentage,
+    required this.pandabrickSpawnPercentage,
+    required this.specialBlocksSpawnPercentage,
   });
+
+  // Helper methods for special blocks
+  bool get hasSpecialBlocks => specialBlocksSpawnPercentage > 0;
+  bool get hasPandaBlocks => pandabrickSpawnPercentage > 0;
 }

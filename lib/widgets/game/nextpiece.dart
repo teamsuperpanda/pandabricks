@@ -43,10 +43,6 @@ class NextPiecePainter extends CustomPainter {
     double offsetX = (size.width - (nextPiece.shape[0].length * cellSize)) / 2;
     double offsetY = (size.height - (nextPiece.shape.length * cellSize)) / 2;
 
-    Paint paint = Paint()
-      ..color = BrickShapes.colors[nextPiece.colorIndex]
-      ..style = PaintingStyle.fill;
-
     for (int y = 0; y < nextPiece.shape.length; y++) {
       for (int x = 0; x < nextPiece.shape[y].length; x++) {
         if (nextPiece.shape[y][x] != 0) {
@@ -56,7 +52,56 @@ class NextPiecePainter extends CustomPainter {
             cellSize - 1,
             cellSize - 1,
           );
-          canvas.drawRect(rect, paint);
+          RRect rRect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
+
+          // Add glow effect for special bricks
+          if (BrickShapes.isSpecialBrick(nextPiece.colorIndex)) {
+            double glowIntensity =
+                (DateTime.now().millisecondsSinceEpoch % 1500) / 1500.0;
+            double glowSize = 8.0 + (glowIntensity * 4.0);
+
+            List<Color> glowColors = BrickShapes.getGlowColors(
+                    nextPiece.colorIndex)
+                .map((color) => color.withAlpha((glowIntensity * 255).round()))
+                .toList();
+
+            // Draw glow layers
+            for (int i = 0; i < glowColors.length; i++) {
+              Paint glowPaint = Paint()
+                ..color = glowColors[i]
+                ..maskFilter = MaskFilter.blur(
+                  BlurStyle.normal,
+                  glowSize + (i * 2.0),
+                );
+              canvas.drawRRect(rRect, glowPaint);
+            }
+          }
+
+          // Draw the base brick
+          Paint paint = Paint()
+            ..color = BrickShapes.colors[nextPiece.colorIndex]
+            ..style = PaintingStyle.fill;
+          canvas.drawRRect(rRect, paint);
+
+          // Draw emoji if it's a special brick
+          String? emoji = BrickShapes.getEmojiForBrick(nextPiece.shape[y][x]);
+          if (emoji != null) {
+            TextPainter textPainter = TextPainter(
+              text: TextSpan(
+                text: emoji,
+                style: TextStyle(fontSize: cellSize * 0.8),
+              ),
+              textDirection: TextDirection.ltr,
+            );
+            textPainter.layout();
+            textPainter.paint(
+              canvas,
+              Offset(
+                offsetX + (x * cellSize) + (cellSize - textPainter.width) / 2,
+                offsetY + (y * cellSize) + (cellSize - textPainter.height) / 2,
+              ),
+            );
+          }
         }
       }
     }
