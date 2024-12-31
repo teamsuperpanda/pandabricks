@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/logic/bricks_logic.dart';
 import 'package:pandabricks/logic/game_logic.dart';
 import 'package:just_audio/just_audio.dart';
-import 'dart:math' show Random;
+import 'dart:math' show Random, pi;
 import 'dart:async' show Timer;
 
 class Playfield extends StatefulWidget {
@@ -18,6 +18,8 @@ class Playfield extends StatefulWidget {
   final VoidCallback? onSoftDropEnd;
   final VoidCallback? onSwipeLeft;
   final VoidCallback? onSwipeRight;
+  final bool isFlipping;
+  final double flipProgress;
 
   const Playfield({
     super.key,
@@ -33,16 +35,19 @@ class Playfield extends StatefulWidget {
     this.onSoftDropEnd,
     this.onSwipeLeft,
     this.onSwipeRight,
+    this.isFlipping = false,
+    this.flipProgress = 0.0,
   });
 
   @override
   State<Playfield> createState() => _PlayfieldState();
 }
 
-class _PlayfieldState extends State<Playfield>
-    with SingleTickerProviderStateMixin {
+class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
   late AnimationController _flashController;
   late Animation<double> _flashAnimation;
+  late AnimationController _flipController;
+  late Animation<double> _flipAnimation;
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Random _random = Random();
   Timer? _flashingTimer;
@@ -74,11 +79,28 @@ class _PlayfieldState extends State<Playfield>
     });
 
     _audioPlayer.setAsset('assets/audio/sfx/row_clear.mp3');
+
+    _flipController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _flipAnimation = CurvedAnimation(
+      parent: _flipController,
+      curve: Curves.easeInOut,
+    );
+
+    _flipController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _flipController.reset();
+      }
+    });
   }
 
   @override
   void dispose() {
     _flashController.dispose();
+    _flipController.dispose();
     _audioPlayer.dispose();
     _flashingTimer?.cancel();
     super.dispose();
@@ -134,128 +156,141 @@ class _PlayfieldState extends State<Playfield>
       _flashingTimer?.cancel();
       _flashingTimer = null;
     }
+
+    // Start flip animation when isFlipping changes
+    if (widget.isFlipping && !oldWidget.isFlipping) {
+      _flipController.forward();
+    } else if (!widget.isFlipping && oldWidget.isFlipping) {
+      _flipController.reset();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _flashAnimation,
+      animation: Listenable.merge([_flashAnimation, _flipAnimation]),
       builder: (context, child) {
-        return GestureDetector(
-          onTap: widget.onTap,
-          onLongPressStart: (_) => widget.onSoftDropStart?.call(),
-          onLongPressEnd: (_) => widget.onSoftDropEnd?.call(),
-          onHorizontalDragEnd: (details) {
-            // Move one column based on swipe direction
-            if (details.primaryVelocity != null) {
-              if (details.primaryVelocity! > 0) {
-                widget.onSwipeRight?.call();
-              } else if (details.primaryVelocity! < 0) {
-                widget.onSwipeLeft?.call();
+        return Transform(
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001) // perspective
+            ..rotateX(_flipAnimation.value * pi),
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: widget.onTap,
+            onLongPressStart: (_) => widget.onSoftDropStart?.call(),
+            onLongPressEnd: (_) => widget.onSoftDropEnd?.call(),
+            onHorizontalDragEnd: (details) {
+              // Move one column based on swipe direction
+              if (details.primaryVelocity != null) {
+                if (details.primaryVelocity! > 0) {
+                  widget.onSwipeRight?.call();
+                } else if (details.primaryVelocity! < 0) {
+                  widget.onSwipeLeft?.call();
+                }
               }
-            }
-          },
-          onVerticalDragEnd: (details) {
-            if (details.primaryVelocity != null &&
-                details.primaryVelocity! > 1000) {
-              widget.onSwipeDown?.call();
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[850],
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white24, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(128),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: AspectRatio(
-              aspectRatio: 0.5,
-              child: Stack(
-                children: [
-                  // Grid background
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 10,
-                      childAspectRatio: 1,
+            },
+            onVerticalDragEnd: (details) {
+              if (details.primaryVelocity != null &&
+                  details.primaryVelocity! > 1000) {
+                widget.onSwipeDown?.call();
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[850],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white24, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(128),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: AspectRatio(
+                aspectRatio: 0.5,
+                child: Stack(
+                  children: [
+                    // Grid background
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 10,
+                        childAspectRatio: 1,
+                      ),
+                      itemCount:
+                          widget.playfield.length * widget.playfield[0].length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.white10,
+                              width: 0.5,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    itemCount:
-                        widget.playfield.length * widget.playfield[0].length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.white10,
-                            width: 0.5,
+                    // Pieces
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 10,
+                        childAspectRatio: 1,
+                      ),
+                      itemCount:
+                          widget.playfield.length * widget.playfield[0].length,
+                      itemBuilder: (context, index) {
+                        int x = index % widget.playfield[0].length;
+                        int y = index ~/ widget.playfield[0].length;
+                        Color cellColor = Colors.transparent;
+
+                        if (widget.playfield[y][x] != 0) {
+                          cellColor =
+                              BrickShapes.colors[widget.playfield[y][x] - 1];
+                        }
+
+                        // Add flash effect for clearing rows
+                        if (widget.flashingRows.contains(y)) {
+                          cellColor = Color.lerp(
+                            cellColor,
+                            Colors.white,
+                            _flashAnimation.value,
+                          )!;
+                        }
+
+                        return Container(
+                          margin: const EdgeInsets.all(1),
+                          decoration: BoxDecoration(
+                            color: cellColor,
+                            borderRadius: BorderRadius.circular(2),
+                            boxShadow: cellColor != Colors.transparent
+                                ? [
+                                    BoxShadow(
+                                      color: cellColor.withAlpha(128),
+                                      blurRadius: 4,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                    if (widget.activePiece != null)
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: ActivePiecePainter(
+                            widget.activePiece!,
+                            isFlashing: widget.isFlashing,
                           ),
                         ),
-                      );
-                    },
-                  ),
-                  // Pieces
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 10,
-                      childAspectRatio: 1,
-                    ),
-                    itemCount:
-                        widget.playfield.length * widget.playfield[0].length,
-                    itemBuilder: (context, index) {
-                      int x = index % widget.playfield[0].length;
-                      int y = index ~/ widget.playfield[0].length;
-                      Color cellColor = Colors.transparent;
-
-                      if (widget.playfield[y][x] != 0) {
-                        cellColor =
-                            BrickShapes.colors[widget.playfield[y][x] - 1];
-                      }
-
-                      // Add flash effect for clearing rows
-                      if (widget.flashingRows.contains(y)) {
-                        cellColor = Color.lerp(
-                          cellColor,
-                          Colors.white,
-                          _flashAnimation.value,
-                        )!;
-                      }
-
-                      return Container(
-                        margin: const EdgeInsets.all(1),
-                        decoration: BoxDecoration(
-                          color: cellColor,
-                          borderRadius: BorderRadius.circular(2),
-                          boxShadow: cellColor != Colors.transparent
-                              ? [
-                                  BoxShadow(
-                                    color: cellColor.withAlpha(128),
-                                    blurRadius: 4,
-                                    spreadRadius: 1,
-                                  ),
-                                ]
-                              : null,
-                        ),
-                      );
-                    },
-                  ),
-                  if (widget.activePiece != null)
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: ActivePiecePainter(
-                          widget.activePiece!,
-                          isFlashing: widget.isFlashing,
-                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

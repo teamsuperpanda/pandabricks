@@ -201,6 +201,12 @@ class GameScreenState extends State<GameScreen> {
     _softDropTimer = null;
   }
 
+  void _testFlip() {
+    setState(() {
+      gameLogic.startFlipAnimation();
+    });
+  }
+
   @override
   void dispose() {
     _softDropTimer?.cancel();
@@ -249,6 +255,8 @@ class GameScreenState extends State<GameScreen> {
                               });
                             },
                             isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
+                            isFlipping: gameLogic.isFlipping,
+                            flipProgress: gameLogic.flipProgress,
                             onTap: _rotate,
                             onSwipeDown: _hardDrop,
                             onSoftDropStart: _handleSoftDropStart,
@@ -289,6 +297,7 @@ class GameScreenState extends State<GameScreen> {
               onRotate: _rotate,
               onHardDrop: _hardDrop,
               onForcePanda: _forcePandaBrick,
+              onFlip: _testFlip,
             ),
           ],
         ),

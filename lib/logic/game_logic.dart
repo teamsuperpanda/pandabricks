@@ -51,6 +51,11 @@ class GameLogic {
   Timer? catMovementTimer;
   bool isTornadoBrick = false;
   Timer? tornadoRotationTimer;
+  bool isFlipping = false;
+  bool shouldFlip = false;
+  double flipProgress = 0.0;
+  final int? flipThreshold;
+  int lastFlipScore = 0;
 
   static const List<int> specialBrickIndices = [
     8,
@@ -61,7 +66,8 @@ class GameLogic {
   GameLogic(this.playfield, this.audioService, this.mode)
       : currentSpeed = mode.speed.toDouble(),
         speedIncrease = mode.speedIncrease.toDouble(),
-        scoreThreshold = mode.scoreThreshold {
+        scoreThreshold = mode.scoreThreshold,
+        flipThreshold = mode.flipThreshold {
     scoreLogic = ScoreLogic(
       rowClearScore: mode.rowClearScore,
     );
@@ -202,6 +208,13 @@ class GameLogic {
 
   void updateGame() {
     if (currentPiece == null || isClearing || isGameOver) return;
+
+    // Check for flip condition
+    if (shouldCheckForFlip()) {
+      currentPiece = null; // Remove current piece
+      startFlipAnimation();
+      return;
+    }
 
     if (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
       currentPiece!.y++;
@@ -421,20 +434,23 @@ class GameLogic {
     }
     if (isPandaBrick) {
       if (currentPiece!.y + 2 >= playfield.length) {
-        // Reached bottom, lock normally with grey color
         currentPiece!.colorIndex = 8;
         placePiece();
         currentPiece = null;
         checkLines();
       } else if (!isPandaFlashing) {
-        // Start flash sequence if collided with other bricks
         startPandaFlash();
       }
     } else {
-      // Normal piece locking
       placePiece();
       currentPiece = null;
-      checkLines();
+
+      // Check for queued flip after piece is locked
+      if (shouldFlip && !isClearing) {
+        executeFlip();
+      } else {
+        checkLines();
+      }
     }
   }
 
@@ -529,5 +545,71 @@ class GameLogic {
         }
       },
     );
+  }
+
+  bool shouldCheckForFlip() {
+    if (flipThreshold == null || isFlipping) return false;
+    int flipPoints =
+        (scoreLogic.score / flipThreshold!).floor() * flipThreshold!;
+    return flipPoints > lastFlipScore;
+  }
+
+  void startFlipAnimation() {
+    if (isFlipping || isGameOver) {
+      return;
+    }
+
+    // If there's an active piece, set shouldFlip flag and wait
+    if (currentPiece != null || isClearing) {
+      shouldFlip = true;
+      return;
+    }
+
+    // Execute flip if no active piece
+    executeFlip();
+  }
+
+  void executeFlip() {
+    isFlipping = true;
+    lastFlipScore =
+        (scoreLogic.score / flipThreshold!).floor() * flipThreshold!;
+
+    // Let the animation complete before flipping the playfield
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      // Mirror the playfield vertically
+      List<List<int>> flippedField = [];
+      for (int i = playfield.length - 1; i >= 0; i--) {
+        flippedField.add(List.from(playfield[i]));
+      }
+      playfield = flippedField;
+
+      // Start letting pieces fall
+      letPiecesFall();
+    });
+  }
+
+  void letPiecesFall() {
+    bool hasFalling = false;
+
+    // Check each cell from bottom to top
+    for (int y = playfield.length - 2; y >= 0; y--) {
+      for (int x = 0; x < playfield[y].length; x++) {
+        if (playfield[y][x] != 0 && playfield[y + 1][x] == 0) {
+          playfield[y + 1][x] = playfield[y][x];
+          playfield[y][x] = 0;
+          hasFalling = true;
+        }
+      }
+    }
+
+    if (hasFalling) {
+      // Continue falling on next frame with a slight delay for visual effect
+      Future.delayed(const Duration(milliseconds: 50), letPiecesFall);
+    } else {
+      // Falling complete
+      isFlipping = false;
+      shouldFlip = false;
+      spawnPiece();
+    }
   }
 }

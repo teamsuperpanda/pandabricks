@@ -8,6 +8,7 @@ class Controls extends StatelessWidget {
   final VoidCallback onRotate;
   final VoidCallback onHardDrop;
   final VoidCallback onForcePanda;
+  final VoidCallback onFlip;
 
   const Controls({
     super.key,
@@ -17,6 +18,7 @@ class Controls extends StatelessWidget {
     required this.onRotate,
     required this.onHardDrop,
     required this.onForcePanda,
+    required this.onFlip,
   });
 
   @override
@@ -43,6 +45,9 @@ class Controls extends StatelessWidget {
               return KeyEventResult.handled;
             case LogicalKeyboardKey.keyP:
               onForcePanda();
+              return KeyEventResult.handled;
+            case LogicalKeyboardKey.keyF:
+              onFlip();
               return KeyEventResult.handled;
           }
         }

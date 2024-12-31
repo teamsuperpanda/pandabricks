@@ -6,6 +6,7 @@ class ModeModel {
   final int rowClearScore;
   final int pandabrickSpawnPercentage;
   final int specialBlocksSpawnPercentage;
+  final int? flipThreshold;
 
   ModeModel({
     required this.name,
@@ -15,9 +16,11 @@ class ModeModel {
     required this.rowClearScore,
     required this.pandabrickSpawnPercentage,
     required this.specialBlocksSpawnPercentage,
+    this.flipThreshold,
   });
 
   // Helper methods for special blocks
   bool get hasSpecialBlocks => specialBlocksSpawnPercentage > 0;
   bool get hasPandaBlocks => pandabrickSpawnPercentage > 0;
+  bool get hasFlipFeature => flipThreshold != null;
 }
