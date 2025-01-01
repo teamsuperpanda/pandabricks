@@ -24,9 +24,9 @@ class Modes {
       speed: 100,
       speedIncrease: 30,
       scoreThreshold: 500,
-      pandabrickSpawnPercentage: 90,
+      pandabrickSpawnPercentage: 5,
       rowClearScore: 2,
-      specialBlocksSpawnPercentage: 90,
+      specialBlocksSpawnPercentage: 10,
       flipThreshold: 2000);
 
   static String getModeName(ModeModel mode) {
