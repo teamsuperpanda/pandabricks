@@ -1,113 +1,63 @@
-# 🐼 PandaBricks
+# Panda Bricks 🐼
 
-PandaBricks is a modern twist on the classic falling blocks puzzle game, featuring unique gameplay mechanics, special blocks, and adorable pandas! Built with Flutter, this free and open-source game combines nostalgic gameplay with innovative features.
+A modern take on the classic block-falling puzzle game, featuring unique gameplay mechanics and special blocks.
 
-![PandaBricks Screenshot](assets/images/screenshot.png)
+## Features
 
-## 🎮 Game Modes
+- 🎮 Three Game Modes:
+  - Easy Mode: Relaxed gameplay with constant speed
+  - Normal Mode: Classic experience with gradual speed increase
+  - Bamboo Blitz: Fast-paced mode with special blocks and board flips
 
-### 🟢 Easy Mode
-- Perfect for beginners and casual players
-- Constant speed throughout gameplay
-- 20% chance of spawning Panda blocks
-- Relaxed scoring system
+- 🧱 Special Blocks:
+  - 🐼 Panda Block: Clears columns when activated
+  - 👻 Ghost Block: Reversed controls
+  - 🐱 Cat Block: Moves unpredictably
+  - 🌪️ Tornado Block: Auto-rotates while falling
 
-### 🔵 Normal Mode
-- Classic tetris-style experience
-- Speed increases every 1000 points
-- 5% chance of spawning Panda blocks
-- Standard scoring system
+- 🎵 Audio Features:
+  - Background music
+  - Sound effects
+  - Toggleable audio settings
 
-### 🟧 Bamboo Blitz
-- Fast-paced challenging gameplay
-- Speed increases every 500 points
-- Board flips every 3000 points
-- 10% chance of special blocks
-- Double scoring system
+- 🏆 Features:
+  - High score tracking for each mode
+  - Responsive controls (touch and keyboard)
+  - Pause/Resume functionality
+  - Smooth animations and visual effects
 
-## ✨ Special Blocks
+## Controls
 
-### 🐼 Panda Block
-- 2x2 magical block
-- Clears entire columns when activated
-- Creates strategic clearing opportunities
+- ⌨️ Keyboard Controls:
+  - Arrow Left/Right: Move piece
+  - Arrow Down: Soft drop
+  - Arrow Up: Rotate piece
+  - Space: Hard drop
+  - P: Force Panda block (debug)
+  - F: Force flip (debug)
 
-### 👻 Ghost Block
-- Features reversed controls
-- Tests your adaptability
-- Adds an extra challenge layer
+- 📱 Touch Controls:
+  - Tap: Rotate piece
+  - Swipe Left/Right: Move piece
+  - Swipe Down: Hard drop
+  - Long Press: Soft drop
 
-### 🐱 Cat Block
-- Moves unpredictably while falling
-- Creates dynamic gameplay situations
-- Requires quick thinking
+## Technical Details
 
-### 🌪️ Tornado Block
-- Rotates as it descends
-- Adds excitement to gameplay
-- Perfect for skilled players
+Built with Flutter, featuring:
+- Clean architecture with separate logic and UI layers
+- Responsive design that works across different screen sizes
+- Custom painters for smooth graphics
+- SharedPreferences for local storage
+- Just Audio for sound management
 
-## 🎯 Controls
+## Getting Started
 
-### Mobile Controls
-- **Tap** → Rotate piece
-- **Swipe Left/Right** → Move piece
-- **Swipe Down** → Hard drop
-- **Long Press** → Soft drop
+1. Ensure Flutter is installed on your system
+2. Clone the repository
+3. Run `flutter pub get` to install dependencies
+4. Run `flutter run` to start the app
 
-### Keyboard Controls
-- **Arrow Keys** → Move piece
-- **Up Arrow** → Rotate piece
-- **Space** → Hard drop
-- **P** → Spawn panda block (debug)
-- **F** → Flip board (debug)
+## License
 
-## 🎵 Features
-
-- Dynamic background music
-- Satisfying sound effects
-- High score tracking per mode
-- Responsive touch controls
-- Smooth animations
-- Debug mode for testing
-
-## 🚀 Getting Started
-
-1. **Clone the repository**
-
-## Controls 🎮
-
-- **Mobile**:
-  - Tap to rotate
-  - Swipe left/right to move
-  - Swipe down for hard drop
-  - Long press for soft drop
-
-- **Keyboard**:
-  - Arrow keys for movement
-  - Up arrow to rotate
-  - Space for hard drop
-  - P key to spawn panda block (debug)
-  - F key to flip board (debug)
-
-## License 📄
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contributing 🤝
-
-Contributions are welcome! Feel free to submit issues and pull requests.
-
-## Support 💖
-
-If you like this project, please give it a star ⭭ on GitHub!
-
-## Contact 📧
-
-[Your Name] - [@twitter_handle](https://twitter.com/your_handle)
-
-Project Link: [https://github.com/YOUR_USERNAME/pandabricks](https://github.com/YOUR_USERNAME/pandabricks)
-
----
-
-Made with ❤️ using Flutter
+This project is licensed under the MIT License - see the LICENSE file for details.
