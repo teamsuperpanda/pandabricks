@@ -1,4 +1,5 @@
 name: pandabricks
+display_name: "Panda Bricks"
 description: "A modern take on the classic falling blocks game, featuring a playful panda theme and unique gameplay mechanics."
 publish_to: 'none'
 

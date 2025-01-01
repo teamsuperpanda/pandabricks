@@ -38,7 +38,7 @@ class _ModeCardState extends State<ModeCard> {
         case 'Normal':
           return 'Classic mode that gradually speeds up.';
         case 'Bamboo Blitz':
-          return 'Fast-paced with special bricks and board flips.';
+          return 'Special bricks and board flips.';
         default:
           return '';
       }
