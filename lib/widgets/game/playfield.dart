@@ -20,6 +20,7 @@ class Playfield extends StatefulWidget {
   final VoidCallback? onSwipeRight;
   final bool isFlipping;
   final double flipProgress;
+  final Function(Playfield)? ref;
 
   const Playfield({
     super.key,
@@ -37,13 +38,14 @@ class Playfield extends StatefulWidget {
     this.onSwipeRight,
     this.isFlipping = false,
     this.flipProgress = 0.0,
+    this.ref,
   });
 
   @override
-  State<Playfield> createState() => _PlayfieldState();
+  State<Playfield> createState() => PlayfieldState();
 }
 
-class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
+class PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
   late AnimationController _flashController;
   late Animation<double> _flashAnimation;
   late AnimationController _flipController;
@@ -51,6 +53,8 @@ class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Random _random = Random();
   Timer? _flashingTimer;
+  List<ExplosionParticle> _particles = [];
+  Timer? _explosionTimer;
 
   @override
   void initState() {
@@ -95,6 +99,13 @@ class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
         _flipController.reset();
       }
     });
+
+    // Register the bomb explode callback
+    // Assuming you have access to GameLogic instance
+    // Replace `gameLogicInstance` with your actual instance
+    // gameLogicInstance.onBombExplode = startExplosion;
+
+    widget.ref?.call(widget);
   }
 
   @override
@@ -103,6 +114,7 @@ class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
     _flipController.dispose();
     _audioPlayer.dispose();
     _flashingTimer?.cancel();
+    _explosionTimer?.cancel();
     super.dispose();
   }
 
@@ -132,6 +144,28 @@ class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
         }
       });
     }
+  }
+
+  void startExplosion(double startX, double startY) {
+    // Create more particles for a bigger explosion
+    _particles = List.generate(
+      50, // Increased from 30 to 50 particles
+      (_) => ExplosionParticle(startX, startY),
+    );
+
+    // Start animation timer
+    _explosionTimer?.cancel();
+    _explosionTimer = Timer.periodic(
+      const Duration(milliseconds: 16),
+      (timer) {
+        setState(() {
+          _particles.removeWhere((particle) => !particle.update());
+          if (_particles.isEmpty) {
+            timer.cancel();
+          }
+        });
+      },
+    );
   }
 
   @override
@@ -277,6 +311,7 @@ class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
                                   ]
                                 : null,
                           ),
+                          child: null,
                         );
                       },
                     ),
@@ -287,6 +322,12 @@ class _PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
                             widget.activePiece!,
                             isFlashing: widget.isFlashing,
                           ),
+                        ),
+                      ),
+                    if (_particles.isNotEmpty)
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: ExplosionPainter(_particles),
                         ),
                       ),
                   ],
@@ -338,26 +379,53 @@ class ActivePiecePainter extends CustomPainter {
           canvas.drawRRect(rRect, paint);
 
           // Draw emoji if it's a special brick
-          String? emoji = BrickShapes.getEmojiForBrick(activePiece.shape[y][x]);
-          if (emoji != null) {
-            TextPainter textPainter = TextPainter(
-              text: TextSpan(
-                text: emoji,
-                style: const TextStyle(fontSize: 24),
-              ),
-              textDirection: TextDirection.ltr,
-            );
-            textPainter.layout();
-            textPainter.paint(
-              canvas,
-              Offset(
-                posX + (cellSize - textPainter.width) / 2,
-                posY + (cellSize - textPainter.height) / 2,
-              ),
-            );
+          if (BrickShapes.isSpecialBrick(activePiece.colorIndex)) {
+            String? emoji =
+                BrickShapes.specialBrickEmojis[activePiece.colorIndex];
+            if (emoji != null) {
+              TextPainter textPainter = TextPainter(
+                text: TextSpan(
+                  text: emoji,
+                  style: const TextStyle(fontSize: 24),
+                ),
+                textDirection: TextDirection.ltr,
+              );
+              textPainter.layout();
+              textPainter.paint(
+                canvas,
+                Offset(
+                  posX + (cellSize - textPainter.width) / 2,
+                  posY + (cellSize - textPainter.height) / 2,
+                ),
+              );
+            }
           }
         }
       }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class ExplosionPainter extends CustomPainter {
+  final List<ExplosionParticle> particles;
+
+  ExplosionPainter(this.particles);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (var particle in particles) {
+      final paint = Paint()
+        ..color = particle.color.withAlpha((particle.opacity * 255).round())
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(
+        Offset(particle.x, particle.y),
+        particle.size,
+        paint,
+      );
     }
   }
 

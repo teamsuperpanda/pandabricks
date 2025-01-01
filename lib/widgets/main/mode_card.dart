@@ -119,7 +119,7 @@ class _ModeCardState extends State<ModeCard> {
                         fontSize: 16,
                         color: Colors.white,
                       ),
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                     ),
                   ],
                 ),

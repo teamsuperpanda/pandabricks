@@ -10,6 +10,7 @@ class NextPiece extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Regular next piece display
     return Container(
       width: 80,
       height: 80,

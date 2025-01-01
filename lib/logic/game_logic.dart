@@ -56,12 +56,18 @@ class GameLogic {
   double flipProgress = 0.0;
   final int? flipThreshold;
   int lastFlipScore = 0;
-
   static const List<int> specialBrickIndices = [
-    8,
-    9,
-    10
-  ]; // [Ghost, Cat, Tornado]
+    BrickShapes.ghostBrick, // 8
+    BrickShapes.catBrick, // 9
+    BrickShapes.tornadoBrick, // 10
+    BrickShapes.bombBrick, // 11
+  ];
+
+  // Add callback for explosion effect
+  Function(double x, double y)? onPandaExplode;
+
+  // Add callback for bomb effect
+  Function(int x, int y)? onBombExplode;
 
   GameLogic(this.playfield, this.audioService, this.mode)
       : currentSpeed = mode.speed.toDouble(),
@@ -83,24 +89,31 @@ class GameLogic {
       isCatBrick = false;
       isTornadoBrick = false;
 
-      // Check for special brick spawn in Bambooblitz
       bool shouldSpawnSpecial = mode.name == 'Bambooblitz' &&
           Random().nextInt(100) < mode.specialBlocksSpawnPercentage;
-
       bool shouldSpawnPanda = !shouldSpawnSpecial &&
           Random().nextInt(100) < mode.pandabrickSpawnPercentage;
 
       int randomIndex;
       if (shouldSpawnSpecial) {
+        // Get a random special brick (excluding brick effect)
+        List<int> normalSpecialBricks = [
+          BrickShapes.ghostBrick,
+          BrickShapes.catBrick,
+          BrickShapes.tornadoBrick,
+          BrickShapes.bombBrick,
+        ];
         randomIndex =
-            specialBrickIndices[Random().nextInt(specialBrickIndices.length)];
-        isGhostBrick = randomIndex == 8;
-        isCatBrick = randomIndex == 9;
-        isTornadoBrick = randomIndex == 10;
+            normalSpecialBricks[Random().nextInt(normalSpecialBricks.length)];
+
+        // Set the appropriate flags
+        isGhostBrick = randomIndex == BrickShapes.ghostBrick;
+        isCatBrick = randomIndex == BrickShapes.catBrick;
+        isTornadoBrick = randomIndex == BrickShapes.tornadoBrick;
       } else if (shouldSpawnPanda) {
-        randomIndex = 7;
+        randomIndex = BrickShapes.pandaBrick;
       } else {
-        randomIndex = Random().nextInt(7);
+        randomIndex = Random().nextInt(BrickShapes.standardBrickEnd + 1);
       }
 
       List<List<int>> shapeClone =
@@ -116,10 +129,12 @@ class GameLogic {
         0,
         randomIndex,
       );
-      isPandaBrick = shouldSpawnPanda;
+      isPandaBrick = randomIndex == 7;
     } else {
+      // Handle next piece becoming current
       currentPiece = nextPiece;
-      // Also center the next piece when it becomes current
+
+      // Center normal pieces as before
       int pieceWidth = currentPiece!.shape[0].length;
       currentPiece!.x = (playfield[0].length - pieceWidth) ~/ 2;
 
@@ -144,11 +159,12 @@ class GameLogic {
       nextIndex =
           specialBrickIndices[Random().nextInt(specialBrickIndices.length)];
     } else if (shouldSpawnNextPanda) {
-      nextIndex = 7;
+      nextIndex = BrickShapes.pandaBrick;
     } else {
-      nextIndex = Random().nextInt(7);
+      nextIndex = Random().nextInt(BrickShapes.standardBrickEnd + 1);
     }
 
+    // Create next piece (even for brick effect, to show in next piece window)
     List<List<int>> nextShapeClone =
         pieces[nextIndex].shape.map((row) => List<int>.from(row)).toList();
     nextPiece = TetrisPiece(
@@ -158,13 +174,17 @@ class GameLogic {
       nextIndex,
     );
 
-    if (checkCollision(currentPiece!.x, currentPiece!.y)) {
+    // Only check collision if we have a current piece
+    if (currentPiece != null &&
+        checkCollision(currentPiece!.x, currentPiece!.y)) {
       isGameOver = true;
     }
   }
 
   void movePiece(Direction direction) {
-    if (currentPiece == null || isClearing || isGameOver) return;
+    if (currentPiece == null || isClearing || isGameOver || isPandaFlashing) {
+      return;
+    }
 
     // Handle reversed controls for ghost brick in Bamboo Blitz
     if (isGhostBrick && currentPiece?.colorIndex == 8) {
@@ -216,7 +236,9 @@ class GameLogic {
   }
 
   void updateGame() {
-    if (currentPiece == null || isClearing || isGameOver) return;
+    if (currentPiece == null || isClearing || isGameOver || isPandaFlashing) {
+      return;
+    }
 
     // Check for flip condition
     if (shouldCheckForFlip()) {
@@ -331,7 +353,9 @@ class GameLogic {
   }
 
   void rotatePiece() {
-    if (currentPiece == null || isClearing || isGameOver) return;
+    if (currentPiece == null || isClearing || isGameOver || isPandaFlashing) {
+      return;
+    }
 
     List<List<int>> rotated = rotate(currentPiece!.shape);
 
@@ -473,6 +497,19 @@ class GameLogic {
       } else if (!isPandaFlashing) {
         startPandaFlash();
       }
+    } else if (isBombBrick()) {
+      // Trigger bomb effect
+      int bombX = currentPiece!.x;
+      int bombY = currentPiece!.y;
+      onBombExplode?.call(bombX, bombY);
+
+      // Clear the row and column of the bomb
+      clearBombEffects(bombX, bombY);
+
+      // Lock the bomb piece
+      placePiece();
+      currentPiece = null;
+      checkLines();
     } else {
       placePiece();
       currentPiece = null;
@@ -486,8 +523,43 @@ class GameLogic {
     }
   }
 
+  void clearBombEffects(int x, int y) {
+    // Add to flashing rows for animation effect
+    flashingRows.add(y);
+    isClearing = true;
+
+    // Delay the actual clearing to allow for animation
+    Future.delayed(const Duration(milliseconds: 500), () {
+      // Clear entire row
+      for (int col = 0; col < playfield[0].length; col++) {
+        playfield[y][col] = 0;
+      }
+
+      // Clear entire column
+      for (int row = 0; row < playfield.length; row++) {
+        playfield[row][x] = 0;
+      }
+
+      // Reset state
+      flashingRows.clear();
+      isClearing = false;
+
+      // Play explosion sound
+      audioService.playSound('bomb_explode');
+
+      // Check for any new lines and spawn new piece
+      checkLines();
+    });
+  }
+
+  bool isBombBrick() {
+    return currentPiece?.colorIndex == BrickShapes.bombBrick;
+  }
+
   void hardDrop() {
-    if (currentPiece == null || isClearing || isGameOver) return;
+    if (currentPiece == null || isClearing || isGameOver || isPandaFlashing) {
+      return;
+    }
 
     // Move piece down until collision
     while (!checkCollision(currentPiece!.x, currentPiece!.y + 1)) {
@@ -519,20 +591,42 @@ class GameLogic {
     int startX = currentPiece!.x;
     int startY = currentPiece!.y;
 
-    // Clear both the panda brick and the columns below it in one go
-    for (int x = startX; x < startX + 2; x++) {
-      // Clear from the panda brick position all the way down
-      for (int y = startY; y < playfield.length; y++) {
-        playfield[y][x] = 0;
+    // Calculate center position for explosion
+    double cellSize = 30.0;
+    double centerX = (startX + 1.0) * cellSize;
+    double centerY = (startY + 1.0) * cellSize;
+
+    // Clear the panda brick immediately
+    for (int y = 0; y < currentPiece!.shape.length; y++) {
+      for (int x = 0; x < currentPiece!.shape[y].length; x++) {
+        if (currentPiece!.shape[y][x] != 0) {
+          int worldY = currentPiece!.y + y;
+          int worldX = currentPiece!.x + x;
+          if (worldY >= 0 && worldY < playfield.length) {
+            playfield[worldY][worldX] = 0;
+          }
+        }
       }
     }
 
-    // Reset state
-    isPandaFlashing = false;
-    currentPiece = null;
-    // Play sound before checking lines
-    AudioService().playSound('panda_disappear');
-    checkLines();
+    // Trigger explosion animation
+    onPandaExplode?.call(centerX, centerY);
+
+    // Clear the columns after a delay
+    Future.delayed(const Duration(milliseconds: 150), () {
+      // Clear the columns below
+      for (int x = startX; x < startX + 2; x++) {
+        for (int y = startY; y < playfield.length; y++) {
+          playfield[y][x] = 0;
+        }
+      }
+
+      // Reset state
+      isPandaFlashing = false;
+      currentPiece = null;
+      AudioService().playSound('panda_disappear');
+      checkLines();
+    });
   }
 
   void dispose() {

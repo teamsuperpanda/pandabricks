@@ -14,6 +14,7 @@ A modern take on the classic block-falling puzzle game, featuring unique gamepla
   - 👻 Ghost Block: Reversed controls
   - 🐱 Cat Block: Moves unpredictably
   - 🌪️ Tornado Block: Auto-rotates while falling
+  - 💣 Bomb Block: Clears its entire row and column upon placement
 
 - 🎵 Audio Features:
   - Background music

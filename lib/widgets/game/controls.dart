@@ -23,48 +23,59 @@ class Controls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      autofocus: true,
-      onKeyEvent: (node, event) {
-        if (event is KeyDownEvent) {
-          switch (event.logicalKey) {
-            case LogicalKeyboardKey.arrowLeft:
-              onLeft();
-              return KeyEventResult.handled;
-            case LogicalKeyboardKey.arrowRight:
-              onRight();
-              return KeyEventResult.handled;
-            case LogicalKeyboardKey.arrowDown:
-              onDown();
-              return KeyEventResult.handled;
-            case LogicalKeyboardKey.arrowUp:
-              onRotate();
-              return KeyEventResult.handled;
-            case LogicalKeyboardKey.space:
-              onHardDrop();
-              return KeyEventResult.handled;
-            case LogicalKeyboardKey.keyP:
-              onForcePanda();
-              return KeyEventResult.handled;
-            case LogicalKeyboardKey.keyF:
-              onFlip();
-              return KeyEventResult.handled;
-          }
-        }
-        return KeyEventResult.ignored;
+    return CallbackShortcuts(
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): onLeft,
+        const SingleActivator(LogicalKeyboardKey.arrowDown): onDown,
+        const SingleActivator(LogicalKeyboardKey.arrowRight): onRight,
+        const SingleActivator(LogicalKeyboardKey.arrowUp): onRotate,
+        const SingleActivator(LogicalKeyboardKey.space): onHardDrop,
+        const SingleActivator(LogicalKeyboardKey.keyP): onForcePanda,
+        const SingleActivator(LogicalKeyboardKey.keyF): onFlip,
       },
-      child: Container(
-        color: Colors.black,
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        height: 70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ControlButton(icon: Icons.arrow_left, onTap: onLeft),
-            ControlButton(icon: Icons.arrow_drop_down, onTap: onDown),
-            ControlButton(icon: Icons.arrow_right, onTap: onRight),
-            ControlButton(icon: Icons.rotate_right, onTap: onRotate),
-          ],
+      child: Focus(
+        autofocus: true,
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent) {
+            switch (event.logicalKey) {
+              case LogicalKeyboardKey.arrowLeft:
+                onLeft();
+                return KeyEventResult.handled;
+              case LogicalKeyboardKey.arrowRight:
+                onRight();
+                return KeyEventResult.handled;
+              case LogicalKeyboardKey.arrowDown:
+                onDown();
+                return KeyEventResult.handled;
+              case LogicalKeyboardKey.arrowUp:
+                onRotate();
+                return KeyEventResult.handled;
+              case LogicalKeyboardKey.space:
+                onHardDrop();
+                return KeyEventResult.handled;
+              case LogicalKeyboardKey.keyP:
+                onForcePanda();
+                return KeyEventResult.handled;
+              case LogicalKeyboardKey.keyF:
+                onFlip();
+                return KeyEventResult.handled;
+            }
+          }
+          return KeyEventResult.ignored;
+        },
+        child: Container(
+          color: Colors.black,
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ControlButton(icon: Icons.arrow_left, onTap: onLeft),
+              ControlButton(icon: Icons.arrow_drop_down, onTap: onDown),
+              ControlButton(icon: Icons.arrow_right, onTap: onRight),
+              ControlButton(icon: Icons.rotate_right, onTap: onRotate),
+            ],
+          ),
         ),
       ),
     );

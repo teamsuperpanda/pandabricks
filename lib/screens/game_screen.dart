@@ -33,6 +33,7 @@ class GameScreenState extends State<GameScreen> {
   bool _isGameInitialized = false;
   Timer? _softDropTimer;
   bool _isHardDropInProgress = false;
+  final GlobalKey<PlayfieldState> _playfieldKey = GlobalKey<PlayfieldState>();
 
   @override
   void initState() {
@@ -245,6 +246,7 @@ class GameScreenState extends State<GameScreen> {
                           width: 300,
                           height: 600,
                           child: Playfield(
+                            key: _playfieldKey,
                             playfield: gameLogic.playfield,
                             activePiece: gameLogic.currentPiece,
                             isFlashing: gameLogic.isPandaFlashing,
@@ -263,6 +265,16 @@ class GameScreenState extends State<GameScreen> {
                             onSoftDropEnd: _handleSoftDropEnd,
                             onSwipeLeft: _moveLeft,
                             onSwipeRight: _moveRight,
+                            ref: (playfield) {
+                              gameLogic.onPandaExplode = (x, y) {
+                                _playfieldKey.currentState
+                                    ?.startExplosion(x, y);
+                              };
+                              gameLogic.onBombExplode = (x, y) {
+                                _playfieldKey.currentState
+                                    ?.startExplosion(x * 30.0, y * 30.0);
+                              };
+                            },
                           ),
                         ),
                       ),

@@ -9,12 +9,15 @@ class BrickShapes {
   static const int ghostBrick = 8;
   static const int catBrick = 9;
   static const int tornadoBrick = 10;
+  static const int bombBrick = 11;
 
   // Special brick properties
   static const Map<int, String> specialBrickEmojis = {
-    ghostBrick: '👻', // Ghost brick (index 8)
-    catBrick: '🐱', // Cat brick (index 9)
-    tornadoBrick: '🌪️', // Tornado brick (index 10)
+    pandaBrick: '🐼', // Add panda emoji
+    ghostBrick: '👻',
+    catBrick: '🐱',
+    tornadoBrick: '🌪️',
+    bombBrick: '💣',
   };
 
   static const List<List<List<int>>> shapes = [
@@ -65,6 +68,10 @@ class BrickShapes {
       [0, 10, 0],
       [10, 10, 10],
     ],
+    // Bomb shape (1x1) - index 11
+    [
+      [11],
+    ],
   ];
 
   static final List<Color> colors = [
@@ -79,6 +86,7 @@ class BrickShapes {
     Colors.purple.shade300, // Ghost brick (index 8)
     Colors.orange.shade300, // Cat brick (index 9)
     Colors.blue.shade300, // Tornado brick (index 10)
+    Colors.redAccent, // Bomb brick (index 11)
   ];
 
   // Helper method to get emoji for a brick
@@ -123,14 +131,19 @@ class BrickShapes {
 
   // Update specialBrickIndices in GameLogic to match
   static const List<int> specialBrickIndices = [
-    8,
-    9,
-    10
-  ]; // [Ghost, Cat, Tornado]
+    ghostBrick,
+    catBrick,
+    tornadoBrick,
+    bombBrick,
+  ];
 
   // Helper method to check if a brick is special (ghost or cat)
   static bool isSpecialBrick(int index) =>
-      index == ghostBrick || index == catBrick || index == tornadoBrick;
+      index == pandaBrick ||
+      index == ghostBrick ||
+      index == catBrick ||
+      index == tornadoBrick ||
+      index == bombBrick;
 
   // Get glow colors for special bricks (simple glow)
   static List<Color> getGlowColors(int brickValue) {
@@ -145,4 +158,70 @@ class BrickShapes {
 
   // Add tornado rotation logic
   static const tornadoRotationInterval = Duration(milliseconds: 500);
+
+  // Helper methods for bomb brick (optional, if needed)
+  static bool isBombBrick(int index) => index == bombBrick;
+}
+
+// Add this class to handle explosion particles
+class ExplosionParticle {
+  double x, y;
+  double dx = 0, dy = 0;
+  double size = 0;
+  double opacity = 1.0;
+  Color color = Colors.white;
+
+  ExplosionParticle(this.x, this.y) {
+    final random = Random();
+    final angle = random.nextDouble() * 2 * pi;
+    final speed = 2 + random.nextDouble() * 8; // More varied speeds
+    dx = cos(angle) * speed;
+    dy = sin(angle) * speed;
+    size = 4 + random.nextDouble() * 12; // More varied sizes
+    opacity = 0.8 + random.nextDouble() * 0.2; // Varied initial opacity
+
+    // Enhanced color palette for explosions
+    color = [
+      Colors.white,
+      Colors.yellow,
+      Colors.orange,
+      Colors.pink,
+      Colors.red,
+      Colors.purple,
+    ][random.nextInt(6)];
+  }
+
+  bool update() {
+    x += dx;
+    y += dy;
+    dy += 0.2; // Reduced gravity for slower fall
+    size *= 0.97; // Slower size reduction
+    opacity *= 0.96; // Slower fade out
+    return opacity > 0.1;
+  }
+}
+
+class ExplosionPainter extends CustomPainter {
+  final List<ExplosionParticle> particles;
+
+  ExplosionPainter(this.particles);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (var particle in particles) {
+      final paint = Paint()
+        ..color = particle.color.withAlpha((particle.opacity * 255).round())
+        ..style = PaintingStyle.fill
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+
+      canvas.drawCircle(
+        Offset(particle.x, particle.y),
+        particle.size,
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

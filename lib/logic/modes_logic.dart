@@ -22,12 +22,12 @@ class Modes {
   static ModeModel bambooblitz = ModeModel(
       name: 'Bambooblitz',
       speed: 100,
-      speedIncrease: 20,
+      speedIncrease: 30,
       scoreThreshold: 500,
-      pandabrickSpawnPercentage: 5,
+      pandabrickSpawnPercentage: 90,
       rowClearScore: 2,
-      specialBlocksSpawnPercentage: 10,
-      flipThreshold: 3000);
+      specialBlocksSpawnPercentage: 90,
+      flipThreshold: 2000);
 
   static String getModeName(ModeModel mode) {
     if (mode == easy) return 'Easy';
