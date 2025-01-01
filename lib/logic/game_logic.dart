@@ -105,15 +105,24 @@ class GameLogic {
 
       List<List<int>> shapeClone =
           pieces[randomIndex].shape.map((row) => List<int>.from(row)).toList();
+
+      // Calculate spawn position to center the piece
+      int pieceWidth = shapeClone[0].length;
+      int spawnX = (playfield[0].length - pieceWidth) ~/ 2;
+
       currentPiece = TetrisPiece(
         shapeClone,
-        4, // Center the piece
+        spawnX, // Center the piece horizontally
         0,
         randomIndex,
       );
       isPandaBrick = shouldSpawnPanda;
     } else {
       currentPiece = nextPiece;
+      // Also center the next piece when it becomes current
+      int pieceWidth = currentPiece!.shape[0].length;
+      currentPiece!.x = (playfield[0].length - pieceWidth) ~/ 2;
+
       isPandaBrick = nextPiece!.colorIndex == 7;
       isGhostBrick = nextPiece!.colorIndex == 8;
       isCatBrick = nextPiece!.colorIndex == 9;
