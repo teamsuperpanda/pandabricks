@@ -1,6 +1,6 @@
 class ModeModel {
   final String name;
-  final int speed;
+  final double initialSpeed;
   final double speedIncrease;
   final int scoreThreshold;
   final int rowClearScore;
@@ -10,7 +10,7 @@ class ModeModel {
 
   ModeModel({
     required this.name,
-    required this.speed,
+    required this.initialSpeed,
     required this.speedIncrease,
     required this.scoreThreshold,
     required this.rowClearScore,

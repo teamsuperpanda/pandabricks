@@ -3,12 +3,14 @@ import 'package:pandabricks/screens/game_screen.dart';
 import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
 import 'package:pandabricks/services/high_score_service.dart';
+import 'package:pandabricks/services/games_services.dart';
 
 class GameOverDialog extends StatefulWidget {
   final ModeModel mode;
   final bool isSoundEffectsEnabled;
   final bool isBackgroundMusicEnabled;
   final int finalScore;
+  final GamesServicesController gamesServices;
 
   const GameOverDialog({
     super.key,
@@ -16,6 +18,7 @@ class GameOverDialog extends StatefulWidget {
     required this.isSoundEffectsEnabled,
     required this.isBackgroundMusicEnabled,
     required this.finalScore,
+    required this.gamesServices,
   });
 
   @override
@@ -43,6 +46,13 @@ class _GameOverDialogState extends State<GameOverDialog> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.gamesServices.submitScore(
+        score: widget.finalScore,
+        gameMode: widget.mode.name,
+      );
+    });
+
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(

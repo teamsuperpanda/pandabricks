@@ -7,9 +7,14 @@ import 'screens/game_screen.dart';
 import 'models/mode_model.dart';
 import 'logic/modes_logic.dart';
 import 'services/audio_service.dart';
+import 'services/games_services.dart';
+import 'widgets/dialog/glowing_button.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final gamesServices = GamesServicesController();
+  await gamesServices.initialize();
 
   try {
     // Initialize the Audio Service
@@ -46,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final AudioService _audioService = AudioService();
+  final GamesServicesController _gamesServices = GamesServicesController();
   bool _isBackgroundMusicEnabled = false;
   bool _isSoundEffectsEnabled = false;
 
@@ -162,6 +168,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.leaderboard_rounded,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          onPressed: () => _showLeaderboardDialog(context),
+                        ),
+                      ],
+                    ),
                     ModeCard(
                       mode: 'Easy',
                       onTap: () => navigateToGameScreen(context, Modes.easy),
@@ -186,6 +205,65 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showLeaderboardDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF2C3E50), Color(0xFF1A1A2E)],
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.white.withAlpha((0.1 * 255).round()),
+              width: 1.5,
+            ),
+          ),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Leaderboards',
+                style: TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GlowingButton(
+                    onPressed: () => _gamesServices.showLeaderboard('Easy'),
+                    color: const Color(0xFF2ECC71),
+                    text: 'EASY',
+                  ),
+                  GlowingButton(
+                    onPressed: () => _gamesServices.showLeaderboard('Normal'),
+                    color: const Color(0xFF3498DB),
+                    text: 'NORMAL',
+                  ),
+                  GlowingButton(
+                    onPressed: () =>
+                        _gamesServices.showLeaderboard('BambooBlitz'),
+                    color: const Color(0xFFE74C3C),
+                    text: 'BLITZ',
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

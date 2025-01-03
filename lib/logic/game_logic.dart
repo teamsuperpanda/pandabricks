@@ -70,7 +70,7 @@ class GameLogic {
   Function(int x, int y)? onBombExplode;
 
   GameLogic(this.playfield, this.audioService, this.mode)
-      : currentSpeed = mode.speed.toDouble(),
+      : currentSpeed = mode.initialSpeed.toDouble(),
         speedIncrease = mode.speedIncrease.toDouble(),
         scoreThreshold = mode.scoreThreshold,
         flipThreshold = mode.flipThreshold {

@@ -3,7 +3,7 @@ import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/logic/modes_logic.dart';
 import 'package:pandabricks/dialog/game/pause_dialog.dart';
 
-class Score extends StatelessWidget {
+class Score extends StatefulWidget {
   final ModeModel mode;
   final VoidCallback onPause;
   final VoidCallback onResume;
@@ -17,19 +17,43 @@ class Score extends StatelessWidget {
     required this.score,
   });
 
+  @override
+  State<Score> createState() => _ScoreState();
+}
+
+class _ScoreState extends State<Score> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {}); // Force refresh when app is resumed
+    }
+  }
+
   void _showPauseDialog(BuildContext context) {
-    onPause();
+    widget.onPause();
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return PauseDialog(onResume: onResume);
+        return PauseDialog(onResume: widget.onResume);
       },
     );
   }
 
   Color _getModeColor() {
-    switch (mode.name.toLowerCase()) {
+    switch (widget.mode.name.toLowerCase()) {
       case 'easy':
         return Colors.green;
       case 'normal':
@@ -53,7 +77,7 @@ class Score extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              Modes.getModeName(mode),
+              Modes.getModeName(widget.mode),
               style: TextStyle(
                 color: _getModeColor(),
                 fontSize: 16,
@@ -75,8 +99,8 @@ class Score extends StatelessWidget {
                 );
               },
               child: Text(
-                score.toString(),
-                key: ValueKey<int>(score),
+                widget.score.toString(),
+                key: ValueKey<int>(widget.score),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,

@@ -14,7 +14,7 @@ void main() {
     mockAudio = MockAudioService();
     testMode = ModeModel(
       name: 'Test',
-      speed: 100,
+      initialSpeed: 100,
       speedIncrease: 10,
       scoreThreshold: 1000,
       pandabrickSpawnPercentage: 5,
@@ -125,7 +125,7 @@ void main() {
         mockAudio,
         ModeModel(
           name: 'Test',
-          speed: 100,
+          initialSpeed: 100,
           speedIncrease: 10,
           scoreThreshold: 1000,
           pandabrickSpawnPercentage: 5,

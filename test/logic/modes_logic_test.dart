@@ -7,7 +7,7 @@ void main() {
       final easyMode = Modes.easy;
 
       expect(easyMode.name, 'Easy');
-      expect(easyMode.speed, 100);
+      expect(easyMode.initialSpeed, 100);
       expect(easyMode.speedIncrease, 0);
       expect(easyMode.scoreThreshold, 0);
       expect(easyMode.pandabrickSpawnPercentage, 20);
@@ -18,7 +18,7 @@ void main() {
       final normalMode = Modes.normal;
 
       expect(normalMode.name, 'Normal');
-      expect(normalMode.speed, 100);
+      expect(normalMode.initialSpeed, 100);
       expect(normalMode.speedIncrease, 10);
       expect(normalMode.scoreThreshold, 1000);
       expect(normalMode.pandabrickSpawnPercentage, 5);
@@ -28,8 +28,8 @@ void main() {
     test('should have correct settings for Bambooblitz mode', () {
       final blitzMode = Modes.bambooblitz;
 
-      expect(blitzMode.name, 'Bambooblitz');
-      expect(blitzMode.speed, 100);
+      expect(blitzMode.name, 'Bamboo Blitz');
+      expect(blitzMode.initialSpeed, 30);
       expect(blitzMode.speedIncrease, 20);
       expect(blitzMode.scoreThreshold, 500);
       expect(blitzMode.pandabrickSpawnPercentage, 5);
@@ -40,7 +40,7 @@ void main() {
     test('should get correct mode names', () {
       expect(Modes.getModeName(Modes.easy), 'Easy');
       expect(Modes.getModeName(Modes.normal), 'Normal');
-      expect(Modes.getModeName(Modes.bambooblitz), 'Bambooblitz');
+      expect(Modes.getModeName(Modes.bambooblitz), 'Bamboo Blitz');
     });
   });
 }

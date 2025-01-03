@@ -16,7 +16,9 @@ dependencies:
   shared_preferences: ^2.2.2
   just_audio: ^0.9.36
   logging: ^1.2.0
-  games_services: ^4.0.3
+  games_services: ^3.0.0
+  google_sign_in: ^6.2.1
+  meta: ^1.11.0
 
 dev_dependencies:
   flutter_test:
