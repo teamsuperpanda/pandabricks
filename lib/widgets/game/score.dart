@@ -58,7 +58,7 @@ class _ScoreState extends State<Score> with WidgetsBindingObserver {
         return Colors.green;
       case 'normal':
         return Colors.blue;
-      case 'bambooblitz':
+      case 'bamboo blitz':
         return Colors.orange;
       default:
         return Colors.white;
@@ -81,6 +81,7 @@ class _ScoreState extends State<Score> with WidgetsBindingObserver {
               style: TextStyle(
                 color: _getModeColor(),
                 fontSize: 16,
+                fontWeight: FontWeight.bold,
                 fontFamily: 'Fredoka',
               ),
             ),

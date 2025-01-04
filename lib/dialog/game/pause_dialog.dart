@@ -5,12 +5,15 @@ import 'package:pandabricks/services/audio_service.dart';
 class PauseDialog extends StatelessWidget {
   final VoidCallback onResume;
 
-  PauseDialog({super.key, required this.onResume}) {
-    AudioService().playSound('pause');
-  }
+  const PauseDialog({super.key, required this.onResume});
 
   @override
   Widget build(BuildContext context) {
+    // Play sound when dialog is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AudioService().playSound('pause');
+    });
+
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(

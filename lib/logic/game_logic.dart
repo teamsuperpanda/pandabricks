@@ -149,7 +149,7 @@ class GameLogic {
     }
 
     // Generate next piece
-    bool shouldSpawnNextSpecial = mode.name == 'Bambooblitz' &&
+    bool shouldSpawnNextSpecial = mode.name == 'Bamboo Blitz' &&
         Random().nextInt(100) < mode.specialBlocksSpawnPercentage;
     bool shouldSpawnNextPanda = !shouldSpawnNextSpecial &&
         Random().nextInt(100) < mode.pandabrickSpawnPercentage;
@@ -276,7 +276,7 @@ class GameLogic {
   }
 
   void checkLines() {
-    if (isClearing) return;
+    if (isClearing || isGameOver) return;
 
     flashingRows.clear();
     // Check all rows from bottom to top
@@ -482,6 +482,14 @@ class GameLogic {
   }
 
   void lockPiece() {
+    if (currentPiece == null) return;
+
+    // Check for game over first
+    if (checkCollision(currentPiece!.x, currentPiece!.y)) {
+      isGameOver = true;
+      return;
+    }
+
     if (isCatBrick) {
       catMovementTimer?.cancel();
     }

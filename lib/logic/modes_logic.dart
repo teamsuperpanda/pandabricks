@@ -6,7 +6,7 @@ class Modes {
     initialSpeed: 100,
     speedIncrease: 0,
     scoreThreshold: 0,
-    pandabrickSpawnPercentage: 20,
+    pandabrickSpawnPercentage: 10,
     specialBlocksSpawnPercentage: 0,
     rowClearScore: 1,
   );

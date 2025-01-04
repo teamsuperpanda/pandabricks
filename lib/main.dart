@@ -8,7 +8,9 @@ import 'models/mode_model.dart';
 import 'logic/modes_logic.dart';
 import 'services/audio_service.dart';
 import 'services/games_services.dart';
-import 'widgets/dialog/glowing_button.dart';
+import 'logic/score_logic.dart';
+import 'widgets/main/help_dialog.dart';
+import 'widgets/main/leaderboard_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Panda Bricks',
       theme: ThemeData(
         useMaterial3: true,
@@ -52,14 +55,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final AudioService _audioService = AudioService();
   final GamesServicesController _gamesServices = GamesServicesController();
+  final ScoreLogic _scoreLogic = ScoreLogic(rowClearScore: 100);
   bool _isBackgroundMusicEnabled = false;
   bool _isSoundEffectsEnabled = false;
+  Map<String, int> _highScores = {
+    'Easy': 0,
+    'Normal': 0,
+    'BambooBlitz': 0,
+  };
 
   @override
   void initState() {
     super.initState();
     _loadAudioPreferences();
     _setupBackgroundMusic();
+    _loadHighScores();
   }
 
   Future<void> _loadAudioPreferences() async {
@@ -108,10 +118,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  @override
-  void dispose() {
-    _audioService.dispose();
-    super.dispose();
+  Future<void> _loadHighScores() async {
+    final scores = await _scoreLogic.getAllHighScores();
+    setState(() {
+      _highScores = scores;
+    });
   }
 
   void navigateToGameScreen(BuildContext context, ModeModel mode) {
@@ -125,11 +136,18 @@ class _MyHomePageState extends State<MyHomePage> {
           isBackgroundMusicEnabled: _isBackgroundMusicEnabled,
         ),
       ),
-    ).then((_) {
+    ).then((_) async {
       if (_isBackgroundMusicEnabled) {
         _audioService.playMenuMusic();
       }
+      await _loadHighScores();
     });
+  }
+
+  @override
+  void dispose() {
+    _audioService.dispose();
+    super.dispose();
   }
 
   @override
@@ -179,6 +197,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           onPressed: () => _showLeaderboardDialog(context),
                         ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.help_outline_rounded,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          onPressed: () => _showHelpDialog(context),
+                        ),
                       ],
                     ),
                     ModeCard(
@@ -210,61 +236,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _showHelpDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => const HelpDialog(),
+    );
+  }
+
   void _showLeaderboardDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF2C3E50), Color(0xFF1A1A2E)],
-            ),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.white.withAlpha((0.1 * 255).round()),
-              width: 1.5,
-            ),
-          ),
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Leaderboards',
-                style: TextStyle(
-                  fontFamily: 'Fredoka',
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GlowingButton(
-                    onPressed: () => _gamesServices.showLeaderboard('Easy'),
-                    color: const Color(0xFF2ECC71),
-                    text: 'EASY',
-                  ),
-                  GlowingButton(
-                    onPressed: () => _gamesServices.showLeaderboard('Normal'),
-                    color: const Color(0xFF3498DB),
-                    text: 'NORMAL',
-                  ),
-                  GlowingButton(
-                    onPressed: () =>
-                        _gamesServices.showLeaderboard('BambooBlitz'),
-                    color: const Color(0xFFE74C3C),
-                    text: 'BLITZ',
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+      builder: (context) => LeaderboardDialog(
+        highScores: _highScores,
+        gamesServices: _gamesServices,
       ),
     );
   }

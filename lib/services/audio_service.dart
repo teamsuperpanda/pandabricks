@@ -184,4 +184,10 @@ class AudioService {
   void stopMenuMusic() {
     _menuMusic.stop();
   }
+
+  void stopAllSounds() {
+    _player.stop();
+    _gameMusic.stop();
+    _menuMusic.stop();
+  }
 }

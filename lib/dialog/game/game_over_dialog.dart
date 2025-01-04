@@ -4,6 +4,7 @@ import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
 import 'package:pandabricks/services/high_score_service.dart';
 import 'package:pandabricks/services/games_services.dart';
+import 'package:pandabricks/services/audio_service.dart';
 
 class GameOverDialog extends StatefulWidget {
   final ModeModel mode;
@@ -32,6 +33,7 @@ class _GameOverDialogState extends State<GameOverDialog> {
   @override
   void initState() {
     super.initState();
+    AudioService().stopAllSounds();
     _checkHighScore();
   }
 
