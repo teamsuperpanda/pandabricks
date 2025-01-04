@@ -10,7 +10,7 @@ void main() {
       expect(easyMode.initialSpeed, 100);
       expect(easyMode.speedIncrease, 0);
       expect(easyMode.scoreThreshold, 0);
-      expect(easyMode.pandabrickSpawnPercentage, 20);
+      expect(easyMode.pandabrickSpawnPercentage, 10);
       expect(easyMode.specialBlocksSpawnPercentage, 0);
     });
 
@@ -29,8 +29,8 @@ void main() {
       final blitzMode = Modes.bambooblitz;
 
       expect(blitzMode.name, 'Bamboo Blitz');
-      expect(blitzMode.initialSpeed, 30);
-      expect(blitzMode.speedIncrease, 20);
+      expect(blitzMode.initialSpeed, 100);
+      expect(blitzMode.speedIncrease, 30);
       expect(blitzMode.scoreThreshold, 500);
       expect(blitzMode.pandabrickSpawnPercentage, 5);
       expect(blitzMode.specialBlocksSpawnPercentage, 10);
