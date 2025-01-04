@@ -23,8 +23,8 @@ class Modes {
 
   static ModeModel bambooblitz = ModeModel(
     name: 'Bamboo Blitz',
-    initialSpeed: 30,
-    speedIncrease: 20,
+    initialSpeed: 100,
+    speedIncrease: 30,
     scoreThreshold: 500,
     pandabrickSpawnPercentage: 5,
     specialBlocksSpawnPercentage: 10,
