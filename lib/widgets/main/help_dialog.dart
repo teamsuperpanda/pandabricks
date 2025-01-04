@@ -66,7 +66,7 @@ class HelpDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withAlpha((0.1 * 255).round()),
                   blurRadius: 4,
                   spreadRadius: 1,
                 ),

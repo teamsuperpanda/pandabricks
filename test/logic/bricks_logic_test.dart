@@ -41,8 +41,8 @@ void main() {
       Color standardColor = BrickShapes.getActiveColor(0);
       Color specialColor = BrickShapes.getActiveColor(8);
 
-      expect(standardColor.alpha, 230); // ~230/255
-      expect(specialColor.alpha, 255); // 255/255
+      expect(standardColor.a, closeTo(0.9, 0.01)); // ~90% opacity
+      expect(specialColor.a, equals(1.0)); // Full opacity
     });
 
     test('should get correct glow colors for special bricks', () {

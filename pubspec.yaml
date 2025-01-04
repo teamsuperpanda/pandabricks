@@ -16,16 +16,16 @@ dependencies:
   shared_preferences: ^2.2.2
   just_audio: ^0.9.36
   logging: ^1.2.0
-  games_services: ^3.0.0
+  games_services: ^4.0.3
   google_sign_in: ^6.2.1
   meta: ^1.11.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   flutter_native_splash: ^2.4.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.2
   mockito: ^5.4.2
   build_runner: ^2.4.6
 
