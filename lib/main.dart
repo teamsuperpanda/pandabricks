@@ -7,23 +7,15 @@ import 'screens/game_screen.dart';
 import 'models/mode_model.dart';
 import 'logic/modes_logic.dart';
 import 'services/audio_service.dart';
-import 'services/games_services.dart';
-import 'logic/score_logic.dart';
 import 'widgets/main/help_dialog.dart';
-import 'widgets/main/leaderboard_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final gamesServices = GamesServicesController();
-  await gamesServices.initialize();
-
   try {
-    // Initialize the Audio Service
     await AudioService().init();
   } catch (e) {
     debugPrint('Failed to initialize audio: $e');
-    // Continue app initialization even if audio fails
   }
 
   runApp(const MyApp());
@@ -54,22 +46,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final AudioService _audioService = AudioService();
-  final GamesServicesController _gamesServices = GamesServicesController();
-  final ScoreLogic _scoreLogic = ScoreLogic(rowClearScore: 100);
   bool _isBackgroundMusicEnabled = false;
   bool _isSoundEffectsEnabled = false;
-  Map<String, int> _highScores = {
-    'Easy': 0,
-    'Normal': 0,
-    'BambooBlitz': 0,
-  };
+  final _easyModeKey = GlobalKey<ModeCardState>();
+  final _normalModeKey = GlobalKey<ModeCardState>();
+  final _blitzModeKey = GlobalKey<ModeCardState>();
 
   @override
   void initState() {
     super.initState();
     _loadAudioPreferences();
     _setupBackgroundMusic();
-    _loadHighScores();
   }
 
   Future<void> _loadAudioPreferences() async {
@@ -118,13 +105,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> _loadHighScores() async {
-    final scores = await _scoreLogic.getAllHighScores();
-    setState(() {
-      _highScores = scores;
-    });
-  }
-
   void navigateToGameScreen(BuildContext context, ModeModel mode) {
     _audioService.pauseMenuMusic();
     Navigator.push(
@@ -136,11 +116,13 @@ class _MyHomePageState extends State<MyHomePage> {
           isBackgroundMusicEnabled: _isBackgroundMusicEnabled,
         ),
       ),
-    ).then((_) async {
+    ).then((_) {
       if (_isBackgroundMusicEnabled) {
         _audioService.playMenuMusic();
       }
-      await _loadHighScores();
+      _easyModeKey.currentState?.refreshHighScore();
+      _normalModeKey.currentState?.refreshHighScore();
+      _blitzModeKey.currentState?.refreshHighScore();
     });
   }
 
@@ -191,14 +173,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         IconButton(
                           icon: const Icon(
-                            Icons.leaderboard_rounded,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () => _showLeaderboardDialog(context),
-                        ),
-                        IconButton(
-                          icon: const Icon(
                             Icons.help_outline_rounded,
                             color: Colors.white,
                             size: 30,
@@ -208,14 +182,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     ModeCard(
+                      key: _easyModeKey,
                       mode: 'Easy',
                       onTap: () => navigateToGameScreen(context, Modes.easy),
                     ),
                     ModeCard(
+                      key: _normalModeKey,
                       mode: 'Normal',
                       onTap: () => navigateToGameScreen(context, Modes.normal),
                     ),
                     ModeCard(
+                      key: _blitzModeKey,
                       mode: 'Bamboo Blitz',
                       onTap: () =>
                           navigateToGameScreen(context, Modes.bambooblitz),
@@ -240,16 +217,6 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog(
       context: context,
       builder: (context) => const HelpDialog(),
-    );
-  }
-
-  void _showLeaderboardDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => LeaderboardDialog(
-        highScores: _highScores,
-        gamesServices: _gamesServices,
-      ),
     );
   }
 }

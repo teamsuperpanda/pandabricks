@@ -8,10 +8,10 @@ class ModeCard extends StatefulWidget {
   const ModeCard({super.key, required this.onTap, required this.mode});
 
   @override
-  State<ModeCard> createState() => _ModeCardState();
+  State<ModeCard> createState() => ModeCardState();
 }
 
-class _ModeCardState extends State<ModeCard> {
+class ModeCardState extends State<ModeCard> {
   int? highScore;
 
   @override
@@ -22,11 +22,15 @@ class _ModeCardState extends State<ModeCard> {
 
   Future<void> _loadHighScore() async {
     final score = await HighScoreService.getHighScore(widget.mode);
-    if (score > 0) {
+    if (mounted) {
       setState(() {
         highScore = score;
       });
     }
+  }
+
+  Future<void> refreshHighScore() async {
+    await _loadHighScore();
   }
 
   @override

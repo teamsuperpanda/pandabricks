@@ -8,7 +8,6 @@ import 'package:pandabricks/logic/game_logic.dart';
 import 'dart:async';
 import 'package:pandabricks/dialog/game/game_over_dialog.dart';
 import 'package:pandabricks/services/audio_service.dart';
-import 'package:pandabricks/services/games_services.dart';
 
 class GameScreen extends StatefulWidget {
   final ModeModel mode;
@@ -29,7 +28,6 @@ class GameScreen extends StatefulWidget {
 class GameScreenState extends State<GameScreen> {
   late Timer _timer;
   late GameLogic gameLogic;
-  final GamesServicesController _gamesServices = GamesServicesController();
   bool isPaused = false;
   final AudioService _audioService = AudioService();
   bool _isGameInitialized = false;
@@ -128,15 +126,12 @@ class GameScreenState extends State<GameScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
-        return GameOverDialog(
-          mode: widget.mode,
-          isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
-          isBackgroundMusicEnabled: widget.isBackgroundMusicEnabled,
-          finalScore: gameLogic.score,
-          gamesServices: _gamesServices,
-        );
-      },
+      builder: (context) => GameOverDialog(
+        mode: widget.mode,
+        isSoundEffectsEnabled: widget.isSoundEffectsEnabled,
+        isBackgroundMusicEnabled: widget.isBackgroundMusicEnabled,
+        finalScore: gameLogic.score,
+      ),
     ).then((_) {
       // Ensure that the menu music is not playing when retrying
       if (widget.isBackgroundMusicEnabled) {

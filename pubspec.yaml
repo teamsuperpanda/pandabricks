@@ -3,7 +3,7 @@ display_name: "Panda Bricks"
 description: "A modern take on the classic falling blocks game, featuring a playful panda theme and unique gameplay mechanics."
 publish_to: 'none'
 
-version: 1.0.1+2
+version: 1.0.2+3
 
 environment:
   sdk: ^3.5.4
@@ -16,8 +16,6 @@ dependencies:
   shared_preferences: ^2.2.2
   just_audio: ^0.9.36
   logging: ^1.2.0
-  games_services: ^4.0.3
-  google_sign_in: ^6.2.1
   meta: ^1.11.0
 
 dev_dependencies:
@@ -65,11 +63,11 @@ flutter:
 
 flutter_launcher_icons:
   android: true
-  ios: true
   image_path: "assets/images/icon.png"
   min_sdk_android: 21
   adaptive_icon_background: "#ADD8E6"
   adaptive_icon_foreground: "assets/images/icon.png"
+  # flutter launcher icons terminal command: flutter pub run flutter_launcher_icons:main
 
 flutter_native_splash:
   android_12: 
@@ -77,4 +75,4 @@ flutter_native_splash:
     branding: assets/images/branding.png
   color: "#1A1A1A"
   android: true
-  ios: true
+  # flutter native splash terminal command: flutter pub run flutter_native_splash:create

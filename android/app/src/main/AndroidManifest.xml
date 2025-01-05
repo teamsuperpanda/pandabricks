@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Add these if not present -->
+    <!-- <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/> -->
     <application
-        android:label="pandabricks"
+        android:label="Panda Bricks"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
