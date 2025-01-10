@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
 import 'package:pandabricks/services/audio_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PauseDialog extends StatelessWidget {
   final VoidCallback onResume;
@@ -9,6 +10,7 @@ class PauseDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     // Play sound when dialog is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AudioService().playSound('pause');
@@ -46,8 +48,8 @@ class PauseDialog extends StatelessWidget {
               color: Colors.white70,
             ),
             const SizedBox(height: 20),
-            const Text(
-              'PAUSED',
+            Text(
+              l10n.paused,
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontWeight: FontWeight.bold,
@@ -65,7 +67,7 @@ class PauseDialog extends StatelessWidget {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                   color: const Color(0xFFE74C3C),
-                  text: 'QUIT',
+                  text: l10n.quit,
                 ),
                 const SizedBox(width: 16),
                 GlowingButton(
@@ -74,7 +76,7 @@ class PauseDialog extends StatelessWidget {
                     onResume();
                   },
                   color: const Color(0xFF2ECC71),
-                  text: 'RESUME',
+                  text: l10n.resume,
                 ),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AudioToggles extends StatelessWidget {
   final bool isBackgroundMusicEnabled;
@@ -16,75 +17,63 @@ class AudioToggles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: GestureDetector(
-                  onTap: () {
-                    onBackgroundMusicChanged(!isBackgroundMusicEnabled);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Background Music',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Fredoka',
-                          color: Colors.white,
-                        ),
-                      ),
-                      Switch(
-                        value: isBackgroundMusicEnabled,
-                        onChanged: onBackgroundMusicChanged,
-                      ),
-                    ],
+          Card(
+            color: Colors.black54,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.backgroundMusic,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Fredoka',
+                      color: Colors.white,
+                    ),
                   ),
-                ),
+                  Switch(
+                    value: isBackgroundMusicEnabled,
+                    onChanged: onBackgroundMusicChanged,
+                  ),
+                ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: GestureDetector(
-                  onTap: () {
-                    onSoundEffectsChanged(!isSoundEffectsEnabled);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Sound Effects',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Fredoka',
-                          color: Colors.white,
-                        ),
-                      ),
-                      Switch(
-                        value: isSoundEffectsEnabled,
-                        onChanged: onSoundEffectsChanged,
-                      ),
-                    ],
+          const SizedBox(height: 10),
+          Card(
+            color: Colors.black54,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.soundEffects,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Fredoka',
+                      color: Colors.white,
+                    ),
                   ),
-                ),
+                  Switch(
+                    value: isSoundEffectsEnabled,
+                    onChanged: onSoundEffectsChanged,
+                  ),
+                ],
               ),
             ),
           ),

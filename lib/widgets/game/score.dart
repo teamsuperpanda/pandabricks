@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/models/mode_model.dart';
-import 'package:pandabricks/logic/modes_logic.dart';
 import 'package:pandabricks/dialog/game/pause_dialog.dart';
 
 class Score extends StatefulWidget {
   final ModeModel mode;
+  final String modeTitle;
   final VoidCallback onPause;
   final VoidCallback onResume;
   final int score;
@@ -12,6 +12,7 @@ class Score extends StatefulWidget {
   const Score({
     super.key,
     required this.mode,
+    required this.modeTitle,
     required this.onPause,
     required this.onResume,
     required this.score,
@@ -77,7 +78,7 @@ class _ScoreState extends State<Score> with WidgetsBindingObserver {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              Modes.getModeName(widget.mode),
+              widget.modeTitle,
               style: TextStyle(
                 color: _getModeColor(),
                 fontSize: 16,

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HelpDialog extends StatelessWidget {
   const HelpDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
@@ -25,27 +27,26 @@ class HelpDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Special Bricks',
-              style: TextStyle(
+            Text(
+              l10n.specialBricks,
+              style: const TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 24,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 20),
+            _buildHelpItem('🐼', 'Panda Brick', l10n.pandaBrickDescription),
+            _buildHelpItem('👻', 'Ghost Brick', l10n.ghostBrickDescription),
+            _buildHelpItem('🐱', 'Cat Brick', l10n.catBrickDescription),
             _buildHelpItem(
-                '🐼', 'Panda Brick', 'Clears two columns when it collides!'),
-            _buildHelpItem('👻', 'Ghost Brick', 'Has reversed controls!'),
-            _buildHelpItem('🐱', 'Cat Brick', 'Moves unpredictably!'),
-            _buildHelpItem('🌪️', 'Tornado Brick', 'Spins as it falls!'),
-            _buildHelpItem(
-                '💣', 'Bomb Brick', 'Clears a row and column when placed!'),
+                '🌪️', 'Tornado Brick', l10n.tornadoBrickDescription),
+            _buildHelpItem('💣', 'Bomb Brick', l10n.bombBrickDescription),
             const SizedBox(height: 16),
             GlowingButton(
               onPressed: () => Navigator.pop(context),
               color: const Color(0xFF3498DB),
-              text: 'Close',
+              text: l10n.close,
             ),
           ],
         ),

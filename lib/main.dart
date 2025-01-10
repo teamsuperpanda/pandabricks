@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pandabricks/theme.dart';
 import 'widgets/main/mode_card.dart';
 import 'widgets/main/audio_toggles.dart';
 import 'screens/game_screen.dart';
@@ -8,6 +9,11 @@ import 'models/mode_model.dart';
 import 'logic/modes_logic.dart';
 import 'services/audio_service.dart';
 import 'widgets/main/help_dialog.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'l10n/l10n.dart';
+import 'package:pandabricks/services/language_service.dart';
+import 'package:pandabricks/dialog/main/language_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,17 +27,43 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _selectedLocale;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedLocale();
+  }
+
+  Future<void> _loadSavedLocale() async {
+    final locale = await LanguageService.getSelectedLocale();
+    setState(() {
+      _selectedLocale = locale;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Panda Bricks',
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
+      theme: AppTheme.darkTheme,
+      locale: _selectedLocale,
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: const MyHomePage(),
     );
   }
@@ -132,6 +164,26 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  void _showLanguageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => LanguageDialog(
+        onLanguageChanged: (locale) {
+          if (context.mounted) {
+            setState(() {
+              // This will trigger a rebuild of the MaterialApp
+              context.findAncestorStateOfType<_MyAppState>()?.setState(() {
+                context
+                    .findAncestorStateOfType<_MyAppState>()
+                    ?._selectedLocale = locale;
+              });
+            });
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,6 +230,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             size: 30,
                           ),
                           onPressed: () => _showHelpDialog(context),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.language_rounded,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          onPressed: () => _showLanguageDialog(context),
                         ),
                       ],
                     ),

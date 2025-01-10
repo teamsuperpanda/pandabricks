@@ -1,0 +1,22 @@
+default_platform(:android)
+
+platform :android do
+  desc "Deploy to Play Store"
+  lane :deploy do
+    # Clean and build the release bundle
+    gradle(
+      task: "clean"
+    )
+    gradle(
+      task: "bundle",
+      build_type: "Release"
+    )
+
+    # Upload the AAB to Google Play
+    upload_to_play_store(
+      track: "production",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      json_key: "fastlane/fastlane.json"
+    )
+  end
+end

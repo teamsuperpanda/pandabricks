@@ -27,6 +27,21 @@ A modern take on the classic block-falling puzzle game, featuring unique gamepla
   - Pause/Resume functionality
   - Smooth animations and visual effects
 
+## Languages Supported
+
+- 🇺🇸 English
+- 🇪🇸 Español (Spanish)
+- 🇫🇷 Français (French)
+- 🇩🇪 Deutsch (German)
+- 🇮🇹 Italiano (Italian)
+- 🇵🇹 Português (Portuguese)
+- 🇯🇵 日本語 (Japanese)
+- 🇰🇷 한국어 (Korean)
+- 🇨🇳 简体中文 (Simplified Chinese)
+- 🇹🇼 繁體中文 (Traditional Chinese)
+
+System language detection is supported. Users can also manually select their preferred language.
+
 ## Controls
 
 - ⌨️ Keyboard Controls:
@@ -58,6 +73,7 @@ Built with Flutter, featuring:
 2. Clone the repository
 3. Run `flutter pub get` to install dependencies
 4. Run `flutter run` to start the app
+5. Run `fastlane deploy` to deploy the app
 
 ## License
 

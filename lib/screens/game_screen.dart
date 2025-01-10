@@ -8,6 +8,7 @@ import 'package:pandabricks/logic/game_logic.dart';
 import 'dart:async';
 import 'package:pandabricks/dialog/game/game_over_dialog.dart';
 import 'package:pandabricks/services/audio_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GameScreen extends StatefulWidget {
   final ModeModel mode;
@@ -217,6 +218,20 @@ class GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    String getModeTitle() {
+      switch (widget.mode.name) {
+        case 'Easy':
+          return l10n.easyMode;
+        case 'Normal':
+          return l10n.normalMode;
+        case 'Bamboo Blitz':
+          return l10n.blitzMode;
+        default:
+          return widget.mode.name;
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.grey[900],
       body: SafeArea(
@@ -225,6 +240,7 @@ class GameScreenState extends State<GameScreen> {
             // Score row
             Score(
               mode: widget.mode,
+              modeTitle: getModeTitle(),
               onPause: _pauseGame,
               onResume: _resumeGame,
               score: gameLogic.score,

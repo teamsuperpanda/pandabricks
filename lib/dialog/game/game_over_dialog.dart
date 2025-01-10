@@ -4,6 +4,7 @@ import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
 import 'package:pandabricks/services/high_score_service.dart';
 import 'package:pandabricks/services/audio_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GameOverDialog extends StatefulWidget {
   final ModeModel mode;
@@ -92,9 +93,9 @@ class _GameOverDialogState extends State<GameOverDialog> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'GAME OVER',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.gameOver,
+              style: const TextStyle(
                 fontFamily: 'Fredoka',
                 fontWeight: FontWeight.bold,
                 fontSize: 32,

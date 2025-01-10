@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/services/high_score_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ModeCard extends StatefulWidget {
   final void Function() onTap;
@@ -33,21 +34,37 @@ class ModeCardState extends State<ModeCard> {
     await _loadHighScore();
   }
 
+  String getTitle() {
+    final l10n = AppLocalizations.of(context)!;
+    switch (widget.mode) {
+      case 'Easy':
+        return l10n.easyMode;
+      case 'Normal':
+        return l10n.normalMode;
+      case 'Bamboo Blitz':
+        return l10n.blitzMode;
+      default:
+        return widget.mode;
+    }
+  }
+
+  String getDescription() {
+    final l10n = AppLocalizations.of(context)!;
+    switch (widget.mode) {
+      case 'Easy':
+        return l10n.easyModeDescription;
+      case 'Normal':
+        return l10n.normalModeDescription;
+      case 'Bamboo Blitz':
+        return l10n.blitzModeDescription;
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String getDescription() {
-      switch (widget.mode) {
-        case 'Easy':
-          return 'Relaxed gameplay with constant speed.';
-        case 'Normal':
-          return 'Classic mode that gradually speeds up.';
-        case 'Bamboo Blitz':
-          return 'Special bricks and board flips.';
-        default:
-          return '';
-      }
-    }
-
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -77,7 +94,7 @@ class ModeCardState extends State<ModeCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${widget.mode} Mode',
+                          getTitle(),
                           style: const TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 24,
@@ -85,33 +102,13 @@ class ModeCardState extends State<ModeCard> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (highScore != null)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Colors.white24,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  highScore.toString(),
-                                  style: const TextStyle(
-                                    fontFamily: 'Fredoka',
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                        if (highScore != null && highScore! > 0)
+                          Text(
+                            l10n.previousHighScore(highScore!),
+                            style: const TextStyle(
+                              fontFamily: 'Fredoka',
+                              fontSize: 16,
+                              color: Colors.white70,
                             ),
                           ),
                       ],

@@ -1,0 +1,120 @@
+{
+    "appTitle": "Panda Bricks",
+    "@appTitle": {
+        "description": "The name of the application"
+    },
+    "gameOver": "GAME OVER",
+    "@gameOver": {
+        "description": "Text shown when the game ends"
+    },
+    "readyForAnotherRound": "Ready for Another Round?",
+    "@readyForAnotherRound": {
+        "description": "Question asked after game over"
+    },
+    "finalScore": "Final Score: {score}",
+    "@finalScore": {
+        "description": "Shows the final score",
+        "placeholders": {
+            "score": {
+                "type": "int"
+            }
+        }
+    },
+    "newHighScore": "New High Score!",
+    "@newHighScore": {
+        "description": "Shown when player achieves a new high score"
+    },
+    "previousHighScore": "Previous: {score}",
+    "@previousHighScore": {
+        "description": "Shows the previous high score",
+        "placeholders": {
+            "score": {
+                "type": "int"
+            }
+        }
+    },
+    "menu": "MENU",
+    "@menu": {
+        "description": "Menu button text"
+    },
+    "retry": "RETRY",
+    "@retry": {
+        "description": "Retry button text"
+    },
+    "paused": "PAUSED",
+    "@paused": {
+        "description": "Shown when game is paused"
+    },
+    "quit": "QUIT",
+    "@quit": {
+        "description": "Quit button text"
+    },
+    "resume": "RESUME",
+    "@resume": {
+        "description": "Resume button text"
+    },
+    "specialBricks": "Special Bricks",
+    "@specialBricks": {
+        "description": "Title for special bricks help section"
+    },
+    "close": "Close",
+    "@close": {
+        "description": "Close button text"
+    },
+    "pandaBrickDescription": "Clears two columns when it collides!",
+    "@pandaBrickDescription": {
+        "description": "Description of panda brick"
+    },
+    "ghostBrickDescription": "Has reversed controls!",
+    "@ghostBrickDescription": {
+        "description": "Description of ghost brick"
+    },
+    "catBrickDescription": "Moves unpredictably!",
+    "@catBrickDescription": {
+        "description": "Description of cat brick"
+    },
+    "tornadoBrickDescription": "Spins as it falls!",
+    "@tornadoBrickDescription": {
+        "description": "Description of tornado brick"
+    },
+    "bombBrickDescription": "Clears a row and column when placed!",
+    "@bombBrickDescription": {
+        "description": "Description of bomb brick"
+    },
+    "backgroundMusic": "Background Music",
+    "@backgroundMusic": {
+        "description": "Background music toggle label"
+    },
+    "soundEffects": "Sound Effects",
+    "@soundEffects": {
+        "description": "Sound effects toggle label"
+    },
+    "easyMode": "Easy Mode",
+    "@easyMode": {
+        "description": "Easy mode title"
+    },
+    "normalMode": "Normal Mode",
+    "@normalMode": {
+        "description": "Normal mode title"
+    },
+    "blitzMode": "Bamboo Blitz Mode",
+    "@blitzMode": {
+        "description": "Blitz mode title"
+    },
+    "easyModeDescription": "Relaxed gameplay with constant speed.",
+    "@easyModeDescription": {
+        "description": "Description of easy mode"
+    },
+    "normalModeDescription": "Classic mode that gradually speeds up.",
+    "@normalModeDescription": {
+        "description": "Description of normal mode"
+    },
+    "blitzModeDescription": "Special bricks and board flips.",
+    "@blitzModeDescription": {
+        "description": "Description of blitz mode"
+    },
+    "systemLanguage": "System",
+    "@systemLanguage": {
+        "description": "System language option"
+    }
+} 
