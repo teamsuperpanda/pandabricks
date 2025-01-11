@@ -1,5 +1,8 @@
 # Panda Bricks 🐼
 
+flutter pub get
+flutter gen-l10n
+
 A modern take on the classic block-falling puzzle game, featuring unique gameplay mechanics and special blocks.
 
 ## Features
