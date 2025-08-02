@@ -585,7 +585,7 @@ class GameLogic {
     flashTimer?.cancel();
 
     // Play stab sound when flash starts
-    audioService.playStabSound();
+    audioService.playSound('flip');
 
     flashTimer = Timer(const Duration(milliseconds: 1500), () {
       clearPandaArea();
@@ -632,7 +632,7 @@ class GameLogic {
       // Reset state
       isPandaFlashing = false;
       currentPiece = null;
-      AudioService().playSound('panda_disappear');
+            audioService.playSound('panda_disappear');
       checkLines();
     });
   }
@@ -656,7 +656,7 @@ class GameLogic {
 
   void removePandaBrick() {
     // Play the disappear sound
-    AudioService().playSound('panda_disappear');
+    audioService.playSound('panda_disappear');
   }
 
   void startCatMovement() {

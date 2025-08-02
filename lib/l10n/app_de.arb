@@ -25,5 +25,15 @@
     "easyModeDescription": "Entspanntes Gameplay mit konstanter Geschwindigkeit.",
     "normalModeDescription": "Klassischer Modus mit zunehmender Geschwindigkeit.",
     "blitzModeDescription": "Spezialsteine und Spielfeldrotationen.",
-    "systemLanguage": "System"
-} 
+    "systemLanguage": "System",
+    "languageEnglish": "Englisch",
+    "languageSpanish": "Spanisch",
+    "languageFrench": "Französisch",
+    "languageGerman": "Deutsch",
+    "languageItalian": "Italienisch",
+    "languagePortuguese": "Portugiesisch",
+    "languageJapanese": "Japanisch",
+    "languageKorean": "Koreanisch",
+    "languageSimplifiedChinese": "Vereinfachtes Chinesisch",
+    "languageTraditionalChinese": "Traditionelles Chinesisch"
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/services/language_service.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 
 class LanguageDialog extends StatefulWidget {
   final Function(Locale?) onLanguageChanged;
@@ -53,7 +53,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              '🌍 Language',
+              'Language',
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 24,
@@ -83,45 +83,45 @@ class _LanguageDialogState extends State<LanguageDialog> {
                     child: Text(AppLocalizations.of(context)?.systemLanguage ??
                         'System'),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'en',
-                    child: Text('English'),
+                    child: Text(AppLocalizations.of(context)!.languageEnglish),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'es',
-                    child: Text('Español'),
+                    child: Text(AppLocalizations.of(context)!.languageSpanish),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'fr',
-                    child: Text('Français'),
+                    child: Text(AppLocalizations.of(context)!.languageFrench),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'de',
-                    child: Text('Deutsch'),
+                    child: Text(AppLocalizations.of(context)!.languageGerman),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'it',
-                    child: Text('Italiano'),
+                    child: Text(AppLocalizations.of(context)!.languageItalian),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'pt',
-                    child: Text('Português'),
+                    child: Text(AppLocalizations.of(context)!.languagePortuguese),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'ja',
-                    child: Text('日本語'),
+                    child: Text(AppLocalizations.of(context)!.languageJapanese),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'ko',
-                    child: Text('한국어'),
+                    child: Text(AppLocalizations.of(context)!.languageKorean),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'zh',
-                    child: Text('简体中文'),
+                    child: Text(AppLocalizations.of(context)!.languageSimplifiedChinese),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: 'zh_TW',
-                    child: Text('繁體中文'),
+                    child: Text(AppLocalizations.of(context)!.languageTraditionalChinese),
                   ),
                 ],
                 onChanged: (String? value) async {

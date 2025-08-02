@@ -25,5 +25,15 @@
     "easyModeDescription": "일정한 속도의 편안한 게임플레이",
     "normalModeDescription": "점차 가속되는 클래식 모드",
     "blitzModeDescription": "특수 블록과 보드 회전",
-    "systemLanguage": "시스템"
-} 
+    "systemLanguage": "시스템",
+    "languageEnglish": "영어",
+    "languageSpanish": "스페인어",
+    "languageFrench": "프랑스어",
+    "languageGerman": "독일어",
+    "languageItalian": "이탈리아어",
+    "languagePortuguese": "포르투갈어",
+    "languageJapanese": "일본어",
+    "languageKorean": "한국어",
+    "languageSimplifiedChinese": "중국어 간체",
+    "languageTraditionalChinese": "중국어 번체"
+}

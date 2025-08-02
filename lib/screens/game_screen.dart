@@ -8,7 +8,7 @@ import 'package:pandabricks/logic/game_logic.dart';
 import 'dart:async';
 import 'package:pandabricks/dialog/game/game_over_dialog.dart';
 import 'package:pandabricks/services/audio_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 
 class GameScreen extends StatefulWidget {
   final ModeModel mode;

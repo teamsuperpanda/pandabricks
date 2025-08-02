@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/dialog/glowing_button.dart';
 import 'package:pandabricks/services/audio_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 
 class PauseDialog extends StatelessWidget {
   final VoidCallback onResume;

@@ -25,5 +25,15 @@
     "easyModeDescription": "Juego relajado con velocidad constante.",
     "normalModeDescription": "Modo clásico que aumenta gradualmente la velocidad.",
     "blitzModeDescription": "Bloques especiales y giros del tablero.",
-    "systemLanguage": "Sistema"
-} 
+    "systemLanguage": "Sistema",
+    "languageEnglish": "Inglés",
+    "languageSpanish": "Español",
+    "languageFrench": "Francés",
+    "languageGerman": "Alemán",
+    "languageItalian": "Italiano",
+    "languagePortuguese": "Portugués",
+    "languageJapanese": "Japonés",
+    "languageKorean": "Coreano",
+    "languageSimplifiedChinese": "Chino simplificado",
+    "languageTraditionalChinese": "Chino tradicional"
+}

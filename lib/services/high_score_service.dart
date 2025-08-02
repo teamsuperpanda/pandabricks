@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pandabricks/logic/modes_logic.dart';
 
 class HighScoreService {
   static const String _easyKey = 'highScore_easy';
@@ -7,15 +8,14 @@ class HighScoreService {
 
   static Future<int> getHighScore(String mode) async {
     final prefs = await SharedPreferences.getInstance();
-    switch (mode) {
-      case 'Easy':
-        return prefs.getInt(_easyKey) ?? 0;
-      case 'Normal':
-        return prefs.getInt(_normalKey) ?? 0;
-      case 'Bamboo Blitz':
-        return prefs.getInt(_bambooblitzKey) ?? 0;
-      default:
-        return 0;
+    if (mode == Modes.easy.name) {
+      return prefs.getInt(_easyKey) ?? 0;
+    } else if (mode == Modes.normal.name) {
+      return prefs.getInt(_normalKey) ?? 0;
+    } else if (mode == Modes.bambooblitz.name) {
+      return prefs.getInt(_bambooblitzKey) ?? 0;
+    } else {
+      return 0;
     }
   }
 
@@ -25,18 +25,14 @@ class HighScoreService {
 
     if (score > currentHighScore) {
       String key;
-      switch (mode) {
-        case 'Easy':
-          key = _easyKey;
-          break;
-        case 'Normal':
-          key = _normalKey;
-          break;
-        case 'Bamboo Blitz':
-          key = _bambooblitzKey;
-          break;
-        default:
-          return false;
+      if (mode == Modes.easy.name) {
+        key = _easyKey;
+      } else if (mode == Modes.normal.name) {
+        key = _normalKey;
+      } else if (mode == Modes.bambooblitz.name) {
+        key = _bambooblitzKey;
+      } else {
+        return false;
       }
       await prefs.setInt(key, score);
       return true;
