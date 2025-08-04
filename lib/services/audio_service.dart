@@ -10,7 +10,7 @@ class AudioService {
 
   final AudioPlayer _menuMusic = AudioPlayer();
   final AudioPlayer _gameMusic = AudioPlayer();
-  final AudioPlayer _sfxPlayer = AudioPlayer(); // Consolidated SFX player
+  final Map<String, AudioPlayer> _sfxPlayers = {};
   bool isSoundEffectsEnabled = true;
 
   final List<String> _gameSongs =
@@ -19,39 +19,30 @@ class AudioService {
   final Random _random = Random();
   int _lastPlayedIndex = -1;
 
-  // Map to store pre-loaded sound effects
-  final Map<String, AudioPlayer> _loadedSfx = {};
-
   Future<void> init() async {
     try {
-      await _sfxPlayer.setAsset('assets/audio/sfx/panda_disappear.mp3');
-      _loadedSfx['panda_disappear'] = _sfxPlayer;
-
-      await _sfxPlayer.setAsset('assets/audio/sfx/flip.mp3');
-      _loadedSfx['flip'] = _sfxPlayer;
-
-      await _sfxPlayer.setAsset('assets/audio/sfx/gameover.mp3');
-      _loadedSfx['game_over'] = _sfxPlayer;
-
-      await _sfxPlayer.setAsset('assets/audio/sfx/pause.mp3');
-      _loadedSfx['pause'] = _sfxPlayer;
-
-      await _sfxPlayer.setAsset('assets/audio/sfx/row_clear.mp3');
-      _loadedSfx['row_clear'] = _sfxPlayer;
-
-      await _sfxPlayer.setAsset('assets/audio/sfx/bomb_explode.mp3');
-      _loadedSfx['bomb_explode'] = _sfxPlayer;
-
+      await _loadSfx('panda_disappear', 'assets/audio/sfx/panda_disappear.mp3');
+      await _loadSfx('flip', 'assets/audio/sfx/flip.mp3');
+      await _loadSfx('game_over', 'assets/audio/sfx/gameover.mp3');
+      await _loadSfx('pause', 'assets/audio/sfx/pause.mp3');
+      await _loadSfx('row_clear', 'assets/audio/sfx/row_clear.mp3');
+      await _loadSfx('bomb_explode', 'assets/audio/sfx/bomb_explode.mp3');
     } catch (e) {
       debugPrint('Audio initialization error: $e');
     }
+  }
+
+  Future<void> _loadSfx(String name, String assetPath) async {
+    final player = AudioPlayer();
+    await player.setAsset(assetPath);
+    _sfxPlayers[name] = player;
   }
 
   Future<void> playSound(String soundName) async {
     if (!isSoundEffectsEnabled) return;
 
     try {
-      final player = _loadedSfx[soundName];
+      final player = _sfxPlayers[soundName];
       if (player != null) {
         await player.seek(Duration.zero);
         await player.play();
@@ -134,7 +125,9 @@ class AudioService {
   void dispose() {
     _menuMusic.dispose();
     _gameMusic.dispose();
-    _sfxPlayer.dispose();
+    for (var player in _sfxPlayers.values) {
+      player.dispose();
+    }
   }
 
   void stopMenuMusic() {
@@ -142,7 +135,9 @@ class AudioService {
   }
 
   void stopAllSounds() {
-    _sfxPlayer.stop();
+    for (var player in _sfxPlayers.values) {
+      player.stop();
+    }
     _gameMusic.stop();
     _menuMusic.stop();
   }
