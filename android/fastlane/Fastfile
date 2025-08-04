@@ -1,22 +1,11 @@
-default_platform(:android)
-
 platform :android do
-  desc "Deploy to Play Store"
   lane :deploy do
-    # Clean and build the release bundle
-    gradle(
-      task: "clean"
-    )
-    gradle(
-      task: "bundle",
-      build_type: "Release"
-    )
+    flutter(args: ["build", "appbundle"])
 
-    # Upload the AAB to Google Play
     upload_to_play_store(
-      track: "production",
-      aab: "../build/app/outputs/bundle/release/app-release.aab",
-      json_key: "fastlane/google_play_api_key.json"
+      aab: "../../build/app/outputs/bundle/release/app-release.aab",
+      json_key: "./google_play_api_key.json"
     )
   end
 end
+
