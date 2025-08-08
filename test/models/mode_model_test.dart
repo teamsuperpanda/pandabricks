@@ -5,6 +5,7 @@ void main() {
   group('ModeModel', () {
     test('should correctly identify if it has special blocks', () {
       final modeWithSpecialBlocks = ModeModel(
+        id: ModeId.easy,
         name: 'Test Mode',
         initialSpeed: 100,
         speedIncrease: 10,
@@ -16,6 +17,7 @@ void main() {
       expect(modeWithSpecialBlocks.hasSpecialBlocks, isTrue);
 
       final modeWithoutSpecialBlocks = ModeModel(
+        id: ModeId.normal,
         name: 'Test Mode',
         initialSpeed: 100,
         speedIncrease: 10,
@@ -29,6 +31,7 @@ void main() {
 
     test('should correctly identify if it has panda blocks', () {
       final modeWithPandaBlocks = ModeModel(
+        id: ModeId.easy,
         name: 'Test Mode',
         initialSpeed: 100,
         speedIncrease: 10,
@@ -40,6 +43,7 @@ void main() {
       expect(modeWithPandaBlocks.hasPandaBlocks, isTrue);
 
       final modeWithoutPandaBlocks = ModeModel(
+        id: ModeId.normal,
         name: 'Test Mode',
         initialSpeed: 100,
         speedIncrease: 10,
@@ -53,6 +57,7 @@ void main() {
 
     test('should correctly identify if it has flip feature', () {
       final modeWithFlip = ModeModel(
+        id: ModeId.bambooblitz,
         name: 'Test Mode',
         initialSpeed: 100,
         speedIncrease: 10,
@@ -65,6 +70,7 @@ void main() {
       expect(modeWithFlip.hasFlipFeature, isTrue);
 
       final modeWithoutFlip = ModeModel(
+        id: ModeId.easy,
         name: 'Test Mode',
         initialSpeed: 100,
         speedIncrease: 10,

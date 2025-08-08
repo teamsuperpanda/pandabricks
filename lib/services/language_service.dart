@@ -11,6 +11,11 @@ class LanguageService {
     if (languageCode == null || languageCode == 'system') {
       return null; // null means system default
     }
+    // Support language codes with country code, e.g., zh_TW
+    if (languageCode.contains('_')) {
+      final parts = languageCode.split('_');
+      return Locale(parts[0], parts[1]);
+    }
     return Locale(languageCode);
   }
 

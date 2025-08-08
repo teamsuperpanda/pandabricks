@@ -12,12 +12,4 @@ class AppTheme {
     ),
     primaryColor: Colors.black,
   );
-
-  // Define mode colors separately
-  static const Map<String, Color> modeColors = {
-    'Easy': Colors.green,
-    'Normal': Colors.blue,
-    'Hard': Colors.orange,
-    'Bamboo Blitz': Colors.orange,
-  };
 }

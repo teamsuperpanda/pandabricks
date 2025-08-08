@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pandabricks/theme.dart';
 import 'widgets/main/mode_card.dart';
 import 'widgets/main/audio_toggles.dart';
@@ -14,6 +13,7 @@ import 'package:pandabricks/l10n/app_localizations.dart';
 import 'l10n/l10n.dart';
 import 'package:pandabricks/services/language_service.dart';
 import 'package:pandabricks/dialog/main/language_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -208,10 +208,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Center(
+                    Center(
                       child: Text(
-                        'Panda Bricks',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.appTitle,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Fredoka',
                           fontSize: 40,
@@ -223,21 +223,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.help_outline_rounded,
-                            color: Colors.white,
-                            size: 30,
+                        Semantics(
+                          label: AppLocalizations.of(context)!.help,
+                          button: true,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.help_outline_rounded,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            onPressed: () => _showHelpDialog(context),
                           ),
-                          onPressed: () => _showHelpDialog(context),
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.language_rounded,
-                            color: Colors.white,
-                            size: 30,
+                        Semantics(
+                          label: AppLocalizations.of(context)!.language,
+                          button: true,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.language_rounded,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            onPressed: () => _showLanguageDialog(context),
                           ),
-                          onPressed: () => _showLanguageDialog(context),
                         ),
                       ],
                     ),

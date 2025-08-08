@@ -122,6 +122,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get languageTraditionalChinese => '繁体中文';
+
+  @override
+  String get languageDialogTitle => '语言';
+
+  @override
+  String get help => '帮助';
+
+  @override
+  String get language => '语言';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -242,4 +251,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get languageTraditionalChinese => '繁體中文';
+
+  @override
+  String get languageDialogTitle => '語言';
+
+  @override
+  String get help => '說明';
+
+  @override
+  String get language => '語言';
 }

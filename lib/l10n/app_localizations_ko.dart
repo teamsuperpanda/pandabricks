@@ -122,4 +122,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get languageTraditionalChinese => '중국어 번체';
+
+  @override
+  String get languageDialogTitle => '언어';
+
+  @override
+  String get help => '도움말';
+
+  @override
+  String get language => '언어';
 }
