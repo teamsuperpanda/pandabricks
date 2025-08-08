@@ -1,7 +1,4 @@
-enum ModeId { easy, normal, bambooblitz }
-
 class ModeModel {
-  final ModeId id;
   final String name;
   final double initialSpeed;
   final double speedIncrease;
@@ -12,7 +9,6 @@ class ModeModel {
   final int? flipThreshold;
 
   ModeModel({
-    required this.id,
     required this.name,
     required this.initialSpeed,
     required this.speedIncrease,

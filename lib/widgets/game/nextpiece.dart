@@ -55,15 +55,25 @@ class NextPiecePainter extends CustomPainter {
           );
           RRect rRect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
 
-          // Add static glow effect for special bricks (no ticker required)
+          // Add glow effect for special bricks
           if (BrickShapes.isSpecialBrick(nextPiece.colorIndex)) {
-            List<Color> glowColors = BrickShapes.getGlowColors(nextPiece.colorIndex)
-                .map((c) => c.withAlpha(160))
+            double glowIntensity =
+                (DateTime.now().millisecondsSinceEpoch % 1500) / 1500.0;
+            double glowSize = 8.0 + (glowIntensity * 4.0);
+
+            List<Color> glowColors = BrickShapes.getGlowColors(
+                    nextPiece.colorIndex)
+                .map((color) => color.withAlpha((glowIntensity * 255).round()))
                 .toList();
-            for (final color in glowColors) {
-              final glowPaint = Paint()
-                ..color = color
-                ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10.0);
+
+            // Draw glow layers
+            for (int i = 0; i < glowColors.length; i++) {
+              Paint glowPaint = Paint()
+                ..color = glowColors[i]
+                ..maskFilter = MaskFilter.blur(
+                  BlurStyle.normal,
+                  glowSize + (i * 2.0),
+                );
               canvas.drawRRect(rRect, glowPaint);
             }
           }

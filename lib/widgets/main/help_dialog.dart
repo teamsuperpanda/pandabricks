@@ -36,11 +36,12 @@ class HelpDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            _buildHelpItem('🐼', l10n.pandaBrickDescription.split('!').first, l10n.pandaBrickDescription),
-            _buildHelpItem('👻', l10n.ghostBrickDescription.split('!').first, l10n.ghostBrickDescription),
-            _buildHelpItem('🐱', l10n.catBrickDescription.split('!').first, l10n.catBrickDescription),
-            _buildHelpItem('🌪️', l10n.tornadoBrickDescription.split('!').first, l10n.tornadoBrickDescription),
-            _buildHelpItem('💣', l10n.bombBrickDescription.split('!').first, l10n.bombBrickDescription),
+            _buildHelpItem('🐼', 'Panda Brick', l10n.pandaBrickDescription),
+            _buildHelpItem('👻', 'Ghost Brick', l10n.ghostBrickDescription),
+            _buildHelpItem('🐱', 'Cat Brick', l10n.catBrickDescription),
+            _buildHelpItem(
+                '🌪️', 'Tornado Brick', l10n.tornadoBrickDescription),
+            _buildHelpItem('💣', 'Bomb Brick', l10n.bombBrickDescription),
             const SizedBox(height: 16),
             GlowingButton(
               onPressed: () => Navigator.pop(context),

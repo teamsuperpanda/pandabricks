@@ -26,19 +26,15 @@ class GameScreen extends StatefulWidget {
   GameScreenState createState() => GameScreenState();
 }
 
-class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMixin {
-  dynamic _ticker; // ticker instance created via createTicker
+class GameScreenState extends State<GameScreen> {
+  late Timer _timer;
   late GameLogic gameLogic;
   bool isPaused = false;
   final AudioService _audioService = AudioService();
   bool _isGameInitialized = false;
-  bool _softDropping = false;
+  Timer? _softDropTimer;
   bool _isHardDropInProgress = false;
   final GlobalKey<PlayfieldState> _playfieldKey = GlobalKey<PlayfieldState>();
-
-  // Accumulator for ticker-driven gravity
-  Duration _lastTick = Duration.zero;
-  double _accumulatorMs = 0.0;
 
   @override
   void initState() {
@@ -55,15 +51,8 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
   Future<void> _initGame() async {
     // Start game immediately
     gameLogic.spawnPiece();
-  _startTicker();
+    _startGame();
     _isGameInitialized = true;
-
-    // Restart timer when speed changes
-    gameLogic.onSpeedChanged = () {
-      // No restart needed; ticker reads current speed each frame
-      // Reset accumulator to make new speed effective immediately
-      _accumulatorMs = 0.0;
-    };
 
     // Handle audio setup separately
     if (widget.isBackgroundMusicEnabled) {
@@ -106,38 +95,20 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
     });
   }
 
-  void _startTicker() {
-    _ticker ??= createTicker((elapsed) {
-      if (!mounted || isPaused) return;
-
-      // Compute delta since last tick in milliseconds
-      if (_lastTick == Duration.zero) {
-        _lastTick = elapsed;
-        return;
-      }
-      final dtMs = (elapsed - _lastTick).inMicroseconds / 1000.0;
-      _lastTick = elapsed;
-
-      // Determine interval based on current speed or soft drop
-      final baseIntervalMs = (500.0 * (100.0 / gameLogic.currentSpeed)).clamp(40.0, 1200.0);
-      final activeIntervalMs = _softDropping ? 75.0 : baseIntervalMs;
-
-      _accumulatorMs += dtMs;
-
-      // Update game for each interval passed (catch up if lagging)
-      while (_accumulatorMs >= activeIntervalMs && mounted && !isPaused) {
-        _accumulatorMs -= activeIntervalMs;
+  void _startGame() {
+    _timer = Timer.periodic(
+      Duration(milliseconds: (500 * (100 / gameLogic.currentSpeed)).round()),
+      (timer) {
+        if (!mounted) return;
         setState(() {
           gameLogic.updateGame();
+          if (gameLogic.isGameOver) {
+            _timer.cancel();
+            _showGameOverDialog();
+          }
         });
-        if (gameLogic.isGameOver) {
-          _ticker?.stop();
-          _showGameOverDialog();
-          break;
-        }
-      }
-    });
-    _ticker!.start();
+      },
+    );
   }
 
   void _showGameOverDialog() {
@@ -174,7 +145,7 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
     if (!mounted) return;
     setState(() {
       isPaused = true;
-  _ticker?.stop();
+      _timer.cancel();
       if (widget.isBackgroundMusicEnabled) {
         _audioService.pauseGameMusic();
       }
@@ -185,8 +156,7 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
     if (!mounted) return;
     setState(() {
       isPaused = false;
-  _lastTick = Duration.zero;
-  _ticker?.start();
+      _startGame();
       if (widget.isBackgroundMusicEnabled && _isGameInitialized) {
         _audioService.playGameMusic();
       }
@@ -213,11 +183,22 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
   }
 
   void _handleSoftDropStart() {
-  _softDropping = true;
+    _softDropTimer?.cancel();
+    _softDropTimer = Timer.periodic(
+      const Duration(milliseconds: 75),
+      (_) {
+        if (!mounted || isPaused) return;
+        setState(() {
+          gameLogic.movePiece(Direction.down);
+          gameLogic.updateGame();
+        });
+      },
+    );
   }
 
   void _handleSoftDropEnd() {
-  _softDropping = false;
+    _softDropTimer?.cancel();
+    _softDropTimer = null;
   }
 
   void _testFlip() {
@@ -228,7 +209,8 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
 
   @override
   void dispose() {
-  _ticker?.dispose();
+    _softDropTimer?.cancel();
+    _timer.cancel();
     _audioService.stopGameMusic();
     gameLogic.dispose();
     super.dispose();
@@ -238,13 +220,15 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     String getModeTitle() {
-      switch (widget.mode.id) {
-        case ModeId.easy:
+      switch (widget.mode.name) {
+        case 'Easy':
           return l10n.easyMode;
-        case ModeId.normal:
+        case 'Normal':
           return l10n.normalMode;
-        case ModeId.bambooblitz:
+        case 'Bamboo Blitz':
           return l10n.blitzMode;
+        default:
+          return widget.mode.name;
       }
     }
 
@@ -275,8 +259,7 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
                         child: SizedBox(
                           width: 300,
                           height: 600,
-                          child: RepaintBoundary(
-                            child: Playfield(
+                          child: Playfield(
                             key: _playfieldKey,
                             playfield: gameLogic.playfield,
                             activePiece: gameLogic.currentPiece,
@@ -306,7 +289,6 @@ class GameScreenState extends State<GameScreen> with SingleTickerProviderStateMi
                                     ?.startExplosion(x * 30.0, y * 30.0);
                               };
                             },
-                            ),
                           ),
                         ),
                       ),
