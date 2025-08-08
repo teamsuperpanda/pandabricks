@@ -70,22 +70,10 @@ class Controls extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Semantics(
-                label: 'Move left', button: true,
-                child: ControlButton(icon: Icons.arrow_left, onTap: onLeft),
-              ),
-              Semantics(
-                label: 'Soft drop', button: true,
-                child: ControlButton(icon: Icons.arrow_drop_down, onTap: onDown),
-              ),
-              Semantics(
-                label: 'Move right', button: true,
-                child: ControlButton(icon: Icons.arrow_right, onTap: onRight),
-              ),
-              Semantics(
-                label: 'Rotate', button: true,
-                child: ControlButton(icon: Icons.rotate_right, onTap: onRotate),
-              ),
+              ControlButton(icon: Icons.arrow_left, onTap: onLeft),
+              ControlButton(icon: Icons.arrow_drop_down, onTap: onDown),
+              ControlButton(icon: Icons.arrow_right, onTap: onRight),
+              ControlButton(icon: Icons.rotate_right, onTap: onRotate),
             ],
           ),
         ),
@@ -103,13 +91,10 @@ class ControlButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap();
-      },
+      onTap: onTap,
       child: Container(
-        width: 64,
-        height: 64,
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
           color: Colors.grey[850],
           shape: BoxShape.circle,
@@ -128,7 +113,7 @@ class ControlButton extends StatelessWidget {
         ),
         child: Icon(
           icon,
-          size: 28,
+          size: 24,
           color: Colors.grey[400],
         ),
       ),

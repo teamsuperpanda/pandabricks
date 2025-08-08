@@ -13,7 +13,6 @@ void main() {
   setUp(() {
     mockAudio = MockAudioService();
     testMode = ModeModel(
-      id: ModeId.normal,
       name: 'Test',
       initialSpeed: 100,
       speedIncrease: 10,
@@ -125,7 +124,6 @@ void main() {
         List.generate(20, (index) => List.filled(10, 0)),
         mockAudio,
         ModeModel(
-          id: ModeId.bambooblitz,
           name: 'Test',
           initialSpeed: 100,
           speedIncrease: 10,

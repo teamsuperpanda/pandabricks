@@ -54,15 +54,16 @@ class _ScoreState extends State<Score> with WidgetsBindingObserver {
   }
 
   Color _getModeColor() {
-    switch (widget.mode.id) {
-      case ModeId.easy:
+    switch (widget.mode.name.toLowerCase()) {
+      case 'easy':
         return Colors.green;
-      case ModeId.normal:
+      case 'normal':
         return Colors.blue;
-      case ModeId.bambooblitz:
+      case 'bamboo blitz':
         return Colors.orange;
+      default:
+        return Colors.white;
     }
-    
   }
 
   @override

@@ -206,7 +206,7 @@ class PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
       builder: (context, child) {
         return Transform(
           transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.001)
+            ..setEntry(3, 2, 0.001) // perspective
             ..rotateX(_flipAnimation.value * pi),
           alignment: Alignment.center,
           child: GestureDetector(
@@ -214,6 +214,7 @@ class PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
             onLongPressStart: (_) => widget.onSoftDropStart?.call(),
             onLongPressEnd: (_) => widget.onSoftDropEnd?.call(),
             onHorizontalDragEnd: (details) {
+              // Move one column based on swipe direction
               if (details.primaryVelocity != null) {
                 if (details.primaryVelocity! > 0) {
                   widget.onSwipeRight?.call();
@@ -223,7 +224,8 @@ class PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
               }
             },
             onVerticalDragEnd: (details) {
-              if (details.primaryVelocity != null && details.primaryVelocity! > 1000) {
+              if (details.primaryVelocity != null &&
+                  details.primaryVelocity! > 1000) {
                 widget.onSwipeDown?.call();
               }
             },
@@ -242,14 +244,93 @@ class PlayfieldState extends State<Playfield> with TickerProviderStateMixin {
               ),
               child: AspectRatio(
                 aspectRatio: 0.5,
-                child: CustomPaint(
-                  painter: PlayfieldPainter(
-                    playfield: widget.playfield,
-                    activePiece: widget.activePiece,
-                    flashingRows: widget.flashingRows,
-                    flashValue: _flashAnimation.value,
-                    particles: _particles,
-                  ),
+                child: Stack(
+                  children: [
+                    // Grid background
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 10,
+                        childAspectRatio: 1,
+                      ),
+                      itemCount:
+                          widget.playfield.length * widget.playfield[0].length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.white10,
+                              width: 0.5,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    // Pieces
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 10,
+                        childAspectRatio: 1,
+                      ),
+                      itemCount:
+                          widget.playfield.length * widget.playfield[0].length,
+                      itemBuilder: (context, index) {
+                        int x = index % widget.playfield[0].length;
+                        int y = index ~/ widget.playfield[0].length;
+                        Color cellColor = Colors.transparent;
+
+                        if (widget.playfield[y][x] != 0) {
+                          cellColor =
+                              BrickShapes.colors[widget.playfield[y][x] - 1];
+                        }
+
+                        // Add flash effect for clearing rows
+                        if (widget.flashingRows.contains(y)) {
+                          cellColor = Color.lerp(
+                            cellColor,
+                            Colors.white,
+                            _flashAnimation.value,
+                          )!;
+                        }
+
+                        return Container(
+                          margin: const EdgeInsets.all(1),
+                          decoration: BoxDecoration(
+                            color: cellColor,
+                            borderRadius: BorderRadius.circular(2),
+                            boxShadow: cellColor != Colors.transparent
+                                ? [
+                                    BoxShadow(
+                                      color: cellColor.withAlpha(128),
+                                      blurRadius: 4,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: null,
+                        );
+                      },
+                    ),
+                    if (widget.activePiece != null)
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: ActivePiecePainter(
+                            widget.activePiece!,
+                            isFlashing: widget.isFlashing,
+                          ),
+                        ),
+                      ),
+                    if (_particles.isNotEmpty)
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: ExplosionPainter(_particles),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -328,10 +409,10 @@ class ActivePiecePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-class PlayfieldExplosionPainter extends CustomPainter {
+class ExplosionPainter extends CustomPainter {
   final List<ExplosionParticle> particles;
 
-  PlayfieldExplosionPainter(this.particles);
+  ExplosionPainter(this.particles);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -350,113 +431,4 @@ class PlayfieldExplosionPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
-
-class PlayfieldPainter extends CustomPainter {
-  final List<List<int>> playfield;
-  final TetrisPiece? activePiece;
-  final List<int> flashingRows;
-  final double flashValue;
-  final List<ExplosionParticle> particles;
-
-  PlayfieldPainter({
-    required this.playfield,
-    required this.activePiece,
-    required this.flashingRows,
-    required this.flashValue,
-    required this.particles,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final cols = playfield[0].length;
-    final rows = playfield.length;
-    final cellSize = size.width / cols;
-
-    // Draw grid background
-    final gridPaint = Paint()
-      ..color = Colors.white10
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.5;
-
-    for (int y = 0; y < rows; y++) {
-      for (int x = 0; x < cols; x++) {
-        final rect = Rect.fromLTWH(x * cellSize, y * cellSize, cellSize, cellSize);
-        canvas.drawRect(rect, gridPaint);
-      }
-    }
-
-    // Draw placed bricks
-    for (int y = 0; y < rows; y++) {
-      for (int x = 0; x < cols; x++) {
-        final v = playfield[y][x];
-        if (v == 0) continue;
-        Color cellColor = BrickShapes.colors[v - 1];
-        if (flashingRows.contains(y)) {
-          cellColor = Color.lerp(cellColor, Colors.white, flashValue)!;
-        }
-        final r = RRect.fromRectAndRadius(
-          Rect.fromLTWH(x * cellSize + 1, y * cellSize + 1, cellSize - 2, cellSize - 2),
-          const Radius.circular(2),
-        );
-        final paint = Paint()..color = cellColor;
-        canvas.drawRRect(r, paint);
-        // Simple glow
-        final glow = Paint()
-          ..color = cellColor.withAlpha(128)
-          ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 4);
-        canvas.drawRRect(r, glow);
-      }
-    }
-
-    // Draw active piece
-    if (activePiece != null) {
-      final ap = activePiece!;
-      for (int y = 0; y < ap.shape.length; y++) {
-        for (int x = 0; x < ap.shape[y].length; x++) {
-          if (ap.shape[y][x] == 0) continue;
-          final posX = (ap.x + x) * cellSize;
-          final posY = (ap.y + y) * cellSize;
-          final r = RRect.fromRectAndRadius(
-            Rect.fromLTWH(posX, posY, cellSize, cellSize),
-            const Radius.circular(4),
-          );
-          final c = BrickShapes.colors[ap.colorIndex];
-          final base = Paint()..color = c;
-          canvas.drawRRect(r, base);
-          // Emoji for special bricks
-          if (BrickShapes.isSpecialBrick(ap.colorIndex)) {
-            final emoji = BrickShapes.specialBrickEmojis[ap.colorIndex];
-            if (emoji != null) {
-              final tp = TextPainter(
-                text: TextSpan(text: emoji, style: const TextStyle(fontSize: 24)),
-                textDirection: TextDirection.ltr,
-              )..layout();
-              tp.paint(
-                canvas,
-                Offset(posX + (cellSize - tp.width) / 2, posY + (cellSize - tp.height) / 2),
-              );
-            }
-          }
-        }
-      }
-    }
-
-    // Draw particles on top
-    for (var p in particles) {
-      final paint = Paint()
-        ..color = p.color.withAlpha((p.opacity * 255).round())
-        ..style = PaintingStyle.fill;
-      canvas.drawCircle(Offset(p.x, p.y), p.size, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant PlayfieldPainter oldDelegate) {
-    return oldDelegate.playfield != playfield ||
-        oldDelegate.activePiece != activePiece ||
-        oldDelegate.flashValue != flashValue ||
-        oldDelegate.flashingRows != flashingRows ||
-        oldDelegate.particles != particles;
-  }
 }

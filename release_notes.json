@@ -1,7 +1,4 @@
 [
-  {
-    "language": "en-US",
-    "text": "This update fixes a Bamboo Blitz issue where special blocks didn’t always appear, improves game speed changes to feel more responsive, and enhances language support for Traditional Chinese. We also made stability and polish improvements across visuals and audio."
-  }
+  { "language": "en-US", "text": "Bug fixes and performance improvements." }
 ]
 

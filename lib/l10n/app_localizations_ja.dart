@@ -122,13 +122,4 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get languageTraditionalChinese => '繁体字中国語';
-
-  @override
-  String get languageDialogTitle => '言語';
-
-  @override
-  String get help => 'ヘルプ';
-
-  @override
-  String get language => '言語';
 }

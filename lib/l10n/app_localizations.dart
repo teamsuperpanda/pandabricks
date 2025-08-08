@@ -331,24 +331,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'繁體中文'**
   String get languageTraditionalChinese;
-
-  /// Title for the language selection dialog
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get languageDialogTitle;
-
-  /// Help label
-  ///
-  /// In en, this message translates to:
-  /// **'Help'**
-  String get help;
-
-  /// Language label
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

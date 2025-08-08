@@ -2,7 +2,6 @@ import 'package:pandabricks/models/mode_model.dart';
 
 class Modes {
   static ModeModel easy = ModeModel(
-    id: ModeId.easy,
     name: 'Easy',
     initialSpeed: 100,
     speedIncrease: 0,
@@ -13,7 +12,6 @@ class Modes {
   );
 
   static ModeModel normal = ModeModel(
-    id: ModeId.normal,
     name: 'Normal',
     initialSpeed: 100,
     speedIncrease: 10,
@@ -24,7 +22,6 @@ class Modes {
   );
 
   static ModeModel bambooblitz = ModeModel(
-    id: ModeId.bambooblitz,
     name: 'Bamboo Blitz',
     initialSpeed: 100,
     speedIncrease: 30,
@@ -36,14 +33,4 @@ class Modes {
   );
 
   static String getModeName(ModeModel mode) => mode.name;
-  static ModeModel byId(ModeId id) {
-    switch (id) {
-      case ModeId.easy:
-        return easy;
-      case ModeId.normal:
-        return normal;
-      case ModeId.bambooblitz:
-        return bambooblitz;
-    }
-  }
 }
