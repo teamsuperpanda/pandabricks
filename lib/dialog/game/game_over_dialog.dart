@@ -104,9 +104,9 @@ class _GameOverDialogState extends State<GameOverDialog> {
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Ready for Another Round?',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.readyForAnotherRound,
+              style: const TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 18,
                 color: Colors.white70,
@@ -114,7 +114,7 @@ class _GameOverDialogState extends State<GameOverDialog> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Final Score: ${widget.finalScore}',
+              AppLocalizations.of(context)!.finalScore(widget.finalScore),
               style: const TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 24,
@@ -130,8 +130,8 @@ class _GameOverDialogState extends State<GameOverDialog> {
                   const SizedBox(width: 8),
                   Text(
                     _previousHighScore > 0
-                        ? 'New High Score!\nPrevious: $_previousHighScore'
-                        : 'New High Score!',
+                        ? '${AppLocalizations.of(context)!.newHighScore}\n${AppLocalizations.of(context)!.previousHighScore(_previousHighScore)}'
+                        : AppLocalizations.of(context)!.newHighScore,
                     style: const TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 16,
@@ -151,7 +151,7 @@ class _GameOverDialogState extends State<GameOverDialog> {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                   color: const Color(0xFFE74C3C),
-                  text: 'MENU',
+                  text: AppLocalizations.of(context)!.menu,
                 ),
                 const SizedBox(width: 16),
                 GlowingButton(
@@ -169,7 +169,7 @@ class _GameOverDialogState extends State<GameOverDialog> {
                     );
                   },
                   color: const Color(0xFF2ECC71),
-                  text: 'RETRY',
+                  text: AppLocalizations.of(context)!.retry,
                 ),
               ],
             ),

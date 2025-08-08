@@ -12,7 +12,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.yourcompany.pandabricks"
+    namespace "com.teamsuperpanda.pandabricks"
     compileSdkVersion 35
     ndkVersion = flutter.ndkVersion
 

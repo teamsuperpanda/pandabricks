@@ -35,5 +35,6 @@
     "languageJapanese": "Japonês",
     "languageKorean": "Coreano",
     "languageSimplifiedChinese": "Chinês simplificado",
-    "languageTraditionalChinese": "Chinês tradicional"
+        "languageTraditionalChinese": "Chinês tradicional",
+        "languageDialogTitle": "Idioma"
 }

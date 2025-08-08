@@ -23,7 +23,7 @@ Panda Bricks is a Flutter-based game, a modern take on the classic falling block
 ## Development Environment:
 - **Framework:** Flutter
 - **Language:** Dart
-- **Platform Targets:** Android, iOS, Web, Linux, macOS, Windows
+- **Platform Targets:** Android
 
 ## Gemini Agent Interaction Notes:
 - **Dependency Management:** The agent uses `flutter pub get`, `flutter pub upgrade`, and `flutter pub upgrade --major-versions` to manage Dart/Flutter dependencies.
