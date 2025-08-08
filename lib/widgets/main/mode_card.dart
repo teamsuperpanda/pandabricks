@@ -23,7 +23,7 @@ class ModeCardState extends State<ModeCard> {
   }
 
   Future<void> _loadHighScore() async {
-    final score = await HighScoreService.getHighScore(widget.modeModel.name);
+  final score = await HighScoreService.getHighScoreForMode(widget.modeModel);
     if (mounted) {
       setState(() {
         highScore = score;
@@ -37,29 +37,25 @@ class ModeCardState extends State<ModeCard> {
 
   String getTitle() {
     final l10n = AppLocalizations.of(context)!;
-    switch (widget.modeModel.name) {
-      case 'Easy':
+    switch (widget.modeModel.id) {
+      case ModeId.easy:
         return l10n.easyMode;
-      case 'Normal':
+      case ModeId.normal:
         return l10n.normalMode;
-      case 'Bamboo Blitz':
+      case ModeId.bambooblitz:
         return l10n.blitzMode;
-      default:
-        return widget.modeModel.name;
     }
   }
 
   String getDescription() {
     final l10n = AppLocalizations.of(context)!;
-    switch (widget.modeModel.name) {
-      case 'Easy':
+    switch (widget.modeModel.id) {
+      case ModeId.easy:
         return l10n.easyModeDescription;
-      case 'Normal':
+      case ModeId.normal:
         return l10n.normalModeDescription;
-      case 'Bamboo Blitz':
+      case ModeId.bambooblitz:
         return l10n.blitzModeDescription;
-      default:
-        return '';
     }
   }
 
@@ -73,11 +69,11 @@ class ModeCardState extends State<ModeCard> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Card(
-              color: widget.modeModel.name == 'Easy'
-                  ? Colors.lightGreen[600]
-                  : widget.modeModel.name == 'Normal'
-                      ? Colors.blue[400]
-                      : Colors.deepOrange[600],
+        color: widget.modeModel.id == ModeId.easy
+          ? Colors.lightGreen[600]
+          : widget.modeModel.id == ModeId.normal
+            ? Colors.blue[400]
+            : Colors.deepOrange[600],
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),

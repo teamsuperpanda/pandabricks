@@ -52,9 +52,9 @@ class _LanguageDialogState extends State<LanguageDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Language',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)?.languageDialogTitle ?? 'Language',
+              style: const TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 24,
                 color: Colors.white,
@@ -129,6 +129,8 @@ class _LanguageDialogState extends State<LanguageDialog> {
                   await LanguageService.setLanguage(value);
                   if (value == 'system') {
                     widget.onLanguageChanged(null);
+                  } else if (value == 'zh_TW') {
+                    widget.onLanguageChanged(const Locale('zh', 'TW'));
                   } else {
                     widget.onLanguageChanged(Locale(value!));
                   }
