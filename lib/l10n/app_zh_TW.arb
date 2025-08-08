@@ -35,8 +35,5 @@
     "languageJapanese": "日語",
     "languageKorean": "韓語",
     "languageSimplifiedChinese": "簡體中文",
-        "languageTraditionalChinese": "繁體中文",
-            "help": "說明",
-            "language": "語言",
-        "languageDialogTitle": "語言"
+    "languageTraditionalChinese": "繁體中文"
 }

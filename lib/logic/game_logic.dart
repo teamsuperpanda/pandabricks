@@ -5,9 +5,6 @@ import 'package:pandabricks/services/audio_service.dart';
 import 'package:pandabricks/models/mode_model.dart';
 import 'package:pandabricks/logic/score_logic.dart';
 
-// Lightweight callback typedef to avoid importing Flutter in logic layer
-typedef VoidCallback = void Function();
-
 // Define the Direction enum
 enum Direction {
   left,
@@ -53,6 +50,7 @@ class GameLogic {
   bool isCatBrick = false;
   Timer? catMovementTimer;
   bool isTornadoBrick = false;
+  Timer? tornadoRotationTimer;
   bool isFlipping = false;
   bool shouldFlip = false;
   double flipProgress = 0.0;
@@ -64,9 +62,6 @@ class GameLogic {
     BrickShapes.tornadoBrick, // 10
     BrickShapes.bombBrick, // 11
   ];
-
-  // Notify UI when speed changes so timers can be updated
-  VoidCallback? onSpeedChanged;
 
   // Add callback for explosion effect
   Function(double x, double y)? onPandaExplode;
@@ -94,8 +89,7 @@ class GameLogic {
       isCatBrick = false;
       isTornadoBrick = false;
 
-  // Compare using Modes.bambooblitz.name to avoid string typos
-  bool shouldSpawnSpecial = mode.id == ModeId.bambooblitz &&
+      bool shouldSpawnSpecial = mode.name == 'Bambooblitz' &&
           Random().nextInt(100) < mode.specialBlocksSpawnPercentage;
       bool shouldSpawnPanda = !shouldSpawnSpecial &&
           Random().nextInt(100) < mode.pandabrickSpawnPercentage;
@@ -155,7 +149,7 @@ class GameLogic {
     }
 
     // Generate next piece
-  bool shouldSpawnNextSpecial = mode.id == ModeId.bambooblitz &&
+    bool shouldSpawnNextSpecial = mode.name == 'Bamboo Blitz' &&
         Random().nextInt(100) < mode.specialBlocksSpawnPercentage;
     bool shouldSpawnNextPanda = !shouldSpawnNextSpecial &&
         Random().nextInt(100) < mode.pandabrickSpawnPercentage;
@@ -316,13 +310,12 @@ class GameLogic {
     int basePoints = scoreLogic.updateScore(flashingRows.length);
 
     // Check if we need to increase speed based on score threshold
-  if (scoreThreshold > 0 &&
-    scoreLogic.score > 0 &&
-    (scoreLogic.score / scoreThreshold).floor() >
-      ((scoreLogic.score - basePoints) / scoreThreshold).floor()) {
-    currentSpeed += speedIncrease;
-    onSpeedChanged?.call();
-  }
+    if (scoreThreshold > 0 &&
+        scoreLogic.score > 0 &&
+        (scoreLogic.score / scoreThreshold).floor() >
+            ((scoreLogic.score - basePoints) / scoreThreshold).floor()) {
+      currentSpeed += speedIncrease;
+    }
 
     // Remove completed rows from bottom to top to avoid index shifting issues
     for (int y in flashingRows) {
@@ -500,10 +493,12 @@ class GameLogic {
     if (isCatBrick) {
       catMovementTimer?.cancel();
     }
-  // no tornado rotation timer in use
+    if (isTornadoBrick) {
+      tornadoRotationTimer?.cancel();
+    }
     if (isPandaBrick) {
       if (currentPiece!.y + 2 >= playfield.length) {
-        // Lock panda brick at bottom
+        currentPiece!.colorIndex = 8;
         placePiece();
         currentPiece = null;
         checkLines();
@@ -675,8 +670,7 @@ class GameLogic {
         }
 
         // Only handle horizontal movement, let natural gravity handle falling
-        final move = BrickShapes.getNextCatMovement();
-        final horizontalMove = move.x;
+        int horizontalMove = Random().nextInt(3) - 1; // -1, 0, or 1
         if (horizontalMove != 0) {
           int newX = currentPiece!.x + horizontalMove;
           if (!checkCollision(newX, currentPiece!.y)) {
