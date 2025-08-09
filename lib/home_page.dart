@@ -25,48 +25,32 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 580),
+            constraints: const BoxConstraints(maxWidth: 640),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // App header with logo and title
                 const AppHeader(),
-                const SizedBox(height: 20),
-                
+                const SizedBox(height: 16),
+
                 // Top utility icons
                 const TopIconRow(),
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
 
-                // Game modes panel
-                FrostedPanel(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ModeCard(
-                        title: 'Easy',
-                        description: 'Relaxed play with a gentle pace.',
-                        color: AppColors.easyMode,
-                      ),
-                      ModeCard(
-                        title: 'Normal',
-                        description: 'Classic challenge. Balanced and fun.',
-                        color: AppColors.normalMode,
-                      ),
-                      ModeCard(
-                        title: 'Bamboo Blitz',
-                        description: 'Beat the clock with spicy specials.',
-                        color: AppColors.blitzMode,
-                      ),
-                    ],
-                  ),
+                // Game modes inside a frosted panel for cohesion
+                const FrostedPanel(
+                  title: 'Choose your mode',
+                  leadingIcon: Icons.rocket_launch_rounded,
+                  padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
+                  child: _ModeList(),
                 ),
 
-                const SizedBox(height: 24),
-                
-                // Audio controls panel
+                // Audio controls, same visual language
                 FrostedPanel(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  title: 'Audio Settings',
+                  leadingIcon: Icons.graphic_eq_rounded,
+                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
                   child: AudioTogglesPanel(
                     musicEnabled: _musicEnabled,
                     sfxEnabled: _sfxEnabled,
@@ -79,6 +63,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ModeList extends StatelessWidget {
+  const _ModeList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: const [
+        ModeCard(
+          title: 'Easy',
+          description: 'Relaxed play with a gentle pace.',
+          color: AppColors.easyMode,
+        ),
+        ModeCard(
+          title: 'Normal',
+          description: 'Classic challenge. Balanced and fun.',
+          color: AppColors.normalMode,
+        ),
+        ModeCard(
+          title: 'Bamboo Blitz',
+          description: 'Special bricks and board flips.',
+          color: const Color(0xFFFF5E57), // Vibrant fun red-orange
+        ),
+      ],
     );
   }
 }

@@ -1,95 +1,104 @@
-import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:flutter/material.dart';
 
-class FrostedPanel extends StatefulWidget {
+/// A reusable frosted glass panel for cohesive, modern UI sections.
+class FrostedPanel extends StatelessWidget {
   final Widget child;
-  final EdgeInsetsGeometry? padding;
-  final double borderRadius;
+  final String? title;
+  final IconData? leadingIcon;
+  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry margin;
+  final BorderRadiusGeometry borderRadius;
 
   const FrostedPanel({
     super.key,
     required this.child,
-    this.padding,
-    this.borderRadius = 24,
+    this.title,
+    this.leadingIcon,
+    this.padding = const EdgeInsets.all(20),
+    this.margin = const EdgeInsets.symmetric(vertical: 10),
+    this.borderRadius = const BorderRadius.all(Radius.circular(24)),
   });
 
   @override
-  State<FrostedPanel> createState() => _FrostedPanelState();
-}
-
-class _FrostedPanelState extends State<FrostedPanel>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _borderAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(seconds: 4),
-      vsync: this,
-    )..repeat();
-    
-    _borderAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(widget.borderRadius),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-        child: AnimatedBuilder(
-          animation: _borderAnimation,
-          builder: (context, child) {
-            return Container(
-              width: double.infinity,
-              padding: widget.padding ?? const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.white.withValues(alpha: 0.12),
-                    Colors.white.withValues(alpha: 0.06),
-                    Colors.white.withValues(alpha: 0.04),
-                  ],
-                ),
-                border: Border.all(
-                  width: 1.5,
-                  color: Colors.white.withValues(
-                    alpha: 0.15 + (_borderAnimation.value * 0.1),
-                  ),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 32,
-                    offset: const Offset(0, 16),
-                  ),
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 64,
-                    offset: const Offset(0, 32),
-                  ),
+    return Container(
+      margin: margin,
+      decoration: BoxDecoration(
+        borderRadius: borderRadius,
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x66000000),
+            blurRadius: 24,
+            offset: Offset(0, 12),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadiusGeometry.lerp(borderRadius, borderRadius, 1)!
+            as BorderRadius,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withValues(alpha: 0.16),
+                  Colors.white.withValues(alpha: 0.08),
                 ],
               ),
-              child: widget.child,
-            );
-          },
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.22),
+                width: 1.2,
+              ),
+            ),
+            padding: padding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (title != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (leadingIcon != null)
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.18),
+                              ),
+                            ),
+                            child: Icon(
+                              leadingIcon,
+                              size: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        if (leadingIcon != null) const SizedBox(width: 10),
+                        Text(
+                          title!,
+                          style: const TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            color: Colors.white,
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                child,
+              ],
+            ),
+          ),
         ),
       ),
     );
