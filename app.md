@@ -191,13 +191,6 @@ Improved
 Fixed
 - General polish and stability fixes carried over during the v2 refresh.
 
-## Open Questions / Decisions Needed
-
-1. Pick the 3–4 Blitz specials for launch (recommended: Bomb, Stripe Row, Color Panda, Time Freeze).
-2. Confirm whether to enable dynamic color (Android 12+) by default or keep the custom palette always-on.
-3. Confirm target minimum OS versions (keep v1 defaults unless store policy requires changes).
-4. Analytics provider (if any) and final event list.
-
 ## Implementation Checklist (for engineering once approved)
 
 - [ ] Create v2 theme (colors, typography, shapes) and wire it globally.
