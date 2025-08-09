@@ -26,6 +26,19 @@ flutter:
   assets:
     # Images
     - assets/images/
+    # Audio
+    - assets/audio/music/
+    - assets/audio/sfx/
+
+  fonts:
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Fredoka-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Fredoka-Bold.ttf
+          weight: 700
 
 flutter_launcher_icons:
   android: true
