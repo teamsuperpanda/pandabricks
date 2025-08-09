@@ -44,15 +44,17 @@ class _AppHeaderState extends State<AppHeader>
         AnimatedBuilder(
           animation: _shimmerAnimation,
           builder: (context, child) {
+            // Traditional shimmer: white shimmer over neutral base
+            double shimmerPos = _shimmerAnimation.value;
             return ShaderMask(
               shaderCallback: (bounds) {
                 return LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   stops: [
-                    (_shimmerAnimation.value - 0.3).clamp(0.0, 1.0),
-                    (_shimmerAnimation.value).clamp(0.0, 1.0),
-                    (_shimmerAnimation.value + 0.3).clamp(0.0, 1.0),
+                    (shimmerPos - 0.3).clamp(0.0, 1.0),
+                    shimmerPos.clamp(0.0, 1.0),
+                    (shimmerPos + 0.3).clamp(0.0, 1.0),
                   ],
                   colors: [
                     AppColors.onSurface,
@@ -78,25 +80,13 @@ class _AppHeaderState extends State<AppHeader>
                   ),
                   const SizedBox(width: 16),
                   const Text(
-                    'Pandabricks',
+                    'Panda Bricks',
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.w700,
                       fontSize: 48,
                       color: AppColors.onSurface,
                       letterSpacing: -0.5,
-                      shadows: [
-                        Shadow(
-                          blurRadius: 20,
-                          color: Colors.black54,
-                          offset: Offset(0, 4),
-                        ),
-                        Shadow(
-                          blurRadius: 40,
-                          color: AppColors.primary,
-                          offset: Offset(0, 0),
-                        ),
-                      ],
                     ),
                   ),
                 ],
