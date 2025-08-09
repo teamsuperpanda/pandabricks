@@ -1,282 +1,122 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pandabricks/theme.dart';
-import 'widgets/main/mode_card.dart';
-import 'widgets/main/audio_toggles.dart';
-import 'screens/game_screen.dart';
-import 'models/mode_model.dart';
-import 'logic/modes_logic.dart';
-import 'services/audio_service.dart';
-import 'widgets/main/help_dialog.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:pandabricks/l10n/app_localizations.dart';
-import 'l10n/l10n.dart';
-import 'package:pandabricks/services/language_service.dart';
-import 'package:pandabricks/dialog/main/language_dialog.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  try {
-    await AudioService().init();
-  } catch (e) {
-    debugPrint('Failed to initialize audio: $e');
-  }
-
+void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  Locale? _selectedLocale;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedLocale();
-  }
-
-  Future<void> _loadSavedLocale() async {
-    final locale = await LanguageService.getSelectedLocale();
-    setState(() {
-      _selectedLocale = locale;
-    });
-  }
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Panda Bricks',
-      theme: AppTheme.darkTheme,
-      locale: _selectedLocale,
-      supportedLocales: L10n.all,
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: const MyHomePage(),
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, required this.title});
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final AudioService _audioService = AudioService();
-  bool _isBackgroundMusicEnabled = false;
-  bool _isSoundEffectsEnabled = false;
-  final _easyModeKey = GlobalKey<ModeCardState>();
-  final _normalModeKey = GlobalKey<ModeCardState>();
-  final _blitzModeKey = GlobalKey<ModeCardState>();
+  int _counter = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadAudioPreferences();
-    _setupBackgroundMusic();
-  }
-
-  Future<void> _loadAudioPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('backgroundMusic')) {
-      await prefs.setBool('backgroundMusic', true);
-    }
-    if (!prefs.containsKey('soundEffects')) {
-      await prefs.setBool('soundEffects', true);
-    }
-
+  void _incrementCounter() {
     setState(() {
-      _isBackgroundMusicEnabled = prefs.getBool('backgroundMusic') ?? true;
-      _isSoundEffectsEnabled = prefs.getBool('soundEffects') ?? true;
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
     });
-  }
-
-  Future<void> _setupBackgroundMusic() async {
-    await _audioService.initMenuMusic();
-    if (_isBackgroundMusicEnabled) {
-      _audioService.playMenuMusic();
-    }
-  }
-
-  Future<void> _toggleBackgroundMusic(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('backgroundMusic', value);
-
-    setState(() {
-      _isBackgroundMusicEnabled = value;
-    });
-
-    if (_isBackgroundMusicEnabled) {
-      _audioService.playMenuMusic();
-    } else {
-      _audioService.pauseMenuMusic();
-    }
-  }
-
-  Future<void> _toggleSoundEffects(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('soundEffects', value);
-
-    setState(() {
-      _isSoundEffectsEnabled = value;
-    });
-  }
-
-  void navigateToGameScreen(BuildContext context, ModeModel mode) {
-    _audioService.pauseMenuMusic();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => GameScreen(
-          mode: mode,
-          isSoundEffectsEnabled: _isSoundEffectsEnabled,
-          isBackgroundMusicEnabled: _isBackgroundMusicEnabled,
-        ),
-      ),
-    ).then((_) {
-      if (_isBackgroundMusicEnabled) {
-        _audioService.playMenuMusic();
-      }
-      _easyModeKey.currentState?.refreshHighScore();
-      _normalModeKey.currentState?.refreshHighScore();
-      _blitzModeKey.currentState?.refreshHighScore();
-    });
-  }
-
-  @override
-  void dispose() {
-    _audioService.dispose();
-    super.dispose();
-  }
-
-  void _showLanguageDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => LanguageDialog(
-        onLanguageChanged: (locale) {
-          if (context.mounted) {
-            setState(() {
-              // This will trigger a rebuild of the MaterialApp
-              context.findAncestorStateOfType<_MyAppState>()?.setState(() {
-                context
-                    .findAncestorStateOfType<_MyAppState>()
-                    ?._selectedLocale = locale;
-              });
-            });
-          }
-        },
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Stack(
-          children: [
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-              child: Container(
-                color: Colors.black.withAlpha(26),
-              ),
-            ),
-            Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Center(
-                      child: Text(
-                        'Panda Bricks',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Fredoka',
-                          fontSize: 40,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.help_outline_rounded,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () => _showHelpDialog(context),
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.language_rounded,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () => _showLanguageDialog(context),
-                        ),
-                      ],
-                    ),
-                    ModeCard(
-                      key: _easyModeKey,
-                      modeModel: Modes.easy,
-                      onTap: () => navigateToGameScreen(context, Modes.easy),
-                    ),
-                    ModeCard(
-                      key: _normalModeKey,
-                      modeModel: Modes.normal,
-                      onTap: () => navigateToGameScreen(context, Modes.normal),
-                    ),
-                    ModeCard(
-                      key: _blitzModeKey,
-                      modeModel: Modes.bambooblitz,
-                      onTap: () =>
-                          navigateToGameScreen(context, Modes.bambooblitz),
-                    ),
-                    AudioToggles(
-                      isBackgroundMusicEnabled: _isBackgroundMusicEnabled,
-                      isSoundEffectsEnabled: _isSoundEffectsEnabled,
-                      onBackgroundMusicChanged: _toggleBackgroundMusic,
-                      onSoundEffectsChanged: _toggleSoundEffects,
-                    ),
-                  ],
-                ),
-              ),
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('You have pushed the button this many times:'),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void _showHelpDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const HelpDialog(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

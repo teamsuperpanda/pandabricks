@@ -1,0 +1,82 @@
+name: pandabricks
+display_name: "Panda Bricks"
+description: "A modern take on the classic falling blocks game, featuring a playful panda theme and unique gameplay mechanics."
+publish_to: 'none'
+
+version: 1.0.7+8
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.2.2
+  just_audio: ^0.10.4
+  logging: ^1.2.0
+  meta: ^1.11.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_native_splash: ^2.4.0
+  flutter_launcher_icons: ^0.14.2
+  mockito: ^5.4.2
+  build_runner: ^2.4.6
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  fonts:
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka-Regular.ttf
+        - asset: assets/fonts/Fredoka-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Fredoka-Bold.ttf
+          weight: 700
+
+  assets:
+    # Images
+    - assets/images/
+
+    # Audio - Sound Effects
+    - assets/audio/sfx/
+    - assets/audio/sfx/flip.mp3
+    - assets/audio/sfx/gameover.mp3
+    - assets/audio/sfx/panda_disappear.mp3
+    - assets/audio/sfx/pause.mp3
+    - assets/audio/sfx/row_clear.mp3
+
+    # Audio - Music
+    - assets/audio/music/
+    - assets/audio/music/menu.mp3
+    - assets/audio/music/game/
+    - assets/audio/music/game/song1.mp3
+    - assets/audio/music/game/song2.mp3
+    - assets/audio/music/game/song3.mp3
+    - assets/audio/music/game/song4.mp3
+    - assets/audio/music/game/song5.mp3
+
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/images/icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#ADD8E6"
+  adaptive_icon_foreground: "assets/images/icon.png"
+  # flutter launcher icons terminal command: flutter pub run flutter_launcher_icons:main
+
+flutter_native_splash:
+  android_12: 
+    image: assets/images/logo.png
+    branding: assets/images/branding.png
+  color: "#1A1A1A"
+  android: true
+  # flutter native splash terminal command: flutter pub run flutter_native_splash:create
