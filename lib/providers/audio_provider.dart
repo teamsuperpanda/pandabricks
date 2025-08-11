@@ -2,6 +2,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AudioProvider extends ChangeNotifier {
@@ -11,11 +12,13 @@ class AudioProvider extends ChangeNotifier {
   AudioPlayer? _player;
   bool _isGameMusic = false;
   String? _currentlyPlaying;
+  final bool _enablePlatformAudio;
 
-  AudioProvider({bool enablePlatformAudio = true}) {
+  AudioProvider({bool enablePlatformAudio = true}) : _enablePlatformAudio = enablePlatformAudio {
     if (enablePlatformAudio) {
       // Creating an AudioPlayer touches platform channels. Skip in tests.
       _player = AudioPlayer();
+      _loadPreferences();
     }
   }
 
@@ -40,11 +43,17 @@ class AudioProvider extends ChangeNotifier {
     } else {
       stopMusic();
     }
+    if (_enablePlatformAudio) {
+      _savePreferences();
+    }
     notifyListeners();
   }
 
   void toggleSfx() {
     sfxEnabled.value = !sfxEnabled.value;
+    if (_enablePlatformAudio) {
+      _savePreferences();
+    }
     notifyListeners();
   }
 
@@ -93,5 +102,26 @@ class AudioProvider extends ChangeNotifier {
 
   void disposePlayer() {
     _player?.dispose();
+  }
+
+  Future<void> _loadPreferences() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      musicEnabled.value = prefs.getBool('musicEnabled') ?? true;
+      sfxEnabled.value = prefs.getBool('sfxEnabled') ?? true;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error loading preferences: $e');
+    }
+  }
+
+  Future<void> _savePreferences() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('musicEnabled', musicEnabled.value);
+      await prefs.setBool('sfxEnabled', sfxEnabled.value);
+    } catch (e) {
+      debugPrint('Error saving preferences: $e');
+    }
   }
 }

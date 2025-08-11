@@ -12,10 +12,12 @@ import 'package:pandabricks/widgets/game/board_painter.dart';
 import 'package:pandabricks/widgets/game/controls.dart';
 import 'package:pandabricks/widgets/game/hud.dart';
 import 'package:pandabricks/widgets/game/preview.dart';
+import 'package:pandabricks/widgets/game/timer_display.dart';
 import 'package:pandabricks/screens/game/game.dart';
 import 'package:pandabricks/dialogs/game/pause_dialog.dart';
 import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
 import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
+import 'package:pandabricks/dialogs/game/main_menu_confirm_dialog.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -38,6 +40,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late AudioProvider _audioProvider;
   bool _musicStarted = false;
   bool _gameOverDialogShown = false;
+  bool _initialized = false;
 
   @override
   void initState() {
@@ -54,11 +57,23 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _audioProvider.playGameMusic();
       _musicStarted = true;
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     
-    _game = Game(audioProvider: _audioProvider);
-    _tick = _game.currentSpeed();
-    _startTimer();
-    _game.addListener(_onGameChanged);
+    if (!_initialized) {
+      // Get game mode from route arguments
+      final arguments = ModalRoute.of(context)?.settings.arguments as String?;
+      final gameMode = arguments == 'timeChallenge' ? GameMode.timeChallenge : GameMode.classic;
+      
+      _game = Game(audioProvider: _audioProvider, gameMode: gameMode);
+      _tick = _game.currentSpeed();
+      _startTimer();
+      _game.addListener(_onGameChanged);
+      _initialized = true;
+    }
   }
 
   void _onGameChanged() {
@@ -115,8 +130,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         },
         onMainMenu: () {
           Navigator.of(context).pop();
-          _audioProvider.playMenuMusic();
-          Navigator.of(context).pop();
+          _showMainMenuConfirmDialog();
         },
       ),
     );
@@ -164,8 +178,32 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         },
         onMainMenu: () {
           Navigator.of(context).pop();
+          _showMainMenuConfirmDialog();
+        },
+      ),
+    );
+  }
+
+  void _showMainMenuConfirmDialog() {
+    bool wasPaused = _game.isPaused;
+    if (!wasPaused) {
+      _game.togglePause(); // Pause the game
+    }
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => MainMenuConfirmDialog(
+        onConfirm: () {
+          Navigator.of(context).pop();
           _audioProvider.playMenuMusic();
           Navigator.of(context).pop();
+        },
+        onCancel: () {
+          Navigator.of(context).pop();
+          if (!wasPaused) {
+            _game.togglePause(); // Resume if we paused it
+          }
         },
       ),
     );
@@ -221,8 +259,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                           GlassMorphismCard(
                             child: InkWell(
                               onTap: () {
-                                _audioProvider.playMenuMusic();
-                                Navigator.of(context).pop();
+                                _showMainMenuConfirmDialog();
                               },
                               borderRadius: BorderRadius.circular(20),
                               child: const Padding(
@@ -322,7 +359,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                             child: _buildPlayfield(context, playfieldWidth, playfieldHeight),
                           ),
                           const SizedBox(width: 12),
-                          // Right sidebar: next piece
+                          // Right sidebar: next piece and timer
                           Expanded(
                             flex: 2,
                             child: Column(
@@ -340,7 +377,24 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                  PiecePreview(next: _game.next),
+                                PiecePreview(next: _game.next),
+                                if (_game.gameMode == GameMode.timeChallenge && _game.timeRemaining != null) ...[
+                                  const SizedBox(height: 16),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Time Left',
+                                      style: TextStyle(
+                                        fontFamily: 'Fredoka',
+                                        fontSize: 14,
+                                        color: Colors.white.withAlpha(220),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  TimerDisplay(timeRemaining: _game.timeRemaining!),
+                                ],
                                 const SizedBox(height: 24),
                               ],
                             ),
