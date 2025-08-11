@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:pandabricks/screens/home_screen.dart';
+import 'package:pandabricks/screens/home/home_screen.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import '../../mocks/mock_audio_provider.dart';
 

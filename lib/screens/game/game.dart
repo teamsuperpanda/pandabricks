@@ -5,6 +5,8 @@ import 'package:pandabricks/providers/audio_provider.dart';
 
 enum Rotation { up, right, down, left }
 
+enum GameMode { classic, timeChallenge }
+
 class PointInt {
   final int x;
   final int y;
@@ -39,6 +41,7 @@ class Game extends ChangeNotifier {
   final int width;
   final int height;
   final AudioProvider audioProvider;
+  final GameMode gameMode;
 
   late List<List<int?>> board; // height x width, stores color index or null
   ActivePiece? current;
@@ -49,6 +52,10 @@ class Game extends ChangeNotifier {
   int score = 0;
   int linesCleared = 0;
   int level = 1;
+
+  // Time challenge specific properties
+  Duration? timeRemaining;
+  DateTime? gameStartTime;
 
   final Random _rng = Random();
   final List<FallingBlock> _bag = [];
@@ -64,11 +71,22 @@ class Game extends ChangeNotifier {
     FallingBlock.L: 6,
   };
 
-  Game({this.width = 10, this.height = 20, required this.audioProvider}) {
+  Game({
+    this.width = 10, 
+    this.height = 20, 
+    required this.audioProvider,
+    this.gameMode = GameMode.classic,
+  }) {
     _resetBoard();
     _refillBag();
     next = _drawFromBag();
     _spawn();
+    
+    // Initialize time challenge if applicable
+    if (gameMode == GameMode.timeChallenge) {
+      timeRemaining = const Duration(minutes: 5);
+      gameStartTime = DateTime.now();
+    }
   }
 
   void _resetBoard() {
@@ -78,6 +96,12 @@ class Game extends ChangeNotifier {
     score = 0;
     linesCleared = 0;
     level = 1;
+    
+    // Reset time challenge properties
+    if (gameMode == GameMode.timeChallenge) {
+      timeRemaining = const Duration(minutes: 5);
+      gameStartTime = DateTime.now();
+    }
   }
 
   void reset() {
@@ -90,6 +114,18 @@ class Game extends ChangeNotifier {
 
   void togglePause() {
     if (isGameOver) return;
+    
+    if (gameMode == GameMode.timeChallenge && gameStartTime != null) {
+      if (!isPaused) {
+        // Pausing - save current time remaining
+        final elapsed = DateTime.now().difference(gameStartTime!);
+        timeRemaining = const Duration(minutes: 5) - elapsed;
+      } else {
+        // Resuming - reset start time based on remaining time
+        gameStartTime = DateTime.now().subtract(const Duration(minutes: 5) - timeRemaining!);
+      }
+    }
+    
     isPaused = !isPaused;
     notifyListeners();
   }
@@ -230,6 +266,21 @@ class Game extends ChangeNotifier {
   // Called each tick
   void tick() {
     if (isPaused || isGameOver) return;
+    
+    // Update time remaining for time challenge mode
+    if (gameMode == GameMode.timeChallenge && gameStartTime != null) {
+      final elapsed = DateTime.now().difference(gameStartTime!);
+      timeRemaining = const Duration(minutes: 5) - elapsed;
+      
+      // Check if time is up
+      if (timeRemaining!.inMilliseconds <= 0) {
+        timeRemaining = Duration.zero;
+        isGameOver = true;
+        notifyListeners();
+        return;
+      }
+    }
+    
     if (!softDrop()) {
       _lockPiece();
     }

@@ -20,17 +20,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _floatingController;
   late Animation<double> _gradientAnimation;
   late Animation<double> _floatingAnimation;
-  late AudioProvider _audioProvider;
+  AudioProvider? _audioProvider;
+  bool _audioInitialized = false;
 
   @override
   void initState() {
     super.initState();
-
-    _audioProvider = context.read<AudioProvider>();
-    if (_audioProvider.musicEnabled.value) {
-      _audioProvider.playMenuMusic();
-    }
-    _audioProvider.musicEnabled.addListener(_onMusicToggle);
 
     _gradientController = AnimationController(
       duration: const Duration(seconds: 10),
@@ -59,11 +54,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ));
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_audioInitialized) {
+      _audioProvider = context.read<AudioProvider>();
+      if (_audioProvider!.musicEnabled.value) {
+        _audioProvider!.playMenuMusic();
+      }
+      _audioProvider!.musicEnabled.addListener(_onMusicToggle);
+      _audioInitialized = true;
+    }
+  }
+
   void _onMusicToggle() {
-    if (_audioProvider.musicEnabled.value) {
-      _audioProvider.playMenuMusic();
+    if (_audioProvider?.musicEnabled.value == true) {
+      _audioProvider!.playMenuMusic();
     } else {
-      _audioProvider.stopMusic();
+      _audioProvider?.stopMusic();
     }
   }
 
@@ -71,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void dispose() {
     _gradientController.dispose();
     _floatingController.dispose();
-    _audioProvider.musicEnabled.removeListener(_onMusicToggle);
+    _audioProvider?.musicEnabled.removeListener(_onMusicToggle);
     super.dispose();
   }
 
@@ -98,8 +106,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   _SectionHeader(title: 'Game Modes'),
                   const SizedBox(height: 12),
                   _ModeList(
-                    onTapClassic: () => Navigator.of(context).pushNamed('/game'),
-                    onTapTimed: () => Navigator.of(context).pushNamed('/game'),
+                    onTapClassic: () => Navigator.of(context).pushNamed('/game', arguments: 'classic'),
+                    onTapTimed: () => Navigator.of(context).pushNamed('/game', arguments: 'timeChallenge'),
                     onTapPlaceholder: () => _showComingSoon(context),
                   ),
                   const SizedBox(height: 24),
