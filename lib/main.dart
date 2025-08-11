@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
-import 'package:pandabricks/screens/home_screen.dart';
+import 'package:pandabricks/screens/home/home_screen.dart';
 import 'package:pandabricks/screens/game/screen.dart';
 import 'package:provider/provider.dart';
 
