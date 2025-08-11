@@ -35,7 +35,7 @@ class ActivePiece {
 
 enum FallingBlock { I, O, T, S, Z, J, L }
 
-class FallingBlocksGame extends ChangeNotifier {
+class Game extends ChangeNotifier {
   final int width;
   final int height;
   final AudioProvider audioProvider;
@@ -64,7 +64,7 @@ class FallingBlocksGame extends ChangeNotifier {
     FallingBlock.L: 6,
   };
 
-  FallingBlocksGame({this.width = 10, this.height = 20, required this.audioProvider}) {
+  Game({this.width = 10, this.height = 20, required this.audioProvider}) {
     _resetBoard();
     _refillBag();
     next = _drawFromBag();
@@ -112,6 +112,7 @@ class FallingBlocksGame extends ChangeNotifier {
     final piece = ActivePiece(type: type, rotation: Rotation.up, position: spawnPos);
     if (_collides(piece)) {
       isGameOver = true;
+      notifyListeners(); // Notify listeners when game over state changes
     } else {
       current = piece;
       // Small note: spawn near the top; if colliding, mark game over
@@ -236,9 +237,11 @@ class FallingBlocksGame extends ChangeNotifier {
 
   void _lockPiece() {
     if (current == null) return;
+    bool gameOverDetected = false;
     for (final c in _cells(current!)) {
       if (c.y < 0 || c.y >= height || c.x < 0 || c.x >= width) {
         isGameOver = true;
+        gameOverDetected = true;
         continue;
       }
       board[c.y][c.x] = colorFor[current!.type];
@@ -253,6 +256,11 @@ class FallingBlocksGame extends ChangeNotifier {
       level = 1 + (linesCleared ~/ 10);
     }
     _spawn();
+    
+    // Notify listeners if game over was detected during piece locking
+    if (gameOverDetected) {
+      notifyListeners();
+    }
   }
 
   int _clearLines() {
