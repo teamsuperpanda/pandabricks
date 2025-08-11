@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
-class FallingBlocksControls extends StatelessWidget {
-  const FallingBlocksControls({
+class GameControls extends StatelessWidget {
+  const GameControls({
     super.key,
     required this.onLeft,
     required this.onRight,
