@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
-class FallingBlocksHUD extends StatelessWidget {
-  const FallingBlocksHUD({
+class GameHUD extends StatelessWidget {
+  const GameHUD({
     super.key,
     required this.score,
     required this.level,

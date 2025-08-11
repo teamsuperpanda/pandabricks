@@ -98,8 +98,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   _SectionHeader(title: 'Game Modes'),
                   const SizedBox(height: 12),
                   _ModeList(
-                    onTapClassic: () => Navigator.of(context).pushNamed('/falling_blocks'),
-                    onTapTimed: () => Navigator.of(context).pushNamed('/falling_blocks'),
+                    onTapClassic: () => Navigator.of(context).pushNamed('/game'),
+                    onTapTimed: () => Navigator.of(context).pushNamed('/game'),
                     onTapPlaceholder: () => _showComingSoon(context),
                   ),
                   const SizedBox(height: 24),

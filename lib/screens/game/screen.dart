@@ -8,26 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/home/ambient_particles.dart';
 import 'package:pandabricks/widgets/home/animated_background.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
-import 'package:pandabricks/widgets/falling_blocks/falling_blocks_board_painter.dart';
-import 'package:pandabricks/widgets/falling_blocks/falling_blocks_controls.dart';
-import 'package:pandabricks/widgets/falling_blocks/falling_blocks_hud.dart';
-import 'package:pandabricks/widgets/falling_blocks/falling_blocks_preview.dart';
-import 'package:pandabricks/screens/falling_blocks/falling_blocks_game.dart';
-import 'package:pandabricks/dialogs/pause_dialog.dart';
-import 'package:pandabricks/dialogs/restart_confirm_dialog.dart';
-import 'package:pandabricks/dialogs/game_over_dialog.dart';
+import 'package:pandabricks/widgets/game/board_painter.dart';
+import 'package:pandabricks/widgets/game/controls.dart';
+import 'package:pandabricks/widgets/game/hud.dart';
+import 'package:pandabricks/widgets/game/preview.dart';
+import 'package:pandabricks/screens/game/game.dart';
+import 'package:pandabricks/dialogs/game/pause_dialog.dart';
+import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
+import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
 
-class FallingBlocksScreen extends StatefulWidget {
-  const FallingBlocksScreen({super.key});
+class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
 
   @override
-  State<FallingBlocksScreen> createState() => _FallingBlocksScreenState();
+  State<GameScreen> createState() => _GameScreenState();
 }
 
-class _FallingBlocksScreenState extends State<FallingBlocksScreen> with TickerProviderStateMixin {
+class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late final AnimationController _bgController;
   late final Animation<double> _bgAnim;
-  late FallingBlocksGame _game;
+  late Game _game;
   Timer? _timer;
   Duration _tick = const Duration(milliseconds: 800);
 
@@ -55,7 +55,7 @@ class _FallingBlocksScreenState extends State<FallingBlocksScreen> with TickerPr
       _musicStarted = true;
     }
     
-    _game = FallingBlocksGame(audioProvider: _audioProvider);
+    _game = Game(audioProvider: _audioProvider);
     _tick = _game.currentSpeed();
     _startTimer();
     _game.addListener(_onGameChanged);
@@ -311,7 +311,7 @@ class _FallingBlocksScreenState extends State<FallingBlocksScreen> with TickerPr
                         ],
                       ),
                       const SizedBox(height: 14),
-                      FallingBlocksHUD(score: _game.score, level: _game.level, lines: _game.linesCleared),
+                        GameHUD(score: _game.score, level: _game.level, lines: _game.linesCleared),
                       const SizedBox(height: 14),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,7 +340,7 @@ class _FallingBlocksScreenState extends State<FallingBlocksScreen> with TickerPr
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                FallingBlocksPreview(next: _game.next),
+                                  PiecePreview(next: _game.next),
                                 const SizedBox(height: 24),
                               ],
                             ),
@@ -349,7 +349,7 @@ class _FallingBlocksScreenState extends State<FallingBlocksScreen> with TickerPr
                       ),
                       const SizedBox(height: 18),
                       // Controls
-                      FallingBlocksControls(
+                        GameControls(
                         onLeft: () {
                           _startMusicOnFirstInteraction();
                           _game.moveLeft();
@@ -427,7 +427,7 @@ class _FallingBlocksScreenState extends State<FallingBlocksScreen> with TickerPr
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomPaint(
-              painter: FallingBlocksBoardPainter(
+              painter: BoardPainter(
                 width: _game.width,
                 height: _game.height,
                 cells: _game.filledCellsWithGhost(),

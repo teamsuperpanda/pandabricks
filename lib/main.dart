@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/screens/home_screen.dart';
-import 'package:pandabricks/screens/falling_blocks/falling_blocks_screen.dart';
+import 'package:pandabricks/screens/game/screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const HomeScreen(),
       routes: {
-        '/falling_blocks': (_) => const FallingBlocksScreen(),
+  '/game': (_) => const GameScreen(),
       },
     );
   }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class FallingBlocksBoardPainter extends CustomPainter {
+class BoardPainter extends CustomPainter {
   final int width;
   final int height;
   final Iterable<List<int>> cells; // [x,y,colorIndex] negative colorIndex => ghost
   final List<Color> palette;
 
-  FallingBlocksBoardPainter({
+  BoardPainter({
     required this.width,
     required this.height,
     required this.cells,
@@ -81,7 +81,7 @@ class FallingBlocksBoardPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant FallingBlocksBoardPainter oldDelegate) {
+  bool shouldRepaint(covariant BoardPainter oldDelegate) {
     return oldDelegate.width != width ||
         oldDelegate.height != height ||
         !identical(oldDelegate.cells, cells);

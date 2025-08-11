@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pandabricks/screens/falling_blocks/falling_blocks_game.dart' as game; // avoid name clash
+import 'package:pandabricks/screens/game/game.dart' as game; // avoid name clash
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
-class FallingBlocksPreview extends StatelessWidget {
-  const FallingBlocksPreview({super.key, required this.next});
+class PiecePreview extends StatelessWidget {
+  const PiecePreview({super.key, required this.next});
 
   final game.FallingBlock? next;
 
@@ -57,7 +57,7 @@ class _PreviewPainter extends CustomPainter {
       final x = (c.dx - minX) * cellSize + offsetX;
       final y = (c.dy - minY) * cellSize + offsetY;
       final rect = Rect.fromLTWH(x, y, cellSize, cellSize).deflate(0.5);
-      final color = palette[game.FallingBlocksGame.colorFor[next!]! % palette.length];
+      final color = palette[game.Game.colorFor[next!]! % palette.length];
       final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
       final paint = Paint()
         ..shader = LinearGradient(
@@ -77,7 +77,7 @@ class _PreviewPainter extends CustomPainter {
 
   List<Offset> _cellsFor(game.FallingBlock t) {
     // minimal preview using Rotation.up shapes
-    final m = game.FallingBlocksGame.shapes[t]!;
+    final m = game.Game.shapes[t]!;
     final offsets = m[game.Rotation.up]!;
     return offsets.map((p) => Offset(p.x.toDouble(), p.y.toDouble())).toList();
   }
