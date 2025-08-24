@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pandabricks/widgets/home/ambient_particles.dart';
 import 'package:pandabricks/widgets/home/animated_background.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
@@ -32,6 +33,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late Game _game;
   Timer? _timer;
   Duration _tick = const Duration(milliseconds: 800);
+  // Keyboard focus and down-key soft drop timer
+  late FocusNode _focusNode;
+  Timer? _keyboardDownTimer;
 
   // gesture state
   double _dragAccum = 0;
@@ -57,6 +61,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _audioProvider.playGameMusic();
       _musicStarted = true;
     }
+  // Keyboard focus for desktop/web
+  _focusNode = FocusNode();
   }
 
   @override
@@ -212,8 +218,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _timer?.cancel();
+  _keyboardDownTimer?.cancel();
     _game.removeListener(_onGameChanged);
     _bgController.dispose();
+  _focusNode.dispose();
     // Stop music when leaving game screen
     if (mounted) {
       _audioProvider.playMenuMusic();
@@ -233,7 +241,37 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return KeyboardListener(
+      focusNode: _focusNode,
+      autofocus: true,
+      onKeyEvent: (KeyEvent event) {
+        // Only handle key down/up for physical keyboards
+        if (event is KeyDownEvent) {
+          final key = event.logicalKey;
+          if (key == LogicalKeyboardKey.arrowLeft) {
+            _startMusicOnFirstInteraction();
+            _game.moveLeft();
+          } else if (key == LogicalKeyboardKey.arrowRight) {
+            _startMusicOnFirstInteraction();
+            _game.moveRight();
+          } else if (key == LogicalKeyboardKey.arrowUp) {
+            _startMusicOnFirstInteraction();
+            _game.rotateCW();
+          } else if (key == LogicalKeyboardKey.arrowDown) {
+            _startMusicOnFirstInteraction();
+            // Start a timer to repeatedly soft-drop while held
+            _keyboardDownTimer?.cancel();
+            _game.softDrop();
+            _keyboardDownTimer = Timer.periodic(const Duration(milliseconds: 120), (_) => _game.softDrop());
+          }
+        } else if (event is KeyUpEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+            _keyboardDownTimer?.cancel();
+            _keyboardDownTimer = null;
+          }
+        }
+      },
+      child: Scaffold(
       body: Stack(
         children: [
           AnimatedBackground(gradientAnimation: _bgAnim),
@@ -434,6 +472,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           ),
         ],
       ),
+    ),
     );
   }
 
