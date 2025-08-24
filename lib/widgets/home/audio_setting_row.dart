@@ -61,7 +61,7 @@ class _AudioSettingRowState extends State<AudioSettingRow> {
           Switch(
             value: _isToggled,
             onChanged: (value) => _toggle(),
-            activeColor: Colors.cyan,
+            activeThumbColor: Colors.cyan,
             inactiveThumbColor: Colors.grey,
             inactiveTrackColor: Colors.grey.withAlpha((255 * 0.5).toInt()),
           ),
