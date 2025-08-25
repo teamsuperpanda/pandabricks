@@ -64,7 +64,6 @@ class ModeCardState extends State<ModeCard> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -103,13 +102,23 @@ class ModeCardState extends State<ModeCard> {
                           ),
                         ),
                         if (highScore != null && highScore! > 0)
-                          Text(
-                            l10n.previousHighScore(highScore!),
-                            style: const TextStyle(
-                              fontFamily: 'Fredoka',
-                              fontSize: 16,
-                              color: Colors.white70,
-                            ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                highScore!.toString(),
+                                style: const TextStyle(
+                                  fontFamily: 'Fredoka',
+                                  fontSize: 16,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
                           ),
                       ],
                     ),
