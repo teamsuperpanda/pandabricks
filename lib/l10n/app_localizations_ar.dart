@@ -30,7 +30,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get blitzMode => 'وضع البرق';
 
   @override
-  String get blitzModeDescription => 'فوضى وطوب خاص وقلب للطاولة!';
+  String get blitzModeDescription => 'فوضى مع طوب خاص';
 
   @override
   String get audio => 'الصوت';

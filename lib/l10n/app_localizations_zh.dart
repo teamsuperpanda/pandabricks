@@ -30,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get blitzMode => '闪电战模式';
 
   @override
-  String get blitzModeDescription => '混乱，特殊的砖块和掀桌子！';
+  String get blitzModeDescription => '混乱与特殊砖块';
 
   @override
   String get audio => '音频';

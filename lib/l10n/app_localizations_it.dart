@@ -30,8 +30,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get blitzMode => 'Modalità Blitz';
 
   @override
-  String get blitzModeDescription =>
-      'Caos, mattoni speciali e ribaltamenti del tavolo!';
+  String get blitzModeDescription => 'Caos con mattoni speciali';
 
   @override
   String get audio => 'Audio';

@@ -30,7 +30,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get blitzMode => '블리츠 모드';
 
   @override
-  String get blitzModeDescription => '혼돈, 특별한 벽돌, 그리고 테이블 뒤집기!';
+  String get blitzModeDescription => '특별한 벽돌이 있는 혼돈';
 
   @override
   String get audio => '오디오';

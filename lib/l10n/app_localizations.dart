@@ -165,7 +165,7 @@ abstract class AppLocalizations {
   /// No description provided for @blitzModeDescription.
   ///
   /// In en, this message translates to:
-  /// **'Chaos, special bricks, and table flipping!'**
+  /// **'Chaos with special bricks'**
   String get blitzModeDescription;
 
   /// No description provided for @audio.

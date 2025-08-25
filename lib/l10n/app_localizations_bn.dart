@@ -30,7 +30,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get blitzMode => '闪电战模式';
 
   @override
-  String get blitzModeDescription => ' বিশৃঙ্খলা, বিশেষ ইট এবং টেবিল ফ্লিপ!';
+  String get blitzModeDescription => 'বিশেষ ইটের সঙ্গে বিশৃঙ্খলা';
 
   @override
   String get audio => 'অডিও';

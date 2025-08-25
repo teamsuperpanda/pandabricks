@@ -30,7 +30,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get blitzMode => 'ब्लिट्ज मोड';
 
   @override
-  String get blitzModeDescription => 'अराजकता, विशेष ईंटें और टेबल फ्लिप!';
+  String get blitzModeDescription => 'विशेष ईंटों के साथ अराजकता';
 
   @override
   String get audio => 'ऑडियो';

@@ -30,8 +30,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get blitzMode => 'Блиц-режим';
 
   @override
-  String get blitzModeDescription =>
-      'Хаос, особые кирпичи и переворачивание стола!';
+  String get blitzModeDescription => 'Хаос со специальными кирпичами';
 
   @override
   String get audio => 'Аудио';
