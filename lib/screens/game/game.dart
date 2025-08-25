@@ -558,9 +558,13 @@ class Game extends ChangeNotifier {
 
   int _clearLines() {
     int cleared = 0;
+    List<int> clearedRows = []; // Track which rows get cleared for effects
+    
     for (int y = height - 1; y >= 0; y--) {
       if (board[y].every((cell) => cell != null)) {
         cleared += 1;
+        clearedRows.add(y); // Record this row for sparkle effect
+        
         // shift down
         for (int yy = y; yy > 0; yy--) {
           board[yy] = List<int?>.from(board[yy - 1]);
@@ -569,6 +573,12 @@ class Game extends ChangeNotifier {
         y++; // recheck this row after shifting
       }
     }
+    
+    // Trigger sparkle effects for all cleared rows
+    for (final rowY in clearedRows) {
+      _triggerRowEffect(rowY);
+    }
+    
     return cleared;
   }
 
