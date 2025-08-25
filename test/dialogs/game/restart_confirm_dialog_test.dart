@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
+import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   group('RestartConfirmDialog Tests', () {
+    late LocaleProvider localeProvider;
+
+    setUp(() {
+      localeProvider = LocaleProvider();
+    });
+
     testWidgets('should display restart confirmation content correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: RestartConfirmDialog(
-              onRestart: () {},
-              onCancel: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: RestartConfirmDialog(
+                onRestart: () {},
+                onCancel: () {},
+              ),
             ),
           ),
         ),
@@ -18,17 +33,18 @@ void main() {
 
       // Check for restart confirmation title and message
       expect(find.text('Restart Game?'), findsOneWidget);
-      expect(find.text('Are you sure you want to restart?\nYour current progress will be lost.'), findsOneWidget);
-      
+      expect(find.text('Are you sure you want to restart?\nYour current progress will be lost.'),
+          findsOneWidget);
+
       // Check for restart icon (appears in header and button)
-      expect(find.byIcon(Icons.refresh), findsAtLeastNWidgets(1));
-      
+      expect(find.byIcon(Icons.refresh_rounded), findsAtLeastNWidgets(1));
+
       // Check for buttons
       expect(find.text('Cancel'), findsOneWidget);
       expect(find.text('Restart'), findsOneWidget);
-      
+
       // Check for button icons
-      expect(find.byIcon(Icons.close), findsOneWidget);
+      expect(find.byIcon(Icons.close_rounded), findsOneWidget);
     });
 
     testWidgets('should call onCancel when cancel button is tapped', (WidgetTester tester) async {
@@ -36,11 +52,17 @@ void main() {
       bool cancelCalled = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: RestartConfirmDialog(
-              onRestart: () => restartCalled = true,
-              onCancel: () => cancelCalled = true,
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: RestartConfirmDialog(
+                onRestart: () => restartCalled = true,
+                onCancel: () => cancelCalled = true,
+              ),
             ),
           ),
         ),
@@ -59,11 +81,17 @@ void main() {
       bool cancelCalled = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: RestartConfirmDialog(
-              onRestart: () => restartCalled = true,
-              onCancel: () => cancelCalled = true,
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: RestartConfirmDialog(
+                onRestart: () => restartCalled = true,
+                onCancel: () => cancelCalled = true,
+              ),
             ),
           ),
         ),
@@ -79,11 +107,17 @@ void main() {
 
     testWidgets('should have proper widget hierarchy', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: RestartConfirmDialog(
-              onRestart: () {},
-              onCancel: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: RestartConfirmDialog(
+                onRestart: () {},
+                onCancel: () {},
+              ),
             ),
           ),
         ),
@@ -91,21 +125,27 @@ void main() {
 
       // Check that it's wrapped in a Dialog
       expect(find.byType(Dialog), findsOneWidget);
-      
+
       // Check for InkWell buttons (should be tappable)
       expect(find.byType(InkWell), findsNWidgets(2)); // Cancel, Restart
-      
+
       // Check for Row layout (buttons side by side)
       expect(find.byType(Row), findsAtLeastNWidgets(1));
     });
 
     testWidgets('should have cancel and restart buttons in correct order', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: RestartConfirmDialog(
-              onRestart: () {},
-              onCancel: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: RestartConfirmDialog(
+                onRestart: () {},
+                onCancel: () {},
+              ),
             ),
           ),
         ),
@@ -114,25 +154,31 @@ void main() {
       // Find both buttons
       final cancelFinder = find.text('Cancel');
       final restartFinder = find.text('Restart');
-      
+
       expect(cancelFinder, findsOneWidget);
       expect(restartFinder, findsOneWidget);
-      
+
       // Get their positions
       final cancelPosition = tester.getCenter(cancelFinder);
       final restartPosition = tester.getCenter(restartFinder);
-      
+
       // Cancel should be on the left (smaller x coordinate)
       expect(cancelPosition.dx, lessThan(restartPosition.dx));
     });
 
     testWidgets('should display warning message about progress loss', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: RestartConfirmDialog(
-              onRestart: () {},
-              onCancel: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: RestartConfirmDialog(
+                onRestart: () {},
+                onCancel: () {},
+              ),
             ),
           ),
         ),

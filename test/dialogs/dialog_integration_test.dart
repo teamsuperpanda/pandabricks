@@ -4,28 +4,43 @@ import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
 import 'package:pandabricks/dialogs/game/pause_dialog.dart';
 import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
 import 'package:pandabricks/dialogs/game/main_menu_confirm_dialog.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
+import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   group('Dialog Integration Tests', () {
+    late LocaleProvider localeProvider;
+
+    setUp(() {
+      localeProvider = LocaleProvider();
+    });
+
     testWidgets('all dialogs should be non-dismissible', (WidgetTester tester) async {
       // Test Game Over Dialog
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () => showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => GameOverDialog(
-                    score: 1000,
-                    level: 1,
-                    lines: 10,
-                    onRestart: () {},
-                    onMainMenu: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => ElevatedButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => GameOverDialog(
+                      score: 1000,
+                      level: 1,
+                      lines: 10,
+                      onRestart: () {},
+                      onMainMenu: () {},
+                    ),
                   ),
+                  child: const Text('Show Dialog'),
                 ),
-                child: const Text('Show Dialog'),
               ),
             ),
           ),
@@ -70,8 +85,14 @@ void main() {
 
       for (final dialog in dialogs) {
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(body: dialog),
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(body: dialog),
+            ),
           ),
         );
 
@@ -83,56 +104,81 @@ void main() {
 
     testWidgets('all dialogs should have consistent styling', (WidgetTester tester) async {
       final dialogs = [
-        ('Game Over', GameOverDialog(
-          score: 1000,
-          level: 1,
-          lines: 10,
-          onRestart: () {},
-          onMainMenu: () {},
-        )),
-        ('Game Paused', PauseDialog(
-          onResume: () {},
-          onRestart: () {},
-          onMainMenu: () {},
-        )),
-        ('Restart Game?', RestartConfirmDialog(
-          onRestart: () {},
-          onCancel: () {},
-        )),
-        ('Return to Main Menu?', MainMenuConfirmDialog(
-          onConfirm: () {},
-          onCancel: () {},
-        )),
+        (
+          'Game Over',
+          GameOverDialog(
+            score: 1000,
+            level: 1,
+            lines: 10,
+            onRestart: () {},
+            onMainMenu: () {},
+          )
+        ),
+        (
+          'Game Paused',
+          PauseDialog(
+            onResume: () {},
+            onRestart: () {},
+            onMainMenu: () {},
+          )
+        ),
+        (
+          'Restart Game?',
+          RestartConfirmDialog(
+            onRestart: () {},
+            onCancel: () {},
+          )
+        ),
+        (
+          'Return to Main Menu?',
+          MainMenuConfirmDialog(
+            onConfirm: () {},
+            onCancel: () {},
+          )
+        ),
       ];
 
       for (final (title, dialog) in dialogs) {
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(body: dialog),
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(body: dialog),
+            ),
           ),
         );
 
         // Each dialog should have a title
         expect(find.text(title), findsOneWidget);
-        
+
         // Each dialog should have an icon
         expect(find.byType(Icon), findsAtLeastNWidgets(1));
-        
+
         await tester.pumpAndSettle();
       }
     });
 
     group('Dialog Accessibility Tests', () {
-      testWidgets('dialogs should have semantic labels for buttons', (WidgetTester tester) async {
+      testWidgets('dialogs should have semantic labels for buttons',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: GameOverDialog(
-                score: 1000,
-                level: 1,
-                lines: 10,
-                onRestart: () {},
-                onMainMenu: () {},
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: GameOverDialog(
+                  score: 1000,
+                  level: 1,
+                  lines: 10,
+                  onRestart: () {},
+                  onMainMenu: () {},
+                ),
               ),
             ),
           ),
@@ -143,13 +189,20 @@ void main() {
         expect(find.text('Main Menu'), findsOneWidget);
       });
 
-      testWidgets('confirmation dialogs should clearly indicate consequences', (WidgetTester tester) async {
+      testWidgets('confirmation dialogs should clearly indicate consequences',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: RestartConfirmDialog(
-                onRestart: () {},
-                onCancel: () {},
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: RestartConfirmDialog(
+                  onRestart: () {},
+                  onCancel: () {},
+                ),
               ),
             ),
           ),
@@ -161,15 +214,22 @@ void main() {
     });
 
     group('Dialog Button Interaction Tests', () {
-      testWidgets('multiple rapid taps should not cause issues', (WidgetTester tester) async {
+      testWidgets('multiple rapid taps should not cause issues',
+          (WidgetTester tester) async {
         int tapCount = 0;
-        
+
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: RestartConfirmDialog(
-                onRestart: () => tapCount++,
-                onCancel: () {},
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: RestartConfirmDialog(
+                  onRestart: () => tapCount++,
+                  onCancel: () {},
+                ),
               ),
             ),
           ),

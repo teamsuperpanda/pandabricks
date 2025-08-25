@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/dialogs/game/pause_dialog.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
+import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   group('PauseDialog Tests', () {
+    late LocaleProvider localeProvider;
+
+    setUp(() {
+      localeProvider = LocaleProvider();
+    });
+
     testWidgets('should display pause dialog content correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: PauseDialog(
-              onResume: () {},
-              onRestart: () {},
-              onMainMenu: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: PauseDialog(
+                onResume: () {},
+                onRestart: () {},
+                onMainMenu: () {},
+              ),
             ),
           ),
         ),
@@ -19,18 +34,18 @@ void main() {
 
       // Check for pause title and description
       expect(find.text('Game Paused'), findsOneWidget);
-      expect(find.text('Your game is currently paused'), findsOneWidget);
-      
+      expect(find.text('Your game is currently paused.'), findsOneWidget);
+
       // Check for pause icon
-      expect(find.byIcon(Icons.pause_circle_filled), findsOneWidget);
-      
+      expect(find.byIcon(Icons.pause_circle_filled_rounded), findsOneWidget);
+
       // Check for buttons
       expect(find.text('Resume'), findsOneWidget);
       expect(find.text('Main Menu'), findsOneWidget);
-      
+
       // Check for button icons
-      expect(find.byIcon(Icons.play_arrow), findsOneWidget);
-      expect(find.byIcon(Icons.home), findsOneWidget);
+      expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.home_rounded), findsOneWidget);
     });
 
     testWidgets('should call onResume when resume button is tapped', (WidgetTester tester) async {
@@ -39,12 +54,18 @@ void main() {
       bool mainMenuCalled = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: PauseDialog(
-              onResume: () => resumeCalled = true,
-              onRestart: () => restartCalled = true,
-              onMainMenu: () => mainMenuCalled = true,
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: PauseDialog(
+                onResume: () => resumeCalled = true,
+                onRestart: () => restartCalled = true,
+                onMainMenu: () => mainMenuCalled = true,
+              ),
             ),
           ),
         ),
@@ -61,12 +82,18 @@ void main() {
 
     testWidgets('should call onRestart when restart button is tapped', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: PauseDialog(
-              onResume: () {},
-              onRestart: () {},
-              onMainMenu: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: PauseDialog(
+                onResume: () {},
+                onRestart: () {},
+                onMainMenu: () {},
+              ),
             ),
           ),
         ),
@@ -82,12 +109,18 @@ void main() {
       bool mainMenuCalled = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: PauseDialog(
-              onResume: () => resumeCalled = true,
-              onRestart: () => restartCalled = true,
-              onMainMenu: () => mainMenuCalled = true,
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: PauseDialog(
+                onResume: () => resumeCalled = true,
+                onRestart: () => restartCalled = true,
+                onMainMenu: () => mainMenuCalled = true,
+              ),
             ),
           ),
         ),
@@ -104,12 +137,18 @@ void main() {
 
     testWidgets('should have proper widget hierarchy', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: PauseDialog(
-              onResume: () {},
-              onRestart: () {},
-              onMainMenu: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: PauseDialog(
+                onResume: () {},
+                onRestart: () {},
+                onMainMenu: () {},
+              ),
             ),
           ),
         ),
@@ -117,7 +156,7 @@ void main() {
 
       // Check that it's wrapped in a Dialog
       expect(find.byType(Dialog), findsOneWidget);
-      
+
       // Check for InkWell buttons (should be tappable)
       expect(find.byType(InkWell), findsNWidgets(2)); // Resume, Main Menu
     });

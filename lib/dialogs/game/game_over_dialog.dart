@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class GameOverDialog extends StatelessWidget {
@@ -19,6 +21,8 @@ class GameOverDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+  final formattedScore = NumberFormat('#,###').format(score);
     return Dialog(
       backgroundColor: Colors.transparent,
       child: GlassMorphismCard(
@@ -28,14 +32,14 @@ class GameOverDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.gamepad,
+                Icons.gamepad_rounded,
                 size: 64,
                 color: Colors.redAccent,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Game Over',
-                style: TextStyle(
+              Text(
+                l10n.gameOver,
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 28,
                   color: Colors.white,
@@ -49,9 +53,9 @@ class GameOverDialog extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      const Text(
-                        'Final Score',
-                        style: TextStyle(
+                      Text(
+                        l10n.finalScore,
+                        style: const TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 16,
                           color: Colors.white70,
@@ -62,9 +66,9 @@ class GameOverDialog extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _scoreItem('Score', score.toString()),
-                          _scoreItem('Level', level.toString()),
-                          _scoreItem('Lines', lines.toString()),
+                          _scoreItem(l10n.score, formattedScore),
+                          _scoreItem(l10n.level, level.toString()),
+                          _scoreItem(l10n.lines, lines.toString()),
                         ],
                       ),
                     ],
@@ -79,16 +83,16 @@ class GameOverDialog extends StatelessWidget {
                       child: InkWell(
                         onTap: onRestart,
                         borderRadius: BorderRadius.circular(16),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.refresh, color: Colors.white),
-                              SizedBox(width: 8),
+                              const Icon(Icons.refresh, color: Colors.white),
+                              const SizedBox(width: 8),
                               Text(
-                                'Play Again',
-                                style: TextStyle(
+                                l10n.playAgain,
+                                style: const TextStyle(
                                   fontFamily: 'Fredoka',
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
@@ -106,16 +110,16 @@ class GameOverDialog extends StatelessWidget {
                       child: InkWell(
                         onTap: onMainMenu,
                         borderRadius: BorderRadius.circular(16),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.home, color: Colors.white),
-                              SizedBox(width: 8),
+                              const Icon(Icons.home, color: Colors.white),
+                              const SizedBox(width: 8),
                               Text(
-                                'Main Menu',
-                                style: TextStyle(
+                                l10n.mainMenu,
+                                style: const TextStyle(
                                   fontFamily: 'Fredoka',
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,

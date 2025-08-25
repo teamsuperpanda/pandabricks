@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
+import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   group('GameOverDialog Tests', () {
+    late LocaleProvider localeProvider;
+
+    setUp(() {
+      localeProvider = LocaleProvider();
+    });
+
     testWidgets('should display game over information correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: GameOverDialog(
-              score: 12500,
-              level: 5,
-              lines: 25,
-              onRestart: () {},
-              onMainMenu: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: GameOverDialog(
+                score: 12500,
+                level: 5,
+                lines: 25,
+                onRestart: () {},
+                onMainMenu: () {},
+              ),
             ),
           ),
         ),
@@ -21,15 +36,15 @@ void main() {
 
       // Check for game over title
       expect(find.text('Game Over'), findsOneWidget);
-      
+
       // Check for game over icon
-      expect(find.byIcon(Icons.gamepad), findsOneWidget);
-      
+      expect(find.byIcon(Icons.gamepad_rounded), findsOneWidget);
+
       // Check for score display
       expect(find.text('Score'), findsOneWidget);
       expect(find.text('Level'), findsOneWidget);
       expect(find.text('Lines'), findsOneWidget);
-      
+
       // Check for buttons
       expect(find.text('Play Again'), findsOneWidget);
       expect(find.text('Main Menu'), findsOneWidget);
@@ -40,14 +55,20 @@ void main() {
       bool mainMenuCalled = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: GameOverDialog(
-              score: 1000,
-              level: 1,
-              lines: 5,
-              onRestart: () => restartCalled = true,
-              onMainMenu: () => mainMenuCalled = true,
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: GameOverDialog(
+                score: 1000,
+                level: 1,
+                lines: 5,
+                onRestart: () => restartCalled = true,
+                onMainMenu: () => mainMenuCalled = true,
+              ),
             ),
           ),
         ),
@@ -66,14 +87,20 @@ void main() {
       bool mainMenuCalled = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: GameOverDialog(
-              score: 1000,
-              level: 1,
-              lines: 5,
-              onRestart: () => restartCalled = true,
-              onMainMenu: () => mainMenuCalled = true,
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: GameOverDialog(
+                score: 1000,
+                level: 1,
+                lines: 5,
+                onRestart: () => restartCalled = true,
+                onMainMenu: () => mainMenuCalled = true,
+              ),
             ),
           ),
         ),
@@ -89,33 +116,45 @@ void main() {
 
     testWidgets('should format large scores with commas', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: GameOverDialog(
-              score: 1234567,
-              level: 10,
-              lines: 100,
-              onRestart: () {},
-              onMainMenu: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: GameOverDialog(
+                score: 1234567,
+                level: 10,
+                lines: 100,
+                onRestart: () {},
+                onMainMenu: () {},
+              ),
             ),
           ),
         ),
       );
 
       // Check for properly formatted score
-      expect(find.text('1234567'), findsOneWidget);
+      expect(find.text('1,234,567'), findsOneWidget);
     });
 
     testWidgets('should display zero values correctly', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: GameOverDialog(
-              score: 0,
-              level: 0,
-              lines: 0,
-              onRestart: () {},
-              onMainMenu: () {},
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: GameOverDialog(
+                score: 0,
+                level: 0,
+                lines: 0,
+                onRestart: () {},
+                onMainMenu: () {},
+              ),
             ),
           ),
         ),
