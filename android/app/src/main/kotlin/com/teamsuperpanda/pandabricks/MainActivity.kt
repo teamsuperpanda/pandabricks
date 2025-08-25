@@ -1,4 +1,4 @@
-package com.example.pandabricks
+package com.teamsuperpanda.pandabricks
 
 import io.flutter.embedding.android.FlutterActivity
 
