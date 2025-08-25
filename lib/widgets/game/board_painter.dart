@@ -4,12 +4,14 @@ class BoardPainter extends CustomPainter {
   final int width;
   final int height;
   final Iterable<List<int>> cells; // [x,y,colorIndex] negative colorIndex => ghost
+  final Iterable<List<int>> effects; // [x,y,type]
   final List<Color> palette;
 
   BoardPainter({
     required this.width,
     required this.height,
     required this.cells,
+    this.effects = const [],
     required this.palette,
   });
 
@@ -77,6 +79,101 @@ class BoardPainter extends CustomPainter {
         ..strokeWidth = 1.3
         ..color = Colors.black.withAlpha((255 * 0.25).toInt());
       canvas.drawRRect(rrect, border);
+
+      // Draw emoji overlay for special blocks (we consider indices >= 7 special)
+      final specialIndexStart = 7;
+      if (!isGhost && idx >= specialIndexStart) {
+        final emojiMap = {
+          7: '🐼', // pandaBrick
+          8: '👻', // ghostBrick
+          9: '🐱', // catBrick
+          10: '🌪️', // tornadoBrick
+          11: '💣', // bombBrick
+        };
+        final emoji = emojiMap[idx] ?? '';
+        if (emoji.isNotEmpty) {
+          final textStyle = TextStyle(fontSize: rect.height * 0.6);
+          final tp = TextPainter(text: TextSpan(text: emoji, style: textStyle), textDirection: TextDirection.ltr);
+          tp.layout();
+          final dx = rect.left + (rect.width - tp.width) / 2;
+          final dy = rect.top + (rect.height - tp.height) / 2;
+          tp.paint(canvas, Offset(dx, dy));
+        }
+      }
+    }
+
+    // Draw effects (sparkle/dissolve animation)
+    for (final eff in effects) {
+      final ex = eff[0];
+      final ey = eff[1];
+      final type = eff.length > 2 ? eff[2] : 0;
+      final alpha = eff.length > 3 ? (eff[3]).clamp(0, 255) : 120;
+      
+      // Create sparkle/particle effect instead of solid flash
+      final t = 1.0 - (alpha / 160.0); // Progress from 0 to 1
+      final sparkleColor = (type == 0 ? Colors.cyanAccent : Colors.deepOrangeAccent);
+      
+      if (type == 0) {
+        // Column sparkle effect - vertical particles
+        _drawColumnSparkles(canvas, ex, cellW, cellH, size.height, sparkleColor, t, alpha);
+      } else {
+        // Row sparkle effect - horizontal particles  
+        _drawRowSparkles(canvas, ey, cellW, cellH, size.width, sparkleColor, t, alpha);
+      }
+    }
+  }
+
+  void _drawColumnSparkles(Canvas canvas, int col, double cellW, double cellH, double height, Color sparkleColor, double t, int alpha) {
+    final x = (col + 0.5) * cellW;
+    const particleCount = 12;
+    
+    for (int i = 0; i < particleCount; i++) {
+      final seed = col * 31 + i * 17;
+      final baseY = (i / particleCount) * height;
+      final offsetX = ((seed % 41) - 20) / 20.0 * cellW * 0.8;
+      final offsetY = ((seed % 23) - 11) / 11.0 * cellH * 0.5;
+      
+      // Sparkle moves outward and fades
+      final sparkleX = x + offsetX * t * 2;
+      final sparkleY = baseY + offsetY * t;
+      final sparkleRadius = (3.0 + (seed % 5)) * (1.0 - t * 0.7);
+      final sparkleAlpha = (alpha * (1.0 - t * t)).toInt().clamp(0, 255);
+      
+      if (sparkleRadius > 0.5) {
+        final paint = Paint()..color = sparkleColor.withAlpha(sparkleAlpha);
+        canvas.drawCircle(Offset(sparkleX, sparkleY), sparkleRadius, paint);
+        
+        // Add inner glow
+        final glowPaint = Paint()..color = Colors.white.withAlpha((sparkleAlpha * 0.6).toInt().clamp(0, 255));
+        canvas.drawCircle(Offset(sparkleX, sparkleY), sparkleRadius * 0.4, glowPaint);
+      }
+    }
+  }
+
+  void _drawRowSparkles(Canvas canvas, int row, double cellW, double cellH, double width, Color sparkleColor, double t, int alpha) {
+    final y = (row + 0.5) * cellH;
+    const particleCount = 15;
+    
+    for (int i = 0; i < particleCount; i++) {
+      final seed = row * 37 + i * 19;
+      final baseX = (i / particleCount) * width;
+      final offsetX = ((seed % 29) - 14) / 14.0 * cellW * 0.5;
+      final offsetY = ((seed % 31) - 15) / 15.0 * cellH * 0.8;
+      
+      // Sparkle moves outward and fades
+      final sparkleX = baseX + offsetX * t;
+      final sparkleY = y + offsetY * t * 2;
+      final sparkleRadius = (3.0 + (seed % 5)) * (1.0 - t * 0.7);
+      final sparkleAlpha = (alpha * (1.0 - t * t)).toInt().clamp(0, 255);
+      
+      if (sparkleRadius > 0.5) {
+        final paint = Paint()..color = sparkleColor.withAlpha(sparkleAlpha);
+        canvas.drawCircle(Offset(sparkleX, sparkleY), sparkleRadius, paint);
+        
+        // Add inner glow
+        final glowPaint = Paint()..color = Colors.white.withAlpha((sparkleAlpha * 0.6).toInt().clamp(0, 255));
+        canvas.drawCircle(Offset(sparkleX, sparkleY), sparkleRadius * 0.4, glowPaint);
+      }
     }
   }
 
@@ -84,6 +181,7 @@ class BoardPainter extends CustomPainter {
   bool shouldRepaint(covariant BoardPainter oldDelegate) {
     return oldDelegate.width != width ||
         oldDelegate.height != height ||
-        !identical(oldDelegate.cells, cells);
+        !identical(oldDelegate.cells, cells) ||
+        !identical(oldDelegate.effects, effects);
   }
 }
