@@ -291,19 +291,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final maxW = constraints.maxWidth;
-                // playfield aspect ratio ~ 10:20 = 1:2
-                final playfieldWidth = min(maxW * 0.9, 380.0);
-                final playfieldHeight = playfieldWidth * 2.0;
-
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 8),
-                      // Header with controls only
-                      Row(
+                return Column(
+                  children: [
+                    // Header with controls only
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                      child: Row(
                         children: [
                           // Main Menu button on the left
                           GlassMorphismCard(
@@ -397,43 +390,35 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 14),
-                        GameHUD(score: _game.score, level: _game.level, lines: _game.linesCleared),
-                      const SizedBox(height: 14),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Playfield
-                          Expanded(
-                            flex: 3,
-                            child: _buildPlayfield(context, playfieldWidth, playfieldHeight),
-                          ),
-                          const SizedBox(width: 12),
-                          // Right sidebar: next piece and timer
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    l10n.next,
-                                    style: TextStyle(
-                                      fontFamily: 'Fredoka',
-                                      fontSize: 14,
-                                      color: Colors.white.withAlpha(220),
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                PiecePreview(next: _game.next),
-                                if (_game.gameMode == GameMode.timeChallenge && _game.timeRemaining != null) ...[
-                                  const SizedBox(height: 16),
+                    ),
+                    // HUD
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: GameHUD(score: _game.score, level: _game.level, lines: _game.linesCleared),
+                    ),
+                    const SizedBox(height: 14),
+                    // Main game area that expands to fill available space
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Playfield
+                            Expanded(
+                              flex: 3,
+                              child: _buildPlayfield(context),
+                            ),
+                            const SizedBox(width: 12),
+                            // Right sidebar: next piece and timer
+                            Expanded(
+                              flex: 2,
+                              child: Column(
+                                children: [
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      l10n.timeLeft,
+                                      l10n.next,
                                       style: TextStyle(
                                         fontFamily: 'Fredoka',
                                         fontSize: 14,
@@ -443,17 +428,35 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-                                  TimerDisplay(timeRemaining: _game.timeRemaining!),
+                                  PiecePreview(next: _game.next),
+                                  if (_game.gameMode == GameMode.timeChallenge && _game.timeRemaining != null) ...[
+                                    const SizedBox(height: 16),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        l10n.timeLeft,
+                                        style: TextStyle(
+                                          fontFamily: 'Fredoka',
+                                          fontSize: 14,
+                                          color: Colors.white.withAlpha(220),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    TimerDisplay(timeRemaining: _game.timeRemaining!),
+                                  ],
                                 ],
-                                const SizedBox(height: 24),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 18),
-                      // Controls
-                        GameControls(
+                    ),
+                    // Controls at the bottom
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                      child: GameControls(
                         onLeft: () {
                           _startMusicOnFirstInteraction();
                           _game.moveLeft();
@@ -475,9 +478,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                           _game.hardDrop();
                         },
                       ),
-                      const SizedBox(height: 12),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               },
             ),
@@ -488,7 +490,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildPlayfield(BuildContext context, double width, double height) {
+  Widget _buildPlayfield(BuildContext context) {
     return GestureDetector(
       onTap: () {
         _startMusicOnFirstInteraction();
@@ -527,19 +529,25 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         }
       },
       child: GlassMorphismCard(
-        child: AspectRatio(
-          aspectRatio: _game.width / _game.height,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomPaint(
-              painter: BoardPainter(
-                width: _game.width,
-                height: _game.height,
-                cells: _game.filledCellsWithGhost(),
-                effects: _game.currentEffects(),
-                palette: _palette(context),
+        child: Container(
+          width: double.infinity,
+          constraints: const BoxConstraints(
+            maxHeight: double.infinity,
+          ),
+          child: AspectRatio(
+            aspectRatio: _game.width / _game.height,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomPaint(
+                painter: BoardPainter(
+                  width: _game.width,
+                  height: _game.height,
+                  cells: _game.filledCellsWithGhost(),
+                  effects: _game.currentEffects(),
+                  palette: _palette(context),
+                ),
+                size: Size.infinite,
               ),
-              size: Size.infinite,
             ),
           ),
         ),
