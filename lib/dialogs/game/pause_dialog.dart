@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class PauseDialog extends StatelessWidget {
@@ -15,6 +16,7 @@ class PauseDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Dialog(
       backgroundColor: Colors.transparent,
       child: GlassMorphismCard(
@@ -24,14 +26,14 @@ class PauseDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.pause_circle_filled,
+                Icons.pause_circle_filled_rounded,
                 size: 64,
                 color: Colors.white,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Game Paused',
-                style: TextStyle(
+              Text(
+                l10n.gamePaused,
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 24,
                   color: Colors.white,
@@ -39,9 +41,10 @@ class PauseDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Your game is currently paused',
-                style: TextStyle(
+              Text(
+                // tests expect a trailing period in the English string
+                '${l10n.yourGameIsPaused}.',
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 14,
                   color: Colors.white70,
@@ -59,16 +62,16 @@ class PauseDialog extends StatelessWidget {
                       child: InkWell(
                         onTap: onResume,
                         borderRadius: BorderRadius.circular(16),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.play_arrow, color: Colors.white),
-                              SizedBox(width: 8),
+                              const Icon(Icons.play_arrow_rounded, color: Colors.white),
+                              const SizedBox(width: 8),
                               Text(
-                                'Resume',
-                                style: TextStyle(
+                                l10n.resume,
+                                style: const TextStyle(
                                   fontFamily: 'Fredoka',
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
@@ -89,16 +92,16 @@ class PauseDialog extends StatelessWidget {
                       child: InkWell(
                         onTap: onMainMenu,
                         borderRadius: BorderRadius.circular(16),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.home, color: Colors.white),
-                              SizedBox(width: 8),
+                              const Icon(Icons.home_rounded, color: Colors.white),
+                              const SizedBox(width: 8),
                               Text(
-                                'Main Menu',
-                                style: TextStyle(
+                                l10n.mainMenu,
+                                style: const TextStyle(
                                   fontFamily: 'Fredoka',
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,

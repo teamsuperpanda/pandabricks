@@ -1,3 +1,5 @@
+import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/widgets/home/animated_background.dart';
@@ -86,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -101,10 +104,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   AnimatedTitle(floatingAnimation: _floatingAnimation),
                   const SizedBox(height: 16),
                   // Glass action buttons centered
-                  _buildActionButtons(),
+                  _buildActionButtons(l10n!),
                   const SizedBox(height: 24),
                   // Modes section
-                  _SectionHeader(title: 'Game Modes'),
+                  _SectionHeader(title: l10n.gameModes),
                   const SizedBox(height: 12),
                   _ModeList(
                     onTapClassic: () => Navigator.of(context).pushNamed('/game', arguments: 'classic'),
@@ -112,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     onTapPlaceholder: () => Navigator.of(context).pushNamed('/game', arguments: 'blitz'),
                   ),
                   const SizedBox(height: 24),
-                  _SectionHeader(title: 'Audio'),
+                  _SectionHeader(title: l10n.audio),
                   const SizedBox(height: 8),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -128,63 +131,105 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GlassIconButton(
           icon: Icons.help_outline_rounded,
-          onTap: () => _showHelp(context),
-          tooltip: 'Help',
+          onTap: () => _showHelp(context, l10n),
+          tooltip: l10n.help,
         ),
         const SizedBox(width: 16),
         GlassIconButton(
-          icon: Icons.settings_rounded,
-          onTap: () => _showSettings(context),
-          tooltip: 'Settings',
+          icon: Icons.language_rounded,
+          onTap: () => _showLanguageSelector(context, l10n),
+          tooltip: l10n.language,
         ),
       ],
     );
   }
 
-  void _showComingSoon(BuildContext context) {
+  void _showLanguageSelector(BuildContext context, AppLocalizations l10n) {
+    final localeProvider = context.read<LocaleProvider>();
+    final supportedLocales = AppLocalizations.supportedLocales;
+    final languageNames = {
+      'en': 'English',
+      'es': 'Español',
+      'fr': 'Français',
+      'de': 'Deutsch',
+      'it': 'Italiano',
+      'ko': '한국어',
+      'ja': '日本語',
+      'zh': '中文',
+      'hi': 'हिन्दी',
+      'ar': 'العربية',
+      'bn': 'বাংলা',
+      'ru': 'Русский',
+      'ur': 'اردو',
+    };
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: const Text(
-          'Coming Soon!',
-          style: TextStyle(
-            fontFamily: 'Fredoka',
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        content: Text(
-          'This game mode will be available in a future update.',
-          style: TextStyle(
-            fontFamily: 'Fredoka',
-            color: Colors.white.withAlpha((255 * 0.8).toInt()),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text(
-              'OK',
-              style: TextStyle(
-                fontFamily: 'Fredoka',
-                color: Colors.cyan,
-                fontWeight: FontWeight.w600,
-              ),
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: GlassMorphismCard(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.language,
+                  style: const TextStyle(
+                    fontFamily: 'Fredoka',
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 2.5,
+                    ),
+                    itemCount: supportedLocales.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return _LanguageCard(
+                          languageName: 'System',
+                          onTap: () {
+                            localeProvider.setLocale(null);
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
+                      final locale = supportedLocales[index - 1];
+                      final languageName = languageNames[locale.languageCode] ?? locale.languageCode;
+                      return _LanguageCard(
+                        languageName: languageName,
+                        onTap: () {
+                          localeProvider.setLocale(locale);
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  void _showHelp(BuildContext context) {
+  void _showHelp(BuildContext context, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -201,9 +246,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   color: Colors.cyanAccent,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Special Bricks',
-                  style: TextStyle(
+                Text(
+                  l10n.specialBricks,
+                  style: const TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 24,
                     color: Colors.white,
@@ -212,15 +257,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 20),
                 // List of special bricks with emoji icons
-                _helpRow('🐼', 'Panda Brick', 'Clears the entire column when it lands!'),
+                _helpRow('🐼', l10n.pandaBrick, l10n.pandaBrickDescription),
                 const SizedBox(height: 12),
-                _helpRow('👻', 'Ghost Brick', 'Has reversed controls!'),
+                _helpRow('👻', l10n.ghostBrick, l10n.ghostBrickDescription),
                 const SizedBox(height: 12),
-                _helpRow('🐱', 'Cat Brick', 'Moves unpredictably as it falls!'),
+                _helpRow('🐱', l10n.catBrick, l10n.catBrickDescription),
                 const SizedBox(height: 12),
-                _helpRow('🌪️', 'Tornado Brick', 'Spins automatically as it falls!'),
+                _helpRow('🌪️', l10n.tornadoBrick, l10n.tornadoBrickDescription),
                 const SizedBox(height: 12),
-                _helpRow('💣', 'Bomb Brick', 'Clears entire row and column when placed!'),
+                _helpRow('💣', l10n.bombBrick, l10n.bombBrickDescription),
                 const SizedBox(height: 24),
                 GlassMorphismCard(
                   child: Material(
@@ -228,11 +273,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
                         child: Text(
-                          'Close',
-                          style: TextStyle(
+                          l10n.close,
+                          style: const TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 16,
                             color: Colors.cyanAccent,
@@ -298,10 +343,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ],
     );
   }
-
-  void _showSettings(BuildContext context) {
-    _showComingSoon(context);
-  }
 }
 
 class _SectionHeader extends StatelessWidget {
@@ -355,24 +396,25 @@ class _ModeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final items = [
       _ModeItem(
-        title: 'Classic Mode',
-        subtitle: 'Classic falling blocks.',
+        title: l10n.classicMode,
+        subtitle: l10n.classicModeDescription,
         icon: Icons.grid_view_rounded,
         color: Colors.cyan,
         onTap: onTapClassic,
       ),
       _ModeItem(
-        title: 'Time Challenge',
-        subtitle: 'Beat the clock. Go fast!',
+        title: l10n.timeChallenge,
+        subtitle: l10n.timeChallengeDescription,
         icon: Icons.timer_rounded,
         color: Colors.purpleAccent,
         onTap: onTapTimed,
       ),
       _ModeItem(
-        title: 'Blitz Mode',
-        subtitle: 'Chaos, special bricks and table flips!',
+        title: l10n.blitzMode,
+        subtitle: l10n.blitzModeDescription,
         icon: Icons.flash_on_rounded,
         color: Colors.orangeAccent,
         onTap: onTapPlaceholder,
@@ -413,6 +455,38 @@ class _ModeItem {
       accentColor: color,
       onTap: onTap,
       enabled: true,
+    );
+  }
+}
+
+class _LanguageCard extends StatelessWidget {
+  const _LanguageCard({
+    required this.languageName,
+    required this.onTap,
+  });
+
+  final String languageName;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassMorphismCard(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Center(
+          child: Text(
+            languageName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Fredoka',
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class GameHUD extends StatelessWidget {
@@ -15,6 +16,7 @@ class GameHUD extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final textColor = Colors.white;
     return Row(
       children: [
@@ -25,9 +27,9 @@ class GameHUD extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _hudItem('Level', level.toString(), textColor),
-                  _hudItem('Score', score.toString(), textColor),
-                  _hudItem('Lines', lines.toString(), textColor),
+                  _hudItem(l10n.level, level.toString(), textColor),
+                  _hudItem(l10n.score, score.toString(), textColor),
+                  _hudItem(l10n.lines, lines.toString(), textColor),
                 ],
               ),
             ),

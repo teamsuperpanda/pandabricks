@@ -1,4 +1,5 @@
 
+import 'package:pandabricks/l10n/app_localizations.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:provider/provider.dart';
@@ -251,6 +252,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return KeyboardListener(
       focusNode: _focusNode,
       autofocus: true,
@@ -310,15 +312,15 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                 _showMainMenuConfirmDialog();
                               },
                               borderRadius: BorderRadius.circular(20),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.home, color: Colors.white),
-                                    SizedBox(width: 6),
+                                    const Icon(Icons.home, color: Colors.white),
+                                    const SizedBox(width: 6),
                                     Text(
-                                      'Main Menu',
-                                      style: TextStyle(
+                                      l10n.mainMenu,
+                                      style: const TextStyle(
                                         fontFamily: 'Fredoka',
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,
@@ -338,15 +340,15 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                 _showRestartDialog();
                               },
                               borderRadius: BorderRadius.circular(20),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.refresh, color: Colors.white),
-                                    SizedBox(width: 6),
+                                    const Icon(Icons.refresh, color: Colors.white),
+                                    const SizedBox(width: 6),
                                     Text(
-                                      'Restart',
-                                      style: TextStyle(
+                                      l10n.restart,
+                                      style: const TextStyle(
                                         fontFamily: 'Fredoka',
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,
@@ -381,7 +383,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      _game.isPaused ? 'Resume' : 'Pause',
+                                      _game.isPaused ? l10n.resume : l10n.pause,
                                       style: const TextStyle(
                                         fontFamily: 'Fredoka',
                                         color: Colors.white,
@@ -415,7 +417,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Next',
+                                    l10n.next,
                                     style: TextStyle(
                                       fontFamily: 'Fredoka',
                                       fontSize: 14,
@@ -431,7 +433,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Time Left',
+                                      l10n.timeLeft,
                                       style: TextStyle(
                                         fontFamily: 'Fredoka',
                                         fontSize: 14,
