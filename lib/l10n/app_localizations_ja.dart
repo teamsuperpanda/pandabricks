@@ -30,7 +30,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get blitzMode => 'ブリッツモード';
 
   @override
-  String get blitzModeDescription => 'カオス、特別なレンガ、そしてテーブルフリップ！';
+  String get blitzModeDescription => '特殊なレンガが混ざるカオス';
 
   @override
   String get audio => 'オーディオ';

@@ -30,7 +30,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get blitzMode => 'بلٹز موڈ';
 
   @override
-  String get blitzModeDescription => 'افراتفری، خصوصی اینٹیں اور ٹیبل پلٹ!';
+  String get blitzModeDescription => 'خصوصی اینٹوں کے ساتھ ہلڑبازی';
 
   @override
   String get audio => 'آڈیو';
