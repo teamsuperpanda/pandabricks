@@ -53,11 +53,14 @@ class _PreviewPainter extends CustomPainter {
     double offsetX = (size.width - pieceWidth) / 2;
     double offsetY = (size.height - pieceHeight) / 2;
 
+    final colorIndex = game.Game.colorFor[next!]!;
+    final isSpecial = colorIndex >= 7; // Special blocks start at index 7
+
     for (final c in cells) {
       final x = (c.dx - minX) * cellSize + offsetX;
       final y = (c.dy - minY) * cellSize + offsetY;
       final rect = Rect.fromLTWH(x, y, cellSize, cellSize).deflate(0.5);
-      final color = palette[game.Game.colorFor[next!]! % palette.length];
+      final color = palette[colorIndex % palette.length];
       final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
       final paint = Paint()
         ..shader = LinearGradient(
@@ -71,6 +74,26 @@ class _PreviewPainter extends CustomPainter {
         ..strokeWidth = 1.5
         ..color = Colors.black.withValues(alpha: 0.4);
       canvas.drawRRect(rrect, border);
+
+      // Draw emoji overlay for special blocks
+      if (isSpecial) {
+        final emojiMap = {
+          7: '🐼', // pandaBrick
+          8: '👻', // ghostBrick
+          9: '🐱', // catBrick
+          10: '🌪️', // tornadoBrick
+          11: '💣', // bombBrick
+        };
+        final emoji = emojiMap[colorIndex] ?? '';
+        if (emoji.isNotEmpty) {
+          final textStyle = TextStyle(fontSize: cellSize * 0.7);
+          final tp = TextPainter(text: TextSpan(text: emoji, style: textStyle), textDirection: TextDirection.ltr);
+          tp.layout();
+          final dx = x + (cellSize - tp.width) / 2;
+          final dy = y + (cellSize - tp.height) / 2;
+          tp.paint(canvas, Offset(dx, dy));
+        }
+      }
     }
   }  @override
   bool shouldRepaint(covariant _PreviewPainter oldDelegate) => oldDelegate.next != next;
@@ -90,5 +113,11 @@ class _PreviewPainter extends CustomPainter {
         Colors.redAccent,
         Colors.blueAccent,
         Colors.orangeAccent,
+        // Special block colors
+        Colors.pink,           // PandaBrick
+        Colors.grey,           // GhostBrick
+        Colors.brown,          // CatBrick
+        Colors.tealAccent,     // TornadoBrick
+        Colors.deepOrangeAccent, // BombBrick
       ].map((c) => c.withAlpha(220)).toList();
 }

@@ -72,7 +72,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     if (!_initialized) {
       // Get game mode from route arguments
       final arguments = ModalRoute.of(context)?.settings.arguments as String?;
-      final gameMode = arguments == 'timeChallenge' ? GameMode.timeChallenge : GameMode.classic;
+      final gameMode = arguments == 'timeChallenge' 
+          ? GameMode.timeChallenge 
+          : arguments == 'blitz'
+              ? GameMode.blitz
+              : GameMode.classic;
       
       _game = Game(audioProvider: _audioProvider, gameMode: gameMode);
       _tick = _game.currentSpeed();
@@ -237,6 +241,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         Colors.redAccent,
         Colors.blueAccent,
         Colors.orangeAccent,
+        // Special block colors
+        Colors.pink,           // PandaBrick
+        Colors.grey,           // GhostBrick
+        Colors.brown,          // CatBrick
+        Colors.tealAccent,     // TornadoBrick
+        Colors.deepOrangeAccent, // BombBrick
       ].map((c) => c.withAlpha(220)).toList();
 
   @override
@@ -524,6 +534,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 width: _game.width,
                 height: _game.height,
                 cells: _game.filledCellsWithGhost(),
+                effects: _game.currentEffects(),
                 palette: _palette(context),
               ),
               size: Size.infinite,

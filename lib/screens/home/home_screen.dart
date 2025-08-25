@@ -5,6 +5,7 @@ import 'package:pandabricks/widgets/home/ambient_particles.dart';
 import 'package:pandabricks/widgets/home/animated_title.dart';
 import 'package:pandabricks/widgets/home/audio_settings.dart';
 import 'package:pandabricks/widgets/home/glass_icon_button.dart';
+import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 import 'package:pandabricks/widgets/home/mode_card.dart';
 import 'package:provider/provider.dart';
 
@@ -108,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   _ModeList(
                     onTapClassic: () => Navigator.of(context).pushNamed('/game', arguments: 'classic'),
                     onTapTimed: () => Navigator.of(context).pushNamed('/game', arguments: 'timeChallenge'),
-                    onTapPlaceholder: () => _showComingSoon(context),
+                    onTapPlaceholder: () => Navigator.of(context).pushNamed('/game', arguments: 'blitz'),
                   ),
                   const SizedBox(height: 24),
                   _SectionHeader(title: 'Audio'),
@@ -184,7 +185,118 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _showHelp(BuildContext context) {
-    _showComingSoon(context);
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: GlassMorphismCard(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.help_outline_rounded,
+                  size: 48,
+                  color: Colors.cyanAccent,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Special Bricks',
+                  style: TextStyle(
+                    fontFamily: 'Fredoka',
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // List of special bricks with emoji icons
+                _helpRow('🐼', 'Panda Brick', 'Clears the entire column when it lands!'),
+                const SizedBox(height: 12),
+                _helpRow('👻', 'Ghost Brick', 'Has reversed controls!'),
+                const SizedBox(height: 12),
+                _helpRow('🐱', 'Cat Brick', 'Moves unpredictably as it falls!'),
+                const SizedBox(height: 12),
+                _helpRow('🌪️', 'Tornado Brick', 'Spins automatically as it falls!'),
+                const SizedBox(height: 12),
+                _helpRow('💣', 'Bomb Brick', 'Clears entire row and column when placed!'),
+                const SizedBox(height: 24),
+                GlassMorphismCard(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontSize: 16,
+                            color: Colors.cyanAccent,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _helpRow(String emoji, String title, String subtitle) {
+    return Row(
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Colors.white.withAlpha(20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Text(
+              emoji,
+              style: const TextStyle(fontSize: 24),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 13,
+                  color: Colors.white.withAlpha(180),
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   void _showSettings(BuildContext context) {
