@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -90,6 +92,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get systemLanguage => '系统';
+
+  @override
+  String get languageEnglish => '英语';
+
+  @override
+  String get languageSpanish => '西班牙语';
+
+  @override
+  String get languageFrench => '法语';
+
+  @override
+  String get languageGerman => '德语';
+
+  @override
+  String get languageItalian => '意大利语';
+
+  @override
+  String get languagePortuguese => '葡萄牙语';
+
+  @override
+  String get languageJapanese => '日语';
+
+  @override
+  String get languageKorean => '韩语';
+
+  @override
+  String get languageSimplifiedChinese => '简体中文';
+
+  @override
+  String get languageTraditionalChinese => '繁体中文';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -180,4 +212,34 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get systemLanguage => '系統';
+
+  @override
+  String get languageEnglish => '英語';
+
+  @override
+  String get languageSpanish => '西班牙語';
+
+  @override
+  String get languageFrench => '法語';
+
+  @override
+  String get languageGerman => '德語';
+
+  @override
+  String get languageItalian => '意大利語';
+
+  @override
+  String get languagePortuguese => '葡萄牙語';
+
+  @override
+  String get languageJapanese => '日語';
+
+  @override
+  String get languageKorean => '韓語';
+
+  @override
+  String get languageSimplifiedChinese => '簡體中文';
+
+  @override
+  String get languageTraditionalChinese => '繁體中文';
 }

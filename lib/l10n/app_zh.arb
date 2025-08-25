@@ -25,5 +25,15 @@
     "easyModeDescription": "恒定速度的轻松游戏",
     "normalModeDescription": "逐渐加速的经典模式",
     "blitzModeDescription": "特殊方块和棋盘翻转",
-    "systemLanguage": "系统"
-} 
+    "systemLanguage": "系统",
+    "languageEnglish": "英语",
+    "languageSpanish": "西班牙语",
+    "languageFrench": "法语",
+    "languageGerman": "德语",
+    "languageItalian": "意大利语",
+    "languagePortuguese": "葡萄牙语",
+    "languageJapanese": "日语",
+    "languageKorean": "韩语",
+    "languageSimplifiedChinese": "简体中文",
+    "languageTraditionalChinese": "繁体中文"
+}

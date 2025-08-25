@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -90,4 +92,34 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get systemLanguage => 'Sistema';
+
+  @override
+  String get languageEnglish => 'Inglês';
+
+  @override
+  String get languageSpanish => 'Espanhol';
+
+  @override
+  String get languageFrench => 'Francês';
+
+  @override
+  String get languageGerman => 'Alemão';
+
+  @override
+  String get languageItalian => 'Italiano';
+
+  @override
+  String get languagePortuguese => 'Português';
+
+  @override
+  String get languageJapanese => 'Japonês';
+
+  @override
+  String get languageKorean => 'Coreano';
+
+  @override
+  String get languageSimplifiedChinese => 'Chinês simplificado';
+
+  @override
+  String get languageTraditionalChinese => 'Chinês tradicional';
 }

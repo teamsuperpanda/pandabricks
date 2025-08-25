@@ -10,7 +10,7 @@ import 'logic/modes_logic.dart';
 import 'services/audio_service.dart';
 import 'widgets/main/help_dialog.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 import 'l10n/l10n.dart';
 import 'package:pandabricks/services/language_service.dart';
 import 'package:pandabricks/dialog/main/language_dialog.dart';
@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppTheme.darkTheme,
       locale: _selectedLocale,
       supportedLocales: L10n.all,
-      localizationsDelegates: const [
+      localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -243,17 +243,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     ModeCard(
                       key: _easyModeKey,
-                      mode: 'Easy',
+                      modeModel: Modes.easy,
                       onTap: () => navigateToGameScreen(context, Modes.easy),
                     ),
                     ModeCard(
                       key: _normalModeKey,
-                      mode: 'Normal',
+                      modeModel: Modes.normal,
                       onTap: () => navigateToGameScreen(context, Modes.normal),
                     ),
                     ModeCard(
                       key: _blitzModeKey,
-                      mode: 'Bamboo Blitz',
+                      modeModel: Modes.bambooblitz,
                       onTap: () =>
                           navigateToGameScreen(context, Modes.bambooblitz),
                     ),

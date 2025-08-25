@@ -25,5 +25,15 @@
     "easyModeDescription": "Gameplay rilassato a velocità costante.",
     "normalModeDescription": "Modalità classica che accelera gradualmente.",
     "blitzModeDescription": "Mattoni speciali e rotazioni del campo.",
-    "systemLanguage": "Sistema"
-} 
+    "systemLanguage": "Sistema",
+    "languageEnglish": "Inglese",
+    "languageSpanish": "Spagnolo",
+    "languageFrench": "Francese",
+    "languageGerman": "Tedesco",
+    "languageItalian": "Italiano",
+    "languagePortuguese": "Portoghese",
+    "languageJapanese": "Giapponese",
+    "languageKorean": "Coreano",
+    "languageSimplifiedChinese": "Cinese semplificato",
+    "languageTraditionalChinese": "Cinese tradizionale"
+}

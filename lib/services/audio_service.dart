@@ -10,8 +10,7 @@ class AudioService {
 
   final AudioPlayer _menuMusic = AudioPlayer();
   final AudioPlayer _gameMusic = AudioPlayer();
-  final AudioPlayer _flipSound = AudioPlayer();
-  final AudioPlayer _gameOverSound = AudioPlayer();
+  final AudioPlayer _sfxPlayer = AudioPlayer(); // Consolidated SFX player
   bool isSoundEffectsEnabled = true;
 
   final List<String> _gameSongs =
@@ -20,31 +19,31 @@ class AudioService {
   final Random _random = Random();
   int _lastPlayedIndex = -1;
 
-  final AudioPlayer _player = AudioPlayer();
+  // Map to store pre-loaded sound effects
+  final Map<String, AudioPlayer> _loadedSfx = {};
 
   Future<void> init() async {
     try {
-      // Initialize with error handling
-      await _initializeAudioPlayers();
+      await _sfxPlayer.setAsset('assets/audio/sfx/panda_disappear.mp3');
+      _loadedSfx['panda_disappear'] = _sfxPlayer;
+
+      await _sfxPlayer.setAsset('assets/audio/sfx/flip.mp3');
+      _loadedSfx['flip'] = _sfxPlayer;
+
+      await _sfxPlayer.setAsset('assets/audio/sfx/gameover.mp3');
+      _loadedSfx['game_over'] = _sfxPlayer;
+
+      await _sfxPlayer.setAsset('assets/audio/sfx/pause.mp3');
+      _loadedSfx['pause'] = _sfxPlayer;
+
+      await _sfxPlayer.setAsset('assets/audio/sfx/row_clear.mp3');
+      _loadedSfx['row_clear'] = _sfxPlayer;
+
+      await _sfxPlayer.setAsset('assets/audio/sfx/bomb_explode.mp3');
+      _loadedSfx['bomb_explode'] = _sfxPlayer;
+
     } catch (e) {
       debugPrint('Audio initialization error: $e');
-      // Continue even if audio fails to initialize
-    }
-  }
-
-  Future<void> _initializeAudioPlayers() async {
-    try {
-      // Load all sound effects with proper error handling
-      await Future.wait([
-        _player.setAsset('assets/audio/sfx/panda_disappear.mp3'),
-        _flipSound.setAsset('assets/audio/sfx/flip.mp3'),
-        _gameOverSound.setAsset('assets/audio/sfx/gameover.mp3'),
-      ]).catchError((e) {
-        debugPrint('Error loading sound effects: $e');
-        return <Duration?>[];
-      });
-    } catch (e) {
-      debugPrint('Error in _initializeAudioPlayers: $e');
     }
   }
 
@@ -52,19 +51,11 @@ class AudioService {
     if (!isSoundEffectsEnabled) return;
 
     try {
-      switch (soundName) {
-        case 'panda_disappear':
-          await _player.setAsset('assets/audio/sfx/panda_disappear.mp3');
-          break;
-        case 'game_over':
-          await _player.setAsset('assets/audio/sfx/gameover.mp3');
-          break;
-        case 'pause':
-          await _player.setAsset('assets/audio/sfx/pause.mp3');
-          break;
+      final player = _loadedSfx[soundName];
+      if (player != null) {
+        await player.seek(Duration.zero);
+        await player.play();
       }
-      await _player.seek(Duration.zero);
-      await _player.play();
     } catch (e) {
       debugPrint('Error playing sound $soundName: $e');
     }
@@ -90,12 +81,6 @@ class AudioService {
         _playNextGameSong();
       }
     });
-
-    // Load all sound effects first
-    await Future.wait([
-      _flipSound.setAsset('audio/sfx/flip.mp3'),
-      _gameOverSound.setAsset('audio/sfx/gameover.mp3'),
-    ]);
   }
 
   Future<void> _playNextGameSong() async {
@@ -141,33 +126,6 @@ class AudioService {
     _gameMusic.stop();
   }
 
-  Future<void> playStabSound() async {
-    if (!isSoundEffectsEnabled) return;
-    try {
-      if (_flipSound.playing) {
-        await _flipSound.stop();
-      }
-      await _flipSound.setAsset('assets/audio/sfx/flip.mp3');
-      await _flipSound.seek(Duration.zero);
-      await _flipSound.play();
-    } catch (e) {
-      debugPrint('Error playing stab sound: $e');
-    }
-  }
-
-  Future<void> playGameOverSound() async {
-    if (!isSoundEffectsEnabled) return;
-    try {
-      if (_gameOverSound.playing) {
-        await _gameOverSound.stop();
-      }
-      await _gameOverSound.seek(Duration.zero);
-      await _gameOverSound.play();
-    } catch (e) {
-      debugPrint('Error playing game over sound: $e');
-    }
-  }
-
   void setSoundEffectsEnabled(bool enabled) {
     isSoundEffectsEnabled = enabled;
   }
@@ -176,9 +134,7 @@ class AudioService {
   void dispose() {
     _menuMusic.dispose();
     _gameMusic.dispose();
-    _flipSound.dispose();
-    _gameOverSound.dispose();
-    _player.dispose();
+    _sfxPlayer.dispose();
   }
 
   void stopMenuMusic() {
@@ -186,7 +142,7 @@ class AudioService {
   }
 
   void stopAllSounds() {
-    _player.stop();
+    _sfxPlayer.stop();
     _gameMusic.stop();
     _menuMusic.stop();
   }

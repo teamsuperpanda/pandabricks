@@ -25,5 +25,15 @@
     "easyModeDescription": "一定速度のリラックスプレイ",
     "normalModeDescription": "徐々に加速するクラシックモード",
     "blitzModeDescription": "特殊ブロックと盤面回転",
-    "systemLanguage": "システム"
-} 
+    "systemLanguage": "システム",
+    "languageEnglish": "英語",
+    "languageSpanish": "スペイン語",
+    "languageFrench": "フランス語",
+    "languageGerman": "ドイツ語",
+    "languageItalian": "イタリア語",
+    "languagePortuguese": "ポルトガル語",
+    "languageJapanese": "日本語",
+    "languageKorean": "韓国語",
+    "languageSimplifiedChinese": "簡体字中国語",
+    "languageTraditionalChinese": "繁体字中国語"
+}

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/services/high_score_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
+import 'package:pandabricks/models/mode_model.dart';
 
 class ModeCard extends StatefulWidget {
   final void Function() onTap;
-  final String mode;
+  final ModeModel modeModel;
 
-  const ModeCard({super.key, required this.onTap, required this.mode});
+  const ModeCard({super.key, required this.onTap, required this.modeModel});
 
   @override
   State<ModeCard> createState() => ModeCardState();
@@ -22,7 +23,7 @@ class ModeCardState extends State<ModeCard> {
   }
 
   Future<void> _loadHighScore() async {
-    final score = await HighScoreService.getHighScore(widget.mode);
+    final score = await HighScoreService.getHighScore(widget.modeModel.name);
     if (mounted) {
       setState(() {
         highScore = score;
@@ -36,7 +37,7 @@ class ModeCardState extends State<ModeCard> {
 
   String getTitle() {
     final l10n = AppLocalizations.of(context)!;
-    switch (widget.mode) {
+    switch (widget.modeModel.name) {
       case 'Easy':
         return l10n.easyMode;
       case 'Normal':
@@ -44,13 +45,13 @@ class ModeCardState extends State<ModeCard> {
       case 'Bamboo Blitz':
         return l10n.blitzMode;
       default:
-        return widget.mode;
+        return widget.modeModel.name;
     }
   }
 
   String getDescription() {
     final l10n = AppLocalizations.of(context)!;
-    switch (widget.mode) {
+    switch (widget.modeModel.name) {
       case 'Easy':
         return l10n.easyModeDescription;
       case 'Normal':
@@ -72,11 +73,11 @@ class ModeCardState extends State<ModeCard> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Card(
-              color: widget.mode == 'Easy'
-                  ? Colors.green
-                  : widget.mode == 'Normal'
-                      ? Colors.blue
-                      : Colors.orange,
+              color: widget.modeModel.name == 'Easy'
+                  ? Colors.lightGreen[600]
+                  : widget.modeModel.name == 'Normal'
+                      ? Colors.blue[400]
+                      : Colors.deepOrange[600],
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
