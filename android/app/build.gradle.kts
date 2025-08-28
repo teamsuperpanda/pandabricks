@@ -4,6 +4,8 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
+import java.util.Properties
+import java.io.FileInputStream
 
 android {
     namespace = "com.teamsuperpanda.pandabricks"
@@ -34,9 +36,6 @@ android {
     // or from environment variables. This mirrors common Flutter project conventions
     // and the working `fox` project. CI (Codemagic) should provide either a
     // properties file or environment variables.
-    import java.util.Properties
-    import java.io.FileInputStream
-
     val possibleProps = listOf("key.properties", "keystore.properties")
     val keystoreProperties = Properties()
     val keystorePropertiesFile = possibleProps.map { rootProject.file(it) }.firstOrNull { it.exists() }
