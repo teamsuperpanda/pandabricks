@@ -86,6 +86,16 @@ android {
             }
         }
     }
+
+    // Ensure modern JNI packaging so native libs are packaged with correct alignment
+    // This helps address Google Play's warning about 16 KB native library alignment.
+    packagingOptions {
+        jniLibs {
+            // Use non-legacy packaging to allow the Android Gradle Plugin to align
+            // native libraries appropriately for newer devices (16 KB pages).
+            useLegacyPackaging = false
+        }
+    }
 }
 
 flutter {
