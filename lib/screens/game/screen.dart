@@ -250,7 +250,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       ].map((c) => c.withAlpha(220)).toList();
 
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return KeyboardListener(
       focusNode: _focusNode,
@@ -282,46 +282,46 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           }
         }
       },
-      child: SafeArea(
-        child: Scaffold(
-          body: GestureDetector(
-            onHorizontalDragStart: (d) {
-              _startMusicOnFirstInteraction();
-              _dragAccum = 0;
-              _lastDx = d.localPosition.dx;
-            },
-            onHorizontalDragUpdate: (d) {
-              final dx = d.localPosition.dx;
-              final delta = dx - _lastDx;
-              _dragAccum += delta;
-              _lastDx = dx;
-              const threshold = 18.0;
-              while (_dragAccum.abs() > threshold) {
-                if (_dragAccum > 0) {
-                  _game.moveRight();
-                  _dragAccum -= threshold;
-                } else {
-                  _game.moveLeft();
-                  _dragAccum += threshold;
-                }
+      child: Scaffold(
+        body: GestureDetector(
+          onHorizontalDragStart: (d) {
+            _startMusicOnFirstInteraction();
+            _dragAccum = 0;
+            _lastDx = d.localPosition.dx;
+          },
+          onHorizontalDragUpdate: (d) {
+            final dx = d.localPosition.dx;
+            final delta = dx - _lastDx;
+            _dragAccum += delta;
+            _lastDx = dx;
+            const threshold = 18.0;
+            while (_dragAccum.abs() > threshold) {
+              if (_dragAccum > 0) {
+                _game.moveRight();
+                _dragAccum -= threshold;
+              } else {
+                _game.moveLeft();
+                _dragAccum += threshold;
               }
-            },
-            onVerticalDragUpdate: (d) {
-              if (d.primaryDelta != null && d.primaryDelta! > 6) {
-                _game.softDrop();
-              }
-            },
-            onVerticalDragEnd: (d) {
-              // Quick downward fling triggers hard drop
-              if (d.primaryVelocity != null && d.primaryVelocity! > 900) {
-                _game.hardDrop();
-              }
-            },
-            child: Stack(
-              children: [
-                AnimatedBackground(gradientAnimation: _bgAnim),
-                const AmbientParticles(),
-                LayoutBuilder(
+            }
+          },
+          onVerticalDragUpdate: (d) {
+            if (d.primaryDelta != null && d.primaryDelta! > 6) {
+              _game.softDrop();
+            }
+          },
+          onVerticalDragEnd: (d) {
+            // Quick downward fling triggers hard drop
+            if (d.primaryVelocity != null && d.primaryVelocity! > 900) {
+              _game.hardDrop();
+            }
+          },
+          child: Stack(
+            children: [
+              AnimatedBackground(gradientAnimation: _bgAnim),
+              const AmbientParticles(),
+              SafeArea(
+                child: LayoutBuilder(
                   builder: (context, constraints) {
                     return Column(
                       children: [
@@ -520,8 +520,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                     );
                   },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -561,3 +561,4 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     );
   }
 }
+
