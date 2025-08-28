@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -89,44 +90,49 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      body: Stack(
-        children: [
-          AnimatedBackground(gradientAnimation: _gradientAnimation),
-          const AmbientParticles(),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  // Centered title
-                  AnimatedTitle(floatingAnimation: _floatingAnimation),
-                  const SizedBox(height: 16),
-                  // Glass action buttons centered
-                  _buildActionButtons(l10n!),
-                  const SizedBox(height: 24),
-                  // Modes section
-                  _SectionHeader(title: l10n.gameModes),
-                  const SizedBox(height: 12),
-                  _ModeList(
-                    onTapClassic: () => Navigator.of(context).pushNamed('/game', arguments: 'classic'),
-                    onTapTimed: () => Navigator.of(context).pushNamed('/game', arguments: 'timeChallenge'),
-                    onTapPlaceholder: () => Navigator.of(context).pushNamed('/game', arguments: 'blitz'),
-                  ),
-                  const SizedBox(height: 24),
-                  _SectionHeader(title: l10n.audio),
-                  const SizedBox(height: 8),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0),
-                    child: AudioSettings(),
-                  ),
-                  const SizedBox(height: 24),
-                ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            AnimatedBackground(gradientAnimation: _gradientAnimation),
+            const AmbientParticles(),
+            SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    // Centered title
+                    AnimatedTitle(floatingAnimation: _floatingAnimation),
+                    const SizedBox(height: 16),
+                    // Glass action buttons centered
+                    _buildActionButtons(l10n!),
+                    const SizedBox(height: 24),
+                    // Modes section
+                    _SectionHeader(title: l10n.gameModes),
+                    const SizedBox(height: 12),
+                    _ModeList(
+                      onTapClassic: () => Navigator.of(context).pushNamed('/game', arguments: 'classic'),
+                      onTapTimed: () => Navigator.of(context).pushNamed('/game', arguments: 'timeChallenge'),
+                      onTapPlaceholder: () => Navigator.of(context).pushNamed('/game', arguments: 'blitz'),
+                    ),
+                    const SizedBox(height: 24),
+                    _SectionHeader(title: l10n.audio),
+                    const SizedBox(height: 8),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.0),
+                      child: AudioSettings(),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

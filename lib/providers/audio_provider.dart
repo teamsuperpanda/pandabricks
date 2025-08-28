@@ -57,6 +57,12 @@ class AudioProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+    @override
+  void dispose() {
+    _player?.dispose();
+    super.dispose();
+  }
+
   void playMenuMusic() async {
     _isGameMusic = false;
     if (!musicEnabled.value) return;
@@ -78,6 +84,7 @@ class AudioProvider extends ChangeNotifier {
   void playGameMusic() async {
     _isGameMusic = true;
     if (!musicEnabled.value) return;
+    debugPrint('Playing game music');
     try {
       if (_player != null) {
         await _player!.stop();
@@ -94,6 +101,7 @@ class AudioProvider extends ChangeNotifier {
   }
 
   void stopMusic() async {
+    debugPrint('Stopping music');
     if (_player != null) {
       await _player!.stop();
     }
