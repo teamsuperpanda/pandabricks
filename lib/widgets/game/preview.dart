@@ -37,21 +37,27 @@ class _PreviewPainter extends CustomPainter {
     final palette = _palette(theme);
     final cells = _cellsFor(next!);
     
-    // Use a larger cell size for better visibility
-    const double cellSize = 28.0;
-    
-    // Calculate bounds of the piece
+  // Choose a cell size that fits the preview area while keeping square cells
+  // Calculate bounds of the piece
     double minX = cells.isEmpty ? 0 : cells.map((c) => c.dx).reduce((a, b) => a < b ? a : b);
     double maxX = cells.isEmpty ? 0 : cells.map((c) => c.dx).reduce((a, b) => a > b ? a : b);
     double minY = cells.isEmpty ? 0 : cells.map((c) => c.dy).reduce((a, b) => a < b ? a : b);
     double maxY = cells.isEmpty ? 0 : cells.map((c) => c.dy).reduce((a, b) => a > b ? a : b);
-    
-    double pieceWidth = (maxX - minX + 1) * cellSize;
-    double pieceHeight = (maxY - minY + 1) * cellSize;
+  final pieceCols = (maxX - minX + 1);
+  final pieceRows = (maxY - minY + 1);
+
+  // compute cell size to fit within size while leaving some padding
+  final padding = 8.0;
+  final maxCellW = (size.width - padding * 2) / pieceCols;
+  final maxCellH = (size.height - padding * 2) / pieceRows;
+  final cellSize = maxCellW < maxCellH ? maxCellW : maxCellH;
+
+  double pieceWidth = pieceCols * cellSize;
+  double pieceHeight = pieceRows * cellSize;
     
     // Center the piece
-    double offsetX = (size.width - pieceWidth) / 2;
-    double offsetY = (size.height - pieceHeight) / 2;
+  double offsetX = (size.width - pieceWidth) / 2;
+  double offsetY = (size.height - pieceHeight) / 2;
 
     final colorIndex = game.Game.colorFor[next!]!;
     final isSpecial = colorIndex >= 7; // Special blocks start at index 7
