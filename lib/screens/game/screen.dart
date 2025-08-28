@@ -282,249 +282,249 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           }
         }
       },
-      child: Scaffold(
-      body: GestureDetector(
-        onHorizontalDragStart: (d) {
-          _startMusicOnFirstInteraction();
-          _dragAccum = 0;
-          _lastDx = d.localPosition.dx;
-        },
-        onHorizontalDragUpdate: (d) {
-          final dx = d.localPosition.dx;
-          final delta = dx - _lastDx;
-          _dragAccum += delta;
-          _lastDx = dx;
-          const threshold = 18.0;
-          while (_dragAccum.abs() > threshold) {
-            if (_dragAccum > 0) {
-              _game.moveRight();
-              _dragAccum -= threshold;
-            } else {
-              _game.moveLeft();
-              _dragAccum += threshold;
-            }
-          }
-        },
-        onVerticalDragUpdate: (d) {
-          if (d.primaryDelta != null && d.primaryDelta! > 6) {
-            _game.softDrop();
-          }
-        },
-        onVerticalDragEnd: (d) {
-          // Quick downward fling triggers hard drop
-          if (d.primaryVelocity != null && d.primaryVelocity! > 900) {
-            _game.hardDrop();
-          }
-        },
-        child: Stack(
-          children: [
-            AnimatedBackground(gradientAnimation: _bgAnim),
-            const AmbientParticles(),
-            SafeArea(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Column(
-                    children: [
-                      // Header with controls only
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                        child: Row(
-                          children: [
-                            // Main Menu button on the left
-                            GlassMorphismCard(
-                              child: InkWell(
-                                onTap: () {
-                                  _showMainMenuConfirmDialog();
-                                },
-                                borderRadius: BorderRadius.circular(20),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.home, color: Colors.white),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        l10n.mainMenu,
-                                        style: const TextStyle(
-                                          fontFamily: 'Fredoka',
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            // Restart button in the middle
-                            GlassMorphismCard(
-                              child: InkWell(
-                                onTap: () {
-                                  _startMusicOnFirstInteraction();
-                                  _showRestartDialog();
-                                },
-                                borderRadius: BorderRadius.circular(20),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.refresh, color: Colors.white),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        l10n.restart,
-                                        style: const TextStyle(
-                                          fontFamily: 'Fredoka',
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            // Pause/Resume button on the right
-                            GlassMorphismCard(
-                              child: InkWell(
-                                onTap: () {
-                                  _startMusicOnFirstInteraction();
-                                  if (_game.isPaused) {
-                                    _game.togglePause();
-                                  } else {
-                                    _game.togglePause();
-                                    _showPauseDialog();
-                                  }
-                                },
-                                borderRadius: BorderRadius.circular(20),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        _game.isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        _game.isPaused ? l10n.resume : l10n.pause,
-                                        style: const TextStyle(
-                                          fontFamily: 'Fredoka',
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // HUD
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: GameHUD(score: _game.score, level: _game.level, lines: _game.linesCleared),
-                      ),
-                      const SizedBox(height: 14),
-                      // Main game area that expands to fill available space
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 500),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Playfield
-                                Expanded(
-                                  flex: 5,
-                                  child: _buildPlayfield(context),
-                                ),
-                                const SizedBox(width: 12),
-                                // Right sidebar: next piece and timer
-                                Expanded(
-                                  flex: 2,
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          l10n.next,
-                                          style: TextStyle(
+      child: SafeArea(
+        child: Scaffold(
+          body: GestureDetector(
+            onHorizontalDragStart: (d) {
+              _startMusicOnFirstInteraction();
+              _dragAccum = 0;
+              _lastDx = d.localPosition.dx;
+            },
+            onHorizontalDragUpdate: (d) {
+              final dx = d.localPosition.dx;
+              final delta = dx - _lastDx;
+              _dragAccum += delta;
+              _lastDx = dx;
+              const threshold = 18.0;
+              while (_dragAccum.abs() > threshold) {
+                if (_dragAccum > 0) {
+                  _game.moveRight();
+                  _dragAccum -= threshold;
+                } else {
+                  _game.moveLeft();
+                  _dragAccum += threshold;
+                }
+              }
+            },
+            onVerticalDragUpdate: (d) {
+              if (d.primaryDelta != null && d.primaryDelta! > 6) {
+                _game.softDrop();
+              }
+            },
+            onVerticalDragEnd: (d) {
+              // Quick downward fling triggers hard drop
+              if (d.primaryVelocity != null && d.primaryVelocity! > 900) {
+                _game.hardDrop();
+              }
+            },
+            child: Stack(
+              children: [
+                AnimatedBackground(gradientAnimation: _bgAnim),
+                const AmbientParticles(),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Column(
+                      children: [
+                        // Header with controls only
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                          child: Row(
+                            children: [
+                              // Main Menu button on the left
+                              GlassMorphismCard(
+                                child: InkWell(
+                                  onTap: () {
+                                    _showMainMenuConfirmDialog();
+                                  },
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.home, color: Colors.white),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          l10n.mainMenu,
+                                          style: const TextStyle(
                                             fontFamily: 'Fredoka',
-                                            fontSize: 14,
-                                            color: Colors.white.withAlpha(220),
+                                            color: Colors.white,
                                             fontWeight: FontWeight.w600,
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      PiecePreview(next: _game.next),
-                                      if (_game.gameMode == GameMode.timeChallenge && _game.timeRemaining != null) ...[
-                                        const SizedBox(height: 16),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            l10n.timeLeft,
-                                            style: TextStyle(
-                                              fontFamily: 'Fredoka',
-                                              fontSize: 14,
-                                              color: Colors.white.withAlpha(220),
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        TimerDisplay(timeRemaining: _game.timeRemaining!),
+                                        )
                                       ],
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ],
+                              ),
+                              const Spacer(),
+                              // Restart button in the middle
+                              GlassMorphismCard(
+                                child: InkWell(
+                                  onTap: () {
+                                    _startMusicOnFirstInteraction();
+                                    _showRestartDialog();
+                                  },
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.refresh, color: Colors.white),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          l10n.restart,
+                                          style: const TextStyle(
+                                            fontFamily: 'Fredoka',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                              // Pause/Resume button on the right
+                              GlassMorphismCard(
+                                child: InkWell(
+                                  onTap: () {
+                                    _startMusicOnFirstInteraction();
+                                    if (_game.isPaused) {
+                                      _game.togglePause();
+                                    } else {
+                                      _game.togglePause();
+                                      _showPauseDialog();
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          _game.isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                                          color: Colors.white,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          _game.isPaused ? l10n.resume : l10n.pause,
+                                          style: const TextStyle(
+                                            fontFamily: 'Fredoka',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // HUD
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: GameHUD(score: _game.score, level: _game.level, lines: _game.linesCleared),
+                        ),
+                        const SizedBox(height: 14),
+                        // Main game area that expands to fill available space
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Center(
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 500),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Playfield
+                                    Expanded(
+                                      flex: 5,
+                                      child: _buildPlayfield(context),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    // Right sidebar: next piece and timer
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              l10n.next,
+                                              style: TextStyle(
+                                                fontFamily: 'Fredoka',
+                                                fontSize: 14,
+                                                color: Colors.white.withAlpha(220),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          PiecePreview(next: _game.next),
+                                          if (_game.gameMode == GameMode.timeChallenge && _game.timeRemaining != null) ...[
+                                            const SizedBox(height: 16),
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                l10n.timeLeft,
+                                                style: TextStyle(
+                                                  fontFamily: 'Fredoka',
+                                                  fontSize: 14,
+                                                  color: Colors.white.withAlpha(220),
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            TimerDisplay(timeRemaining: _game.timeRemaining!),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    // Controls at the bottom
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-                      child: GameControls(
-                        onLeft: () {
-                          _startMusicOnFirstInteraction();
-                          _game.moveLeft();
-                        },
-                        onRight: () {
-                          _startMusicOnFirstInteraction();
-                          _game.moveRight();
-                        },
-                        onRotate: () {
-                          _startMusicOnFirstInteraction();
-                          _game.rotateCW();
-                        },
-                        onSoftDrop: () {
-                          _startMusicOnFirstInteraction();
-                          _game.softDrop();
-                        },
-                        onHardDrop: () {
-                          _startMusicOnFirstInteraction();
-                          _game.hardDrop();
-                        },
-                      ),
-                    ),
-                    ],
-                  );
-                },
-              ),
+                        // Controls at the bottom
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                          child: GameControls(
+                            onLeft: () {
+                              _startMusicOnFirstInteraction();
+                              _game.moveLeft();
+                            },
+                            onRight: () {
+                              _startMusicOnFirstInteraction();
+                              _game.moveRight();
+                            },
+                            onRotate: () {
+                              _startMusicOnFirstInteraction();
+                              _game.rotateCW();
+                            },
+                            onSoftDrop: () {
+                              _startMusicOnFirstInteraction();
+                              _game.softDrop();
+                            },
+                            onHardDrop: () {
+                              _startMusicOnFirstInteraction();
+                              _game.hardDrop();
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-    ),
     );
   }
 

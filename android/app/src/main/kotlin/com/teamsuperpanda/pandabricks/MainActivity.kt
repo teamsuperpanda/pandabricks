@@ -1,13 +1,13 @@
 package com.teamsuperpanda.pandabricks
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity : FlutterActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		// Enable edge-to-edge display for Android 15+ compatibility
-		(this as androidx.activity.ComponentActivity).enableEdgeToEdge()
+		WindowCompat.setDecorFitsSystemWindows(window, false)
 		
 		super.onCreate(savedInstanceState)
 	}
