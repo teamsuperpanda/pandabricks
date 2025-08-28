@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
@@ -7,6 +8,12 @@ import 'package:pandabricks/screens/game/screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
   runApp(
     MultiProvider(
       providers: [

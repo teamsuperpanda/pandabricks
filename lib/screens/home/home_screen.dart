@@ -89,13 +89,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            AnimatedBackground(gradientAnimation: _gradientAnimation),
-            const AmbientParticles(),
-            SingleChildScrollView(
+    return Scaffold(
+      body: Stack(
+        children: [
+          AnimatedBackground(gradientAnimation: _gradientAnimation),
+          const AmbientParticles(),
+          SafeArea(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
@@ -125,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
