@@ -12,7 +12,7 @@
   "language": "언어",
   "specialBricks": "특별한 벽돌",
   "pandaBrick": "판다 벽돌",
-  "pandaBrickDescription": "착지 시 전체 열을 지웁니다!",
+  "pandaBrickDescription": "착지하면 전체 열을 지웁니다!",
   "ghostBrick": "유령 벽돌",
   "ghostBrickDescription": "컨트롤이 반대입니다!",
   "catBrick": "고양이 벽돌",

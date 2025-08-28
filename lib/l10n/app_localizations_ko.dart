@@ -48,7 +48,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get pandaBrick => '판다 벽돌';
 
   @override
-  String get pandaBrickDescription => '착지 시 전체 열을 지웁니다!';
+  String get pandaBrickDescription => '착지하면 전체 열을 지웁니다!';
 
   @override
   String get ghostBrick => '유령 벽돌';

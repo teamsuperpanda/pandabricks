@@ -30,7 +30,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get blitzMode => 'Modo Blitz';
 
   @override
-  String get blitzModeDescription => 'Caos con bloques especiales';
+  String get blitzModeDescription => 'Caos y bloques especiales';
 
   @override
   String get audio => 'Audio';

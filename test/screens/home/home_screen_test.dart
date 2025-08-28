@@ -55,7 +55,7 @@ void main() {
       expect(find.text('Blitz Mode'), findsOneWidget);
       // Test for both possible descriptions (depending on locale loading)
       final blitzDescriptions = [
-        'Chaos, special bricks and table flips!',
+        'Chaos and special bricks',
         'Chaos with special bricks'
       ];
       bool foundBlitzDescription = false;
