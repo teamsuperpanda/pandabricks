@@ -3,7 +3,7 @@ display_name: "Panda Bricks"
 description: "A modern take on the classic falling blocks game, featuring a playful panda theme and unique gameplay mechanics."
 publish_to: 'none'
 
-version: 2.0.0+9
+version: 2.0.1+10
 
 environment:
   sdk: ^3.8.1
