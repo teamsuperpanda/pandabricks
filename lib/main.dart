@@ -9,11 +9,8 @@ import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-    ),
-  );
+  // Removed explicit SystemUiOverlayStyle to let enableEdgeToEdge() (in MainActivity) and
+  // the system manage icon contrast automatically on Android 15+.
   runApp(const MyAppWrapper());
 }
 
