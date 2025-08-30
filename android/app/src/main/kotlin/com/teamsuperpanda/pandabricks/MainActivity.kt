@@ -6,8 +6,8 @@ import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity : FlutterActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
-		// Single modern API; no legacy fallback or deprecated calls.
-		WindowCompat.enableEdgeToEdge(window)
+		// Enable edge-to-edge display by letting content draw under system bars
+		WindowCompat.setDecorFitsSystemWindows(window, false)
 		super.onCreate(savedInstanceState)
 	}
 }
