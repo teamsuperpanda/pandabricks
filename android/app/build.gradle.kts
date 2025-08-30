@@ -102,6 +102,7 @@ flutter {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.13.1")
+    // Upgrade to newer core-ktx to access enableEdgeToEdge without reflection.
+    implementation("androidx.core:core-ktx:1.16.0")
     implementation("androidx.activity:activity-ktx:1.9.2")
 }
