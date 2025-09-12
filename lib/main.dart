@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
@@ -9,6 +10,10 @@ import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Preserve the splash screen
+  FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+  
   // Removed explicit SystemUiOverlayStyle to let enableEdgeToEdge() (in MainActivity) and
   // the system manage icon contrast automatically on Android 15+.
   runApp(const MyAppWrapper());
@@ -41,6 +46,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _removeSplashScreen();
+  }
+
+  void _removeSplashScreen() async {
+    // Wait for 1 second before removing the splash screen
+    await Future.delayed(const Duration(seconds: 1));
+    FlutterNativeSplash.remove();
   }
 
   @override
