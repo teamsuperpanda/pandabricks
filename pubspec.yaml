@@ -3,7 +3,7 @@ display_name: "Panda Bricks"
 description: "A modern take on the classic falling blocks game, featuring a playful panda theme and unique gameplay mechanics."
 publish_to: 'none'
 
-version: 2.0.4+14
+version: 2.0.5+15
 
 environment:
   sdk: ^3.8.1
@@ -32,6 +32,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/launchscreen/
     - assets/audio/music/
     - assets/audio/music/game/
     - assets/audio/sfx/
@@ -52,12 +53,23 @@ flutter_launcher_icons:
   min_sdk_android: 21
   adaptive_icon_background: "#ADD8E6"
   adaptive_icon_foreground: "assets/images/icon.png"
-  # flutter launcher icons terminal command: flutter pub run flutter_launcher_icons
+  # dart run flutter_launcher_icons
 
 flutter_native_splash:
-  android_12: 
-    image: assets/images/logo.png
-    branding: assets/images/branding.png
-  color: "#1A1A1A"
+  color: "#FFFFFF"
+  color_dark: "#1A1A1A"
+  image: assets/images/launchscreen/logo_light.png
+  image_dark: assets/images/launchscreen/logo_dark.png
+  branding: assets/images/launchscreen/branding_light.png
+  branding_dark: assets/images/launchscreen/branding_dark.png
+
+  android_12:
+    image: assets/images/launchscreen/logo_light.png
+    image_dark: assets/images/launchscreen/logo_dark.png
+    branding: assets/images/launchscreen/branding_light.png
+    branding_dark: assets/images/launchscreen/branding_dark.png
+    color: "#FFFFFF"
+    color_dark: "#1A1A1A"
   android: true
-  # flutter native splash terminal command: dart run flutter_native_splash:create
+  ios: false
+  # dart run flutter_native_splash:create
