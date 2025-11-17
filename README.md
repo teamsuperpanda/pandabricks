@@ -1,6 +1,6 @@
 # Pandabricks
 
-<img src="assets/images/launchscreen/panda.png" width="100" alt="Pandabricks Icon">
+<img src="assets/images/icon_org.png" width="100" alt="Pandabricks Icon">
 
 Pandabricks is a modern take on the classic falling blocks game, featuring a playful panda theme and unique gameplay mechanics. It's designed to be fast, fun, and accessible, with smooth animations, audio feedback, and support for multiple languages.
 
@@ -12,8 +12,7 @@ Pandabricks is a modern take on the classic falling blocks game, featuring a pla
 
 Get Pandabricks on the Google Play Store:
 
-<a href="https://play.google.com/store/apps/details?id=com.teamsuperpanda.pandabricks">
-<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200" alt="Get it on Google Play"></a>
+<a href="https://play.google.com/store/apps/details?id=com.teamsuperpanda.pandabricks"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200" alt="Get it on Google Play"></a>
 
 ---
 
@@ -28,7 +27,7 @@ Pandabricks is a puzzle game for people who want:
 - Dark & light themes
 - Localization support for multiple languages
 - Local settings persistence
-- Zero cloud overhead: No accounts, no sync setup
+- Zero cloud overhead: No accounts, no sync setup, no third party services
 
 If you enjoy puzzle games that are relaxing yet challenging, with adorable panda aesthetics, Pandabricks is for you.
 
@@ -147,11 +146,11 @@ Whether it's a bug report, feature idea, design tweak, or documentation improvem
 
 ### Ways to contribute
 
-- Report bugs – Open a GitHub issue with steps to reproduce
-- Suggest features – Share what you'd like to see next
-- Improve tests – Add or refine unit and widget tests
-- Polish the UI/UX – Small design improvements are very welcome
-- Docs – Help make the project easier to understand
+- Report bugs: Open a GitHub issue with steps to reproduce
+- Suggest features: Share what you'd like to see next
+- Improve tests: Add or refine unit and widget tests
+- Polish the UI/UX: Small design improvements are very welcome
+- Docs: Help make the project easier to understand
 
 ### Contribution flow
 
@@ -203,4 +202,4 @@ Pandabricks is maintained by **Team Super Panda**, a small group that loves buil
 
 Visit us at **[www.teamsuperpanda.com](https://www.teamsuperpanda.com)** to learn more, follow our work, or say hi.
 
-If you ship something cool with Pandabricks—or build your own spin‑off—let us know. We'd love to see what you create.
+If you ship something cool with Pandabricks or build your own spin-off, let us know. We'd love to see what you create.
