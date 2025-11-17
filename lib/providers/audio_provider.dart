@@ -1,26 +1,49 @@
-
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum GameSfx { rowClear, columnClear, bombExplosion }
+
+const Map<GameSfx, String> _sfxAssets = {
+  GameSfx.rowClear: 'audio/sfx/row_clear.mp3',
+  GameSfx.columnClear: 'audio/sfx/panda_disappear.mp3',
+  GameSfx.bombExplosion: 'audio/sfx/row_clear.mp3',
+};
 
 class AudioProvider extends ChangeNotifier {
-  final ValueNotifier<bool> musicEnabled = ValueNotifier<bool>(true);
-  final ValueNotifier<bool> sfxEnabled = ValueNotifier<bool>(true);
+  bool _musicEnabled = true;
+  bool _sfxEnabled = true;
 
   AudioPlayer? _player;
+  AudioPlayer? _sfxPlayer;
   bool _isGameMusic = false;
   String? _currentlyPlaying;
+  String? _lastGameTrack; // Track the last played game track to avoid duplicates
   final bool _enablePlatformAudio;
+
+  // Public getter for testing purposes
+  @visibleForTesting
+  String? get currentlyPlaying => _currentlyPlaying;
+
+  // Public setters for testing purposes
+  @visibleForTesting
+  set player(AudioPlayer? value) => _player = value;
+  @visibleForTesting
+  set sfxPlayer(AudioPlayer? value) => _sfxPlayer = value;
 
   AudioProvider({bool enablePlatformAudio = true}) : _enablePlatformAudio = enablePlatformAudio {
     if (enablePlatformAudio) {
       // Creating an AudioPlayer touches platform channels. Skip in tests.
       _player = AudioPlayer();
-      _loadPreferences();
+      _sfxPlayer = AudioPlayer(playerId: 'sfx');
+      loadPreferences(null);
     }
   }
+
+  // Public getters for audio settings
+  bool get musicEnabled => _musicEnabled;
+  bool get sfxEnabled => _sfxEnabled;
 
   static const String menuTrack = 'audio/music/menu.mp3';
   static const List<String> gameTracks = [
@@ -33,8 +56,8 @@ class AudioProvider extends ChangeNotifier {
   ];
 
   void toggleMusic() {
-    musicEnabled.value = !musicEnabled.value;
-    if (musicEnabled.value) {
+    _musicEnabled = !_musicEnabled;
+    if (_musicEnabled) {
       if (_isGameMusic) {
         playGameMusic();
       } else {
@@ -44,28 +67,29 @@ class AudioProvider extends ChangeNotifier {
       stopMusic();
     }
     if (_enablePlatformAudio) {
-      _savePreferences();
+      savePreferences(null);
     }
     notifyListeners();
   }
 
   void toggleSfx() {
-    sfxEnabled.value = !sfxEnabled.value;
+    _sfxEnabled = !_sfxEnabled;
     if (_enablePlatformAudio) {
-      _savePreferences();
+      savePreferences(null);
     }
     notifyListeners();
   }
 
-    @override
+  @override
   void dispose() {
     _player?.dispose();
+    _sfxPlayer?.dispose();
     super.dispose();
   }
 
-  void playMenuMusic() async {
+  Future<void> playMenuMusic() async {
     _isGameMusic = false;
-    if (!musicEnabled.value) return;
+    if (!_musicEnabled) return;
     if (_currentlyPlaying == menuTrack) return; // Already playing menu music
     
     try {
@@ -81,53 +105,69 @@ class AudioProvider extends ChangeNotifier {
     }
   }
 
-  void playGameMusic() async {
+  Future<void> playGameMusic() async {
     _isGameMusic = true;
-    if (!musicEnabled.value) return;
-    debugPrint('Playing game music');
+    if (!_musicEnabled) return;
+    
     try {
       if (_player != null) {
         await _player!.stop();
       }
-      final track = gameTracks[Random().nextInt(gameTracks.length)];
+      // Select a track that's different from the last one played
+      final availableTracks = gameTracks.where((track) => track != _lastGameTrack).toList();
+      final track = availableTracks[Random().nextInt(availableTracks.length)];
       if (_player != null) {
         await _player!.play(AssetSource(track), volume: 0.5);
         await _player!.setReleaseMode(ReleaseMode.loop);
       }
+      _lastGameTrack = track;
       _currentlyPlaying = track;
     } catch (e) {
       debugPrint('Error playing game music: $e');
     }
   }
 
-  void stopMusic() async {
-    debugPrint('Stopping music');
+  Future<void> stopMusic() async {
     if (_player != null) {
       await _player!.stop();
     }
     _currentlyPlaying = null;
   }
 
-  void disposePlayer() {
-    _player?.dispose();
+  Future<void> playSfx(GameSfx effect, {double volume = 1.0}) async {
+    if (!_sfxEnabled) return;
+    final asset = _sfxAssets[effect];
+    if (asset == null) return;
+
+    try {
+      // Only call plugin methods when player is available (i.e., not in tests)
+      if (_sfxPlayer != null) {
+        await _sfxPlayer!.stop();
+        await _sfxPlayer!.play(AssetSource(asset), volume: volume);
+      }
+    } catch (e) {
+      debugPrint('Error playing sfx $asset: $e');
+    }
   }
 
-  Future<void> _loadPreferences() async {
+  @visibleForTesting
+  Future<void> loadPreferences(SharedPreferences? injectedPrefs) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      musicEnabled.value = prefs.getBool('musicEnabled') ?? true;
-      sfxEnabled.value = prefs.getBool('sfxEnabled') ?? true;
+      final prefs = injectedPrefs ?? await SharedPreferences.getInstance();
+      _musicEnabled = prefs.getBool('musicEnabled') ?? true;
+      _sfxEnabled = prefs.getBool('sfxEnabled') ?? true;
       notifyListeners();
     } catch (e) {
       debugPrint('Error loading preferences: $e');
     }
   }
 
-  Future<void> _savePreferences() async {
+  @visibleForTesting
+  Future<void> savePreferences(SharedPreferences? injectedPrefs) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('musicEnabled', musicEnabled.value);
-      await prefs.setBool('sfxEnabled', sfxEnabled.value);
+      final prefs = injectedPrefs ?? await SharedPreferences.getInstance();
+      await prefs.setBool('musicEnabled', _musicEnabled);
+      await prefs.setBool('sfxEnabled', _sfxEnabled);
     } catch (e) {
       debugPrint('Error saving preferences: $e');
     }

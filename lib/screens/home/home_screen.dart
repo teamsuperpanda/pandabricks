@@ -10,6 +10,8 @@ import 'package:pandabricks/widgets/home/audio_settings.dart';
 import 'package:pandabricks/widgets/home/glass_icon_button.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 import 'package:pandabricks/widgets/home/mode_card.dart';
+import 'package:pandabricks/dialogs/game/custom_game_dialog.dart';
+import 'package:pandabricks/models/game_settings.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<double> _floatingAnimation;
   AudioProvider? _audioProvider;
   bool _audioInitialized = false;
+  bool _customDialogShown = false;
 
   @override
   void initState() {
@@ -63,27 +66,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.didChangeDependencies();
     if (!_audioInitialized) {
       _audioProvider = context.read<AudioProvider>();
-      if (_audioProvider!.musicEnabled.value) {
+      if (_audioProvider!.musicEnabled) {
         _audioProvider!.playMenuMusic();
       }
-      _audioProvider!.musicEnabled.addListener(_onMusicToggle);
+      // Remove the listener since AudioProvider.toggleMusic() already handles start/stop
+      // _audioProvider!.musicEnabled.addListener(_onMusicToggle);
       _audioInitialized = true;
+    }
+    
+        // Check if we should show the custom game dialog (e.g., coming back from a custom game)
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args == 'showCustomDialog' && !_customDialogShown) {
+      _customDialogShown = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showCustomGameDialog(context);
+      });
     }
   }
 
-  void _onMusicToggle() {
-    if (_audioProvider?.musicEnabled.value == true) {
-      _audioProvider!.playMenuMusic();
-    } else {
-      _audioProvider?.stopMusic();
-    }
-  }
+  // Remove this method since it's redundant with AudioProvider.toggleMusic()
+  // void _onMusicToggle() {
+  //   if (_audioProvider?.musicEnabled.value == true) {
+  //     _audioProvider!.playMenuMusic();
+  //   } else {
+  //     _audioProvider?.stopMusic();
+  //   }
+  // }
 
   @override
   void dispose() {
     _gradientController.dispose();
     _floatingController.dispose();
-    _audioProvider?.musicEnabled.removeListener(_onMusicToggle);
+    // Remove the listener since we removed it from didChangeDependencies
+    // _audioProvider?.musicEnabled.removeListener(_onMusicToggle);
     super.dispose();
   }
 
@@ -115,9 +130,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     _SectionHeader(title: l10n.gameModes),
                     const SizedBox(height: 12),
                     _ModeList(
-                      onTapClassic: () => Navigator.of(context).pushNamed('/game', arguments: 'classic'),
-                      onTapTimed: () => Navigator.of(context).pushNamed('/game', arguments: 'timeChallenge'),
-                      onTapPlaceholder: () => Navigator.of(context).pushNamed('/game', arguments: 'blitz'),
+                      onTapClassic: () => Navigator.of(context).pushNamed(
+                        '/game', 
+                        arguments: const GameSettings.classic(),
+                      ),
+                      onTapTimed: () => Navigator.of(context).pushNamed(
+                        '/game', 
+                        arguments: const GameSettings.timeChallenge(),
+                      ),
+                      onTapBlitz: () => Navigator.of(context).pushNamed(
+                        '/game', 
+                        arguments: const GameSettings.blitz(),
+                      ),
+                      onTapCustom: () => _showCustomGameDialog(context),
                     ),
                     const SizedBox(height: 24),
                     _SectionHeader(title: l10n.audio),
@@ -302,6 +327,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
+  void _showCustomGameDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => const CustomGameDialog(),
+    );
+  }
+
   Widget _helpRow(String emoji, String title, String subtitle) {
     return Row(
       children: [
@@ -394,11 +427,13 @@ class _ModeList extends StatelessWidget {
   const _ModeList({
     required this.onTapClassic,
     required this.onTapTimed,
-    required this.onTapPlaceholder,
+    required this.onTapBlitz,
+    required this.onTapCustom,
   });
   final VoidCallback onTapClassic;
   final VoidCallback onTapTimed;
-  final VoidCallback onTapPlaceholder;
+  final VoidCallback onTapBlitz;
+  final VoidCallback onTapCustom;
 
   @override
   Widget build(BuildContext context) {
@@ -423,7 +458,14 @@ class _ModeList extends StatelessWidget {
         subtitle: l10n.blitzModeDescription,
         icon: Icons.flash_on_rounded,
         color: Colors.orangeAccent,
-        onTap: onTapPlaceholder,
+        onTap: onTapBlitz,
+      ),
+      _ModeItem(
+        title: 'Custom Mode',
+        subtitle: 'Configure your own game rules',
+        icon: Icons.settings_rounded,
+        color: Colors.greenAccent,
+        onTap: onTapCustom,
       ),
     ];
     return Column(

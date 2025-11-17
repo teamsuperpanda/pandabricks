@@ -5,7 +5,48 @@ import 'package:pandabricks/providers/audio_provider.dart';
 
 enum Rotation { up, right, down, left }
 
-enum GameMode { classic, timeChallenge, blitz }
+enum GameMode { classic, timeChallenge, blitz, custom }
+
+class CustomGameConfig {
+  static const Duration _unsetDuration = Duration(days: -1);
+  final Duration? timeLimit; // null for unlimited
+  final int startingLevel;
+  final double speedMultiplier;
+  final double scoreMultiplier;
+  final bool enableSpecialBricks;
+  final int boardWidth;
+  final int boardHeight;
+
+  const CustomGameConfig({
+    this.timeLimit,
+    this.startingLevel = 1,
+    this.speedMultiplier = 1.0,
+    this.scoreMultiplier = 1.0,
+    this.enableSpecialBricks = true,
+    this.boardWidth = 10,
+    this.boardHeight = 20,
+  });
+
+  CustomGameConfig copyWith({
+    Duration? timeLimit = _unsetDuration,
+    int? startingLevel,
+    double? speedMultiplier,
+    double? scoreMultiplier,
+    bool? enableSpecialBricks,
+    int? boardWidth,
+    int? boardHeight,
+  }) {
+    return CustomGameConfig(
+      timeLimit: timeLimit == _unsetDuration ? this.timeLimit : timeLimit,
+      startingLevel: startingLevel ?? this.startingLevel,
+      speedMultiplier: speedMultiplier ?? this.speedMultiplier,
+      scoreMultiplier: scoreMultiplier ?? this.scoreMultiplier,
+      enableSpecialBricks: enableSpecialBricks ?? this.enableSpecialBricks,
+      boardWidth: boardWidth ?? this.boardWidth,
+      boardHeight: boardHeight ?? this.boardHeight,
+    );
+  }
+}
 
 class PointInt {
   final int x;
@@ -52,6 +93,19 @@ class Game extends ChangeNotifier {
   final int height;
   final AudioProvider audioProvider;
   final GameMode gameMode;
+  final CustomGameConfig? customConfig;
+
+  // Game timing constants (milliseconds)
+  static const int effectDurationMs = 500;
+  static const int baseSpeedMs = 800;
+  static const int speedLevelDecrement = 50;
+  static const int minSpeedMs = 50;
+  static const int maxSpeedMs = 2000;
+
+  // Scoring constants
+  static const List<int> lineClearScores = [0, 100, 300, 500, 800];
+  static const int pandaBrickBonus = 200;
+  static const int bombBrickBonus = 500;
 
   late List<List<int?>> board; // height x width, stores color index or null
   ActivePiece? current;
@@ -92,20 +146,32 @@ class Game extends ChangeNotifier {
   };
 
   Game({
-    this.width = 10, 
-    this.height = 20, 
+    int? width,
+    int? height,
     required this.audioProvider,
     this.gameMode = GameMode.classic,
-  }) {
+    this.customConfig,
+  }) : 
+    width = customConfig?.boardWidth ?? width ?? 10,
+    height = customConfig?.boardHeight ?? height ?? 20 {
+    // Initialize board with correct dimensions
     _resetBoard();
+    
     _refillBag();
     next = _drawFromBag();
     _spawn();
     
     // Initialize time challenge if applicable
-    if (gameMode == GameMode.timeChallenge) {
-      timeRemaining = const Duration(minutes: 5);
+    final initialTimeLimit = _configuredTimeLimit;
+    if (initialTimeLimit != null) {
+      timeRemaining = initialTimeLimit;
       gameStartTime = DateTime.now();
+    }
+    
+    // Apply custom starting level
+    if (customConfig != null && customConfig!.startingLevel > 1) {
+      level = customConfig!.startingLevel;
+      linesCleared = (level - 1) * 10; // Set lines cleared to match the level
     }
   }
 
@@ -117,10 +183,13 @@ class Game extends ChangeNotifier {
     linesCleared = 0;
     level = 1;
     
-    // Reset time challenge properties
-    if (gameMode == GameMode.timeChallenge) {
-      timeRemaining = const Duration(minutes: 5);
+    final initialTimeLimit = _configuredTimeLimit;
+    if (initialTimeLimit != null) {
+      timeRemaining = initialTimeLimit;
       gameStartTime = DateTime.now();
+    } else {
+      timeRemaining = null;
+      gameStartTime = null;
     }
   }
 
@@ -135,14 +204,20 @@ class Game extends ChangeNotifier {
   void togglePause() {
     if (isGameOver) return;
     
-    if (gameMode == GameMode.timeChallenge && gameStartTime != null) {
+    final totalDuration = _configuredTimeLimit;
+    if (totalDuration != null && gameStartTime != null) {
       if (!isPaused) {
-        // Pausing - save current time remaining
+        // Pausing - capture the remaining time based on elapsed duration
         final elapsed = DateTime.now().difference(gameStartTime!);
-        timeRemaining = const Duration(minutes: 5) - elapsed;
+        final remaining = totalDuration - elapsed;
+        timeRemaining = remaining.isNegative ? Duration.zero : remaining;
+      } else if (timeRemaining != null) {
+        // Resuming - rebuild the start time so ticking logic keeps consistent elapsed tracking
+        final elapsed = totalDuration - timeRemaining!;
+        gameStartTime = DateTime.now().subtract(elapsed);
       } else {
-        // Resuming - reset start time based on remaining time
-        gameStartTime = DateTime.now().subtract(const Duration(minutes: 5) - timeRemaining!);
+        timeRemaining = totalDuration;
+        gameStartTime = DateTime.now();
       }
     }
     
@@ -153,8 +228,11 @@ class Game extends ChangeNotifier {
   void _refillBag() {
     _bag.clear();
     
-    if (gameMode == GameMode.blitz) {
-      // In blitz mode, include regular pieces + special pieces
+    final shouldIncludeSpecial = (gameMode == GameMode.blitz) || 
+                                (gameMode == GameMode.custom && (customConfig?.enableSpecialBricks ?? true));
+    
+    if (shouldIncludeSpecial) {
+      // Include regular pieces + special pieces
       // 70% regular pieces, 30% special pieces
       _bag.addAll([FallingBlock.I, FallingBlock.O, FallingBlock.T, FallingBlock.S, FallingBlock.Z, FallingBlock.J, FallingBlock.L]);
       _bag.addAll([FallingBlock.I, FallingBlock.O, FallingBlock.T, FallingBlock.S, FallingBlock.Z, FallingBlock.J, FallingBlock.L]);
@@ -163,7 +241,7 @@ class Game extends ChangeNotifier {
       // Add special pieces
       _bag.addAll([FallingBlock.pandaBrick, FallingBlock.ghostBrick, FallingBlock.catBrick, FallingBlock.tornadoBrick, FallingBlock.bombBrick]);
     } else {
-      // Classic and time challenge modes - only regular pieces
+      // Classic, time challenge, or custom with special bricks disabled - only regular pieces
       _bag.addAll([FallingBlock.I, FallingBlock.O, FallingBlock.T, FallingBlock.S, FallingBlock.Z, FallingBlock.J, FallingBlock.L]);
     }
     
@@ -339,7 +417,7 @@ class Game extends ChangeNotifier {
     }
     _lockPiece();
     // optional drop score
-    score += distance * 2;
+    score += (distance * 2 * (customConfig?.scoreMultiplier ?? 1.0)).toInt();
     notifyListeners();
   }
 
@@ -347,14 +425,13 @@ class Game extends ChangeNotifier {
   void tick() {
     if (isPaused || isGameOver) return;
     
-    // Update time remaining for time challenge mode
-    if (gameMode == GameMode.timeChallenge && gameStartTime != null) {
+    final totalTimeLimit = _configuredTimeLimit;
+    if (totalTimeLimit != null && gameStartTime != null) {
       final elapsed = DateTime.now().difference(gameStartTime!);
-      timeRemaining = const Duration(minutes: 5) - elapsed;
+      final remaining = totalTimeLimit - elapsed;
+      timeRemaining = remaining.isNegative ? Duration.zero : remaining;
       
-      // Check if time is up
-      if (timeRemaining!.inMilliseconds <= 0) {
-        timeRemaining = Duration.zero;
+      if (timeRemaining == Duration.zero) {
         isGameOver = true;
         notifyListeners();
         return;
@@ -427,8 +504,9 @@ class Game extends ChangeNotifier {
     if (cleared > 0) {
       linesCleared += cleared;
       // Basic scoring similar to falling blocks guideline (simplified)
-      final lineScore = [0, 100, 300, 500, 800][cleared];
-      score += lineScore * level;
+      final lineScore = lineClearScores[cleared];
+      final baseScore = lineScore * level;
+      score += (baseScore * (customConfig?.scoreMultiplier ?? 1.0)).toInt();
       // increase level every 10 lines
       level = 1 + (linesCleared ~/ 10);
     }
@@ -453,7 +531,8 @@ class Game extends ChangeNotifier {
           }
         }
         // Award bonus points for column clear
-        score += 200;
+        score += pandaBrickBonus;
+        audioProvider.playSfx(GameSfx.columnClear);
         break;
         
       case FallingBlock.bombBrick:
@@ -465,7 +544,8 @@ class Game extends ChangeNotifier {
           }
         }
         // Award bonus points for bomb explosion
-        score += 500;
+        score += bombBrickBonus;
+        audioProvider.playSfx(GameSfx.bombExplosion);
         break;
         
       default:
@@ -502,11 +582,10 @@ class Game extends ChangeNotifier {
   // Public accessor for painter
   Iterable<List<int>> currentEffects() sync* {
     final now = DateTime.now().millisecondsSinceEpoch;
-    const duration = 500;
     for (final e in _effects) {
       final start = e['start'] ?? now;
-      final elapsed = (now - start).clamp(0, duration);
-      final t = elapsed / duration;
+      final elapsed = (now - start).clamp(0, effectDurationMs);
+      final t = elapsed / effectDurationMs;
       // alpha goes from 160 -> 0
       final alpha = (160 * (1 - t)).toInt().clamp(0, 160);
       yield [e['x']!, e['y']!, e['type']!, alpha];
@@ -521,15 +600,9 @@ class Game extends ChangeNotifier {
       _effects.add({'x': x, 'y': y, 'type': 0, 'start': start});
     }
     notifyListeners();
-    // Schedule periodic notifications for smooth fade (approx every 50ms)
-    const duration = 500;
-    final steps = (duration / 50).ceil();
-    for (int i = 1; i <= steps; i++) {
-      Future.delayed(Duration(milliseconds: i * 50), () {
-        notifyListeners();
-      });
-    }
-    Future.delayed(Duration(milliseconds: duration), () {
+    // Schedule cleanup after animation duration
+    // The animation itself is driven by the game tick timer in GameScreen
+    Future.delayed(const Duration(milliseconds: effectDurationMs), () {
       _effects.removeWhere((e) => e['type'] == 0 && e['x'] == x && e['start'] == start);
       notifyListeners();
     });
@@ -543,14 +616,9 @@ class Game extends ChangeNotifier {
       _effects.add({'x': x, 'y': y, 'type': 1, 'start': start});
     }
     notifyListeners();
-    const duration = 500;
-    final steps = (duration / 50).ceil();
-    for (int i = 1; i <= steps; i++) {
-      Future.delayed(Duration(milliseconds: i * 50), () {
-        notifyListeners();
-      });
-    }
-    Future.delayed(Duration(milliseconds: duration), () {
+    // Schedule cleanup after animation duration
+    // The animation itself is driven by the game tick timer in GameScreen
+    Future.delayed(const Duration(milliseconds: effectDurationMs), () {
       _effects.removeWhere((e) => e['type'] == 1 && e['y'] == y && e['start'] == start);
       notifyListeners();
     });
@@ -583,9 +651,10 @@ class Game extends ChangeNotifier {
   }
 
   Duration currentSpeed() {
-    // Speed up with level, clamp to min 100ms
-    final baseMs = 800 - (level - 1) * 50;
-    return Duration(milliseconds: baseMs.clamp(100, 800));
+    // Speed up with level, clamp to min 50ms and max 2000ms
+    final baseMs = baseSpeedMs - (level - 1) * speedLevelDecrement;
+    final speedMs = (baseMs / (customConfig?.speedMultiplier ?? 1.0)).clamp(minSpeedMs, maxSpeedMs).toInt();
+    return Duration(milliseconds: speedMs);
   }
 
   // Helper to get all filled cells and ghost for painter
@@ -618,5 +687,15 @@ class Game extends ChangeNotifier {
       ghost = nextPiece;
     }
     return _cells(ghost);
+  }
+
+  Duration? get _configuredTimeLimit {
+    if (gameMode == GameMode.timeChallenge) {
+      return const Duration(minutes: 5);
+    }
+    if (gameMode == GameMode.custom) {
+      return customConfig?.timeLimit;
+    }
+    return null;
   }
 }

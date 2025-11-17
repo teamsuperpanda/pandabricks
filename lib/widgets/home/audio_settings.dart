@@ -23,7 +23,7 @@ class AudioSettings extends StatelessWidget {
                   child: AudioSettingRow(
                     title: l10n.music,
                     icon: Icons.music_note,
-                    initialValue: audioProvider.musicEnabled.value,
+                    initialValue: audioProvider.musicEnabled,
                     onChanged: (value) {
                       audioProvider.toggleMusic();
                     },
@@ -35,7 +35,7 @@ class AudioSettings extends StatelessWidget {
                   child: AudioSettingRow(
                     title: l10n.sfx,
                     icon: Icons.volume_up,
-                    initialValue: audioProvider.sfxEnabled.value,
+                    initialValue: audioProvider.sfxEnabled,
                     onChanged: (value) {
                       audioProvider.toggleSfx();
                     },
