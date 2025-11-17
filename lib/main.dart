@@ -14,8 +14,6 @@ void main() {
   // Preserve the splash screen
   FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   
-  // Removed explicit SystemUiOverlayStyle to let enableEdgeToEdge() (in MainActivity) and
-  // the system manage icon contrast automatically on Android 15+.
   runApp(const MyAppWrapper());
 }
 
@@ -42,6 +40,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  double? _cachedShortestSide;
+
   @override
   void initState() {
     super.initState();
@@ -49,10 +49,38 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _removeSplashScreen();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateOrientation();
+  }
+
   void _removeSplashScreen() async {
     // Wait for 1 second before removing the splash screen
     await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
+  }
+
+  void _updateOrientation() {
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+
+    // Only update orientation if screen size has changed significantly
+    if (_cachedShortestSide == null || (_cachedShortestSide! - shortestSide).abs() > 50) {
+      _cachedShortestSide = shortestSide;
+      if (shortestSide < 600) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
+      } else {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      }
+    }
   }
 
   @override
@@ -72,20 +100,33 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
-    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    
+    // Update orientation on first build or when context changes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateOrientation();
+    });
 
-    if (shortestSide < 600) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-    } else {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
+    // Apply font family fallback for missing glyph coverage (e.g. use NotoSans when available)
+    TextTheme applyFallback(TextTheme base) {
+      const fallback = <String>[];
+      TextStyle? applyFallback(TextStyle? s) => s?.copyWith(fontFamilyFallback: fallback);
+      return TextTheme(
+        displayLarge: applyFallback(base.displayLarge),
+        displayMedium: applyFallback(base.displayMedium),
+        displaySmall: applyFallback(base.displaySmall),
+        headlineLarge: applyFallback(base.headlineLarge),
+        headlineMedium: applyFallback(base.headlineMedium),
+        headlineSmall: applyFallback(base.headlineSmall),
+        titleLarge: applyFallback(base.titleLarge),
+        titleMedium: applyFallback(base.titleMedium),
+        titleSmall: applyFallback(base.titleSmall),
+        bodyLarge: applyFallback(base.bodyLarge),
+        bodyMedium: applyFallback(base.bodyMedium),
+        bodySmall: applyFallback(base.bodySmall),
+        labelLarge: applyFallback(base.labelLarge),
+        labelMedium: applyFallback(base.labelMedium),
+        labelSmall: applyFallback(base.labelSmall),
+      );
     }
 
     return MaterialApp(
@@ -94,7 +135,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         fontFamily: 'Fredoka',
-        scaffoldBackgroundColor: const Color(0x00000000),
+        // Ensure text styles will fall back to NotoSans if glyphs are missing
+        textTheme: applyFallback(ThemeData.light().textTheme),
       ),
       locale: localeProvider.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -102,6 +144,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       home: const HomeScreen(),
       routes: {
         '/game': (_) => const GameScreen(),
+        '/home': (_) => const HomeScreen(),
       },
     );
   }

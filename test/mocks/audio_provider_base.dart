@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pandabricks/providers/audio_provider.dart';
 
 /// Abstract base class for AudioProvider implementations
 abstract class AudioProviderBase extends ChangeNotifier {
@@ -10,5 +11,5 @@ abstract class AudioProviderBase extends ChangeNotifier {
   void playMenuMusic();
   void playGameMusic();
   void stopMusic();
-  void disposePlayer();
+  Future<void> playSfx(GameSfx effect, {double volume = 1.0});
 }
