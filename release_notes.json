@@ -1,83 +1,82 @@
 [
   {
     "language": "en-US",
-    "text": "What's new in version 2.1.0:\n• New custom game mode with configurable settings\n• Minor bug fixes and other improvements\nEnjoy!"
+    "text": "What's new in version 2.2.0:\n• Updated User Interface for a better experience\n• Improved app and game engine performance\n• Cleaned up codebase and removed redundant code\n• Increased test coverage for better stability\nEnjoy!"
   },
   {
     "language": "en-GB",
-    "text": "What's new in version 2.1.0:\n• New custom game mode with configurable settings\n• Minor bug fixes and other improvements\nEnjoy!"
+    "text": "What's new in version 2.2.0:\n• Updated User Interface for a better experience\n• Improved app and game engine performance\n• Cleaned up codebase and removed redundant code\n• Increased test coverage for better stability\nEnjoy!"
   },
   {
     "language": "es-ES",
-    "text": "Novedades en la versión 2.1.0:\n• Nuevo modo de juego personalizado con configuraciones ajustables\n• Correcciones menores de errores y otras mejoras\n¡Disfruta!"
+    "text": "Novedades en la versión 2.2.0:\n• Interfaz de usuario actualizada para una mejor experiencia\n• Rendimiento mejorado de la aplicación y el motor de juego\n• Código base limpio y eliminación de código redundante\n• Mayor cobertura de pruebas para una mejor estabilidad\n¡Disfrutar!"
   },
   {
     "language": "fr-FR",
-    "text": "Nouveautés de la version 2.1.0 :\n• Nouveau mode de jeu personnalisé avec paramètres configurables\n• Corrections mineures de bugs et autres améliorations\nProfitez-en !"
+    "text": "Nouveautés de la version 2.2.0 :\n• Interface utilisateur mise à jour pour une meilleure expérience\n• Amélioration des performances de l'application et du moteur de jeu\n• Nettoyage de la base de code et suppression du code redondant\n• Couverture de tests accrue pour une meilleure stabilité\nProfitez-en !"
   },
   {
     "language": "de-DE",
-    "text": "Neu in Version 2.1.0:\n• Neuer benutzerdefinierter Spielmodus mit konfigurierbaren Einstellungen\n• Kleinere Fehlerbehebungen und andere Verbesserungen\nViel Spaß!"
+    "text": "Neu in Version 2.2.0:\n• Aktualisierte Benutzeroberfläche für ein besseres Erlebnis\n• Verbesserte App- und Game-Engine-Leistung\n• Bereinigte Codebasis und Entfernung von redundantem Code\n• Erhöhte Testabdeckung für bessere Stabilität\nViel Spaß!"
   },
   {
     "language": "pt-BR",
-    "text": "Novidades na versão 2.1.0:\n• Novo modo de jogo personalizado com configurações ajustáveis\n• Correções menores de bugs e outras melhorias\nAproveite!"
+    "text": "Novidades na versão 2.2.0:\n• Interface de usuário atualizada para uma melhor experiência\n• Desempenho aprimorado do aplicativo e do motor de jogo\n• Base de código limpa e remoção de código redundante\n• Maior cobertura de testes para melhor estabilidade\nAproveite!"
   },
   {
     "language": "it-IT",
-    "text": "Novità della versione 2.1.0:\n• Nuovo modalità gioco personalizzata con impostazioni configurabili\n• Correzioni minori di bug e altri miglioramenti\nBuon divertimento!"
+    "text": "Novità della versione 2.2.0:\n• Interfaccia utente aggiornata per un'esperienza migliore\n• Prestazioni dell'app e del motore di gioco migliorate\n• Base di codice ripulita e rimozione del codice ridondante\n• Maggiore copertura dei test per una migliore stabilità\nBuon divertimento!"
   },
   {
     "language": "ja-JP",
-    "text": "バージョン 2.1.0 の新機能：\n• 新しいカスタムゲームモード — 設定可能なオプション付き\n• 軽微なバグ修正とその他の改善\nお楽しみください！"
+    "text": "バージョン 2.2.0 の新機能：\n• より良い体験のための更新されたユーザーインターフェース\n• アプリとゲームエンジンのパフォーマンスの向上\n• コードベースのクリーンアップと冗長なコードの削除\n• 安定性向上のためのテストカバレッジの拡大\nお楽しみください！"
   },
   {
     "language": "ko-KR",
-    "text": "변경사항:\n• 새로운 사용자 지정 게임 모드 — 구성 가능한 설정 포함\n• 사소한 버그 수정 및 기타 개선사항\n즐겨보세요!"
+    "text": "변경사항:\n• 더 나은 경험을 위한 업데이트된 사용자 인터페이스\n• 앱 및 게임 엔진 성능 향상\n• 코드베이스 정리 및 중복 코드 제거\n• 더 나은 안정성을 위한 테스트 커버리지 증가\n즐겨보세요!"
   },
   {
     "language": "zh-CN",
-    "text": "更新内容：\n• 新增自定义游戏模式 — 包含可配置的选项\n• 修复了一些小错误并进行了其他改进\n敬请体验！"
+    "text": "更新内容：\n• 更新了用户界面，带来更好的体验\n• 提升了应用和游戏引擎的性能\n• 清理了代码库并删除了冗余代码\n• 增加了测试覆盖率以提高稳定性\n敬请体验！"
   },
   {
     "language": "zh-TW",
-    "text": "更新內容：\n• 新增自訂遊戲模式 — 包含可配置的選項\n• 修正了一些小錯誤並進行了其他改進\n歡迎體驗！"
+    "text": "更新內容：\n• 更新了使用者介面，帶來更好的體驗\n• 提升了應用程式和遊戲引擎的效能\n• 清理了程式碼庫並刪除冗余程式碼\n• 增加了測試覆蓋率以提高穩定性\n歡迎體驗！"
   },
   {
     "language": "ru-RU",
-    "text": "Новое:\n• Новый режим пользовательской игры с настраиваемыми параметрами\n• Незначительные исправления ошибок и другие улучшения\nПриятной игры!"
+    "text": "Новое:\n• Обновленный пользовательский интерфейс для лучшего взаимодействия\n• Повышенная производительность приложения и игрового движка\n• Очистка кодовой базы и удаление лишнего кода\n• Увеличение тестового покрытия для большей стабильности\nПриятной игры!"
   },
   {
     "language": "tr-TR",
-    "text": "Yenilikler:\n• Yeni özel oyun modu — yapılandırılabilir ayarlar ile\n• Küçük hata düzeltmeleri ve diğer iyileştirmeler\nİyi eğlenceler!"
+    "text": "Yenilikler:\n• Daha iyi bir deneyim için güncellenmiş Kullanıcı Arayüzü\n• İyileştirilmiş uygulama ve oyun motoru performansı\n• Kod tabanı temizlendi ve gereksiz kodlar kaldırıldı\n• Daha iyi stabilite için artırılmış test kapsamı\nİyi eğlenceler!"
   },
   {
     "language": "nl-NL",
-    "text": "Wat is nieuw:\n• Nieuwe aangepaste spelmodus met configureerbare instellingen\n• Kleine bugfixes en andere verbeteringen\nVeel plezier!"
+    "text": "Wat is nieuw:\n• Vernieuwde gebruikersinterface voor een betere ervaring\n• Verbeterde app- en game engine-prestaties\n• Codebase opgeschoond en redundante code verwijderd\n• Verhoogde testdekking voor betere stabiliteit\nVeel plezier!"
   },
   {
     "language": "sv-SE",
-    "text": "Nyheter:\n• Ny anpassad spelläge med konfigurerbara inställningar\n• Mindre buggfixar och andra förbättringar\nNjut!"
+    "text": "Nyheter:\n• Uppdaterat användargränssnitt för een bättre upplevelse\n• Förbättrad prestanda för app och spelmotor\n• Rensa upp kodbasen och ta bort redundant kod\n• Ökad testtäckning för bättre stabilitet\nNjut!"
   },
   {
     "language": "pl-PL",
-    "text": "Co nowego:\n• Nowy tryb gry niestandardowej z konfigurowalnymi ustawieniami\n• Drobne poprawki błędów i inne ulepszenia\nMiłej zabawy!"
+    "text": "Co nowego:\n• Zaktualizowany interfejs użytkownika dla lepszych wrażeń\n• Poprawiona wydajność aplikacji i silnika gry\n• Oczyszczona baza kodu i usunięcie zbędnego kodu\n• Zwiększony zakres testów dla lepszej stabilności\nMiłej zabawy!"
   },
   {
     "language": "ar-SA",
-    "text": "الجديد:\n• وضع لعبة مخصص جديد مع إعدادات قابلة للتكوين\n• إصلاحات أخطاء طفيفة وتحسينات أخرى\nاستمتع!"
+    "text": "الجديد:\n• واجهة مستخدم محدثة لتجربة أفضل\n• تحسين أداء التطبيق ومحرك اللعبة\n• تنظيف قاعدة التعليمات البرمجية وإزالة الأكواد المكررة\n• زيادة تغطية الاختبار لتحقيق استقرار أفضل\nاستمتع!"
   },
   {
     "language": "hi-IN",
-    "text": "नया:\n• नया कस्टम गेम मोड — कॉन्फ़िगर करने योग्य सेटिंग्स के साथ\n• मामूली बग फिक्स और अन्य सुधार\nआनंद लें!"
+    "text": "नया:\n• बेहतर अनुभव के लिए अपडेटेड यूजर इंटरफेस\n• बेहतर ऐप और गेम इंजन प्रदर्शन\n• कोडबेस को साफ किया गया और अनावश्यक कोड को हटा दिया गया\n• बेहतर स्थिरता के लिए परीक्षण कवरेज में वृद्धि\nआनंद लें!"
   },
   {
     "language": "id-ID",
-    "text": "Baru:\n• Mode permainan kustom baru dengan pengaturan yang dapat dikonfigurasi\n• Perbaikan bug kecil dan peningkatan lainnya\nSelamat mencoba!"
+    "text": "Baru:\n• Antarmuka Pengguna yang diperbarui untuk pengalaman yang lebih baik\n• Peningkatan performa aplikasi dan mesin game\n• Pembersihan basis kode dan penghapusan kode redundan\n• Peningkatan cakupan pengujian untuk stabilitas yang lebih baik\nSelamat mencoba!"
   },
   {
     "language": "vi-VN",
-    "text": "Có gì mới:\n• Chế độ trò chơi tùy chỉnh mới với cài đặt có thể cấu hình\n• Sửa lỗi nhỏ và các cải tiến khác\nThưởng thức!"
+    "text": "Có gì mới:\n• Giao diện người dùng được cập nhật để có trải nghiệm tốt hơn\n• Cải thiện hiệu suất ứng dụng và công cụ trò chơi\n• Dọn dẹp cơ sở mã và xóa mã dư thừa\n• Tăng độ bao phủ thử nghiệm để ổn định hơn\nThưởng thức!"
   }
 ]
-
