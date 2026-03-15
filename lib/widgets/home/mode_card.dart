@@ -102,7 +102,6 @@ class _ModeCardState extends State<ModeCard> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontFamily: 'Fredoka',
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
@@ -124,7 +123,6 @@ class _ModeCardState extends State<ModeCard> {
                               child: Text(
                                 widget.badge!,
                                 style: const TextStyle(
-                                  fontFamily: 'Fredoka',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black,
@@ -139,7 +137,6 @@ class _ModeCardState extends State<ModeCard> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: 'Fredoka',
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: textColor.withAlpha(200),

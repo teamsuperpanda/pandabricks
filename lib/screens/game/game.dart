@@ -8,7 +8,6 @@ enum Rotation { up, right, down, left }
 enum GameMode { classic, timeChallenge, blitz, custom }
 
 class CustomGameConfig {
-  static const Duration _unsetDuration = Duration(days: -1);
   final Duration? timeLimit; // null for unlimited
   final int startingLevel;
   final double speedMultiplier;
@@ -25,10 +24,16 @@ class CustomGameConfig {
     this.enableSpecialBricks = true,
     this.boardWidth = 10,
     this.boardHeight = 20,
-  });
+  })  : assert(startingLevel >= 1 && startingLevel <= 20, 'startingLevel must be between 1 and 20'),
+        assert(speedMultiplier > 0 && speedMultiplier <= 10, 'speedMultiplier must be between 0 (exclusive) and 10'),
+        assert(scoreMultiplier > 0 && scoreMultiplier <= 10, 'scoreMultiplier must be between 0 (exclusive) and 10'),
+        assert(boardWidth >= 4 && boardWidth <= 20, 'boardWidth must be between 4 and 20'),
+        assert(boardHeight >= 8 && boardHeight <= 40, 'boardHeight must be between 8 and 40');
+
+  static const _keep = Object();
 
   CustomGameConfig copyWith({
-    Duration? timeLimit = _unsetDuration,
+    Object? timeLimit = _keep,
     int? startingLevel,
     double? speedMultiplier,
     double? scoreMultiplier,
@@ -37,7 +42,7 @@ class CustomGameConfig {
     int? boardHeight,
   }) {
     return CustomGameConfig(
-      timeLimit: timeLimit == _unsetDuration ? this.timeLimit : timeLimit,
+      timeLimit: identical(timeLimit, _keep) ? this.timeLimit : timeLimit as Duration?,
       startingLevel: startingLevel ?? this.startingLevel,
       speedMultiplier: speedMultiplier ?? this.speedMultiplier,
       scoreMultiplier: scoreMultiplier ?? this.scoreMultiplier,
@@ -46,6 +51,39 @@ class CustomGameConfig {
       boardHeight: boardHeight ?? this.boardHeight,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CustomGameConfig &&
+          timeLimit == other.timeLimit &&
+          startingLevel == other.startingLevel &&
+          speedMultiplier == other.speedMultiplier &&
+          scoreMultiplier == other.scoreMultiplier &&
+          enableSpecialBricks == other.enableSpecialBricks &&
+          boardWidth == other.boardWidth &&
+          boardHeight == other.boardHeight;
+
+  @override
+  int get hashCode => Object.hash(
+        timeLimit,
+        startingLevel,
+        speedMultiplier,
+        scoreMultiplier,
+        enableSpecialBricks,
+        boardWidth,
+        boardHeight,
+      );
+
+  @override
+  String toString() => 'CustomGameConfig('
+      'timeLimit: $timeLimit, '
+      'startingLevel: $startingLevel, '
+      'speedMultiplier: $speedMultiplier, '
+      'scoreMultiplier: $scoreMultiplier, '
+      'enableSpecialBricks: $enableSpecialBricks, '
+      'boardWidth: $boardWidth, '
+      'boardHeight: $boardHeight)';
 }
 
 class PointInt {
@@ -95,6 +133,11 @@ class Game extends ChangeNotifier {
   final GameMode gameMode;
   final CustomGameConfig? customConfig;
 
+  /// Incremented on every state change; used by [BoardPainter.shouldRepaint].
+  int version = 0;
+
+  bool _disposed = false;
+
   // Game timing constants (milliseconds)
   static const int effectDurationMs = 500;
   static const int baseSpeedMs = 800;
@@ -127,6 +170,19 @@ class Game extends ChangeNotifier {
   // Each effect is a map: {'x':int, 'y':int, 'type':int, 'start':ms}
   // type: 0 = column clear, 1 = row clear
   final List<Map<String, int>> _effects = [];
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    version++;
+    super.notifyListeners();
+  }
 
   // Colors indices map for painter; 0..n
   static const Map<FallingBlock, int> colorFor = {
@@ -225,26 +281,20 @@ class Game extends ChangeNotifier {
     notifyListeners();
   }
 
+  static const _standardPieces = [FallingBlock.I, FallingBlock.O, FallingBlock.T, FallingBlock.S, FallingBlock.Z, FallingBlock.J, FallingBlock.L];
+  static const _specialPieces = [FallingBlock.pandaBrick, FallingBlock.ghostBrick, FallingBlock.catBrick, FallingBlock.tornadoBrick, FallingBlock.bombBrick];
+
   void _refillBag() {
     _bag.clear();
-    
-    final shouldIncludeSpecial = (gameMode == GameMode.blitz) || 
-                                (gameMode == GameMode.custom && (customConfig?.enableSpecialBricks ?? true));
-    
-    if (shouldIncludeSpecial) {
-      // Include regular pieces + special pieces
-      // 70% regular pieces, 30% special pieces
-      _bag.addAll([FallingBlock.I, FallingBlock.O, FallingBlock.T, FallingBlock.S, FallingBlock.Z, FallingBlock.J, FallingBlock.L]);
-      _bag.addAll([FallingBlock.I, FallingBlock.O, FallingBlock.T, FallingBlock.S, FallingBlock.Z, FallingBlock.J, FallingBlock.L]);
-      _bag.addAll([FallingBlock.I, FallingBlock.O, FallingBlock.T]);
-      
-      // Add special pieces
-      _bag.addAll([FallingBlock.pandaBrick, FallingBlock.ghostBrick, FallingBlock.catBrick, FallingBlock.tornadoBrick, FallingBlock.bombBrick]);
-    } else {
-      // Classic, time challenge, or custom with special bricks disabled - only regular pieces
-      _bag.addAll([FallingBlock.I, FallingBlock.O, FallingBlock.T, FallingBlock.S, FallingBlock.Z, FallingBlock.J, FallingBlock.L]);
+    final includeSpecial = gameMode == GameMode.blitz ||
+        (gameMode == GameMode.custom && (customConfig?.enableSpecialBricks ?? true));
+    // 70% standard pieces (17 tiles), 30% special (5 tiles) when enabled
+    _bag.addAll(_standardPieces);
+    if (includeSpecial) {
+      _bag.addAll(_standardPieces);
+      _bag.addAll(_standardPieces.take(3));
+      _bag.addAll(_specialPieces);
     }
-    
     _bag.shuffle(_rng);
   }
 
@@ -261,11 +311,10 @@ class Game extends ChangeNotifier {
     final piece = ActivePiece(type: type, rotation: Rotation.up, position: spawnPos, isSpecialBlock: isSpecial);
     if (_collides(piece)) {
       isGameOver = true;
-      notifyListeners(); // Notify listeners when game over state changes
     } else {
       current = piece;
-      notifyListeners(); // Notify listeners immediately when piece spawns
     }
+    notifyListeners();
   }
 
   // FallingBlock definition as list of relative offsets per rotation
@@ -313,36 +362,30 @@ class Game extends ChangeNotifier {
       Rotation.left: [PointInt(-1, -1), PointInt(0, -1), PointInt(0, 0), PointInt(0, 1)],
     },
     // Special blitz mode blocks
-    FallingBlock.pandaBrick: {
-      Rotation.up: [PointInt(0, 0)],
-      Rotation.right: [PointInt(0, 0)],
-      Rotation.down: [PointInt(0, 0)],
-      Rotation.left: [PointInt(0, 0)],
-    },
-    FallingBlock.ghostBrick: {
-      Rotation.up: [PointInt(0, 0)],
-      Rotation.right: [PointInt(0, 0)],
-      Rotation.down: [PointInt(0, 0)],
-      Rotation.left: [PointInt(0, 0)],
-    },
-    FallingBlock.catBrick: {
-      Rotation.up: [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
-      Rotation.right: [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
-      Rotation.down: [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
-      Rotation.left: [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
-    },
+    FallingBlock.pandaBrick: _singleCell,
+    FallingBlock.ghostBrick: _singleCell,
+    FallingBlock.catBrick: _squareCell,
     FallingBlock.tornadoBrick: {
-      Rotation.up: [PointInt(-1, 0), PointInt(0, 0), PointInt(1, 0), PointInt(0, 1)],
+      Rotation.up:    [PointInt(-1, 0), PointInt(0, 0), PointInt(1, 0), PointInt(0, 1)],
       Rotation.right: [PointInt(0, -1), PointInt(0, 0), PointInt(0, 1), PointInt(1, 0)],
-      Rotation.down: [PointInt(-1, 0), PointInt(0, 0), PointInt(1, 0), PointInt(0, -1)],
-      Rotation.left: [PointInt(0, -1), PointInt(0, 0), PointInt(0, 1), PointInt(-1, 0)],
+      Rotation.down:  [PointInt(-1, 0), PointInt(0, 0), PointInt(1, 0), PointInt(0, -1)],
+      Rotation.left:  [PointInt(0, -1), PointInt(0, 0), PointInt(0, 1), PointInt(-1, 0)],
     },
-    FallingBlock.bombBrick: {
-      Rotation.up: [PointInt(0, 0)],
-      Rotation.right: [PointInt(0, 0)],
-      Rotation.down: [PointInt(0, 0)],
-      Rotation.left: [PointInt(0, 0)],
-    },
+    FallingBlock.bombBrick: _singleCell,
+  };
+
+  static const _singleCell = {
+    Rotation.up:    [PointInt(0, 0)],
+    Rotation.right: [PointInt(0, 0)],
+    Rotation.down:  [PointInt(0, 0)],
+    Rotation.left:  [PointInt(0, 0)],
+  };
+
+  static const _squareCell = {
+    Rotation.up:    [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
+    Rotation.right: [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
+    Rotation.down:  [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
+    Rotation.left:  [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
   };
 
   List<PointInt> _cells(ActivePiece piece) {
@@ -483,39 +526,24 @@ class Game extends ChangeNotifier {
 
   void _lockPiece() {
     if (current == null) return;
-    bool gameOverDetected = false;
-    
-    // Handle special block effects before placing on board
     if (current!.isSpecialBlock) {
       _handleSpecialBlockEffects();
     } else {
-      // Normal block placement
       for (final c in _cells(current!)) {
         if (c.y < 0 || c.y >= height || c.x < 0 || c.x >= width) {
           isGameOver = true;
-          gameOverDetected = true;
           continue;
         }
         board[c.y][c.x] = colorFor[current!.type];
       }
     }
-    
     final cleared = _clearLines();
     if (cleared > 0) {
       linesCleared += cleared;
-      // Basic scoring similar to falling blocks guideline (simplified)
-      final lineScore = lineClearScores[cleared];
-      final baseScore = lineScore * level;
-      score += (baseScore * (customConfig?.scoreMultiplier ?? 1.0)).toInt();
-      // increase level every 10 lines
+      score += (lineClearScores[cleared] * level * (customConfig?.scoreMultiplier ?? 1.0)).toInt();
       level = 1 + (linesCleared ~/ 10);
     }
     _spawn();
-    
-    // Notify listeners if game over was detected during piece locking
-    if (gameOverDetected) {
-      notifyListeners();
-    }
   }
 
   void _handleSpecialBlockEffects() {
@@ -549,13 +577,12 @@ class Game extends ChangeNotifier {
         break;
         
       default:
-        // Other special blocks (Ghost, Cat, Tornado) behave like normal blocks when locked
         for (final c in cells) {
           if (c.y < 0 || c.y >= height || c.x < 0 || c.x >= width) {
             isGameOver = true;
-            continue;
+          } else {
+            board[c.y][c.x] = colorFor[current!.type];
           }
-          board[c.y][c.x] = colorFor[current!.type];
         }
         break;
     }
@@ -603,6 +630,7 @@ class Game extends ChangeNotifier {
     // Schedule cleanup after animation duration
     // The animation itself is driven by the game tick timer in GameScreen
     Future.delayed(const Duration(milliseconds: effectDurationMs), () {
+      if (_disposed) return;
       _effects.removeWhere((e) => e['type'] == 0 && e['x'] == x && e['start'] == start);
       notifyListeners();
     });
@@ -619,6 +647,7 @@ class Game extends ChangeNotifier {
     // Schedule cleanup after animation duration
     // The animation itself is driven by the game tick timer in GameScreen
     Future.delayed(const Duration(milliseconds: effectDurationMs), () {
+      if (_disposed) return;
       _effects.removeWhere((e) => e['type'] == 1 && e['y'] == y && e['start'] == start);
       notifyListeners();
     });

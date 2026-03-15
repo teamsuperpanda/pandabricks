@@ -33,6 +33,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get blitzModeDescription => '특별한 벽돌이 있는 혼돈';
 
   @override
+  String get customMode => '커스텀 모드';
+
+  @override
+  String get customModeDescription => '나만의 게임 규칙을 설정하세요';
+
+  @override
   String get audio => '오디오';
 
   @override
@@ -126,7 +132,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get gamePaused => '게임 일시 중지됨';
 
   @override
-  String get yourGameIsPaused => '게임이 현재 일시 중지되었습니다';
+  String get yourGameIsPaused => '게임이 현재 일시 중지되었습니다.';
 
   @override
   String get restartGame => '게임을 다시 시작하시겠습니까?';
@@ -139,4 +145,46 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get sfx => 'SFX';
+
+  @override
+  String get customGame => '커스텀 게임';
+
+  @override
+  String get timeLimit => '시간 제한';
+
+  @override
+  String get oneMin => '1분';
+
+  @override
+  String get threeMin => '3분';
+
+  @override
+  String get fiveMin => '5분';
+
+  @override
+  String get tenMin => '10분';
+
+  @override
+  String get unlimited => '무제한';
+
+  @override
+  String get startingLevel => '시작 레벨';
+
+  @override
+  String get speedMultiplier => '속도 배율';
+
+  @override
+  String get specialFeatures => '특수 기능';
+
+  @override
+  String get specialBricksToggle => '특수 벽돌';
+
+  @override
+  String get scoreMultiplier => '점수 배율';
+
+  @override
+  String get startGame => '게임 시작';
+
+  @override
+  String get system => '시스템';
 }

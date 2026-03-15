@@ -27,10 +27,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String get timeChallengeDescription => 'ঘড়িকে হারান। দ্রুত যাও!';
 
   @override
-  String get blitzMode => '闪电战模式';
+  String get blitzMode => 'ব্লিট্জ মোড';
 
   @override
   String get blitzModeDescription => 'বিশেষ ইটের সঙ্গে বিশৃঙ্খলা';
+
+  @override
+  String get customMode => 'কাস্টম মোড';
+
+  @override
+  String get customModeDescription => 'আপনার নিজের গেমের নিয়ম কনফিগার করুন';
 
   @override
   String get audio => 'অডিও';
@@ -129,7 +135,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get gamePaused => 'গেমটি সাময়িকভাবে বন্ধ আছে';
 
   @override
-  String get yourGameIsPaused => 'আপনার গেমটি বর্তমানে সাময়িকভাবে বন্ধ আছে';
+  String get yourGameIsPaused => 'আপনার গেমটি বর্তমানে সাময়িকভাবে বন্ধ আছে।';
 
   @override
   String get restartGame => 'গেমটি পুনরায় চালু করবেন?';
@@ -143,4 +149,46 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get sfx => 'এসএফএক্স';
+
+  @override
+  String get customGame => 'কাস্টম গেম';
+
+  @override
+  String get timeLimit => 'সময় সীমা';
+
+  @override
+  String get oneMin => '১ মিনিট';
+
+  @override
+  String get threeMin => '৩ মিনিট';
+
+  @override
+  String get fiveMin => '৫ মিনিট';
+
+  @override
+  String get tenMin => '১০ মিনিট';
+
+  @override
+  String get unlimited => 'অসীম';
+
+  @override
+  String get startingLevel => 'শুরুর স্তর';
+
+  @override
+  String get speedMultiplier => 'গতি গুণক';
+
+  @override
+  String get specialFeatures => 'বিশেষ সুবিধা';
+
+  @override
+  String get specialBricksToggle => 'বিশেষ ইট';
+
+  @override
+  String get scoreMultiplier => 'স্কোর গুণক';
+
+  @override
+  String get startGame => 'গেম শুরু করুন';
+
+  @override
+  String get system => 'সিস্টেম';
 }

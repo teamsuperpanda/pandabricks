@@ -33,6 +33,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get blitzModeDescription => '混乱与特殊砖块';
 
   @override
+  String get customMode => '自定义模式';
+
+  @override
+  String get customModeDescription => '配置您自己的游戏规则';
+
+  @override
   String get audio => '音频';
 
   @override
@@ -126,7 +132,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get gamePaused => '游戏已暂停';
 
   @override
-  String get yourGameIsPaused => '您的游戏当前已暂停';
+  String get yourGameIsPaused => '您的游戏当前已暂停。';
 
   @override
   String get restartGame => '重新开始游戏？';
@@ -139,4 +145,46 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sfx => '音效';
+
+  @override
+  String get customGame => '自定义游戏';
+
+  @override
+  String get timeLimit => '时间限制';
+
+  @override
+  String get oneMin => '1分钟';
+
+  @override
+  String get threeMin => '3分钟';
+
+  @override
+  String get fiveMin => '5分钟';
+
+  @override
+  String get tenMin => '10分钟';
+
+  @override
+  String get unlimited => '无限制';
+
+  @override
+  String get startingLevel => '起始等级';
+
+  @override
+  String get speedMultiplier => '速度倍率';
+
+  @override
+  String get specialFeatures => '特殊功能';
+
+  @override
+  String get specialBricksToggle => '特殊砖块';
+
+  @override
+  String get scoreMultiplier => '得分倍率';
+
+  @override
+  String get startGame => '开始游戏';
+
+  @override
+  String get system => '系统';
 }

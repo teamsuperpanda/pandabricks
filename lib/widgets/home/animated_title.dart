@@ -23,7 +23,6 @@ class AnimatedTitle extends StatelessWidget {
             child: Text(
               l10n.appTitle.toUpperCase(),
               style: const TextStyle(
-                fontFamily: 'Fredoka',
                 fontSize: 42,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 2,

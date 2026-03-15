@@ -80,7 +80,7 @@ void main() {
       expect(mainMenuCalled, isFalse);
     });
 
-    testWidgets('should call onRestart when restart button is tapped', (WidgetTester tester) async {
+    testWidgets('should NOT have a restart button (only resume and main menu)', (WidgetTester tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -99,8 +99,10 @@ void main() {
         ),
       );
 
-      // Note: Pause dialog doesn't have a restart button, only Resume and Main Menu
+      // PauseDialog only has Resume and Main Menu - no standalone Restart button
       expect(find.text('Restart'), findsNothing);
+      // Confirm exactly two action buttons
+      expect(find.byType(InkWell), findsNWidgets(2));
     });
 
     testWidgets('should call onMainMenu when main menu button is tapped', (WidgetTester tester) async {

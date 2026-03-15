@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/screens/game/game.dart' as game; // avoid name clash
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
+import 'package:pandabricks/widgets/game/game_palette.dart';
 
 class PiecePreview extends StatelessWidget {
   const PiecePreview({super.key, required this.next});
@@ -9,14 +10,13 @@ class PiecePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return GlassMorphismCard(
       child: AspectRatio(
         aspectRatio: 1,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: CustomPaint(
-            painter: _PreviewPainter(next, theme),
+            painter: _PreviewPainter(next),
             size: Size.infinite,
           ),
         ),
@@ -27,14 +27,13 @@ class PiecePreview extends StatelessWidget {
 
 class _PreviewPainter extends CustomPainter {
   final game.FallingBlock? next;
-  final ThemeData theme;
 
-  _PreviewPainter(this.next, this.theme);
+  _PreviewPainter(this.next);
 
   @override
   void paint(Canvas canvas, Size size) {
     if (next == null) return;
-    final palette = _palette(theme);
+    final palette = kGamePaletteWithAlpha;
     final cells = _cellsFor(next!);
     
   // Choose a cell size that fits the preview area while keeping square cells
@@ -60,7 +59,7 @@ class _PreviewPainter extends CustomPainter {
   double offsetY = (size.height - pieceHeight) / 2;
 
     final colorIndex = game.Game.colorFor[next!]!;
-    final isSpecial = colorIndex >= 7; // Special blocks start at index 7
+    final isSpecial = colorIndex >= kSpecialBlockStartIndex;
 
     for (final c in cells) {
       final x = (c.dx - minX) * cellSize + offsetX;
@@ -83,14 +82,7 @@ class _PreviewPainter extends CustomPainter {
 
       // Draw emoji overlay for special blocks
       if (isSpecial) {
-        final emojiMap = {
-          7: '🐼', // pandaBrick
-          8: '👻', // ghostBrick
-          9: '🐱', // catBrick
-          10: '🌪️', // tornadoBrick
-          11: '💣', // bombBrick
-        };
-        final emoji = emojiMap[colorIndex] ?? '';
+        final emoji = kSpecialBlockEmojis[colorIndex] ?? '';
         if (emoji.isNotEmpty) {
           final textStyle = TextStyle(fontSize: cellSize * 0.7);
           final tp = TextPainter(text: TextSpan(text: emoji, style: textStyle), textDirection: TextDirection.ltr);
@@ -98,6 +90,7 @@ class _PreviewPainter extends CustomPainter {
           final dx = x + (cellSize - tp.width) / 2;
           final dy = y + (cellSize - tp.height) / 2;
           tp.paint(canvas, Offset(dx, dy));
+          tp.dispose();
         }
       }
     }
@@ -110,20 +103,4 @@ class _PreviewPainter extends CustomPainter {
     final offsets = m[game.Rotation.up]!;
     return offsets.map((p) => Offset(p.x.toDouble(), p.y.toDouble())).toList();
   }
-
-  List<Color> _palette(ThemeData theme) => [
-        Colors.cyanAccent,
-        Colors.yellowAccent,
-        Colors.purpleAccent,
-        Colors.greenAccent,
-        Colors.redAccent,
-        Colors.blueAccent,
-        Colors.orangeAccent,
-        // Special block colors
-        Colors.pink,           // PandaBrick
-        Colors.grey,           // GhostBrick
-        Colors.brown,          // CatBrick
-        Colors.tealAccent,     // TornadoBrick
-        Colors.deepOrangeAccent, // BombBrick
-      ].map((c) => c.withAlpha(220)).toList();
 }

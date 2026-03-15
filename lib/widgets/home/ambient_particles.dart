@@ -85,5 +85,7 @@ class _ParticlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant _ParticlePainter oldDelegate) {
+    return oldDelegate.t != t;
+  }
 }

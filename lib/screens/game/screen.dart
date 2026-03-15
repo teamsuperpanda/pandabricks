@@ -14,6 +14,7 @@ import 'package:pandabricks/widgets/game/controls.dart';
 import 'package:pandabricks/widgets/game/hud.dart';
 import 'package:pandabricks/widgets/game/preview.dart';
 import 'package:pandabricks/widgets/game/timer_display.dart';
+import 'package:pandabricks/widgets/game/game_palette.dart';
 import 'package:pandabricks/screens/game/game.dart';
 import 'package:pandabricks/dialogs/game/pause_dialog.dart';
 import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
@@ -55,7 +56,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   bool _musicStarted = false;
   bool _gameOverDialogShown = false;
   bool _initialized = false;
-  late List<Color> _cachedPalette;
   late GameSettings _gameSettings;
 
   @override
@@ -75,9 +75,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     }
     // Keyboard focus for desktop/web
     _focusNode = FocusNode();
-    
-    // Cache palette once
-    _cachedPalette = _buildPalette();
   }
 
   @override
@@ -99,7 +96,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         height: settings.boardHeight,
       );
       _tick = _game.currentSpeed();
-      _startTimer();
+      _restartTimer();
       _game.addListener(_onGameChanged);
       _initialized = true;
     }
@@ -126,11 +123,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     setState(() {});
   }
 
-  void _startTimer() {
-    _timer?.cancel();
-    _timer = Timer.periodic(_tick, (_) => _game.tick());
-  }
-
   void _restartTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(_tick, (_) => _game.tick());
@@ -141,6 +133,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _audioProvider.playGameMusic();
       _musicStarted = true;
     }
+  }
+
+  /// Calls [action] and ensures game music has started.
+  void _withMusic(void Function() action) {
+    _startMusicOnFirstInteraction();
+    action();
   }
 
   void _showPauseDialog() {
@@ -251,30 +249,13 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     _game.removeListener(_onGameChanged);
     _bgController.dispose();
     _focusNode.dispose();
-    // Stop music when leaving game screen
-    if (mounted) {
-      _audioProvider.playMenuMusic();
-    }
+    _game.dispose();
+    // Return to menu music when leaving the game screen.
+    // This is intentionally called unconditionally — dispose() is only ever
+    // invoked when the widget is truly removed from the tree.
+    _audioProvider.playMenuMusic();
     super.dispose();
   }
-
-  List<Color> _palette(BuildContext context) => _cachedPalette;
-
-  List<Color> _buildPalette() => [
-        Colors.cyanAccent,
-        Colors.yellowAccent,
-        Colors.purpleAccent,
-        Colors.greenAccent,
-        Colors.redAccent,
-        Colors.blueAccent,
-        Colors.orangeAccent,
-        // Special block colors
-        Colors.pink,           // PandaBrick
-        Colors.grey,           // GhostBrick
-        Colors.brown,          // CatBrick
-        Colors.tealAccent,     // TornadoBrick
-        Colors.deepOrangeAccent, // BombBrick
-      ].map((c) => c.withAlpha(220)).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -293,14 +274,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             if (event is KeyDownEvent) {
               final key = event.logicalKey;
               if (key == LogicalKeyboardKey.arrowLeft) {
-                _startMusicOnFirstInteraction();
-                _game.moveLeft();
+                _withMusic(_game.moveLeft);
               } else if (key == LogicalKeyboardKey.arrowRight) {
-                _startMusicOnFirstInteraction();
-                _game.moveRight();
+                _withMusic(_game.moveRight);
               } else if (key == LogicalKeyboardKey.arrowUp) {
-                _startMusicOnFirstInteraction();
-                _game.rotateCW();
+                _withMusic(_game.rotateCW);
               } else if (key == LogicalKeyboardKey.arrowDown) {
                 _startMusicOnFirstInteraction();
                 // Start a timer to repeatedly soft-drop while held
@@ -308,11 +286,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 _game.softDrop();
                 _keyboardDownTimer = Timer.periodic(const Duration(milliseconds: keyboardSoftDropMs), (_) => _game.softDrop());
               } else if (key == LogicalKeyboardKey.space) {
-                _startMusicOnFirstInteraction();
-                _game.rotateCW();
+                _withMusic(_game.rotateCW);
               } else if (key == LogicalKeyboardKey.enter) {
-                _startMusicOnFirstInteraction();
-                _game.hardDrop();
+                _withMusic(_game.hardDrop);
               }
             } else if (event is KeyUpEvent) {
               if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
@@ -323,24 +299,22 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           },
           child: Scaffold(
             body: GestureDetector(
-              onHorizontalDragStart: (d) {
+              onHorizontalDragStart: (_) {
                 _startMusicOnFirstInteraction();
                 _dragAccum = 0;
-                _lastDx = d.localPosition.dx;
+                _lastDx = 0;
               },
               onHorizontalDragUpdate: (d) {
                 final dx = d.localPosition.dx;
-                final delta = dx - _lastDx;
-                _dragAccum += delta;
+                _dragAccum += dx - _lastDx;
                 _lastDx = dx;
-                const threshold = dragThreshold;
-                while (_dragAccum.abs() > threshold) {
+                while (_dragAccum.abs() > dragThreshold) {
                   if (_dragAccum > 0) {
                     _game.moveRight();
-                    _dragAccum -= threshold;
+                    _dragAccum -= dragThreshold;
                   } else {
                     _game.moveLeft();
-                    _dragAccum += threshold;
+                    _dragAccum += dragThreshold;
                   }
                 }
               },
@@ -380,10 +354,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                   HeaderButton(
                                     icon: Icons.refresh,
                                     label: l10n.restart,
-                                    onPressed: () {
-                                      _startMusicOnFirstInteraction();
-                                      _showRestartDialog();
-                                    },
+                                    onPressed: () => _withMusic(_showRestartDialog),
                                   ),
                                   const Spacer(),
                                   // Pause/Resume button on the right
@@ -391,15 +362,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                     builder: (context, game, _) => HeaderButton(
                                       icon: game.isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
                                       label: game.isPaused ? l10n.resume : l10n.pause,
-                                      onPressed: () {
-                                        _startMusicOnFirstInteraction();
-                                        if (_game.isPaused) {
-                                          _game.togglePause();
-                                        } else {
-                                          _game.togglePause();
-                                          _showPauseDialog();
-                                        }
-                                      },
+                                      onPressed: () => _withMusic(() {
+                                        _game.togglePause();
+                                        if (_game.isPaused) _showPauseDialog();
+                                      }),
                                     ),
                                   ),
                                 ],
@@ -437,7 +403,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                                 child: Text(
                                                   l10n.next,
                                                   style: TextStyle(
-                                                    fontFamily: 'Fredoka',
                                                     fontSize: 14,
                                                     color: Colors.white.withAlpha(220),
                                                     fontWeight: FontWeight.w600,
@@ -455,7 +420,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                                   child: Text(
                                                     l10n.timeLeft,
                                                     style: TextStyle(
-                                                      fontFamily: 'Fredoka',
+
                                                       fontSize: 14,
                                                       color: Colors.white.withAlpha(220),
                                                       fontWeight: FontWeight.w600,
@@ -478,26 +443,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
                               child: GameControls(
-                                onLeft: () {
-                                  _startMusicOnFirstInteraction();
-                                  _game.moveLeft();
-                                },
-                                onRight: () {
-                                  _startMusicOnFirstInteraction();
-                                  _game.moveRight();
-                                },
-                                onRotate: () {
-                                  _startMusicOnFirstInteraction();
-                                  _game.rotateCW();
-                                },
-                                onSoftDrop: () {
-                                  _startMusicOnFirstInteraction();
-                                  _game.softDrop();
-                                },
-                                onHardDrop: () {
-                                  _startMusicOnFirstInteraction();
-                                  _game.hardDrop();
-                                },
+                                onLeft: () => _withMusic(_game.moveLeft),
+                                onRight: () => _withMusic(_game.moveRight),
+                                onRotate: () => _withMusic(_game.rotateCW),
+                                onSoftDrop: () => _withMusic(_game.softDrop),
+                                onHardDrop: () => _withMusic(_game.hardDrop),
                               ),
                             ),
                           ],
@@ -516,10 +466,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   Widget _buildPlayfield(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        _startMusicOnFirstInteraction();
-        _game.rotateCW();
-      },
+      onTap: () => _withMusic(_game.rotateCW),
       child: GlassMorphismCard(
         child: Container(
           width: double.infinity,
@@ -534,7 +481,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                   height: _game.height,
                   cells: _game.filledCellsWithGhost(),
                   effects: _game.currentEffects(),
-                  palette: _palette(context),
+                  palette: kGamePaletteWithAlpha,
+                  version: _game.version,
                 ),
                 size: Size.infinite,
               ),

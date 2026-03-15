@@ -29,7 +29,6 @@ class HeaderButton extends StatelessWidget {
               Text(
                 label,
                 style: const TextStyle(
-                  fontFamily: 'Fredoka',
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),

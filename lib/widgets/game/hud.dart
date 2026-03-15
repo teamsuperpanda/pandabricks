@@ -17,7 +17,6 @@ class GameHUD extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final textColor = Colors.white;
     return Row(
       children: [
         Expanded(
@@ -27,9 +26,9 @@ class GameHUD extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _hudItem(l10n.level, level.toString(), textColor),
-                  _hudItem(l10n.score, score.toString(), textColor),
-                  _hudItem(l10n.lines, lines.toString(), textColor),
+                  _hudItem(l10n.level, level.toString()),
+                  _hudItem(l10n.score, score.toString()),
+                  _hudItem(l10n.lines, lines.toString()),
                 ],
               ),
             ),
@@ -39,27 +38,38 @@ class GameHUD extends StatelessWidget {
     );
   }
 
-  Widget _hudItem(String label, String value, Color color) {
+  Widget _hudItem(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          label,
+          label.toUpperCase(),
           style: TextStyle(
-            fontFamily: 'Fredoka',
             fontSize: 12,
-            color: color.withAlpha(200),
-            fontWeight: FontWeight.w500,
+            color: Colors.cyanAccent.withAlpha(200),
+            fontWeight: FontWeight.w800,
+            letterSpacing: 1.2,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           value,
           style: const TextStyle(
-            fontFamily: 'Fredoka',
-            fontSize: 20,
+            fontSize: 24,
             color: Colors.white,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w900,
+            shadows: [
+              Shadow(
+                color: Colors.cyanAccent,
+                blurRadius: 8,
+                offset: Offset(0, 0),
+              ),
+              Shadow(
+                color: Colors.blueAccent,
+                blurRadius: 16,
+                offset: Offset(0, 0),
+              ),
+            ],
           ),
         ),
       ],
