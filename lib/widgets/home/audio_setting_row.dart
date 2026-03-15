@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 
-class AudioSettingRow extends StatefulWidget {
+class AudioSettingRow extends StatelessWidget {
   final String title;
   final IconData icon;
   final bool initialValue;
@@ -16,54 +15,29 @@ class AudioSettingRow extends StatefulWidget {
   });
 
   @override
-  State<AudioSettingRow> createState() => _AudioSettingRowState();
-}
-
-class _AudioSettingRowState extends State<AudioSettingRow> {
-  late bool _isToggled;
-
-  @override
-  void initState() {
-    super.initState();
-    _isToggled = widget.initialValue;
-  }
-
-  void _toggle() {
-    setState(() {
-      _isToggled = !_isToggled;
-      widget.onChanged(_isToggled);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _toggle,
+      onTap: () => onChanged(!initialValue),
       child: Row(
         children: [
           Icon(
-            _isToggled ? widget.icon : Icons.volume_off_rounded,
-            color: _isToggled ? Colors.cyan : Colors.grey,
+            initialValue ? icon : Icons.volume_off_rounded,
+            color: initialValue ? Colors.cyan : Colors.grey,
             size: 28,
           ),
           const SizedBox(width: 15),
           Expanded(
             child: Text(
-              widget.title,
-              style: const TextStyle(
-                fontFamily: 'Fredoka',
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
             ),
           ),
           Switch(
-            value: _isToggled,
-            onChanged: (value) => _toggle(),
+            value: initialValue,
+            onChanged: onChanged,
             activeThumbColor: Colors.cyan,
             inactiveThumbColor: Colors.grey,
-            inactiveTrackColor: Colors.grey.withAlpha((255 * 0.5).toInt()),
+            inactiveTrackColor: Colors.grey.withAlpha(128),
           ),
         ],
       ),

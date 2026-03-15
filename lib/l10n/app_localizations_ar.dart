@@ -33,6 +33,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get blitzModeDescription => 'فوضى مع طوب خاص';
 
   @override
+  String get customMode => 'وضع مخصص';
+
+  @override
+  String get customModeDescription => 'قم بتكوين قواعد اللعبة الخاصة بك';
+
+  @override
   String get audio => 'الصوت';
 
   @override
@@ -126,7 +132,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get gamePaused => 'اللعبة متوقفة مؤقتًا';
 
   @override
-  String get yourGameIsPaused => 'اللعبة متوقفة مؤقتًا حاليًا';
+  String get yourGameIsPaused => 'اللعبة متوقفة مؤقتًا حاليًا.';
 
   @override
   String get restartGame => 'إعادة تشغيل اللعبة؟';
@@ -140,4 +146,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sfx => 'المؤثرات الصوتية';
+
+  @override
+  String get customGame => 'لعبة مخصصة';
+
+  @override
+  String get timeLimit => 'الحد الزمني';
+
+  @override
+  String get oneMin => 'دقيقة';
+
+  @override
+  String get threeMin => '٣ دقائق';
+
+  @override
+  String get fiveMin => '٥ دقائق';
+
+  @override
+  String get tenMin => '١٠ دقائق';
+
+  @override
+  String get unlimited => 'غير محدود';
+
+  @override
+  String get startingLevel => 'مستوى البداية';
+
+  @override
+  String get speedMultiplier => 'مضاعف السرعة';
+
+  @override
+  String get specialFeatures => 'ميزات خاصة';
+
+  @override
+  String get specialBricksToggle => 'الطوب الخاص';
+
+  @override
+  String get scoreMultiplier => 'مضاعف النقاط';
+
+  @override
+  String get startGame => 'ابدأ اللعبة';
+
+  @override
+  String get system => 'النظام';
 }

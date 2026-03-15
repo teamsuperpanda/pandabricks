@@ -37,7 +37,6 @@ class TimerDisplay extends StatelessWidget {
               Text(
                 timeString,
                 style: TextStyle(
-                  fontFamily: 'Fredoka',
                   fontSize: 20,
                   color: timeColor,
                   fontWeight: FontWeight.w700,

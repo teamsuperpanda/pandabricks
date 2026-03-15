@@ -33,6 +33,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get blitzModeDescription => 'Chaos und spezielle Steine';
 
   @override
+  String get customMode => 'Benutzerdefinierter Modus';
+
+  @override
+  String get customModeDescription => 'Konfiguriere deine eigenen Spielregeln';
+
+  @override
   String get audio => 'Audio';
 
   @override
@@ -94,7 +100,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get resume => 'Fortsetzen';
 
   @override
-  String get next => 'Nächster';
+  String get next => 'Nächstes';
 
   @override
   String get timeLeft => 'Verbleibende Zeit';
@@ -109,10 +115,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get score => 'Punktzahl';
 
   @override
-  String get level => 'Ebene';
+  String get level => 'Level';
 
   @override
-  String get lines => 'Linien';
+  String get lines => 'Zeilen';
 
   @override
   String get playAgain => 'Nochmal spielen';
@@ -122,7 +128,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get progressWillBeLost =>
-      'Ihr aktueller Spielfortschritt geht verloren.';
+      'Dein aktueller Spielfortschritt geht verloren.';
 
   @override
   String get cancel => 'Abbrechen';
@@ -131,18 +137,60 @@ class AppLocalizationsDe extends AppLocalizations {
   String get gamePaused => 'Spiel pausiert';
 
   @override
-  String get yourGameIsPaused => 'Ihr Spiel ist derzeit pausiert';
+  String get yourGameIsPaused => 'Dein Spiel ist derzeit pausiert.';
 
   @override
   String get restartGame => 'Spiel neustarten?';
 
   @override
   String get areYouSureYouWantToRestart =>
-      'Sind Sie sicher, dass Sie neu starten möchten?\nIhr aktueller Fortschritt geht verloren.';
+      'Bist du sicher, dass du neu starten möchtest?\nDein aktueller Fortschritt geht verloren.';
 
   @override
   String get music => 'Musik';
 
   @override
   String get sfx => 'SFX';
+
+  @override
+  String get customGame => 'Eigenes Spiel';
+
+  @override
+  String get timeLimit => 'Zeitlimit';
+
+  @override
+  String get oneMin => '1 Min';
+
+  @override
+  String get threeMin => '3 Min';
+
+  @override
+  String get fiveMin => '5 Min';
+
+  @override
+  String get tenMin => '10 Min';
+
+  @override
+  String get unlimited => 'Unbegrenzt';
+
+  @override
+  String get startingLevel => 'Startlevel';
+
+  @override
+  String get speedMultiplier => 'Geschwindigkeitsmultiplikator';
+
+  @override
+  String get specialFeatures => 'Spezialfunktionen';
+
+  @override
+  String get specialBricksToggle => 'Spezielle Steine';
+
+  @override
+  String get scoreMultiplier => 'Punktemultiplikator';
+
+  @override
+  String get startGame => 'Spiel starten';
+
+  @override
+  String get system => 'System';
 }

@@ -168,6 +168,18 @@ abstract class AppLocalizations {
   /// **'Chaos and special bricks'**
   String get blitzModeDescription;
 
+  /// No description provided for @customMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Mode'**
+  String get customMode;
+
+  /// No description provided for @customModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure your own game rules'**
+  String get customModeDescription;
+
   /// No description provided for @audio.
   ///
   /// In en, this message translates to:
@@ -357,7 +369,7 @@ abstract class AppLocalizations {
   /// No description provided for @yourGameIsPaused.
   ///
   /// In en, this message translates to:
-  /// **'Your game is currently paused'**
+  /// **'Your game is currently paused.'**
   String get yourGameIsPaused;
 
   /// No description provided for @restartGame.
@@ -383,6 +395,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SFX'**
   String get sfx;
+
+  /// No description provided for @customGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Game'**
+  String get customGame;
+
+  /// No description provided for @timeLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Limit'**
+  String get timeLimit;
+
+  /// No description provided for @oneMin.
+  ///
+  /// In en, this message translates to:
+  /// **'1 min'**
+  String get oneMin;
+
+  /// No description provided for @threeMin.
+  ///
+  /// In en, this message translates to:
+  /// **'3 min'**
+  String get threeMin;
+
+  /// No description provided for @fiveMin.
+  ///
+  /// In en, this message translates to:
+  /// **'5 min'**
+  String get fiveMin;
+
+  /// No description provided for @tenMin.
+  ///
+  /// In en, this message translates to:
+  /// **'10 min'**
+  String get tenMin;
+
+  /// No description provided for @unlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited'**
+  String get unlimited;
+
+  /// No description provided for @startingLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting Level'**
+  String get startingLevel;
+
+  /// No description provided for @speedMultiplier.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed Multiplier'**
+  String get speedMultiplier;
+
+  /// No description provided for @specialFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Special Features'**
+  String get specialFeatures;
+
+  /// No description provided for @specialBricksToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Special Bricks'**
+  String get specialBricksToggle;
+
+  /// No description provided for @scoreMultiplier.
+  ///
+  /// In en, this message translates to:
+  /// **'Score Multiplier'**
+  String get scoreMultiplier;
+
+  /// No description provided for @startGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Game'**
+  String get startGame;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
 }
 
 class _AppLocalizationsDelegate

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/widgets/home/audio_setting_row.dart';
-import 'package:pandabricks/widgets/home/glass_morphism_container.dart';
+import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 import 'package:provider/provider.dart';
 
 class AudioSettings extends StatelessWidget {
@@ -13,7 +13,8 @@ class AudioSettings extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Consumer<AudioProvider>(
       builder: (context, audioProvider, child) {
-        return GlassMorphismContainer(
+        return GlassMorphismCard(
+          showShadow: false,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Column(

@@ -33,6 +33,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get blitzModeDescription => 'विशेष ईंटों के साथ अराजकता';
 
   @override
+  String get customMode => 'कस्टम मोड';
+
+  @override
+  String get customModeDescription => 'अपने खुद के खेल नियम कॉन्फ़िगर करें';
+
+  @override
   String get audio => 'ऑडियो';
 
   @override
@@ -128,7 +134,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get gamePaused => 'खेल रुका हुआ है';
 
   @override
-  String get yourGameIsPaused => 'आपका खेल वर्तमान में रुका हुआ है';
+  String get yourGameIsPaused => 'आपका खेल वर्तमान में रुका हुआ है।';
 
   @override
   String get restartGame => 'खेल पुनरारंभ करें?';
@@ -142,4 +148,46 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get sfx => 'एसएफएक्स';
+
+  @override
+  String get customGame => 'कस्टम गेम';
+
+  @override
+  String get timeLimit => 'समय सीमा';
+
+  @override
+  String get oneMin => '1 मिनट';
+
+  @override
+  String get threeMin => '3 मिनट';
+
+  @override
+  String get fiveMin => '5 मिनट';
+
+  @override
+  String get tenMin => '10 मिनट';
+
+  @override
+  String get unlimited => 'असीमित';
+
+  @override
+  String get startingLevel => 'शुरुआती स्तर';
+
+  @override
+  String get speedMultiplier => 'गति गुणक';
+
+  @override
+  String get specialFeatures => 'विशेष सुविधाएँ';
+
+  @override
+  String get specialBricksToggle => 'विशेष ईंटें';
+
+  @override
+  String get scoreMultiplier => 'स्कोर गुणक';
+
+  @override
+  String get startGame => 'खेल शुरू करें';
+
+  @override
+  String get system => 'सिस्टम';
 }

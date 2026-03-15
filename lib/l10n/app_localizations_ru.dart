@@ -33,6 +33,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get blitzModeDescription => 'Хаос и специальные кирпичи';
 
   @override
+  String get customMode => 'Пользовательский режим';
+
+  @override
+  String get customModeDescription => 'Настройте собственные правила игры';
+
+  @override
   String get audio => 'Аудио';
 
   @override
@@ -129,7 +135,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get gamePaused => 'Игра на паузе';
 
   @override
-  String get yourGameIsPaused => 'Ваша игра в настоящее время на паузе';
+  String get yourGameIsPaused => 'Ваша игра в настоящее время на паузе.';
 
   @override
   String get restartGame => 'Перезапустить игру?';
@@ -143,4 +149,46 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sfx => 'Звуковые эффекты';
+
+  @override
+  String get customGame => 'Пользовательская игра';
+
+  @override
+  String get timeLimit => 'Ограничение времени';
+
+  @override
+  String get oneMin => '1 мин';
+
+  @override
+  String get threeMin => '3 мин';
+
+  @override
+  String get fiveMin => '5 мин';
+
+  @override
+  String get tenMin => '10 мин';
+
+  @override
+  String get unlimited => 'Без ограничений';
+
+  @override
+  String get startingLevel => 'Начальный уровень';
+
+  @override
+  String get speedMultiplier => 'Множитель скорости';
+
+  @override
+  String get specialFeatures => 'Специальные возможности';
+
+  @override
+  String get specialBricksToggle => 'Особые кирпичи';
+
+  @override
+  String get scoreMultiplier => 'Множитель очков';
+
+  @override
+  String get startGame => 'Начать игру';
+
+  @override
+  String get system => 'Система';
 }

@@ -69,8 +69,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       if (_audioProvider!.musicEnabled) {
         _audioProvider!.playMenuMusic();
       }
-      // Remove the listener since AudioProvider.toggleMusic() already handles start/stop
-      // _audioProvider!.musicEnabled.addListener(_onMusicToggle);
       _audioInitialized = true;
     }
     
@@ -84,21 +82,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }
   }
 
-  // Remove this method since it's redundant with AudioProvider.toggleMusic()
-  // void _onMusicToggle() {
-  //   if (_audioProvider?.musicEnabled.value == true) {
-  //     _audioProvider!.playMenuMusic();
-  //   } else {
-  //     _audioProvider?.stopMusic();
-  //   }
-  // }
-
   @override
   void dispose() {
     _gradientController.dispose();
     _floatingController.dispose();
-    // Remove the listener since we removed it from didChangeDependencies
-    // _audioProvider?.musicEnabled.removeListener(_onMusicToggle);
     super.dispose();
   }
 
@@ -213,7 +200,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Text(
                   l10n.language,
                   style: const TextStyle(
-                    fontFamily: 'Fredoka',
                     fontSize: 24,
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -233,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return _LanguageCard(
-                          languageName: 'System',
+                          languageName: l10n.system,
                           onTap: () {
                             localeProvider.setLocale(null);
                             Navigator.of(context).pop();
@@ -280,7 +266,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Text(
                   l10n.specialBricks,
                   style: const TextStyle(
-                    fontFamily: 'Fredoka',
                     fontSize: 24,
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -309,7 +294,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         child: Text(
                           l10n.close,
                           style: const TextStyle(
-                            fontFamily: 'Fredoka',
                             fontSize: 16,
                             color: Colors.cyanAccent,
                             fontWeight: FontWeight.w600,
@@ -360,7 +344,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Text(
                 title,
                 style: const TextStyle(
-                  fontFamily: 'Fredoka',
                   fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
@@ -370,7 +353,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Text(
                 subtitle,
                 style: TextStyle(
-                  fontFamily: 'Fredoka',
                   fontSize: 13,
                   color: Colors.white.withAlpha(180),
                   fontWeight: FontWeight.w400,
@@ -395,7 +377,6 @@ class _SectionHeader extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            fontFamily: 'Fredoka',
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -438,71 +419,16 @@ class _ModeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final items = [
-      _ModeItem(
-        title: l10n.classicMode,
-        subtitle: l10n.classicModeDescription,
-        icon: Icons.grid_view_rounded,
-        color: Colors.cyan,
-        onTap: onTapClassic,
-      ),
-      _ModeItem(
-        title: l10n.timeChallenge,
-        subtitle: l10n.timeChallengeDescription,
-        icon: Icons.timer_rounded,
-        color: Colors.purpleAccent,
-        onTap: onTapTimed,
-      ),
-      _ModeItem(
-        title: l10n.blitzMode,
-        subtitle: l10n.blitzModeDescription,
-        icon: Icons.flash_on_rounded,
-        color: Colors.orangeAccent,
-        onTap: onTapBlitz,
-      ),
-      _ModeItem(
-        title: 'Custom Mode',
-        subtitle: 'Configure your own game rules',
-        icon: Icons.settings_rounded,
-        color: Colors.greenAccent,
-        onTap: onTapCustom,
-      ),
-    ];
     return Column(
       children: [
-        for (int i = 0; i < items.length; i++)
-          Padding(
-            padding: EdgeInsets.only(bottom: i < items.length - 1 ? 16 : 0),
-            child: items[i].buildCard(),
-          ),
+        ModeCard(title: l10n.classicMode, subtitle: l10n.classicModeDescription, icon: Icons.grid_view_rounded, accentColor: Colors.cyan, onTap: onTapClassic, enabled: true),
+        const SizedBox(height: 16),
+        ModeCard(title: l10n.timeChallenge, subtitle: l10n.timeChallengeDescription, icon: Icons.timer_rounded, accentColor: Colors.purpleAccent, onTap: onTapTimed, enabled: true),
+        const SizedBox(height: 16),
+        ModeCard(title: l10n.blitzMode, subtitle: l10n.blitzModeDescription, icon: Icons.flash_on_rounded, accentColor: Colors.orangeAccent, onTap: onTapBlitz, enabled: true),
+        const SizedBox(height: 16),
+        ModeCard(title: l10n.customMode, subtitle: l10n.customModeDescription, icon: Icons.settings_rounded, accentColor: Colors.greenAccent, onTap: onTapCustom, enabled: true),
       ],
-    );
-  }
-}
-
-class _ModeItem {
-  _ModeItem({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
-
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  Widget buildCard() {
-    return ModeCard(
-      title: title,
-      subtitle: subtitle,
-      icon: icon,
-      accentColor: color,
-      onTap: onTap,
-      enabled: true,
     );
   }
 }
@@ -527,7 +453,6 @@ class _LanguageCard extends StatelessWidget {
             languageName,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontFamily: 'Fredoka',
               fontSize: 16,
               color: Colors.white,
               fontWeight: FontWeight.w600,

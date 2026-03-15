@@ -33,6 +33,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get blitzModeDescription => '特殊なレンガが混ざるカオス';
 
   @override
+  String get customMode => 'カスタムモード';
+
+  @override
+  String get customModeDescription => '独自のゲームルールを設定';
+
+  @override
   String get audio => 'オーディオ';
 
   @override
@@ -126,7 +132,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get gamePaused => 'ゲーム一時停止中';
 
   @override
-  String get yourGameIsPaused => 'ゲームは現在一時停止中です';
+  String get yourGameIsPaused => 'ゲームは現在一時停止中です。';
 
   @override
   String get restartGame => 'ゲームを再起動しますか？';
@@ -139,4 +145,46 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get sfx => 'SFX';
+
+  @override
+  String get customGame => 'カスタムゲーム';
+
+  @override
+  String get timeLimit => '制限時間';
+
+  @override
+  String get oneMin => '1分';
+
+  @override
+  String get threeMin => '3分';
+
+  @override
+  String get fiveMin => '5分';
+
+  @override
+  String get tenMin => '10分';
+
+  @override
+  String get unlimited => '無制限';
+
+  @override
+  String get startingLevel => '開始レベル';
+
+  @override
+  String get speedMultiplier => 'スピード倍率';
+
+  @override
+  String get specialFeatures => '特殊機能';
+
+  @override
+  String get specialBricksToggle => '特殊ブロック';
+
+  @override
+  String get scoreMultiplier => 'スコア倍率';
+
+  @override
+  String get startGame => 'ゲーム開始';
+
+  @override
+  String get system => 'システム';
 }

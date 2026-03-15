@@ -33,6 +33,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get blitzModeDescription => 'Chaos avec briques spéciales';
 
   @override
+  String get customMode => 'Mode personnalisé';
+
+  @override
+  String get customModeDescription => 'Configurez vos propres règles de jeu';
+
+  @override
   String get audio => 'Audio';
 
   @override
@@ -130,7 +136,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gamePaused => 'Jeu en pause';
 
   @override
-  String get yourGameIsPaused => 'Votre jeu est actuellement en pause';
+  String get yourGameIsPaused => 'Votre jeu est actuellement en pause.';
 
   @override
   String get restartGame => 'Recommencer le jeu?';
@@ -144,4 +150,46 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get sfx => 'SFX';
+
+  @override
+  String get customGame => 'Partie personnalisée';
+
+  @override
+  String get timeLimit => 'Limite de temps';
+
+  @override
+  String get oneMin => '1 min';
+
+  @override
+  String get threeMin => '3 min';
+
+  @override
+  String get fiveMin => '5 min';
+
+  @override
+  String get tenMin => '10 min';
+
+  @override
+  String get unlimited => 'Illimité';
+
+  @override
+  String get startingLevel => 'Niveau de départ';
+
+  @override
+  String get speedMultiplier => 'Multiplicateur de vitesse';
+
+  @override
+  String get specialFeatures => 'Fonctionnalités spéciales';
+
+  @override
+  String get specialBricksToggle => 'Briques spéciales';
+
+  @override
+  String get scoreMultiplier => 'Multiplicateur de score';
+
+  @override
+  String get startGame => 'Lancer la partie';
+
+  @override
+  String get system => 'Système';
 }

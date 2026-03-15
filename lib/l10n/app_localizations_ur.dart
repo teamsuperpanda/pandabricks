@@ -30,7 +30,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get blitzMode => 'بلٹز موڈ';
 
   @override
-  String get blitzModeDescription => 'خلطی اور خصوصی کے اینٹوں کے ساتھ ہلڑبازی';
+  String get blitzModeDescription => 'خصوصی اینٹوں کے ساتھ افراتفری';
+
+  @override
+  String get customMode => 'کسٹم موڈ';
+
+  @override
+  String get customModeDescription => 'اپنے گیم کے قواعد خود ترتیب دیں';
 
   @override
   String get audio => 'آڈیو';
@@ -129,7 +135,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get gamePaused => 'گیم روک دی گئی ہے';
 
   @override
-  String get yourGameIsPaused => 'آپ کا گیم فی الحال روک دیا گیا ہے';
+  String get yourGameIsPaused => 'آپ کا گیم فی الحال روک دیا گیا ہے۔';
 
   @override
   String get restartGame => 'گیم دوبارہ شروع کریں؟';
@@ -143,4 +149,46 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get sfx => 'ایس ایف ایکس';
+
+  @override
+  String get customGame => 'کسٹم گیم';
+
+  @override
+  String get timeLimit => 'وقت کی حد';
+
+  @override
+  String get oneMin => '1 منٹ';
+
+  @override
+  String get threeMin => '3 منٹ';
+
+  @override
+  String get fiveMin => '5 منٹ';
+
+  @override
+  String get tenMin => '10 منٹ';
+
+  @override
+  String get unlimited => 'لامحدود';
+
+  @override
+  String get startingLevel => 'شروعاتی سطح';
+
+  @override
+  String get speedMultiplier => 'رفتار ضرب';
+
+  @override
+  String get specialFeatures => 'خصوصی خصوصیات';
+
+  @override
+  String get specialBricksToggle => 'خصوصی اینٹیں';
+
+  @override
+  String get scoreMultiplier => 'اسکور ضرب';
+
+  @override
+  String get startGame => 'گیم شروع کریں';
+
+  @override
+  String get system => 'سسٹم';
 }

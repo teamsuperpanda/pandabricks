@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 class GlassMorphismCard extends StatelessWidget {
   const GlassMorphismCard({
     required this.child,
+    this.showShadow = true,
     super.key,
   });
 
   final Widget child;
+  final bool showShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +34,15 @@ class GlassMorphismCard extends StatelessWidget {
               color: theme.colorScheme.primary.withAlpha(51),
               width: 1.5,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.primary.withAlpha(25),
-                blurRadius: 10,
-                spreadRadius: 5,
-              ),
-            ],
+            boxShadow: showShadow
+                ? [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withAlpha(25),
+                      blurRadius: 10,
+                      spreadRadius: 5,
+                    ),
+                  ]
+                : null,
           ),
           child: child,
         ),

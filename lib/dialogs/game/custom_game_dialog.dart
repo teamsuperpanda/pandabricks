@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/screens/game/game.dart';
 import 'package:pandabricks/models/game_settings.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
@@ -21,6 +22,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Dialog(
       backgroundColor: Colors.transparent,
       child: GlassMorphismCard(
@@ -30,22 +32,21 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Custom Game',
+                l10n.customGame,
                 style: const TextStyle(
-                  fontFamily: 'Fredoka',
                   fontSize: 24,
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 20),
-              _buildTimeLimitSection(),
+              _buildTimeLimitSection(l10n),
               const SizedBox(height: 16),
-              _buildDifficultySection(),
+              _buildDifficultySection(l10n),
               const SizedBox(height: 16),
-              _buildSpecialFeaturesSection(),
+              _buildSpecialFeaturesSection(l10n),
               const SizedBox(height: 24),
-              _buildActionButtons(),
+              _buildActionButtons(l10n),
             ],
           ),
         ),
@@ -53,14 +54,13 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     );
   }
 
-  Widget _buildTimeLimitSection() {
+  Widget _buildTimeLimitSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Time Limit',
+          l10n.timeLimit,
           style: const TextStyle(
-            fontFamily: 'Fredoka',
             fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.w600,
@@ -69,15 +69,15 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
         const SizedBox(height: 8),
         Row(
           children: [
-            _timeButton('1 min', const Duration(minutes: 1)),
+            _timeButton(l10n.oneMin, const Duration(minutes: 1)),
             const SizedBox(width: 8),
-            _timeButton('3 min', const Duration(minutes: 3)),
+            _timeButton(l10n.threeMin, const Duration(minutes: 3)),
             const SizedBox(width: 8),
-            _timeButton('5 min', const Duration(minutes: 5)),
+            _timeButton(l10n.fiveMin, const Duration(minutes: 5)),
             const SizedBox(width: 8),
-            _timeButton('10 min', const Duration(minutes: 10)),
+            _timeButton(l10n.tenMin, const Duration(minutes: 10)),
             const SizedBox(width: 8),
-            _timeButton('Unlimited', null),
+            _timeButton(l10n.unlimited, null),
           ],
         ),
       ],
@@ -107,7 +107,6 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Fredoka',
               fontSize: 12,
               color: Colors.white,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -118,14 +117,13 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     );
   }
 
-  Widget _buildDifficultySection() {
+  Widget _buildDifficultySection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Starting Level',
+          l10n.startingLevel,
           style: const TextStyle(
-            fontFamily: 'Fredoka',
             fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.w600,
@@ -145,9 +143,8 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
         ),
         const SizedBox(height: 12),
         Text(
-          'Speed Multiplier',
+          l10n.speedMultiplier,
           style: const TextStyle(
-            fontFamily: 'Fredoka',
             fontSize: 16,
             color: Colors.white,
             fontWeight: FontWeight.w600,
@@ -192,7 +189,6 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Fredoka',
               fontSize: 14,
               color: Colors.white,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -203,28 +199,26 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     );
   }
 
-  Widget _buildSpecialFeaturesSection() {
+  Widget _buildSpecialFeaturesSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Special Features',
+          l10n.specialFeatures,
           style: const TextStyle(
-            fontFamily: 'Fredoka',
             fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 12),
-        _featureToggle('Special Bricks', config.enableSpecialBricks, (value) {
+        _featureToggle(l10n.specialBricksToggle, config.enableSpecialBricks, (value) {
           setState(() => config = config.copyWith(enableSpecialBricks: value));
         }),
         const SizedBox(height: 8),
         Text(
-          'Score Multiplier',
+          l10n.scoreMultiplier,
           style: const TextStyle(
-            fontFamily: 'Fredoka',
             fontSize: 16,
             color: Colors.white,
             fontWeight: FontWeight.w600,
@@ -257,7 +251,6 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           child: Text(
             label,
             style: const TextStyle(
-              fontFamily: 'Fredoka',
               fontSize: 16,
               color: Colors.white,
               fontWeight: FontWeight.w500,
@@ -284,7 +277,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(AppLocalizations l10n) {
     return Row(
       children: [
         Expanded(
@@ -297,10 +290,9 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
                   child: Text(
-                    'Cancel',
+                    l10n.cancel,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontFamily: 'Fredoka',
                       fontSize: 16,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -336,10 +328,9 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
                   child: Text(
-                    'Start Game',
+                    l10n.startGame,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontFamily: 'Fredoka',
                       fontSize: 16,
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
