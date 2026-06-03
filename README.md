@@ -14,7 +14,7 @@ A modern, panda-themed take on the classic falling blocks game. Fast, fun, and a
 - **Modes**: Includes Timed Mode for competitive play.
 - **Audio & Visuals**: Background music, SFX, particle effects, and animated backgrounds.
 - **Localization**: Supported in 13+ languages (en, ar, fr, zh, etc.).
-- **Privacy First**: Zero cloud overhead. No accounts or tracking.
+- **Privacy First**: Zero cloud overhead. No accounts. Anonymous analytics, opt-out anytime.
 - **Modern UI**: Dark/light modes with Glass Morphism design.
 
 ---

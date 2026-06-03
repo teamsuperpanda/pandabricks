@@ -35,7 +35,7 @@ void main() {
       test('currentSpeed applies custom speed multiplier', () {
         final customGame = Game(
           audioProvider: mockAudio,
-          customConfig: const CustomGameConfig(speedMultiplier: 2.0),
+          customConfig: const CustomGameConfig(speedMultiplier: 2),
         );
         final normalSpeed = game.currentSpeed();
         final fastSpeed = customGame.currentSpeed();
@@ -69,21 +69,20 @@ void main() {
 
     group('Ghost Piece Calculation', () {
       test('ghost piece is rendered on the board', () {
-        final ghostCells = game.filledCellsWithGhost().where((c) => c[2] < 0);
+        final ghostCells = game.filledCellsWithGhost().where((c) => c.isGhost);
         expect(ghostCells, isNotEmpty);
       });
 
       test('ghost piece is below current piece', () {
         final currentY = game.current?.position.y ?? 0;
-        final ghostY = game.filledCellsWithGhost().where((c) => c[2] < 0).map((c) => c[1]).reduce(min);
+        final ghostY = game.filledCellsWithGhost().where((c) => c.isGhost).map((c) => c.y).reduce(min);
         expect(ghostY, greaterThanOrEqualTo(currentY));
       });
 
       test('ghost piece stays same when piece cannot fall', () {
-        // Move piece to bottom
         while (game.softDrop()) {}
         final currentY = game.current?.position.y ?? 0;
-        final ghostY = game.filledCellsWithGhost().where((c) => c[2] < 0).map((c) => c[1]).reduce(min);
+        final ghostY = game.filledCellsWithGhost().where((c) => c.isGhost).map((c) => c.y).reduce(min);
         expect(ghostY, currentY);
       });
     });
@@ -105,7 +104,7 @@ void main() {
 
       test('moving into an occupied cell fails', () {
         // Fill bottom row
-        for (int x = 0; x < game.width; x++) {
+        for (var x = 0; x < game.width; x++) {
           game.board[game.height - 1][x] = 0;
         }
         
@@ -121,8 +120,8 @@ void main() {
     group('Board State', () {
       test('board is empty initially', () {
         var isEmpty = true;
-        for (var row in game.board) {
-          for (var cell in row) {
+        for (final row in game.board) {
+          for (final cell in row) {
             if (cell != null) {
               isEmpty = false;
               break;
@@ -163,7 +162,7 @@ void main() {
         final normalGame = Game(audioProvider: mockAudio);
         final bonusGame = Game(
           audioProvider: mockAudio,
-          customConfig: const CustomGameConfig(scoreMultiplier: 2.0),
+          customConfig: const CustomGameConfig(scoreMultiplier: 2),
         );
 
         normalGame.hardDrop();
@@ -195,7 +194,6 @@ void main() {
       test('classic mode initializes correctly', () {
         final classicGame = Game(
           audioProvider: mockAudio,
-          gameMode: GameMode.classic,
         );
         expect(classicGame.gameMode, GameMode.classic);
         expect(classicGame.timeRemaining, isNull);
@@ -265,7 +263,7 @@ void main() {
       });
 
       test('all block types have color mappings', () {
-        for (var block in FallingBlock.values) {
+        for (final block in FallingBlock.values) {
           final colorIndex = Game.colorFor[block];
           expect(colorIndex, isNotNull);
           expect(colorIndex, greaterThanOrEqualTo(0));
@@ -306,7 +304,7 @@ void main() {
 
     group('Piece Shapes', () {
       test('all piece types have shape definitions', () {
-        for (var block in [
+        for (final block in [
           FallingBlock.I,
           FallingBlock.O,
           FallingBlock.T,

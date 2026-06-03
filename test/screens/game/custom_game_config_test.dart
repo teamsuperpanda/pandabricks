@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pandabricks/screens/game/game.dart';
+import 'package:pandabricks/models/game_types.dart';
 
 void main() {
   group('CustomGameConfig', () {
@@ -24,17 +24,11 @@ void main() {
       test('copyWith updates every field independently', () {
         const original = CustomGameConfig(
           timeLimit: Duration(minutes: 3),
-          startingLevel: 1,
-          speedMultiplier: 1.0,
-          scoreMultiplier: 1.0,
-          enableSpecialBricks: true,
-          boardWidth: 10,
-          boardHeight: 20,
         );
 
         final updated = original.copyWith(
           startingLevel: 5,
-          speedMultiplier: 2.0,
+          speedMultiplier: 2,
           scoreMultiplier: 1.5,
           enableSpecialBricks: false,
           boardWidth: 12,
@@ -55,7 +49,7 @@ void main() {
           timeLimit: Duration(seconds: 90),
           startingLevel: 3,
           speedMultiplier: 1.5,
-          scoreMultiplier: 2.0,
+          scoreMultiplier: 2,
           enableSpecialBricks: false,
           boardWidth: 8,
           boardHeight: 18,
@@ -92,13 +86,13 @@ void main() {
       });
 
       test('configs with different startingLevel are not equal', () {
-        const a = CustomGameConfig(startingLevel: 1);
+        const a = CustomGameConfig();
         const b = CustomGameConfig(startingLevel: 5);
         expect(a, isNot(equals(b)));
       });
 
       test('configs with different boardWidth are not equal', () {
-        const a = CustomGameConfig(boardWidth: 10);
+        const a = CustomGameConfig();
         const b = CustomGameConfig(boardWidth: 12);
         expect(a, isNot(equals(b)));
       });
@@ -129,7 +123,7 @@ void main() {
       });
 
       test('hashCode is stable across multiple calls', () {
-        const config = CustomGameConfig(speedMultiplier: 2.0);
+        const config = CustomGameConfig(speedMultiplier: 2);
         final hash1 = config.hashCode;
         final hash2 = config.hashCode;
         expect(hash1, equals(hash2));

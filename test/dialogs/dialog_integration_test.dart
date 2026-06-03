@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
+import 'package:pandabricks/dialogs/game/main_menu_confirm_dialog.dart';
 import 'package:pandabricks/dialogs/game/pause_dialog.dart';
 import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
-import 'package:pandabricks/dialogs/game/main_menu_confirm_dialog.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +74,7 @@ void main() {
           onMainMenu: () {},
         ),
         RestartConfirmDialog(
-          onRestart: () {},
+          onConfirm: () {},
           onCancel: () {},
         ),
         MainMenuConfirmDialog(
@@ -125,7 +125,7 @@ void main() {
         (
           'Restart Game?',
           RestartConfirmDialog(
-            onRestart: () {},
+            onConfirm: () {},
             onCancel: () {},
           )
         ),
@@ -200,7 +200,7 @@ void main() {
               supportedLocales: AppLocalizations.supportedLocales,
               home: Scaffold(
                 body: RestartConfirmDialog(
-                  onRestart: () {},
+                  onConfirm: () {},
                   onCancel: () {},
                 ),
               ),
@@ -216,7 +216,7 @@ void main() {
     group('Dialog Button Interaction Tests', () {
       testWidgets('multiple rapid taps should not cause issues',
           (WidgetTester tester) async {
-        int tapCount = 0;
+        var tapCount = 0;
 
         await tester.pumpWidget(
           ChangeNotifierProvider<LocaleProvider>.value(
@@ -227,7 +227,7 @@ void main() {
               supportedLocales: AppLocalizations.supportedLocales,
               home: Scaffold(
                 body: RestartConfirmDialog(
-                  onRestart: () => tapCount++,
+                  onConfirm: () => tapCount++,
                   onCancel: () {},
                 ),
               ),

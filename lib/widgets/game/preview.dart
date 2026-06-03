@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:pandabricks/screens/game/game.dart' as game; // avoid name clash
-import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
+import 'package:pandabricks/screens/game/game.dart' as game;
 import 'package:pandabricks/widgets/game/game_palette.dart';
+import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class PiecePreview extends StatelessWidget {
-  const PiecePreview({super.key, required this.next});
+  const PiecePreview({required this.next, super.key});
 
   final game.FallingBlock? next;
 
   @override
   Widget build(BuildContext context) {
-    return GlassMorphismCard(
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: CustomPaint(
-            painter: _PreviewPainter(next),
-            size: Size.infinite,
+    return Semantics(
+      label: next != null ? 'Next piece: ${next!.name}' : 'No next piece',
+      child: GlassMorphismCard(
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: CustomPaint(
+              painter: _PreviewPainter(next),
+              size: Size.infinite,
+            ),
           ),
         ),
       ),
@@ -26,39 +29,45 @@ class PiecePreview extends StatelessWidget {
 }
 
 class _PreviewPainter extends CustomPainter {
-  final game.FallingBlock? next;
 
   _PreviewPainter(this.next);
+  final game.FallingBlock? next;
 
   @override
   void paint(Canvas canvas, Size size) {
     if (next == null) return;
-    final palette = kGamePaletteWithAlpha;
+    const palette = kGamePalette;
     final cells = _cellsFor(next!);
-    
-  // Choose a cell size that fits the preview area while keeping square cells
-  // Calculate bounds of the piece
-    double minX = cells.isEmpty ? 0 : cells.map((c) => c.dx).reduce((a, b) => a < b ? a : b);
-    double maxX = cells.isEmpty ? 0 : cells.map((c) => c.dx).reduce((a, b) => a > b ? a : b);
-    double minY = cells.isEmpty ? 0 : cells.map((c) => c.dy).reduce((a, b) => a < b ? a : b);
-    double maxY = cells.isEmpty ? 0 : cells.map((c) => c.dy).reduce((a, b) => a > b ? a : b);
-  final pieceCols = (maxX - minX + 1);
-  final pieceRows = (maxY - minY + 1);
 
-  // compute cell size to fit within size while leaving some padding
-  final padding = 8.0;
+    var minX = 0.0;
+    var maxX = 0.0;
+    var minY = 0.0;
+    var maxY = 0.0;
+    if (cells.isNotEmpty) {
+      minX = maxX = cells.first.dx;
+      minY = maxY = cells.first.dy;
+      for (final c in cells.skip(1)) {
+        if (c.dx < minX) minX = c.dx;
+        if (c.dx > maxX) maxX = c.dx;
+        if (c.dy < minY) minY = c.dy;
+        if (c.dy > maxY) maxY = c.dy;
+      }
+    }
+  final pieceCols = maxX - minX + 1;
+  final pieceRows = maxY - minY + 1;
+
+  const padding = 8.0;
   final maxCellW = (size.width - padding * 2) / pieceCols;
   final maxCellH = (size.height - padding * 2) / pieceRows;
   final cellSize = maxCellW < maxCellH ? maxCellW : maxCellH;
 
-  double pieceWidth = pieceCols * cellSize;
-  double pieceHeight = pieceRows * cellSize;
-    
-    // Center the piece
-  double offsetX = (size.width - pieceWidth) / 2;
-  double offsetY = (size.height - pieceHeight) / 2;
+  final pieceWidth = pieceCols * cellSize;
+  final pieceHeight = pieceRows * cellSize;
 
-    final colorIndex = game.Game.colorFor[next!]!;
+    final offsetX = (size.width - pieceWidth) / 2;
+  final offsetY = (size.height - pieceHeight) / 2;
+
+    final colorIndex = game.Game.colorFor[next] ?? 0;
     final isSpecial = colorIndex >= kSpecialBlockStartIndex;
 
     for (final c in cells) {
@@ -80,27 +89,30 @@ class _PreviewPainter extends CustomPainter {
         ..color = Colors.black.withValues(alpha: 0.4);
       canvas.drawRRect(rrect, border);
 
-      // Draw emoji overlay for special blocks
       if (isSpecial) {
         final emoji = kSpecialBlockEmojis[colorIndex] ?? '';
         if (emoji.isNotEmpty) {
-          final textStyle = TextStyle(fontSize: cellSize * 0.7);
+          final textStyle = TextStyle(fontSize: cellSize * 0.7, fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji']);
           final tp = TextPainter(text: TextSpan(text: emoji, style: textStyle), textDirection: TextDirection.ltr);
-          tp.layout();
-          final dx = x + (cellSize - tp.width) / 2;
-          final dy = y + (cellSize - tp.height) / 2;
-          tp.paint(canvas, Offset(dx, dy));
-          tp.dispose();
+          try {
+            tp.layout();
+            final dx = x + (cellSize - tp.width) / 2;
+            final dy = y + (cellSize - tp.height) / 2;
+            tp.paint(canvas, Offset(dx, dy));
+          } finally {
+            tp.dispose();
+          }
         }
       }
     }
-  }  @override
+  }
+
+  @override
   bool shouldRepaint(covariant _PreviewPainter oldDelegate) => oldDelegate.next != next;
 
   List<Offset> _cellsFor(game.FallingBlock t) {
-    // minimal preview using Rotation.up shapes
-    final m = game.Game.shapes[t]!;
-    final offsets = m[game.Rotation.up]!;
+    final shape = game.Game.shapes[t]!;
+    final offsets = shape[game.Rotation.up]!;
     return offsets.map((p) => Offset(p.x.toDouble(), p.y.toDouble())).toList();
   }
 }

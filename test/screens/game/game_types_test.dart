@@ -34,11 +34,11 @@ void main() {
     });
 
     test('has special brick types', () {
-      expect(FallingBlock.values, contains(FallingBlock.pandaBrick));
-      expect(FallingBlock.values, contains(FallingBlock.ghostBrick));
-      expect(FallingBlock.values, contains(FallingBlock.catBrick));
-      expect(FallingBlock.values, contains(FallingBlock.tornadoBrick));
-      expect(FallingBlock.values, contains(FallingBlock.bombBrick));
+      expect(FallingBlock.values, contains(FallingBlock.PANDA));
+      expect(FallingBlock.values, contains(FallingBlock.GHOST));
+      expect(FallingBlock.values, contains(FallingBlock.CAT));
+      expect(FallingBlock.values, contains(FallingBlock.TORNADO));
+      expect(FallingBlock.values, contains(FallingBlock.BOMB));
     });
   });
 
@@ -81,12 +81,12 @@ void main() {
       expect(piece.position.x, 5);
       expect(piece.position.y, 10);
       expect(piece.isSpecialBlock, false);
-      expect(piece.lastMoveY, -1);
+      expect(piece.lastMoveY, isNull);
     });
 
     test('creates special block piece', () {
       const piece = ActivePiece(
-        type: FallingBlock.pandaBrick,
+        type: FallingBlock.PANDA,
         rotation: Rotation.up,
         position: PointInt(0, 0),
         isSpecialBlock: true,
@@ -115,7 +115,7 @@ void main() {
 
     test('copyWith preserves special block status', () {
       const original = ActivePiece(
-        type: FallingBlock.ghostBrick,
+        type: FallingBlock.GHOST,
         rotation: Rotation.up,
         position: PointInt(0, 0),
         isSpecialBlock: true,
@@ -139,11 +139,11 @@ void main() {
     });
 
     test('maps all special blocks to colors', () {
-      expect(Game.colorFor[FallingBlock.pandaBrick], 7);
-      expect(Game.colorFor[FallingBlock.ghostBrick], 8);
-      expect(Game.colorFor[FallingBlock.catBrick], 9);
-      expect(Game.colorFor[FallingBlock.tornadoBrick], 10);
-      expect(Game.colorFor[FallingBlock.bombBrick], 11);
+      expect(Game.colorFor[FallingBlock.PANDA], 7);
+      expect(Game.colorFor[FallingBlock.GHOST], 8);
+      expect(Game.colorFor[FallingBlock.CAT], 9);
+      expect(Game.colorFor[FallingBlock.TORNADO], 10);
+      expect(Game.colorFor[FallingBlock.BOMB], 11);
     });
   });
 
@@ -157,12 +157,13 @@ void main() {
     });
 
     test('has correct scoring constants', () {
-      expect(Game.lineClearScores.length, 5);
+      expect(Game.lineClearScores.length, 10);
       expect(Game.lineClearScores[0], 0);
       expect(Game.lineClearScores[1], 100);
       expect(Game.lineClearScores[2], 300);
       expect(Game.lineClearScores[3], 500);
       expect(Game.lineClearScores[4], 800);
+      expect(Game.lineClearScores[9], 3000);
       expect(Game.pandaBrickBonus, 200);
       expect(Game.bombBrickBonus, 500);
     });

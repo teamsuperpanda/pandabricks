@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'audio_provider_test.mocks.dart'; // Generated file
@@ -35,11 +35,6 @@ void main() {
       await audioProvider.loadPreferences(mockSharedPreferences); // Manually load preferences
     });
 
-    test('initialization sets music and sfx enabled to true by default', () {
-      // This test already uses enablePlatformAudio: false, so no change needed here.
-      expect(audioProvider.musicEnabled, isTrue);
-      expect(audioProvider.sfxEnabled, isTrue);
-    });
 
     test('toggleMusic toggles musicEnabled state', () {
       expect(audioProvider.musicEnabled, isTrue);
@@ -89,7 +84,7 @@ void main() {
 
     test('playSfx plays sfx when sfx is enabled', () async {
       await audioProvider.playSfx(GameSfx.rowClear);
-      verify(mockSfxPlayer.play(argThat(isA<AssetSource>().having((p0) => p0.path, 'path', 'audio/sfx/row_clear.mp3')), volume: 1.0)).called(1);
+      verify(mockSfxPlayer.play(argThat(isA<AssetSource>().having((p0) => p0.path, 'path', 'audio/sfx/row_clear.mp3')), volume: 1)).called(1);
     });
 
     test('playSfx does not play when sfx is disabled', () async {

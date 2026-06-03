@@ -6,7 +6,7 @@
   "timeChallenge": "समय चुनौती",
   "timeChallengeDescription": "घड़ी को हराएं। तेजी से जाओ!",
   "blitzMode": "ब्लिट्ज मोड",
-    "blitzModeDescription": "विशेष ईंटों के साथ अराजकता",
+  "blitzModeDescription": "विशेष ईंटों के साथ अराजकता",
   "customMode": "कस्टम मोड",
   "customModeDescription": "अपने खुद के खेल नियम कॉन्फ़िगर करें",
   "audio": "ऑडियो",
@@ -58,5 +58,6 @@
   "specialBricksToggle": "विशेष ईंटें",
   "scoreMultiplier": "स्कोर गुणक",
   "startGame": "खेल शुरू करें",
-  "system": "सिस्टम"
+  "system": "सिस्टम",
+  "nativeName": "हिन्दी"
 }

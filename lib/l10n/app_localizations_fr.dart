@@ -54,8 +54,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pandaBrick => 'Brique Panda';
 
   @override
-  String get pandaBrickDescription =>
-      'Efface toute la colonne quand elle atterrit!';
+  String get pandaBrickDescription => 'Efface toute la colonne quand elle atterrit!';
 
   @override
   String get ghostBrick => 'Brique Fantôme';
@@ -67,8 +66,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get catBrick => 'Brique Chat';
 
   @override
-  String get catBrickDescription =>
-      'Se déplace de manière imprévisible en tombant!';
+  String get catBrickDescription => 'Se déplace de manière imprévisible en tombant!';
 
   @override
   String get tornadoBrick => 'Brique Tornade';
@@ -80,8 +78,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get bombBrick => 'Brique Bombe';
 
   @override
-  String get bombBrickDescription =>
-      'Efface toute la rangée et la colonne lorsqu\'elle est placée!';
+  String get bombBrickDescription => 'Efface toute la rangée et la colonne lorsqu\'elle est placée!';
 
   @override
   String get close => 'Fermer';
@@ -126,8 +123,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get returnToMainMenu => 'Retourner au menu principal?';
 
   @override
-  String get progressWillBeLost =>
-      'Votre progression de jeu actuelle sera perdue.';
+  String get progressWillBeLost => 'Votre progression de jeu actuelle sera perdue.';
 
   @override
   String get cancel => 'Annuler';
@@ -142,8 +138,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get restartGame => 'Recommencer le jeu?';
 
   @override
-  String get areYouSureYouWantToRestart =>
-      'Êtes-vous sûr de vouloir recommencer?\nVotre progression actuelle sera perdue.';
+  String get areYouSureYouWantToRestart => 'Êtes-vous sûr de vouloir recommencer?\nVotre progression actuelle sera perdue.';
 
   @override
   String get music => 'Musique';
@@ -192,4 +187,22 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get system => 'Système';
+
+  @override
+  String get nativeName => 'Français';
+
+  @override
+  String get rotatePiece => 'Rotate piece';
+
+  @override
+  String get softDrop => 'Soft drop';
+
+  @override
+  String get hardDrop => 'Hard drop';
+
+  @override
+  String get moveLeft => 'Move left';
+
+  @override
+  String get moveRight => 'Move right';
 }

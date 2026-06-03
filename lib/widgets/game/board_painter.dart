@@ -1,152 +1,172 @@
 import 'package:flutter/material.dart';
+import 'package:pandabricks/models/game_types.dart';
 import 'package:pandabricks/widgets/game/game_palette.dart';
 
 class BoardPainter extends CustomPainter {
-  final int width;
-  final int height;
-  final Iterable<List<int>> cells; // [x,y,colorIndex] negative colorIndex => ghost
-  final Iterable<List<int>> effects; // [x,y,type]
-  final List<Color> palette;
-  final int version; // incremented on each game state change
 
   BoardPainter({
     required this.width,
     required this.height,
     required this.cells,
-    this.effects = const [],
-    required this.palette,
+    required this.palette, this.effects = const [],
     this.version = 0,
-  });
+  }) : _cachedShaderGradient = _buildShaderGradient(palette);
+  final int width;
+  final int height;
+  final Iterable<CellRender> cells;
+  final Iterable<EffectRender> effects;
+  final List<Color> palette;
+  final int version;
+
+  // Immortal cache — bounded by ~5 unique emoji+size combos in practice
+  static final Map<String, TextPainter> _emojiPainters = {};
+
+  final Map<int, LinearGradient> _cachedShaderGradient;
+
+  static Map<int, LinearGradient> _buildShaderGradient(List<Color> palette) {
+    final cache = <int, LinearGradient>{};
+    for (var i = 0; i < palette.length; i++) {
+      cache[i] = LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          palette[i].withValues(alpha: 1),
+          palette[i].withValues(alpha: 0.6),
+        ],
+      );
+    }
+    return cache;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
   final cellW = size.width / width;
   final cellH = size.height / height;
 
-  // Force square cells: pick the smaller of the two and center the board
   final cellSize = cellW < cellH ? cellW : cellH;
   final boardWidth = cellSize * width;
   final boardHeight = cellSize * height;
   final offsetX = (size.width - boardWidth) / 2.0;
   final offsetY = (size.height - boardHeight) / 2.0;
 
-    // Reusable Paint object to avoid per-cell allocation
     final paint = Paint();
 
-    // Background grid subtle glow
     final gridPaint = Paint()
-      ..color = Colors.white.withAlpha(15)
+      ..color = Colors.white.withValues(alpha: 15/255.0)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
     final gridGlow = Paint()
-      ..color = Colors.cyanAccent.withAlpha(10)
+      ..color = Colors.cyanAccent.withValues(alpha: 10/255.0)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
-      
-    for (int x = 0; x <= width; x++) {
+
+    for (var x = 0; x <= width; x++) {
       final dx = offsetX + x * cellSize;
       canvas.drawLine(Offset(dx, offsetY), Offset(dx, offsetY + boardHeight), gridGlow);
       canvas.drawLine(Offset(dx, offsetY), Offset(dx, offsetY + boardHeight), gridPaint);
     }
-    for (int y = 0; y <= height; y++) {
+    for (var y = 0; y <= height; y++) {
       final dy = offsetY + y * cellSize;
       canvas.drawLine(Offset(offsetX, dy), Offset(offsetX + boardWidth, dy), gridGlow);
       canvas.drawLine(Offset(offsetX, dy), Offset(offsetX + boardWidth, dy), gridPaint);
     }
 
-    // Draw cells
-    for (final triple in cells) {
-      final x = triple[0];
-      final y = triple[1];
-      final colorIndex = triple[2];
-  final rect = Rect.fromLTWH(offsetX + x * cellSize, offsetY + y * cellSize, cellSize, cellSize).deflate(1.5);
-      final isGhost = colorIndex < 0;
-      final idx = isGhost ? (-colorIndex - 1) : colorIndex;
+    final filledCells = <CellRender>[];
+    final ghostCells = <CellRender>[];
+    for (final c in cells) {
+      if (!c.isGhost) {
+        filledCells.add(c);
+      } else {
+        ghostCells.add(c);
+      }
+    }
+
+    for (final cell in filledCells) {
+      final x = cell.x;
+      final y = cell.y;
+      final colorIndex = cell.colorIndex;
+    final rect = Rect.fromLTWH(offsetX + x * cellSize, offsetY + y * cellSize, cellSize, cellSize).deflate(1.5);
+      final idx = colorIndex;
       final base = palette[idx % palette.length];
-      final color = isGhost ? base.withAlpha((255 * 0.15).toInt()) : base;
 
       final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(6));
-      if (isGhost) {
-        paint
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2
-          ..shader = null
-          ..maskFilter = null;
-        canvas.drawRRect(rrect, paint);
-      } else {
-        // Outer glowing shadow
-        paint
-          ..color = color.withAlpha((255 * 0.4).toInt())
-          ..style = PaintingStyle.fill
-          ..shader = null
-          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-        canvas.drawRRect(rrect, paint);
 
-        // Fill with gradient glow
-        paint
-          ..maskFilter = null
-          ..shader = LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              color.withAlpha((255 * 1.0).toInt()),
-              color.withAlpha((255 * 0.6).toInt()),
-            ],
-          ).createShader(rect);
-        canvas.drawRRect(rrect, paint);
+      paint
+        ..color = base.withValues(alpha: 0.4)
+        ..style = PaintingStyle.fill
+        ..shader = null
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+      canvas.drawRRect(rrect, paint);
 
-        // Inner highlight
-        final inner = rrect.deflate(2);
-        paint.shader = LinearGradient(
-          colors: [Colors.white.withAlpha((255 * 0.5).toInt()), Colors.transparent],
+      paint
+        ..maskFilter = null
+        ..shader = (_cachedShaderGradient[idx % palette.length] ?? LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-        ).createShader(inner.outerRect);
-        canvas.drawRRect(inner, paint);
-        paint.shader = null;
-      }
+          colors: [base.withValues(alpha: 1), base.withValues(alpha: 0.6)],
+        )).createShader(rect);
+      canvas.drawRRect(rrect, paint);
 
-      // Border and edge highlight
-      if (!isGhost) {
-        paint
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.0
-          ..color = Colors.white.withAlpha((255 * 0.4).toInt());
-        canvas.drawRRect(rrect, paint);
-      }
+      final inner = rrect.deflate(2);
+      paint.shader = const LinearGradient(
+        colors: [Colors.white54, Colors.transparent],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(inner.outerRect);
+      canvas.drawRRect(inner, paint);
+      paint.shader = null;
 
-      // Draw emoji overlay for special blocks (we consider indices >= 7 special)
-      if (!isGhost && idx >= kSpecialBlockStartIndex) {
+      paint
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.0
+        ..color = Colors.white.withValues(alpha: 0.4);
+      canvas.drawRRect(rrect, paint);
+
+      if (idx >= kSpecialBlockStartIndex) {
         final emoji = kSpecialBlockEmojis[idx] ?? '';
         if (emoji.isNotEmpty) {
-          final textStyle = TextStyle(fontSize: rect.height * 0.6);
-          final tp = TextPainter(text: TextSpan(text: emoji, style: textStyle), textDirection: TextDirection.ltr);
-          tp.layout();
+          final cacheKey = '$emoji-${rect.height}';
+          var tp = _emojiPainters[cacheKey];
+          if (tp == null) {
+            final textStyle = TextStyle(fontSize: rect.height * 0.6, fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji']);
+            tp = TextPainter(text: TextSpan(text: emoji, style: textStyle), textDirection: TextDirection.ltr);
+            tp.layout();
+            _emojiPainters[cacheKey] = tp;
+          }
           final dx = rect.left + (rect.width - tp.width) / 2;
           final dy = rect.top + (rect.height - tp.height) / 2;
           tp.paint(canvas, Offset(dx, dy));
-          tp.dispose();
         }
       }
     }
 
-    // Draw effects (sparkle/dissolve animation)
+    for (final cell in ghostCells) {
+      final x = cell.x;
+      final y = cell.y;
+    final rect = Rect.fromLTWH(offsetX + x * cellSize, offsetY + y * cellSize, cellSize, cellSize).deflate(1.5);
+      final idx = cell.colorIndex;
+      final base = palette[idx % palette.length];
+      final color = base.withValues(alpha: 0.15);
+
+      final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(6));
+      paint
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2
+        ..shader = null
+        ..maskFilter = null;
+      canvas.drawRRect(rrect, paint);
+    }
+
     for (final eff in effects) {
-      final ex = eff[0];
-      final ey = eff[1];
-      final type = eff.length > 2 ? eff[2] : 0;
-      final alpha = eff.length > 3 ? (eff[3]).clamp(0, 255) : 120;
-      
-      // Create sparkle/particle effect instead of solid flash
-      final t = 1.0 - (alpha / 160.0); // Progress from 0 to 1
-      final sparkleColor = (type == 0 ? Colors.cyanAccent : Colors.deepOrangeAccent);
-      
-      if (type == 0) {
-        _drawSparkles(canvas, offsetX + (ex + 0.5) * cellSize, offsetY, true, cellSize, boardHeight, sparkleColor, t, alpha, ex);
+      final t = 1.0 - (eff.alpha / 160.0);
+      final sparkleColor = (eff.type == EffectType.column ? Colors.cyanAccent : Colors.deepOrangeAccent);
+
+      if (eff.type == EffectType.column) {
+        _drawSparkles(canvas, offsetX + (eff.x + 0.5) * cellSize, offsetY, true, cellSize, boardHeight, sparkleColor, t, eff.alpha, eff.x);
       } else {
-        _drawSparkles(canvas, offsetX, offsetY + (ey + 0.5) * cellSize, false, cellSize, boardWidth, sparkleColor, t, alpha, ey);
+        _drawSparkles(canvas, offsetX, offsetY + (eff.y + 0.5) * cellSize, false, cellSize, boardWidth, sparkleColor, t, eff.alpha, eff.y);
       }
     }
   }
@@ -157,7 +177,7 @@ class BoardPainter extends CustomPainter {
     final glowPaint = Paint();
     final corePaint = Paint();
     final whitePaint = Paint();
-    for (int i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++) {
       final seed = seed0 * (isColumn ? 31 : 37) + i * (isColumn ? 17 : 19);
       final base = isColumn
           ? Offset(fixedX, fixedY + (i / count) * boardExtent)
@@ -169,13 +189,11 @@ class BoardPainter extends CustomPainter {
       final r = (4.0 + (seed % 6)) * (1.0 - t * 0.8);
       final a = (alpha * (1.0 - t * t)).toInt().clamp(0, 255);
       if (r > 0.5) {
-        // Sparkle glow
-        glowPaint.color = sparkleColor.withAlpha((a * 0.4).toInt());
+        glowPaint.color = sparkleColor.withValues(alpha: (a * 0.4 / 255).clamp(0.0, 1.0));
         canvas.drawCircle(Offset(sx, sy), r * 2, glowPaint);
-        // Sparkle core
-        corePaint.color = sparkleColor.withAlpha(a);
+        corePaint.color = sparkleColor.withValues(alpha: a / 255.0);
         canvas.drawCircle(Offset(sx, sy), r, corePaint);
-        whitePaint.color = Colors.white.withAlpha((a * 0.8).toInt().clamp(0, 255));
+        whitePaint.color = Colors.white.withValues(alpha: ((a * 0.8) / 255.0).clamp(0.0, 1.0));
         canvas.drawCircle(Offset(sx, sy), r * 0.5, whitePaint);
       }
     }
@@ -185,6 +203,7 @@ class BoardPainter extends CustomPainter {
   bool shouldRepaint(covariant BoardPainter oldDelegate) {
     return oldDelegate.version != version ||
         oldDelegate.width != width ||
-        oldDelegate.height != height;
+        oldDelegate.height != height ||
+        oldDelegate.palette != palette;
   }
 }

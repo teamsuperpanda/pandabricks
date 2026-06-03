@@ -187,4 +187,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get system => '系统';
+
+  @override
+  String get nativeName => '中文';
+
+  @override
+  String get rotatePiece => 'Rotate piece';
+
+  @override
+  String get softDrop => 'Soft drop';
+
+  @override
+  String get hardDrop => 'Hard drop';
+
+  @override
+  String get moveLeft => 'Move left';
+
+  @override
+  String get moveRight => 'Move right';
 }

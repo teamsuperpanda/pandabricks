@@ -58,5 +58,6 @@
   "specialBricksToggle": "الطوب الخاص",
   "scoreMultiplier": "مضاعف النقاط",
   "startGame": "ابدأ اللعبة",
-  "system": "النظام"
+  "system": "النظام",
+  "nativeName": "العربية"
 }

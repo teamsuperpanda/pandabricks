@@ -6,7 +6,7 @@
   "timeChallenge": "ٹائم چیلنج",
   "timeChallengeDescription": "گھڑی کو ہراؤ۔ تیز چلو!",
   "blitzMode": "بلٹز موڈ",
-    "blitzModeDescription": "خصوصی اینٹوں کے ساتھ افراتفری",
+  "blitzModeDescription": "خصوصی اینٹوں کے ساتھ افراتفری",
   "customMode": "کسٹم موڈ",
   "customModeDescription": "اپنے گیم کے قواعد خود ترتیب دیں",
   "audio": "آڈیو",
@@ -58,5 +58,6 @@
   "specialBricksToggle": "خصوصی اینٹیں",
   "scoreMultiplier": "اسکور ضرب",
   "startGame": "گیم شروع کریں",
-  "system": "سسٹم"
+  "system": "سسٹم",
+  "nativeName": "اردو"
 }

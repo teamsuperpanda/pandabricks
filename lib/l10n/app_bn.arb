@@ -6,7 +6,7 @@
   "timeChallenge": "সময় চ্যালেঞ্জ",
   "timeChallengeDescription": "ঘড়িকে হারান। দ্রুত যাও!",
   "blitzMode": "ব্লিট্জ মোড",
-    "blitzModeDescription": "বিশেষ ইটের সঙ্গে বিশৃঙ্খলা",
+  "blitzModeDescription": "বিশেষ ইটের সঙ্গে বিশৃঙ্খলা",
   "customMode": "কাস্টম মোড",
   "customModeDescription": "আপনার নিজের গেমের নিয়ম কনফিগার করুন",
   "audio": "অডিও",
@@ -58,5 +58,6 @@
   "specialBricksToggle": "বিশেষ ইট",
   "scoreMultiplier": "স্কোর গুণক",
   "startGame": "গেম শুরু করুন",
-  "system": "সিস্টেম"
+  "system": "সিস্টেম",
+  "nativeName": "বাংলা"
 }

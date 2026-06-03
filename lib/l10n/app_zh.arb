@@ -58,5 +58,6 @@
   "specialBricksToggle": "特殊砖块",
   "scoreMultiplier": "得分倍率",
   "startGame": "开始游戏",
-  "system": "系统"
+  "system": "系统",
+  "nativeName": "中文"
 }

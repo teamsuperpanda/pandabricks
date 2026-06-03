@@ -14,13 +14,13 @@ void main() {
       final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
 
       // Fill column 3 with dummy values
-      for (int y = 0; y < game.height; y++) {
+      for (var y = 0; y < game.height; y++) {
         game.board[y][3] = 2;
       }
 
       // Spawn a panda at column 3 on the bottom so it locks immediately
       game.current = ActivePiece(
-        type: FallingBlock.pandaBrick,
+        type: FallingBlock.PANDA,
         rotation: Rotation.up,
         position: PointInt(3, game.height - 1),
         isSpecialBlock: true,
@@ -29,31 +29,31 @@ void main() {
       game.hardDrop();
 
       // Column should be cleared
-      for (int y = 0; y < game.height; y++) {
+      for (var y = 0; y < game.height; y++) {
         expect(game.board[y][3], isNull);
       }
 
-      // Effects should contain column (type == 0) entries for x == 3
+      // Effects should contain column entries for x == 3
       final effects = game.currentEffects().toList();
-      expect(effects.where((e) => e[2] == 0 && e[0] == 3), isNotEmpty);
+      expect(effects.where((e) => e.type == EffectType.column && e.x == 3), isNotEmpty);
     });
 
     test('Bomb clears its row and column and triggers both effects', () {
       final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
 
-      final targetX = 4;
+      const targetX = 4;
       final targetY = game.height - 1;
 
       // Fill the target row and column with dummy values
-      for (int x = 0; x < game.width; x++) {
+      for (var x = 0; x < game.width; x++) {
         game.board[targetY][x] = 3;
       }
-      for (int y = 0; y < game.height; y++) {
+      for (var y = 0; y < game.height; y++) {
         game.board[y][targetX] = 3;
       }
 
       game.current = ActivePiece(
-        type: FallingBlock.bombBrick,
+        type: FallingBlock.BOMB,
         rotation: Rotation.up,
         position: PointInt(targetX, targetY),
         isSpecialBlock: true,
@@ -62,27 +62,27 @@ void main() {
       game.hardDrop();
 
       // Row should be cleared
-      for (int x = 0; x < game.width; x++) {
+      for (var x = 0; x < game.width; x++) {
         expect(game.board[targetY][x], isNull);
       }
 
       // Column should be cleared
-      for (int y = 0; y < game.height; y++) {
+      for (var y = 0; y < game.height; y++) {
         expect(game.board[y][targetX], isNull);
       }
 
       final effects = game.currentEffects().toList();
       // Look for at least one column effect for targetX and one row effect for targetY
-      expect(effects.where((e) => e[2] == 0 && e[0] == targetX), isNotEmpty);
-      expect(effects.where((e) => e[2] == 1 && e[1] == targetY), isNotEmpty);
+      expect(effects.where((e) => e.type == EffectType.column && e.x == targetX), isNotEmpty);
+      expect(effects.where((e) => e.type == EffectType.row && e.y == targetY), isNotEmpty);
     });
 
     test('Ghost brick reverses left/right controls', () {
       final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
 
       // Place ghost in middle
-      game.current = ActivePiece(
-        type: FallingBlock.ghostBrick,
+      game.current = const ActivePiece(
+        type: FallingBlock.GHOST,
         rotation: Rotation.up,
         position: PointInt(5, 5),
         isSpecialBlock: true,
@@ -102,12 +102,11 @@ void main() {
     test('Cat brick updates lastMoveY on tick (autonomous movement bookkeeping)', () {
       final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
 
-      game.current = ActivePiece(
-        type: FallingBlock.catBrick,
+      game.current = const ActivePiece(
+        type: FallingBlock.CAT,
         rotation: Rotation.up,
         position: PointInt(5, 1),
         isSpecialBlock: true,
-        lastMoveY: -1,
       );
 
       game.tick();
@@ -119,12 +118,11 @@ void main() {
     test('Tornado auto-rotates on tick', () {
       final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
 
-      game.current = ActivePiece(
-        type: FallingBlock.tornadoBrick,
+      game.current = const ActivePiece(
+        type: FallingBlock.TORNADO,
         rotation: Rotation.up,
         position: PointInt(5, 1),
         isSpecialBlock: true,
-        lastMoveY: -1,
       );
 
       game.tick();
@@ -134,12 +132,12 @@ void main() {
     });
 
     test('Regular line clear triggers sparkle row effects', () {
-      final game = Game(audioProvider: mockAudio, gameMode: GameMode.classic);
+      final game = Game(audioProvider: mockAudio);
 
       final targetY = game.height - 1;
 
       // Fill bottom row completely to force a line clear
-      for (int x = 0; x < game.width; x++) {
+      for (var x = 0; x < game.width; x++) {
         game.board[targetY][x] = 4;
       }
 
@@ -153,7 +151,6 @@ void main() {
         type: FallingBlock.O,
         rotation: Rotation.up,
         position: PointInt(1, targetY - 2),
-        isSpecialBlock: false,
       );
 
       // Lock the piece to trigger line clearing
@@ -166,7 +163,7 @@ void main() {
 
       // Effects should contain row clear sparkles
       final effects = game.currentEffects().toList();
-      expect(effects.where((e) => e[2] == 1), isNotEmpty, 
+      expect(effects.where((e) => e.type == EffectType.row), isNotEmpty, 
         reason: 'Should have row clear effects after line clear');
     });
   });

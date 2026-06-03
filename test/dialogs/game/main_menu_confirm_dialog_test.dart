@@ -49,8 +49,8 @@ void main() {
 
     testWidgets('should call onCancel when cancel button is tapped',
         (WidgetTester tester) async {
-      bool confirmCalled = false;
-      bool cancelCalled = false;
+      var confirmCalled = false;
+      var cancelCalled = false;
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -79,8 +79,8 @@ void main() {
 
     testWidgets('should call onConfirm when confirm button is tapped',
         (WidgetTester tester) async {
-      bool confirmCalled = false;
-      bool cancelCalled = false;
+      var confirmCalled = false;
+      var cancelCalled = false;
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(

@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/models/game_settings.dart';
-import 'package:pandabricks/screens/game/game.dart';
 
 void main() {
   group('GameSettings', () {
@@ -14,7 +13,7 @@ void main() {
 
       test('creates settings with custom config', () {
         const config = CustomGameConfig(boardWidth: 8);
-        final settings = GameSettings(mode: GameMode.custom, customConfig: config);
+        const settings = GameSettings(mode: GameMode.custom, customConfig: config);
         
         expect(settings.mode, GameMode.custom);
         expect(settings.customConfig, config);
@@ -144,7 +143,7 @@ void main() {
     group('Type safety', () {
       test('can be used as route arguments', () {
         const settings = GameSettings.timeChallenge();
-        final arguments = settings; // Would be passed to Navigator
+        const arguments = settings; // Would be passed to Navigator
         
         expect(arguments, isA<GameSettings>());
         expect(arguments.mode, GameMode.timeChallenge);
@@ -152,7 +151,7 @@ void main() {
 
       test('provides compile-time safety for game mode', () {
         // This test ensures type safety - if it compiles, it's safe
-        const GameSettings settings = GameSettings.blitz();
+        const settings = GameSettings.blitz();
         
         expect(settings.mode, isA<GameMode>());
       });
@@ -176,7 +175,7 @@ void main() {
         const config = CustomGameConfig(
           timeLimit: Duration(minutes: 3),
           startingLevel: 5,
-          speedMultiplier: 2.0,
+          speedMultiplier: 2,
           scoreMultiplier: 1.5,
           enableSpecialBricks: false,
           boardWidth: 8,

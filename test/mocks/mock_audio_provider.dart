@@ -78,7 +78,7 @@ class MockAudioProvider extends AudioProvider {
   }
 
   @override
-  Future<void> playSfx(GameSfx effect, {double volume = 1.0}) async {
+  Future<void> playSfx(GameSfx effect) async {
     if (!sfxEnabled) return;
     _lastSfx = effect;
   }

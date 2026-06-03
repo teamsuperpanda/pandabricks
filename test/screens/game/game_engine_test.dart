@@ -81,8 +81,8 @@ void main() {
         expect(game.board[0].length, equals(10)); // width
 
         // All cells should be null (empty)
-        for (int y = 0; y < game.height; y++) {
-          for (int x = 0; x < game.width; x++) {
+        for (var y = 0; y < game.height; y++) {
+          for (var x = 0; x < game.width; x++) {
             expect(game.board[y][x], isNull);
           }
         }
@@ -169,7 +169,7 @@ void main() {
         final game = Game(audioProvider: mockAudio);
 
         // Move piece close to wall
-        for (int i = 0; i < 3; i++) {
+        for (var i = 0; i < 3; i++) {
           game.moveRight();
         }
 
@@ -192,9 +192,9 @@ void main() {
         expect(game.current!.position.y, greaterThanOrEqualTo(initialY));
 
         // After hard drop, piece should be locked and board should have blocks
-        bool hasBlocks = false;
-        for (int y = 0; y < game.height; y++) {
-          for (int x = 0; x < game.width; x++) {
+        var hasBlocks = false;
+        for (var y = 0; y < game.height; y++) {
+          for (var x = 0; x < game.width; x++) {
             if (game.board[y][x] != null) {
               hasBlocks = true;
               break;
@@ -221,7 +221,7 @@ void main() {
         final game = Game(audioProvider: mockAudio);
 
         // Fill bottom row
-        for (int x = 0; x < game.width; x++) {
+        for (var x = 0; x < game.width; x++) {
           game.board[game.height - 1][x] = 1;
         }
 
@@ -242,8 +242,8 @@ void main() {
         final game = Game(audioProvider: mockAudio);
 
         // Fill bottom two rows
-        for (int y = game.height - 2; y < game.height; y++) {
-          for (int x = 0; x < game.width; x++) {
+        for (var y = game.height - 2; y < game.height; y++) {
+          for (var x = 0; x < game.width; x++) {
             game.board[y][x] = 1;
           }
         }
@@ -265,8 +265,8 @@ void main() {
         final game = Game(audioProvider: mockAudio);
 
         // Fill bottom four rows
-        for (int y = game.height - 4; y < game.height; y++) {
-          for (int x = 0; x < game.width; x++) {
+        for (var y = game.height - 4; y < game.height; y++) {
+          for (var x = 0; x < game.width; x++) {
             game.board[y][x] = 1;
           }
         }
@@ -400,8 +400,8 @@ void main() {
         expect(game.isPaused, isFalse);
 
         // Board should be cleared
-        for (int y = 0; y < game.height; y++) {
-          for (int x = 0; x < game.width; x++) {
+        for (var y = 0; y < game.height; y++) {
+          for (var x = 0; x < game.width; x++) {
             expect(game.board[y][x], isNull);
           }
         }
@@ -444,7 +444,7 @@ void main() {
 
     group('Bag System', () {
       test('bag contains regular pieces in classic mode', () {
-        final game = Game(audioProvider: mockAudio, gameMode: GameMode.classic);
+        final game = Game(audioProvider: mockAudio);
 
         // Check that bag contains only regular pieces
         // This is tested indirectly through the spawning logic
@@ -457,8 +457,8 @@ void main() {
 
         // In blitz mode, special pieces should appear
         // This test may be flaky due to randomness, but statistically should pass
-        bool foundSpecial = false;
-        for (int i = 0; i < 50 && !foundSpecial; i++) {
+        var foundSpecial = false;
+        for (var i = 0; i < 50 && !foundSpecial; i++) {
           game.reset();
           if (FallingBlock.values.sublist(7).contains(game.next)) {
             foundSpecial = true;
@@ -489,11 +489,11 @@ void main() {
       });
 
       test('special blocks have higher color indices', () {
-        expect(Game.colorFor[FallingBlock.pandaBrick], equals(7));
-        expect(Game.colorFor[FallingBlock.ghostBrick], equals(8));
-        expect(Game.colorFor[FallingBlock.catBrick], equals(9));
-        expect(Game.colorFor[FallingBlock.tornadoBrick], equals(10));
-        expect(Game.colorFor[FallingBlock.bombBrick], equals(11));
+        expect(Game.colorFor[FallingBlock.PANDA], equals(7));
+        expect(Game.colorFor[FallingBlock.GHOST], equals(8));
+        expect(Game.colorFor[FallingBlock.CAT], equals(9));
+        expect(Game.colorFor[FallingBlock.TORNADO], equals(10));
+        expect(Game.colorFor[FallingBlock.BOMB], equals(11));
       });
     });
 
@@ -597,11 +597,11 @@ void main() {
 
         // Place a distinctive marker in row height-2 (above the row we'll clear)
         const markerColor = 42;
-        for (int x = 0; x < game.width; x++) {
+        for (var x = 0; x < game.width; x++) {
           game.board[game.height - 2][x] = markerColor;
         }
         // Fill the bottom row completely except one cell, then fill it
-        for (int x = 0; x < game.width; x++) {
+        for (var x = 0; x < game.width; x++) {
           game.board[game.height - 1][x] = 1;
         }
 

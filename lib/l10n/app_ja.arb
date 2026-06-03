@@ -58,5 +58,6 @@
   "specialBricksToggle": "特殊ブロック",
   "scoreMultiplier": "スコア倍率",
   "startGame": "ゲーム開始",
-  "system": "システム"
+  "system": "システム",
+  "nativeName": "日本語"
 }

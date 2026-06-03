@@ -33,7 +33,7 @@ void main() {
     });
 
     test('should notify listeners when locale changes', () {
-      bool notified = false;
+      var notified = false;
       localeProvider.addListener(() {
         notified = true;
       });
@@ -46,7 +46,7 @@ void main() {
       // First set a locale to establish a baseline
       localeProvider.setLocale(const Locale('de', 'DE'));
 
-      bool notified = false;
+      var notified = false;
       localeProvider.addListener(() {
         notified = true;
       });
@@ -59,7 +59,7 @@ void main() {
       const locale = Locale('ja', 'JP');
       localeProvider.setLocale(locale);
 
-      bool notified = false;
+      var notified = false;
       localeProvider.addListener(() {
         notified = true;
       });
@@ -92,7 +92,7 @@ void main() {
     });
 
     test('should support multiple listeners', () {
-      int notificationCount = 0;
+      var notificationCount = 0;
       void listener() => notificationCount++;
 
       localeProvider.addListener(listener);
@@ -113,7 +113,7 @@ void main() {
         Locale('it'),
       ];
 
-      int notificationCount = 0;
+      var notificationCount = 0;
       localeProvider.addListener(() => notificationCount++);
 
       for (final locale in locales) {
@@ -125,9 +125,8 @@ void main() {
     });
 
     test('should properly dispose without errors', () {
-      final provider = LocaleProvider();
-      // Should not throw any errors
-      expect(() => provider.dispose(), returnsNormally);
+      final provider = LocaleProvider(enablePersistence: false);
+      expect(provider.dispose, returnsNormally);
     });
 
     group('Supported locales from app', () {

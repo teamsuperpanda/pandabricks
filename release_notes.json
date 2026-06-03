@@ -1,82 +1,82 @@
 [
   {
     "language": "en-US",
-    "text": "What's new in version 2.2.0:\n• Updated User Interface for a better experience\n• Improved app and game engine performance\n• Cleaned up codebase and removed redundant code\n• Increased test coverage for better stability\nEnjoy!"
+    "text": "What's new in version 2.2.1:\n• Fixed a crash when clearing multiple lines with special blocks\n• Fixed bomb explosion sound effect not playing\n• Fixed score calculation for hard drops with custom multipliers\n• Improved game stability and performance\n• Various UI and accessibility fixes\nEnjoy!"
   },
   {
     "language": "en-GB",
-    "text": "What's new in version 2.2.0:\n• Updated User Interface for a better experience\n• Improved app and game engine performance\n• Cleaned up codebase and removed redundant code\n• Increased test coverage for better stability\nEnjoy!"
+    "text": "What's new in version 2.2.1:\n• Fixed a crash when clearing multiple lines with special blocks\n• Fixed bomb explosion sound effect not playing\n• Fixed score calculation for hard drops with custom multipliers\n• Improved game stability and performance\n• Various UI and accessibility fixes\nEnjoy!"
   },
   {
     "language": "es-ES",
-    "text": "Novedades en la versión 2.2.0:\n• Interfaz de usuario actualizada para una mejor experiencia\n• Rendimiento mejorado de la aplicación y el motor de juego\n• Código base limpio y eliminación de código redundante\n• Mayor cobertura de pruebas para una mejor estabilidad\n¡Disfrutar!"
+    "text": "Novedades en la versión 2.2.1:\n• Corregido un fallo al limpiar varias líneas con bloques especiales\n• Corregido el efecto de sonido de explosión de bomba que no se reproducía\n• Corregido el cálculo de puntuación para caídas rápidas con multiplicadores personalizados\n• Mejorada la estabilidad y el rendimiento del juego\n• Varias correcciones de UI y accesibilidad\n¡Disfruta!"
   },
   {
     "language": "fr-FR",
-    "text": "Nouveautés de la version 2.2.0 :\n• Interface utilisateur mise à jour pour une meilleure expérience\n• Amélioration des performances de l'application et du moteur de jeu\n• Nettoyage de la base de code et suppression du code redondant\n• Couverture de tests accrue pour une meilleure stabilité\nProfitez-en !"
+    "text": "Nouveautés de la version 2.2.1 :\n• Correction d'un crash lors de la suppression de plusieurs lignes avec des blocs spéciaux\n• Correction de l'effet sonore d'explosion de bombe qui ne jouait pas\n• Correction du calcul du score pour les chutes rapides avec multiplicateurs personnalisés\n• Amélioration de la stabilité et des performances du jeu\n• Divers correctifs d'interface et d'accessibilité\nProfitez-en !"
   },
   {
     "language": "de-DE",
-    "text": "Neu in Version 2.2.0:\n• Aktualisierte Benutzeroberfläche für ein besseres Erlebnis\n• Verbesserte App- und Game-Engine-Leistung\n• Bereinigte Codebasis und Entfernung von redundantem Code\n• Erhöhte Testabdeckung für bessere Stabilität\nViel Spaß!"
+    "text": "Neu in Version 2.2.1:\n• Absturz behoben beim Löschen mehrerer Zeilen mit Spezialblöcken\n• Bombenexplosions-Soundeffekt repariert, der nicht abgespielt wurde\n• Punkteberechnung für Schnellablagen mit benutzerdefinierten Multiplikatoren korrigiert\n• Verbesserte Spielstabilität und Leistung\n• Verschiedene UI- und Barrierefreiheitskorrekturen\nViel Spaß!"
   },
   {
     "language": "pt-BR",
-    "text": "Novidades na versão 2.2.0:\n• Interface de usuário atualizada para uma melhor experiência\n• Desempenho aprimorado do aplicativo e do motor de jogo\n• Base de código limpa e remoção de código redundante\n• Maior cobertura de testes para melhor estabilidade\nAproveite!"
+    "text": "Novidades na versão 2.2.1:\n• Corrigido um travamento ao limpar várias linhas com blocos especiais\n• Corrigido o efeito sonoro de explosão de bomba que não tocava\n• Corrigido o cálculo de pontuação para quedas rápidas com multiplicadores personalizados\n• Estabilidade e desempenho do jogo melhorados\n• Várias correções de UI e acessibilidade\nAproveite!"
   },
   {
     "language": "it-IT",
-    "text": "Novità della versione 2.2.0:\n• Interfaccia utente aggiornata per un'esperienza migliore\n• Prestazioni dell'app e del motore di gioco migliorate\n• Base di codice ripulita e rimozione del codice ridondante\n• Maggiore copertura dei test per una migliore stabilità\nBuon divertimento!"
+    "text": "Novità della versione 2.2.1:\n• Risolto un crash durante la cancellazione di più righe con blocchi speciali\n• Risolto l'effetto sonoro dell'esplosione della bomba che non veniva riprodotto\n• Corretto il calcolo del punteggio per i drop rapidi con moltiplicatori personalizzati\n• Migliorata la stabilità e le prestazioni del gioco\n• Vari fix dell'interfaccia e dell'accessibilità\nBuon divertimento!"
   },
   {
     "language": "ja-JP",
-    "text": "バージョン 2.2.0 の新機能：\n• より良い体験のための更新されたユーザーインターフェース\n• アプリとゲームエンジンのパフォーマンスの向上\n• コードベースのクリーンアップと冗長なコードの削除\n• 安定性向上のためのテストカバレッジの拡大\nお楽しみください！"
+    "text": "バージョン 2.2.1 の新機能：\n• 特殊ブロックで複数ラインを消去する際のクラッシュを修正\n• 爆弾の爆発効果音が再生されない問題を修正\n• カスタム倍率でのハードドロップのスコア計算を修正\n• ゲームの安定性とパフォーマンスを向上\n• 各種UIとアクセシビリティの修正\nお楽しみください！"
   },
   {
     "language": "ko-KR",
-    "text": "변경사항:\n• 더 나은 경험을 위한 업데이트된 사용자 인터페이스\n• 앱 및 게임 엔진 성능 향상\n• 코드베이스 정리 및 중복 코드 제거\n• 더 나은 안정성을 위한 테스트 커버리지 증가\n즐겨보세요!"
+    "text": "버전 2.2.1 변경사항:\n• 특수 블록으로 여러 줄을 지울 때 발생하는 충돌 수정\n• 폭탄 폭발 효과음이 재생되지 않는 문제 수정\n• 사용자 지정 배수에서 하드 드롭 점수 계산 수정\n• 게임 안정성 및 성능 향상\n• 다양한 UI 및 접근성 수정\n즐겨보세요!"
   },
   {
     "language": "zh-CN",
-    "text": "更新内容：\n• 更新了用户界面，带来更好的体验\n• 提升了应用和游戏引擎的性能\n• 清理了代码库并删除了冗余代码\n• 增加了测试覆盖率以提高稳定性\n敬请体验！"
+    "text": "版本 2.2.1 更新内容：\n• 修复了使用特殊方块清除多行时的崩溃问题\n• 修复了炸弹爆炸音效无法播放的问题\n• 修复了自定义倍率下硬降的分数计算问题\n• 提升了游戏稳定性和性能\n• 多项界面和辅助功能改进\n敬请体验！"
   },
   {
     "language": "zh-TW",
-    "text": "更新內容：\n• 更新了使用者介面，帶來更好的體驗\n• 提升了應用程式和遊戲引擎的效能\n• 清理了程式碼庫並刪除冗余程式碼\n• 增加了測試覆蓋率以提高穩定性\n歡迎體驗！"
+    "text": "版本 2.2.1 更新內容：\n• 修復了使用特殊方塊清除多行時的崩潰問題\n• 修復了炸彈爆炸音效無法播放的問題\n• 修復了自訂倍率下硬降的分數計算問題\n• 提升了遊戲穩定性和效能\n• 多項介面和辅助功能改進\n歡迎體驗！"
   },
   {
     "language": "ru-RU",
-    "text": "Новое:\n• Обновленный пользовательский интерфейс для лучшего взаимодействия\n• Повышенная производительность приложения и игрового движка\n• Очистка кодовой базы и удаление лишнего кода\n• Увеличение тестового покрытия для большей стабильности\nПриятной игры!"
+    "text": "Новое в версии 2.2.1:\n• Исправлен вылет при очистке нескольких линий специальными блоками\n• Исправлен звук взрыва бомбы, который не воспроизводился\n• Исправлен расчёт очков за быстрое падение с пользовательскими множителями\n• Улучшена стабильность и производительность игры\n• Различные исправления интерфейса и доступности\nПриятной игры!"
   },
   {
     "language": "tr-TR",
-    "text": "Yenilikler:\n• Daha iyi bir deneyim için güncellenmiş Kullanıcı Arayüzü\n• İyileştirilmiş uygulama ve oyun motoru performansı\n• Kod tabanı temizlendi ve gereksiz kodlar kaldırıldı\n• Daha iyi stabilite için artırılmış test kapsamı\nİyi eğlenceler!"
+    "text": "Sürüm 2.2.1'deki yenilikler:\n• Özel bloklarla birden fazla satır temizlerken oluşan çökme hatası düzeltildi\n• Bomba patlama ses efektinin çalınmaması sorunu düzeltildi\n• Özel çarpanlarla hızlı düşüşlerde puan hesaplaması düzeltildi\n• Oyun kararlılığı ve performansı iyileştirildi\n• Çeşitli UI ve erişilebilirlik düzeltmeleri\nİyi eğlenceler!"
   },
   {
     "language": "nl-NL",
-    "text": "Wat is nieuw:\n• Vernieuwde gebruikersinterface voor een betere ervaring\n• Verbeterde app- en game engine-prestaties\n• Codebase opgeschoond en redundante code verwijderd\n• Verhoogde testdekking voor betere stabiliteit\nVeel plezier!"
+    "text": "Nieuw in versie 2.2.1:\n• Een crash verholpen bij het wissen van meerdere rijen met speciale blokken\n• Het geluidseffect van de bomexplosie dat niet afspeelde is verholpen\n• De scoreberekening voor harde drops met aangepaste multipliers is gecorrigeerd\n• Verbeterde spelstabiliteit en prestaties\n• Diverse UI- en toegankelijkheidsfixes\nVeel plezier!"
   },
   {
     "language": "sv-SE",
-    "text": "Nyheter:\n• Uppdaterat användargränssnitt för een bättre upplevelse\n• Förbättrad prestanda för app och spelmotor\n• Rensa upp kodbasen och ta bort redundant kod\n• Ökad testtäckning för bättre stabilitet\nNjut!"
+    "text": "Nyheter i version 2.2.1:\n• Åtgärdade en krasch vid rensning av flera rader med specialblock\n• Åtgärdade bombexplosionens ljudeffekt som inte spelades upp\n• Korrigerade poängberäkning för hårda droppar med anpassade multiplikatorer\n• Förbättrad spelstabilitet och prestanda\n• Diverse UI- och tillgänglighetsfixar\nNjut!"
   },
   {
     "language": "pl-PL",
-    "text": "Co nowego:\n• Zaktualizowany interfejs użytkownika dla lepszych wrażeń\n• Poprawiona wydajność aplikacji i silnika gry\n• Oczyszczona baza kodu i usunięcie zbędnego kodu\n• Zwiększony zakres testów dla lepszej stabilności\nMiłej zabawy!"
+    "text": "Co nowego w wersji 2.2.1:\n• Naprawiono awarię podczas czyszczenia wielu linii specjalnymi blokami\n• Naprawiono efekt dźwiękowy wybuchu bomby, który się nie odtwarzał\n• Poprawiono obliczanie punktów za twarde upuszczenie z niestandardowymi mnożnikami\n• Poprawiona stabilność i wydajność gry\n• Różne poprawki interfejsu i dostępności\nMiłej zabawy!"
   },
   {
     "language": "ar-SA",
-    "text": "الجديد:\n• واجهة مستخدم محدثة لتجربة أفضل\n• تحسين أداء التطبيق ومحرك اللعبة\n• تنظيف قاعدة التعليمات البرمجية وإزالة الأكواد المكررة\n• زيادة تغطية الاختبار لتحقيق استقرار أفضل\nاستمتع!"
+    "text": "الجديد في الإصدار 2.2.1:\n• إصلاح تعطل عند مسح عدة أسطر باستخدام المكعبات الخاصة\n• إصلاح مشكلة عدم تشغيل مؤثر صوت انفجار القنبلة\n• إصلاح حساب النقاط للهبوط السريع مع المضاعفات المخصصة\n• تحسين استقرار وأداء اللعبة\n• إصلاحات متنوعة لواجهة المستخدم وإمكانية الوصول\nاستمتع!"
   },
   {
     "language": "hi-IN",
-    "text": "नया:\n• बेहतर अनुभव के लिए अपडेटेड यूजर इंटरफेस\n• बेहतर ऐप और गेम इंजन प्रदर्शन\n• कोडबेस को साफ किया गया और अनावश्यक कोड को हटा दिया गया\n• बेहतर स्थिरता के लिए परीक्षण कवरेज में वृद्धि\nआनंद लें!"
+    "text": "संस्करण 2.2.1 में नया क्या है:\n• विशेष ब्लॉकों से कई पंक्तियाँ साफ़ करते समय क्रैश ठीक किया गया\n• बम विस्फोट ध्वनि प्रभाव नहीं बजने की समस्या ठीक की गई\n• कस्टम गुणकों के साथ हार्ड ड्रॉप के स्कोर गणना में सुधार\n• गेम स्थिरता और प्रदर्शन में सुधार\n• विभिन्न UI और एक्सेसिबिलिटी सुधार\nआनंद लें!"
   },
   {
     "language": "id-ID",
-    "text": "Baru:\n• Antarmuka Pengguna yang diperbarui untuk pengalaman yang lebih baik\n• Peningkatan performa aplikasi dan mesin game\n• Pembersihan basis kode dan penghapusan kode redundan\n• Peningkatan cakupan pengujian untuk stabilitas yang lebih baik\nSelamat mencoba!"
+    "text": "Baru di versi 2.2.1:\n• Memperbaiki crash saat membersihkan beberapa baris dengan blok khusus\n• Memperbaiki efek suara ledakan bom yang tidak dimainkan\n• Memperbaiki perhitungan skor untuk hard drop dengan pengali kustom\n• Meningkatkan stabilitas dan performa game\n• Berbagai perbaikan UI dan aksesibilitas\nSelamat mencoba!"
   },
   {
     "language": "vi-VN",
-    "text": "Có gì mới:\n• Giao diện người dùng được cập nhật để có trải nghiệm tốt hơn\n• Cải thiện hiệu suất ứng dụng và công cụ trò chơi\n• Dọn dẹp cơ sở mã và xóa mã dư thừa\n• Tăng độ bao phủ thử nghiệm để ổn định hơn\nThưởng thức!"
+    "text": "Có gì mới trong phiên bản 2.2.1:\n• Sửa lỗi treo khi xóa nhiều dòng bằng các khối đặc biệt\n• Sửa hiệu ứng âm thanh vụ nổ bom không phát\n• Sửa cách tính điểm cho thả nhanh với hệ số nhân tùy chỉnh\n• Cải thiện độ ổn định và hiệu suất trò chơi\n• Nhiều bản sửa lỗi giao diện và trợ năng\nThưởng thức!"
   }
 ]

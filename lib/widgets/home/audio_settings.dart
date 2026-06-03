@@ -13,36 +13,39 @@ class AudioSettings extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Consumer<AudioProvider>(
       builder: (context, audioProvider, child) {
-        return GlassMorphismCard(
-          showShadow: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                  child: AudioSettingRow(
-                    title: l10n.music,
-                    icon: Icons.music_note,
-                    initialValue: audioProvider.musicEnabled,
-                    onChanged: (value) {
-                      audioProvider.toggleMusic();
-                    },
+        return Semantics(
+          label: 'Audio settings',
+          child: GlassMorphismCard(
+            showShadow: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    child: AudioSettingRow(
+                      title: l10n.music,
+                      icon: Icons.music_note,
+                      initialValue: audioProvider.musicEnabled,
+                      onChanged: (value) {
+                        audioProvider.toggleMusic();
+                      },
+                    ),
                   ),
-                ),
-                const Divider(height: 8, color: Colors.white24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                  child: AudioSettingRow(
-                    title: l10n.sfx,
-                    icon: Icons.volume_up,
-                    initialValue: audioProvider.sfxEnabled,
-                    onChanged: (value) {
-                      audioProvider.toggleSfx();
-                    },
+                  const Divider(height: 8, color: Colors.white24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    child: AudioSettingRow(
+                      title: l10n.sfx,
+                      icon: Icons.volume_up,
+                      initialValue: audioProvider.sfxEnabled,
+                      onChanged: (value) {
+                        audioProvider.toggleSfx();
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

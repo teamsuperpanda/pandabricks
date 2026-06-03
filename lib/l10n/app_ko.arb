@@ -58,5 +58,6 @@
   "specialBricksToggle": "특수 벽돌",
   "scoreMultiplier": "점수 배율",
   "startGame": "게임 시작",
-  "system": "시스템"
+  "system": "시스템",
+  "nativeName": "한국어"
 }

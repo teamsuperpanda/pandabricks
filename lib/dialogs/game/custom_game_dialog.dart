@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pandabricks/dialogs/game/game_dialog_wrapper.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
-import 'package:pandabricks/screens/game/game.dart';
 import 'package:pandabricks/models/game_settings.dart';
-import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
+import 'package:pandabricks/widgets/game/dialog_button.dart';
 
 class CustomGameDialog extends StatefulWidget {
   const CustomGameDialog({super.key});
@@ -23,33 +24,19 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      child: GlassMorphismCard(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                l10n.customGame,
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildTimeLimitSection(l10n),
-              const SizedBox(height: 16),
-              _buildDifficultySection(l10n),
-              const SizedBox(height: 16),
-              _buildSpecialFeaturesSection(l10n),
-              const SizedBox(height: 24),
-              _buildActionButtons(l10n),
-            ],
-          ),
-        ),
+    return GameDialogWrapper(
+      icon: const Icon(Icons.tune_rounded, size: 64, color: Colors.white),
+      title: l10n.customGame,
+      actions: [_buildActionButtons(l10n)],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildTimeLimitSection(l10n),
+          const SizedBox(height: 16),
+          _buildDifficultySection(l10n),
+          const SizedBox(height: 16),
+          _buildSpecialFeaturesSection(l10n),
+        ],
       ),
     );
   }
@@ -96,11 +83,10 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.cyan.withAlpha(100) : Colors.white.withAlpha(20),
+            color: isSelected ? Colors.cyan.withValues(alpha: 100/255.0) : Colors.white.withValues(alpha: 20/255.0),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected ? Colors.cyan : Colors.white.withAlpha(50),
-              width: 1,
+              color: isSelected ? Colors.cyan : Colors.white.withValues(alpha: 50/255.0),
             ),
           ),
           child: Text(
@@ -155,12 +141,12 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: Colors.cyan,
             thumbColor: Colors.cyan,
-            inactiveTrackColor: Colors.white.withAlpha(50),
+            inactiveTrackColor: Colors.white.withValues(alpha: 50/255.0),
           ),
           child: Slider(
             value: config.speedMultiplier,
             min: 0.5,
-            max: 2.0,
+            max: 2,
             divisions: 6,
             label: '${config.speedMultiplier.toStringAsFixed(1)}x',
             onChanged: (value) => setState(() => config = config.copyWith(speedMultiplier: value)),
@@ -178,11 +164,10 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.purple.withAlpha(100) : Colors.white.withAlpha(20),
+            color: isSelected ? Colors.purple.withValues(alpha: 100/255.0) : Colors.white.withValues(alpha: 20/255.0),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected ? Colors.purple : Colors.white.withAlpha(50),
-              width: 1,
+              color: isSelected ? Colors.purple : Colors.white.withValues(alpha: 50/255.0),
             ),
           ),
           child: Text(
@@ -229,12 +214,12 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: Colors.orange,
             thumbColor: Colors.orange,
-            inactiveTrackColor: Colors.white.withAlpha(50),
+            inactiveTrackColor: Colors.white.withValues(alpha: 50/255.0),
           ),
           child: Slider(
             value: config.scoreMultiplier,
             min: 0.5,
-            max: 3.0,
+            max: 3,
             divisions: 10,
             label: '${config.scoreMultiplier.toStringAsFixed(1)}x',
             onChanged: (value) => setState(() => config = config.copyWith(scoreMultiplier: value)),
@@ -264,13 +249,13 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             if (states.contains(WidgetState.selected)) {
               return Colors.cyan;
             }
-            return Colors.white.withAlpha(150);
+            return Colors.white.withValues(alpha: 150/255.0);
           }),
           trackColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return Colors.cyan.withAlpha(100);
+              return Colors.cyan.withValues(alpha: 100/255.0);
             }
-            return Colors.white.withAlpha(50);
+            return Colors.white.withValues(alpha: 50/255.0);
           }),
         ),
       ],
@@ -280,66 +265,21 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
   Widget _buildActionButtons(AppLocalizations l10n) {
     return Row(
       children: [
-        Expanded(
-          child: GlassMorphismCard(
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: () => Navigator.of(context).pop(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-                  child: Text(
-                    l10n.cancel,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Colors.cyan, Colors.blueAccent],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed(
-                    '/game', 
-                    arguments: GameSettings.custom(config),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-                  child: Text(
-                    l10n.startGame,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+        DialogButton(
+          icon: Icons.close_rounded,
+          label: l10n.cancel,
+          onTap: () => Navigator.of(context).pop(),
+          compact: true,
+      ),
+        const SizedBox(width: 12),
+        DialogButton(
+          icon: Icons.play_arrow_rounded,
+          label: l10n.startGame,
+          onTap: () {
+            Navigator.of(context).pop();
+            context.push('/game', extra: GameSettings.custom(config));
+          },
+          compact: true,
         ),
       ],
     );
