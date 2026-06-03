@@ -1,0 +1,7 @@
+Có gì mới trong phiên bản 2.2.1:
+• Sửa lỗi treo khi xóa nhiều dòng bằng các khối đặc biệt
+• Sửa hiệu ứng âm thanh vụ nổ bom không phát
+• Sửa cách tính điểm cho thả nhanh với hệ số nhân tùy chỉnh
+• Cải thiện độ ổn định và hiệu suất trò chơi
+• Nhiều bản sửa lỗi giao diện và trợ năng
+Thưởng thức!

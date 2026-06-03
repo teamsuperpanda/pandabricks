@@ -1,0 +1,7 @@
+Novedades en la versión 2.2.1:
+• Corregido un fallo al limpiar varias líneas con bloques especiales
+• Corregido el efecto de sonido de explosión de bomba que no se reproducía
+• Corregido el cálculo de puntuación para caídas rápidas con multiplicadores personalizados
+• Mejorada la estabilidad y el rendimiento del juego
+• Varias correcciones de UI y accesibilidad
+¡Disfruta!
