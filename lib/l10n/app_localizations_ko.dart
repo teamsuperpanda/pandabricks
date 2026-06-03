@@ -187,4 +187,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get system => '시스템';
+
+  @override
+  String get nativeName => '한국어';
+
+  @override
+  String get rotatePiece => 'Rotate piece';
+
+  @override
+  String get softDrop => 'Soft drop';
+
+  @override
+  String get hardDrop => 'Hard drop';
+
+  @override
+  String get moveLeft => 'Move left';
+
+  @override
+  String get moveRight => 'Move right';
 }

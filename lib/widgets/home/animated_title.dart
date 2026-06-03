@@ -1,12 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
-import 'package:shimmer/shimmer.dart';
 
 class AnimatedTitle extends StatelessWidget {
-  final Animation<double> floatingAnimation;
 
-  const AnimatedTitle({super.key, required this.floatingAnimation});
+  const AnimatedTitle({required this.floatingAnimation, super.key});
+  final Animation<double> floatingAnimation;
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +14,12 @@ class AnimatedTitle extends StatelessWidget {
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, floatingAnimation.value),
-          child: Shimmer.fromColors(
-            baseColor: Colors.white,
-            highlightColor: Colors.cyan.withAlpha((255 * 0.7).toInt()),
-            period: const Duration(seconds: 5),
+          child: ShaderMask(
+            shaderCallback: (bounds) => LinearGradient(
+              colors: [Colors.white, Colors.cyan.withValues(alpha: 0.7), Colors.white],
+              stops: const [0.0, 0.5, 1.0],
+            ).createShader(bounds),
+            blendMode: BlendMode.srcIn,
             child: Text(
               l10n.appTitle.toUpperCase(),
               style: const TextStyle(

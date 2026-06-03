@@ -54,8 +54,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get pandaBrick => 'پانڈا اینٹ';
 
   @override
-  String get pandaBrickDescription =>
-      'جب یہ اترتی ہے تو پورے کالم کو صاف کرتی ہے!';
+  String get pandaBrickDescription => 'جب یہ اترتی ہے تو پورے کالم کو صاف کرتی ہے!';
 
   @override
   String get ghostBrick => 'گھوسٹ برک';
@@ -79,8 +78,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get bombBrick => 'بم برک';
 
   @override
-  String get bombBrickDescription =>
-      'رکھے جانے پر پوری قطار اور کالم کو صاف کرتی ہے!';
+  String get bombBrickDescription => 'رکھے جانے پر پوری قطار اور کالم کو صاف کرتی ہے!';
 
   @override
   String get close => 'بند کریں';
@@ -125,8 +123,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get returnToMainMenu => 'مرکزی مینو پر واپس جائیں؟';
 
   @override
-  String get progressWillBeLost =>
-      'آپ کی موجودہ گیم کی پیشرفت ضائع ہو جائے گی۔';
+  String get progressWillBeLost => 'آپ کی موجودہ گیم کی پیشرفت ضائع ہو جائے گی۔';
 
   @override
   String get cancel => 'منسوخ کریں';
@@ -141,8 +138,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get restartGame => 'گیم دوبارہ شروع کریں؟';
 
   @override
-  String get areYouSureYouWantToRestart =>
-      'کیا آپ واقعی دوبارہ شروع کرنا چاہتے ہیں؟\nآپ کی موجودہ پیشرفت ضائع ہو جائے گی۔';
+  String get areYouSureYouWantToRestart => 'کیا آپ واقعی دوبارہ شروع کرنا چاہتے ہیں؟\nآپ کی موجودہ پیشرفت ضائع ہو جائے گی۔';
 
   @override
   String get music => 'موسیقی';
@@ -191,4 +187,22 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get system => 'سسٹم';
+
+  @override
+  String get nativeName => 'اردو';
+
+  @override
+  String get rotatePiece => 'Rotate piece';
+
+  @override
+  String get softDrop => 'Soft drop';
+
+  @override
+  String get hardDrop => 'Hard drop';
+
+  @override
+  String get moveLeft => 'Move left';
+
+  @override
+  String get moveRight => 'Move right';
 }

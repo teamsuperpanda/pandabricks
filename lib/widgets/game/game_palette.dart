@@ -18,9 +18,6 @@ const List<Color> kGamePalette = [
   Color(0xFFFF4500),       // BombBrick - Neon Deep Orange
 ];
 
-/// Pre-computed palette with alpha applied, matching in-game rendering.
-final List<Color> kGamePaletteWithAlpha =
-    kGamePalette.map((c) => c).toList(growable: false);
 
 /// Emoji overlays for special block types (index 7+).
 const Map<int, String> kSpecialBlockEmojis = {

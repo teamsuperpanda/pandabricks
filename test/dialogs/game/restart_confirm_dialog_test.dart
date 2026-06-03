@@ -23,7 +23,7 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: RestartConfirmDialog(
-                onRestart: () {},
+                onConfirm: () {},
                 onCancel: () {},
               ),
             ),
@@ -48,8 +48,8 @@ void main() {
     });
 
     testWidgets('should call onCancel when cancel button is tapped', (WidgetTester tester) async {
-      bool restartCalled = false;
-      bool cancelCalled = false;
+      var restartCalled = false;
+      var cancelCalled = false;
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -60,7 +60,7 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: RestartConfirmDialog(
-                onRestart: () => restartCalled = true,
+                onConfirm: () => restartCalled = true,
                 onCancel: () => cancelCalled = true,
               ),
             ),
@@ -77,8 +77,8 @@ void main() {
     });
 
     testWidgets('should call onRestart when restart button is tapped', (WidgetTester tester) async {
-      bool restartCalled = false;
-      bool cancelCalled = false;
+      var restartCalled = false;
+      var cancelCalled = false;
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -89,7 +89,7 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: RestartConfirmDialog(
-                onRestart: () => restartCalled = true,
+                onConfirm: () => restartCalled = true,
                 onCancel: () => cancelCalled = true,
               ),
             ),
@@ -115,7 +115,7 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: RestartConfirmDialog(
-                onRestart: () {},
+                onConfirm: () {},
                 onCancel: () {},
               ),
             ),
@@ -143,7 +143,7 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: RestartConfirmDialog(
-                onRestart: () {},
+                onConfirm: () {},
                 onCancel: () {},
               ),
             ),
@@ -176,7 +176,7 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: RestartConfirmDialog(
-                onRestart: () {},
+                onConfirm: () {},
                 onCancel: () {},
               ),
             ),

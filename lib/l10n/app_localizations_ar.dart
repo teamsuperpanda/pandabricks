@@ -138,8 +138,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get restartGame => 'إعادة تشغيل اللعبة؟';
 
   @override
-  String get areYouSureYouWantToRestart =>
-      'هل أنت متأكد أنك تريد إعادة التشغيل؟\nسيتم فقد تقدمك الحالي.';
+  String get areYouSureYouWantToRestart => 'هل أنت متأكد أنك تريد إعادة التشغيل؟\nسيتم فقد تقدمك الحالي.';
 
   @override
   String get music => 'الموسيقى';
@@ -188,4 +187,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get system => 'النظام';
+
+  @override
+  String get nativeName => 'العربية';
+
+  @override
+  String get rotatePiece => 'Rotate piece';
+
+  @override
+  String get softDrop => 'Soft drop';
+
+  @override
+  String get hardDrop => 'Hard drop';
+
+  @override
+  String get moveLeft => 'Move left';
+
+  @override
+  String get moveRight => 'Move right';
 }

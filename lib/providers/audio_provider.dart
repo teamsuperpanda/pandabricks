@@ -1,6 +1,8 @@
 import 'dart:math';
-import 'package:flutter/foundation.dart';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
+import 'package:pandabricks/services/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum GameSfx { rowClear, columnClear, bombExplosion }
@@ -8,10 +10,23 @@ enum GameSfx { rowClear, columnClear, bombExplosion }
 const Map<GameSfx, String> _sfxAssets = {
   GameSfx.rowClear: 'audio/sfx/row_clear.mp3',
   GameSfx.columnClear: 'audio/sfx/panda_disappear.mp3',
-  GameSfx.bombExplosion: 'audio/sfx/row_clear.mp3',
+  GameSfx.bombExplosion: 'audio/sfx/bomb_explosion.mp3',
 };
 
 class AudioProvider extends ChangeNotifier {
+
+  AudioProvider({bool enablePlatformAudio = true, bool? musicEnabled, bool? sfxEnabled})
+      : _enablePlatformAudio = enablePlatformAudio {
+    if (musicEnabled != null) _musicEnabled = musicEnabled;
+    if (sfxEnabled != null) _sfxEnabled = sfxEnabled;
+    if (enablePlatformAudio) {
+      _player = AudioPlayer();
+      _sfxPlayer = AudioPlayer(playerId: 'sfx');
+      if (musicEnabled == null && sfxEnabled == null) {
+        loadPreferences(null);
+      }
+    }
+  }
   bool _musicEnabled = true;
   bool _sfxEnabled = true;
 
@@ -21,6 +36,7 @@ class AudioProvider extends ChangeNotifier {
   String? _currentlyPlaying;
   String? _lastGameTrack; // Track the last played game track to avoid duplicates
   final bool _enablePlatformAudio;
+  final Random _rng = Random();
 
   // Public getter for testing purposes
   @visibleForTesting
@@ -31,15 +47,6 @@ class AudioProvider extends ChangeNotifier {
   set player(AudioPlayer? value) => _player = value;
   @visibleForTesting
   set sfxPlayer(AudioPlayer? value) => _sfxPlayer = value;
-
-  AudioProvider({bool enablePlatformAudio = true}) : _enablePlatformAudio = enablePlatformAudio {
-    if (enablePlatformAudio) {
-      // Creating an AudioPlayer touches platform channels. Skip in tests.
-      _player = AudioPlayer();
-      _sfxPlayer = AudioPlayer(playerId: 'sfx');
-      loadPreferences(null);
-    }
-  }
 
   // Public getters for audio settings
   bool get musicEnabled => _musicEnabled;
@@ -87,69 +94,61 @@ class AudioProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  /// Plays menu background music. Errors from audio plugin are silently logged.
   Future<void> playMenuMusic() async {
     _isGameMusic = false;
     if (!_musicEnabled) return;
-    if (_currentlyPlaying == menuTrack) return; // Already playing menu music
+    if (_currentlyPlaying == menuTrack) return;
     
     try {
-      // Only call plugin methods when player is available (i.e., not in tests)
-      if (_player != null) {
-        await _player!.stop();
-        await _player!.play(AssetSource(menuTrack), volume: 0.5);
-        await _player!.setReleaseMode(ReleaseMode.loop);
-      }
+      await _player?.stop();
+      await _player?.play(AssetSource(menuTrack), volume: 0.5);
+      await _player?.setReleaseMode(ReleaseMode.loop);
       _currentlyPlaying = menuTrack;
     } catch (e) {
-      debugPrint('Error playing menu music: $e');
+      logError('AudioProvider', e);
     }
   }
 
+  /// Plays game background music. Errors from audio plugin are silently logged.
   Future<void> playGameMusic() async {
     _isGameMusic = true;
     if (!_musicEnabled) return;
     
     try {
-      if (_player != null) {
-        await _player!.stop();
-      }
+      await _player?.stop();
       // Select a track that's different from the last one played
       final availableTracks = gameTracks.where((track) => track != _lastGameTrack).toList();
-      final track = availableTracks[Random().nextInt(availableTracks.length)];
-      if (_player != null) {
-        await _player!.play(AssetSource(track), volume: 0.5);
-        await _player!.setReleaseMode(ReleaseMode.loop);
-      }
+      final track = availableTracks[_rng.nextInt(availableTracks.length)];
+      await _player?.play(AssetSource(track), volume: 0.5);
+      await _player?.setReleaseMode(ReleaseMode.loop);
       _lastGameTrack = track;
       _currentlyPlaying = track;
     } catch (e) {
-      debugPrint('Error playing game music: $e');
+      logError('AudioProvider', e);
     }
   }
 
   Future<void> stopMusic() async {
-    if (_player != null) {
-      await _player!.stop();
-    }
+    await _player?.stop();
     _currentlyPlaying = null;
   }
 
-  Future<void> playSfx(GameSfx effect, {double volume = 1.0}) async {
+  /// Plays a sound effect. Errors from audio plugin are silently logged.
+  Future<void> playSfx(GameSfx effect) async {
     if (!_sfxEnabled) return;
     final asset = _sfxAssets[effect];
     if (asset == null) return;
 
     try {
-      // Only call plugin methods when player is available (i.e., not in tests)
-      if (_sfxPlayer != null) {
-        await _sfxPlayer!.stop();
-        await _sfxPlayer!.play(AssetSource(asset), volume: volume);
-      }
+      await _sfxPlayer?.stop();
+      await _sfxPlayer?.play(AssetSource(asset), volume: 1);
     } catch (e) {
-      debugPrint('Error playing sfx $asset: $e');
+      logError('AudioProvider', e);
     }
   }
 
+  /// Loads persisted audio preferences. Errors fall back to defaults and are logged.
   @visibleForTesting
   Future<void> loadPreferences(SharedPreferences? injectedPrefs) async {
     try {
@@ -158,10 +157,11 @@ class AudioProvider extends ChangeNotifier {
       _sfxEnabled = prefs.getBool('sfxEnabled') ?? true;
       notifyListeners();
     } catch (e) {
-      debugPrint('Error loading preferences: $e');
+      logError('AudioProvider', e);
     }
   }
 
+  /// Persists current audio preferences. Errors are silently logged.
   @visibleForTesting
   Future<void> savePreferences(SharedPreferences? injectedPrefs) async {
     try {
@@ -169,7 +169,7 @@ class AudioProvider extends ChangeNotifier {
       await prefs.setBool('musicEnabled', _musicEnabled);
       await prefs.setBool('sfxEnabled', _sfxEnabled);
     } catch (e) {
-      debugPrint('Error saving preferences: $e');
+      logError('AudioProvider', e);
     }
   }
 }

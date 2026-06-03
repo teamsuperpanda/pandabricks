@@ -21,8 +21,8 @@ void main() {
       
       // Board should be empty
       var isEmpty = true;
-      for (var row in game.board) {
-        for (var cell in row) {
+      for (final row in game.board) {
+        for (final cell in row) {
           if (cell != null) {
             isEmpty = false;
           }
@@ -160,7 +160,7 @@ void main() {
       final customGame = Game(
         audioProvider: MockAudioProvider(),
         customConfig: const CustomGameConfig(
-          timeLimit: null, // Unlimited
+          
         ),
       );
       
@@ -314,7 +314,6 @@ void main() {
     test('classic mode uses standard pieces only', () {
       final classicGame = Game(
         audioProvider: mockAudio,
-        gameMode: GameMode.classic,
       );
       
       final standardPieces = {

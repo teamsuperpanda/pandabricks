@@ -1,1 +1,33 @@
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  errors:
+    close_sinks: warning
+    inference_failure_on_function_invocation: ignore
+    inference_failure_on_collection_literal: ignore
+    inference_failure_on_instance_creation: ignore
+    inference_failure_on_function_return_type: ignore
+    strict_raw_type: ignore
+
+linter:
+  rules:
+    public_member_api_docs: false
+    lines_longer_than_80_chars: false
+    cascade_invocations: false
+    avoid_catches_without_on_clauses: false
+    sort_pub_dependencies: false
+    prefer_const_constructors: false
+    prefer_const_literals_to_create_immutables: false
+    avoid_dynamic_calls: false
+    omit_local_variable_types: false
+    require_trailing_commas: false
+    prefer_final_locals: false
+    prefer_final_in_for_each: false
+    avoid_equals_and_hash_code_on_mutable_classes: false
+    avoid_setters_without_getters: false
+    prefer_asserts_with_message: false
+    unawaited_futures: false
+    one_member_abstracts: false
+    parameter_assignments: false
+    use_late_for_private_fields_and_variables: false
+    no_default_cases: false

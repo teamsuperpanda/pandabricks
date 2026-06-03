@@ -187,4 +187,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get system => 'システム';
+
+  @override
+  String get nativeName => '日本語';
+
+  @override
+  String get rotatePiece => 'Rotate piece';
+
+  @override
+  String get softDrop => 'Soft drop';
+
+  @override
+  String get hardDrop => 'Hard drop';
+
+  @override
+  String get moveLeft => 'Move left';
+
+  @override
+  String get moveRight => 'Move right';
 }

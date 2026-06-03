@@ -58,5 +58,6 @@
   "specialBricksToggle": "Особые кирпичи",
   "scoreMultiplier": "Множитель очков",
   "startGame": "Начать игру",
-  "system": "Система"
+  "system": "Система",
+  "nativeName": "Русский"
 }

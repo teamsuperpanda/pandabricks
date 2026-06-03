@@ -51,8 +51,8 @@ void main() {
     });
 
     testWidgets('should call onRestart when restart button is tapped', (WidgetTester tester) async {
-      bool restartCalled = false;
-      bool mainMenuCalled = false;
+      var restartCalled = false;
+      var mainMenuCalled = false;
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -83,8 +83,8 @@ void main() {
     });
 
     testWidgets('should call onMainMenu when main menu button is tapped', (WidgetTester tester) async {
-      bool restartCalled = false;
-      bool mainMenuCalled = false;
+      var restartCalled = false;
+      var mainMenuCalled = false;
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(

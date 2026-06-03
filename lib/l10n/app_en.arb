@@ -58,5 +58,11 @@
   "specialBricksToggle": "Special Bricks",
   "scoreMultiplier": "Score Multiplier",
   "startGame": "Start Game",
-  "system": "System"
+  "system": "System",
+  "nativeName": "English",
+  "rotatePiece": "Rotate piece",
+  "softDrop": "Soft drop",
+  "hardDrop": "Hard drop",
+  "moveLeft": "Move left",
+  "moveRight": "Move right"
 }
