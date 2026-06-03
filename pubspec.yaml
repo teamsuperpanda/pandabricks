@@ -2,6 +2,7 @@ name: pandabricks
 display_name: "Panda Bricks"
 description: "A modern take on the classic falling blocks game, featuring a playful panda theme and unique gameplay mechanics."
 publish_to: 'none'
+license: PolyForm-Noncommercial-1.0.0
 repository: https://github.com/teamsuperpanda/pandabricks
 issue_tracker: https://github.com/teamsuperpanda/pandabricks/issues
 
