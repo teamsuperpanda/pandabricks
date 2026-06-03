@@ -54,7 +54,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pandaBrick => 'पांडा ईंट';
 
   @override
-  String get pandaBrickDescription => 'जब यह उतरता है तो पूरे कॉलम को साफ़ करता है!';
+  String get pandaBrickDescription =>
+      'जब यह उतरता है तो पूरे कॉलम को साफ़ करता है!';
 
   @override
   String get ghostBrick => 'घोस्ट ब्रिक';
@@ -78,7 +79,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get bombBrick => 'बम ईंट';
 
   @override
-  String get bombBrickDescription => 'रखे जाने पर पूरी पंक्ति और कॉलम को साफ़ करता है!';
+  String get bombBrickDescription =>
+      'रखे जाने पर पूरी पंक्ति और कॉलम को साफ़ करता है!';
 
   @override
   String get close => 'बंद करें';
@@ -138,7 +140,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get restartGame => 'खेल पुनरारंभ करें?';
 
   @override
-  String get areYouSureYouWantToRestart => 'क्या आप वाकई पुनरारंभ करना चाहते हैं?\nआपकी वर्तमान प्रगति खो जाएगी।';
+  String get areYouSureYouWantToRestart =>
+      'क्या आप वाकई पुनरारंभ करना चाहते हैं?\nआपकी वर्तमान प्रगति खो जाएगी।';
 
   @override
   String get music => 'संगीत';

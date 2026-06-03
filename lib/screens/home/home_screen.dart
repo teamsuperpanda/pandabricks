@@ -47,21 +47,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
     )..repeat(reverse: true);
 
-    _gradientAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(
-      parent: _gradientController,
-      curve: Curves.easeInOut,
-    ));
+    _gradientAnimation =
+        Tween<double>(
+          begin: 0,
+          end: 1,
+        ).animate(
+          CurvedAnimation(
+            parent: _gradientController,
+            curve: Curves.easeInOut,
+          ),
+        );
 
-    _floatingAnimation = Tween<double>(
-      begin: -8,
-      end: 8,
-    ).animate(CurvedAnimation(
-      parent: _floatingController,
-      curve: Curves.easeInOut,
-    ));
+    _floatingAnimation =
+        Tween<double>(
+          begin: -8,
+          end: 8,
+        ).animate(
+          CurvedAnimation(
+            parent: _floatingController,
+            curve: Curves.easeInOut,
+          ),
+        );
   }
 
   @override
@@ -105,7 +111,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             children: [
               Semantics(
                 label: 'Background animation',
-                child: AnimatedBackground(gradientAnimation: _gradientAnimation),
+                child: AnimatedBackground(
+                  gradientAnimation: _gradientAnimation,
+                ),
               ),
               Semantics(
                 label: 'Ambient particles',
@@ -120,7 +128,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Semantics(
                         header: true,
                         label: l10n!.appTitle,
-                        child: AnimatedTitle(floatingAnimation: _floatingAnimation),
+                        child: AnimatedTitle(
+                          floatingAnimation: _floatingAnimation,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       Semantics(
@@ -253,8 +263,8 @@ class _SectionHeader extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.cyan.withValues(alpha: 120/255.0),
-                  Colors.cyan.withValues(alpha: 0/255.0),
+                  Colors.cyan.withValues(alpha: 120 / 255.0),
+                  Colors.cyan.withValues(alpha: 0 / 255.0),
                 ],
               ),
               borderRadius: BorderRadius.circular(2),
@@ -283,13 +293,36 @@ class _ModeList extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        ModeCard(title: l10n.classicMode, subtitle: l10n.classicModeDescription, icon: Icons.grid_view_rounded, onTap: onTapClassic),
+        ModeCard(
+          title: l10n.classicMode,
+          subtitle: l10n.classicModeDescription,
+          icon: Icons.grid_view_rounded,
+          onTap: onTapClassic,
+        ),
         const SizedBox(height: 16),
-        ModeCard(title: l10n.timeChallenge, subtitle: l10n.timeChallengeDescription, icon: Icons.timer_rounded, accentColor: Colors.purpleAccent, onTap: onTapTimed),
+        ModeCard(
+          title: l10n.timeChallenge,
+          subtitle: l10n.timeChallengeDescription,
+          icon: Icons.timer_rounded,
+          accentColor: Colors.purpleAccent,
+          onTap: onTapTimed,
+        ),
         const SizedBox(height: 16),
-        ModeCard(title: l10n.blitzMode, subtitle: l10n.blitzModeDescription, icon: Icons.flash_on_rounded, accentColor: Colors.orangeAccent, onTap: onTapBlitz),
+        ModeCard(
+          title: l10n.blitzMode,
+          subtitle: l10n.blitzModeDescription,
+          icon: Icons.flash_on_rounded,
+          accentColor: Colors.orangeAccent,
+          onTap: onTapBlitz,
+        ),
         const SizedBox(height: 16),
-        ModeCard(title: l10n.customMode, subtitle: l10n.customModeDescription, icon: Icons.settings_rounded, accentColor: Colors.greenAccent, onTap: onTapCustom),
+        ModeCard(
+          title: l10n.customMode,
+          subtitle: l10n.customModeDescription,
+          icon: Icons.settings_rounded,
+          accentColor: Colors.greenAccent,
+          onTap: onTapCustom,
+        ),
       ],
     );
   }

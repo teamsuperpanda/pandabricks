@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class TimerDisplay extends StatelessWidget {
-
   const TimerDisplay({required this.timeRemaining, super.key});
   final Duration timeRemaining;
 
@@ -10,7 +9,8 @@ class TimerDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final minutes = timeRemaining.inMinutes;
     final seconds = timeRemaining.inSeconds % 60;
-    final timeString = '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    final timeString =
+        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 
     var timeColor = Colors.white;
     if (timeRemaining.inSeconds <= 30) {

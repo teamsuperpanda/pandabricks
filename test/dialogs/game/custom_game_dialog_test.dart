@@ -34,7 +34,9 @@ void main() {
       );
     }
 
-    testWidgets('renders custom game dialog content', (WidgetTester tester) async {
+    testWidgets('renders custom game dialog content', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestWidget());
 
       expect(find.text('Custom Game'), findsOneWidget);
@@ -53,14 +55,18 @@ void main() {
       expect(find.text('Unlimited'), findsOneWidget);
     });
 
-    testWidgets('renders cancel and start buttons', (WidgetTester tester) async {
+    testWidgets('renders cancel and start buttons', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestWidget());
 
       expect(find.text('Cancel'), findsOneWidget);
       expect(find.text('Start Game'), findsOneWidget);
     });
 
-    testWidgets('renders special features section', (WidgetTester tester) async {
+    testWidgets('renders special features section', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestWidget());
 
       expect(find.text('Special Features'), findsOneWidget);

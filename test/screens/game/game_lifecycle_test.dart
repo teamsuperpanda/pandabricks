@@ -16,9 +16,9 @@ void main() {
       // Add some pieces to board
       game.board[game.height - 1][0] = 1;
       game.board[game.height - 1][1] = 2;
-      
+
       game.reset();
-      
+
       // Board should be empty
       var isEmpty = true;
       for (final row in game.board) {
@@ -76,10 +76,10 @@ void main() {
         audioProvider: mockAudio,
         gameMode: GameMode.timeChallenge,
       );
-      
+
       timeGame.timeRemaining = const Duration(seconds: 10);
       timeGame.reset();
-      
+
       expect(timeGame.timeRemaining, greaterThan(const Duration(seconds: 100)));
     });
   });
@@ -95,14 +95,14 @@ void main() {
 
     test('bag system ensures fair piece distribution', () {
       final pieces = <FallingBlock>{};
-      
+
       // Draw 7 pieces, which should be all the unique standard pieces
       for (var i = 0; i < 7; i++) {
         if (game.isGameOver) break;
         pieces.add(game.current!.type);
         game.hardDrop();
       }
-      
+
       final standardPieces = {
         FallingBlock.I,
         FallingBlock.O,
@@ -134,11 +134,11 @@ void main() {
         audioProvider: MockAudioProvider(),
         gameMode: GameMode.timeChallenge,
       );
-      
+
       // Simulate some time passing
       await Future.delayed(const Duration(milliseconds: 100));
       timeGame.tick();
-      
+
       // Time should still be set (might not have decreased yet depending on implementation)
       expect(timeGame.timeRemaining, isNotNull);
     });
@@ -151,7 +151,7 @@ void main() {
           timeLimit: Duration(minutes: 5),
         ),
       );
-      
+
       expect(customGame.timeRemaining, isNotNull);
       expect(customGame.timeRemaining!.inMinutes, greaterThanOrEqualTo(4));
     });
@@ -159,11 +159,9 @@ void main() {
     test('unlimited time mode has null timeRemaining', () {
       final customGame = Game(
         audioProvider: MockAudioProvider(),
-        customConfig: const CustomGameConfig(
-          
-        ),
+        customConfig: const CustomGameConfig(),
       );
-      
+
       expect(customGame.timeRemaining, isNull);
     });
   });
@@ -184,8 +182,6 @@ void main() {
     test('spawned piece starts at top', () {
       expect(game.current!.position.y, lessThan(5));
     });
-
-
   });
 
   group('Game Score Calculation', () {
@@ -199,20 +195,20 @@ void main() {
 
     test('hard drop distance affects score', () {
       final score1 = game.score;
-      
+
       game.hardDrop();
       final scoreGain1 = game.score - score1;
-      
+
       game.reset();
-      
+
       // Move down a bit before hard drop
       game.softDrop();
       game.softDrop();
       final score2 = game.score;
-      
+
       game.hardDrop();
       final scoreGain2 = game.score - score2;
-      
+
       // Shorter drop should give less score
       expect(scoreGain2, lessThan(scoreGain1));
     });
@@ -233,7 +229,7 @@ void main() {
         width: 4,
         height: 10,
       );
-      
+
       expect(smallGame.board.length, 10);
       expect(smallGame.board[0].length, 4);
       expect(smallGame.current, isNotNull);
@@ -245,7 +241,7 @@ void main() {
         width: 20,
         height: 40,
       );
-      
+
       expect(largeGame.board.length, 40);
       expect(largeGame.board[0].length, 20);
       expect(largeGame.current, isNotNull);
@@ -256,7 +252,7 @@ void main() {
         game.score = 1000;
         game.level = 5;
         game.reset();
-        
+
         expect(game.score, 0);
         expect(game.level, 1);
         expect(game.current, isNotNull);
@@ -266,7 +262,7 @@ void main() {
     test('game continues after pause/unpause', () {
       game.togglePause();
       game.togglePause();
-      
+
       // Game should be unpaused
       expect(game.isPaused, false);
     });
@@ -277,7 +273,7 @@ void main() {
           game.tick();
         }
       }
-      
+
       // Game should still be in valid state
       expect(game.board, isNotNull);
     });
@@ -295,7 +291,7 @@ void main() {
         audioProvider: mockAudio,
         gameMode: GameMode.blitz,
       );
-      
+
       // Blitz mode should be able to spawn special pieces
       // Play enough to potentially see special pieces
       final piecesSeenTypes = <FallingBlock>{};
@@ -306,7 +302,7 @@ void main() {
         blitzGame.hardDrop();
         if (blitzGame.isGameOver) break;
       }
-      
+
       // At minimum, we should see various pieces
       expect(piecesSeenTypes.length, greaterThan(3));
     });
@@ -315,7 +311,7 @@ void main() {
       final classicGame = Game(
         audioProvider: mockAudio,
       );
-      
+
       final standardPieces = {
         FallingBlock.I,
         FallingBlock.O,
@@ -325,7 +321,7 @@ void main() {
         FallingBlock.J,
         FallingBlock.L,
       };
-      
+
       // Check current and next pieces
       expect(standardPieces.contains(classicGame.current!.type), true);
       expect(standardPieces.contains(classicGame.next), true);

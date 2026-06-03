@@ -38,9 +38,19 @@ class ActionConfirmDialog extends StatelessWidget {
             button: true,
             child: Row(
               children: [
-                DialogButton(icon: Icons.close_rounded, label: l10n.cancel, onTap: onCancel ?? () => Navigator.of(context).pop(), compact: true),
+                DialogButton(
+                  icon: Icons.close_rounded,
+                  label: l10n.cancel,
+                  onTap: onCancel ?? () => Navigator.of(context).pop(),
+                  compact: true,
+                ),
                 const SizedBox(width: 12),
-                DialogButton(icon: icon, label: confirmLabel, onTap: onConfirm, compact: true),
+                DialogButton(
+                  icon: icon,
+                  label: confirmLabel,
+                  onTap: onConfirm,
+                  compact: true,
+                ),
               ],
             ),
           ),

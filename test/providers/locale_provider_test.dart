@@ -86,7 +86,10 @@ void main() {
       expect(localeProvider.locale, equals(spanish));
 
       // Test language with script
-      const simplifiedChinese = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
+      const simplifiedChinese = Locale.fromSubtags(
+        languageCode: 'zh',
+        scriptCode: 'Hans',
+      );
       localeProvider.setLocale(simplifiedChinese);
       expect(localeProvider.locale, equals(simplifiedChinese));
     });
@@ -150,8 +153,11 @@ void main() {
       test('should support all app locales', () {
         for (final locale in supportedLocales) {
           localeProvider.setLocale(locale);
-          expect(localeProvider.locale, equals(locale),
-              reason: 'Failed to set locale: $locale');
+          expect(
+            localeProvider.locale,
+            equals(locale),
+            reason: 'Failed to set locale: $locale',
+          );
         }
       });
 

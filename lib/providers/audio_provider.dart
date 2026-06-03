@@ -14,9 +14,11 @@ const Map<GameSfx, String> _sfxAssets = {
 };
 
 class AudioProvider extends ChangeNotifier {
-
-  AudioProvider({bool enablePlatformAudio = true, bool? musicEnabled, bool? sfxEnabled})
-      : _enablePlatformAudio = enablePlatformAudio {
+  AudioProvider({
+    bool enablePlatformAudio = true,
+    bool? musicEnabled,
+    bool? sfxEnabled,
+  }) : _enablePlatformAudio = enablePlatformAudio {
     if (musicEnabled != null) _musicEnabled = musicEnabled;
     if (sfxEnabled != null) _sfxEnabled = sfxEnabled;
     if (enablePlatformAudio) {
@@ -34,7 +36,8 @@ class AudioProvider extends ChangeNotifier {
   AudioPlayer? _sfxPlayer;
   bool _isGameMusic = false;
   String? _currentlyPlaying;
-  String? _lastGameTrack; // Track the last played game track to avoid duplicates
+  String?
+  _lastGameTrack; // Track the last played game track to avoid duplicates
   final bool _enablePlatformAudio;
   final Random _rng = Random();
 
@@ -99,7 +102,7 @@ class AudioProvider extends ChangeNotifier {
     _isGameMusic = false;
     if (!_musicEnabled) return;
     if (_currentlyPlaying == menuTrack) return;
-    
+
     try {
       await _player?.stop();
       await _player?.play(AssetSource(menuTrack), volume: 0.5);
@@ -114,11 +117,13 @@ class AudioProvider extends ChangeNotifier {
   Future<void> playGameMusic() async {
     _isGameMusic = true;
     if (!_musicEnabled) return;
-    
+
     try {
       await _player?.stop();
       // Select a track that's different from the last one played
-      final availableTracks = gameTracks.where((track) => track != _lastGameTrack).toList();
+      final availableTracks = gameTracks
+          .where((track) => track != _lastGameTrack)
+          .toList();
       final track = availableTracks[_rng.nextInt(availableTracks.length)];
       await _player?.play(AssetSource(track), volume: 0.5);
       await _player?.setReleaseMode(ReleaseMode.loop);

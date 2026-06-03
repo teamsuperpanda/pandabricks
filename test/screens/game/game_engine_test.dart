@@ -150,7 +150,10 @@ void main() {
         // Next soft drop should lock the piece
         final moved = game.softDrop();
         expect(moved, isFalse);
-        expect(game.current, isNotNull); // Piece should still exist until next spawn
+        expect(
+          game.current,
+          isNotNull,
+        ); // Piece should still exist until next spawn
       });
     });
 
@@ -374,7 +377,10 @@ void main() {
         expect(game.isPaused, isTrue);
 
         // Time should be preserved when paused (allow small timing differences)
-        expect(game.timeRemaining!.inMilliseconds, closeTo(initialTime!.inMilliseconds, 100));
+        expect(
+          game.timeRemaining!.inMilliseconds,
+          closeTo(initialTime!.inMilliseconds, 100),
+        );
 
         game.togglePause();
         expect(game.isPaused, isFalse);
@@ -533,13 +539,16 @@ void main() {
         expect(game.version, greaterThan(before));
       });
 
-      test('version does NOT increment on failed moveLeft (wall collision)', () {
-        final game = Game(audioProvider: mockAudio);
-        while (game.moveLeft()) {}
-        final before = game.version;
-        game.moveLeft(); // blocked by wall
-        expect(game.version, equals(before));
-      });
+      test(
+        'version does NOT increment on failed moveLeft (wall collision)',
+        () {
+          final game = Game(audioProvider: mockAudio);
+          while (game.moveLeft()) {}
+          final before = game.version;
+          game.moveLeft(); // blocked by wall
+          expect(game.version, equals(before));
+        },
+      );
     });
 
     group('Time Challenge Expiry', () {
@@ -552,7 +561,9 @@ void main() {
         // Manually exhaust the time
         game.timeRemaining = Duration.zero;
         // Set gameStartTime so elapsed calculation yields zero remaining
-        game.gameStartTime = DateTime.now().subtract(const Duration(minutes: 10));
+        game.gameStartTime = DateTime.now().subtract(
+          const Duration(minutes: 10),
+        );
 
         game.tick();
 
@@ -578,12 +589,16 @@ void main() {
         final game = Game(
           audioProvider: mockAudio,
           gameMode: GameMode.custom,
-          customConfig: const CustomGameConfig(timeLimit: Duration(seconds: 30)),
+          customConfig: const CustomGameConfig(
+            timeLimit: Duration(seconds: 30),
+          ),
         );
 
         expect(game.timeRemaining, isNotNull);
         // Exhaust time
-        game.gameStartTime = DateTime.now().subtract(const Duration(minutes: 5));
+        game.gameStartTime = DateTime.now().subtract(
+          const Duration(minutes: 5),
+        );
 
         game.tick();
 

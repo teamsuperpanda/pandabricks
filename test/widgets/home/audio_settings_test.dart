@@ -11,7 +11,9 @@ void main() {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
-            ChangeNotifierProvider<AudioProvider>(create: (_) => AudioProvider(enablePlatformAudio: false)),
+            ChangeNotifierProvider<AudioProvider>(
+              create: (_) => AudioProvider(enablePlatformAudio: false),
+            ),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -34,7 +36,9 @@ void main() {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
-            ChangeNotifierProvider<AudioProvider>(create: (_) => AudioProvider(enablePlatformAudio: false)),
+            ChangeNotifierProvider<AudioProvider>(
+              create: (_) => AudioProvider(enablePlatformAudio: false),
+            ),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,

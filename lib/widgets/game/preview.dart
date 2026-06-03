@@ -29,7 +29,6 @@ class PiecePreview extends StatelessWidget {
 }
 
 class _PreviewPainter extends CustomPainter {
-
   _PreviewPainter(this.next);
   final game.FallingBlock? next;
 
@@ -53,19 +52,19 @@ class _PreviewPainter extends CustomPainter {
         if (c.dy > maxY) maxY = c.dy;
       }
     }
-  final pieceCols = maxX - minX + 1;
-  final pieceRows = maxY - minY + 1;
+    final pieceCols = maxX - minX + 1;
+    final pieceRows = maxY - minY + 1;
 
-  const padding = 8.0;
-  final maxCellW = (size.width - padding * 2) / pieceCols;
-  final maxCellH = (size.height - padding * 2) / pieceRows;
-  final cellSize = maxCellW < maxCellH ? maxCellW : maxCellH;
+    const padding = 8.0;
+    final maxCellW = (size.width - padding * 2) / pieceCols;
+    final maxCellH = (size.height - padding * 2) / pieceRows;
+    final cellSize = maxCellW < maxCellH ? maxCellW : maxCellH;
 
-  final pieceWidth = pieceCols * cellSize;
-  final pieceHeight = pieceRows * cellSize;
+    final pieceWidth = pieceCols * cellSize;
+    final pieceHeight = pieceRows * cellSize;
 
     final offsetX = (size.width - pieceWidth) / 2;
-  final offsetY = (size.height - pieceHeight) / 2;
+    final offsetY = (size.height - pieceHeight) / 2;
 
     final colorIndex = game.Game.colorFor[next] ?? 0;
     final isSpecial = colorIndex >= kSpecialBlockStartIndex;
@@ -92,8 +91,14 @@ class _PreviewPainter extends CustomPainter {
       if (isSpecial) {
         final emoji = kSpecialBlockEmojis[colorIndex] ?? '';
         if (emoji.isNotEmpty) {
-          final textStyle = TextStyle(fontSize: cellSize * 0.7, fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji']);
-          final tp = TextPainter(text: TextSpan(text: emoji, style: textStyle), textDirection: TextDirection.ltr);
+          final textStyle = TextStyle(
+            fontSize: cellSize * 0.7,
+            fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'],
+          );
+          final tp = TextPainter(
+            text: TextSpan(text: emoji, style: textStyle),
+            textDirection: TextDirection.ltr,
+          );
           try {
             tp.layout();
             final dx = x + (cellSize - tp.width) / 2;
@@ -108,7 +113,8 @@ class _PreviewPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _PreviewPainter oldDelegate) => oldDelegate.next != next;
+  bool shouldRepaint(covariant _PreviewPainter oldDelegate) =>
+      oldDelegate.next != next;
 
   List<Offset> _cellsFor(game.FallingBlock t) {
     final shape = game.Game.shapes[t]!;

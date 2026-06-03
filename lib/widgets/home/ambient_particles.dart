@@ -50,7 +50,6 @@ class _AmbientParticlesState extends State<AmbientParticles>
 }
 
 class _Particle {
-
   _Particle.random() {
     final rand = Random();
     x = rand.nextDouble();
@@ -59,7 +58,12 @@ class _Particle {
     speed = rand.nextDouble() * 0.2 + 0.05;
     phase = rand.nextDouble() * 2 * pi;
     opacity = rand.nextDouble() * 0.3 + 0.2;
-    final baseColor = [Colors.cyanAccent, Colors.white, Colors.purpleAccent, Colors.tealAccent][rand.nextInt(4)];
+    final baseColor = [
+      Colors.cyanAccent,
+      Colors.white,
+      Colors.purpleAccent,
+      Colors.tealAccent,
+    ][rand.nextInt(4)];
     color = baseColor.withValues(alpha: opacity);
   }
   late double x;
@@ -72,7 +76,6 @@ class _Particle {
 }
 
 class _ParticlePainter extends CustomPainter {
-
   _ParticlePainter(this.particles, this.t);
   final List<_Particle> particles;
   final double t;

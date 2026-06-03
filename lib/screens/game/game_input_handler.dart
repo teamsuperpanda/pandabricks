@@ -5,8 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pandabricks/models/game_input_callbacks.dart';
 
 class GameInputHandler {
-  GameInputHandler(GameInputCallbacks callbacks)
-      : _callbacks = callbacks;
+  GameInputHandler(GameInputCallbacks callbacks) : _callbacks = callbacks;
 
   final GameInputCallbacks _callbacks;
 

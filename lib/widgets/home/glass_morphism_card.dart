@@ -23,21 +23,23 @@ class GlassMorphismCard extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                theme.colorScheme.primary.withValues(alpha: 51/255.0),
-                theme.colorScheme.primary.withValues(alpha: 25/255.0),
+                theme.colorScheme.primary.withValues(alpha: 51 / 255.0),
+                theme.colorScheme.primary.withValues(alpha: 25 / 255.0),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: theme.colorScheme.primary.withValues(alpha: 51/255.0),
+              color: theme.colorScheme.primary.withValues(alpha: 51 / 255.0),
               width: 1.5,
             ),
             boxShadow: showShadow
                 ? [
                     BoxShadow(
-                      color: theme.colorScheme.primary.withValues(alpha: 25/255.0),
+                      color: theme.colorScheme.primary.withValues(
+                        alpha: 25 / 255.0,
+                      ),
                       blurRadius: 10,
                       spreadRadius: 5,
                     ),

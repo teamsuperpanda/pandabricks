@@ -16,7 +16,9 @@ void main() {
       localeProvider = LocaleProvider();
     });
 
-    testWidgets('all dialogs should be non-dismissible', (WidgetTester tester) async {
+    testWidgets('all dialogs should be non-dismissible', (
+      WidgetTester tester,
+    ) async {
       // Test Game Over Dialog
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -59,7 +61,9 @@ void main() {
       expect(find.text('Game Over'), findsOneWidget);
     });
 
-    testWidgets('all dialogs should use GlassMorphismCard', (WidgetTester tester) async {
+    testWidgets('all dialogs should use GlassMorphismCard', (
+      WidgetTester tester,
+    ) async {
       final dialogs = [
         GameOverDialog(
           score: 1000,
@@ -102,7 +106,9 @@ void main() {
       }
     });
 
-    testWidgets('all dialogs should have consistent styling', (WidgetTester tester) async {
+    testWidgets('all dialogs should have consistent styling', (
+      WidgetTester tester,
+    ) async {
       final dialogs = [
         (
           'Game Over',
@@ -112,7 +118,7 @@ void main() {
             lines: 10,
             onRestart: () {},
             onMainMenu: () {},
-          )
+          ),
         ),
         (
           'Game Paused',
@@ -120,21 +126,21 @@ void main() {
             onResume: () {},
             onRestart: () {},
             onMainMenu: () {},
-          )
+          ),
         ),
         (
           'Restart Game?',
           RestartConfirmDialog(
             onConfirm: () {},
             onCancel: () {},
-          )
+          ),
         ),
         (
           'Return to Main Menu?',
           MainMenuConfirmDialog(
             onConfirm: () {},
             onCancel: () {},
-          )
+          ),
         ),
       ];
 
@@ -162,8 +168,9 @@ void main() {
     });
 
     group('Dialog Accessibility Tests', () {
-      testWidgets('dialogs should have semantic labels for buttons',
-          (WidgetTester tester) async {
+      testWidgets('dialogs should have semantic labels for buttons', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           ChangeNotifierProvider<LocaleProvider>.value(
             value: localeProvider,
@@ -189,8 +196,9 @@ void main() {
         expect(find.text('Main Menu'), findsOneWidget);
       });
 
-      testWidgets('confirmation dialogs should clearly indicate consequences',
-          (WidgetTester tester) async {
+      testWidgets('confirmation dialogs should clearly indicate consequences', (
+        WidgetTester tester,
+      ) async {
         await tester.pumpWidget(
           ChangeNotifierProvider<LocaleProvider>.value(
             value: localeProvider,
@@ -214,8 +222,9 @@ void main() {
     });
 
     group('Dialog Button Interaction Tests', () {
-      testWidgets('multiple rapid taps should not cause issues',
-          (WidgetTester tester) async {
+      testWidgets('multiple rapid taps should not cause issues', (
+        WidgetTester tester,
+      ) async {
         var tapCount = 0;
 
         await tester.pumpWidget(

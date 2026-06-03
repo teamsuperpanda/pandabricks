@@ -6,7 +6,7 @@ void main() {
   group('GlassMorphismCard', () {
     testWidgets('renders child widget correctly', (WidgetTester tester) async {
       const testText = 'Test Content';
-      
+
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -35,7 +35,9 @@ void main() {
       expect(find.byType(BackdropFilter), findsOneWidget);
     });
 
-    testWidgets('uses ClipRRect for rounded corners', (WidgetTester tester) async {
+    testWidgets('uses ClipRRect for rounded corners', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

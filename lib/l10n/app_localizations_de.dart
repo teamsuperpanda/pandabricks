@@ -54,7 +54,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pandaBrick => 'Panda-Stein';
 
   @override
-  String get pandaBrickDescription => 'Räumt die gesamte Spalte ab, wenn er landet!';
+  String get pandaBrickDescription =>
+      'Räumt die gesamte Spalte ab, wenn er landet!';
 
   @override
   String get ghostBrick => 'Geister-Stein';
@@ -66,19 +67,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get catBrick => 'Katzen-Stein';
 
   @override
-  String get catBrickDescription => 'Bewegt sich unvorhersehbar, während er fällt!';
+  String get catBrickDescription =>
+      'Bewegt sich unvorhersehbar, während er fällt!';
 
   @override
   String get tornadoBrick => 'Tornado-Stein';
 
   @override
-  String get tornadoBrickDescription => 'Dreht sich automatisch, während er fällt!';
+  String get tornadoBrickDescription =>
+      'Dreht sich automatisch, während er fällt!';
 
   @override
   String get bombBrick => 'Bomben-Stein';
 
   @override
-  String get bombBrickDescription => 'Räumt die gesamte Zeile und Spalte ab, wenn platziert!';
+  String get bombBrickDescription =>
+      'Räumt die gesamte Zeile und Spalte ab, wenn platziert!';
 
   @override
   String get close => 'Schließen';
@@ -123,7 +127,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get returnToMainMenu => 'Zurück zum Hauptmenü?';
 
   @override
-  String get progressWillBeLost => 'Dein aktueller Spielfortschritt geht verloren.';
+  String get progressWillBeLost =>
+      'Dein aktueller Spielfortschritt geht verloren.';
 
   @override
   String get cancel => 'Abbrechen';
@@ -138,7 +143,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get restartGame => 'Spiel neustarten?';
 
   @override
-  String get areYouSureYouWantToRestart => 'Bist du sicher, dass du neu starten möchtest?\nDein aktueller Fortschritt geht verloren.';
+  String get areYouSureYouWantToRestart =>
+      'Bist du sicher, dass du neu starten möchtest?\nDein aktueller Fortschritt geht verloren.';
 
   @override
   String get music => 'Musik';

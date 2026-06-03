@@ -22,7 +22,10 @@ class AudioSettings extends StatelessWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 6,
+                    ),
                     child: AudioSettingRow(
                       title: l10n.music,
                       icon: Icons.music_note,
@@ -34,7 +37,10 @@ class AudioSettings extends StatelessWidget {
                   ),
                   const Divider(height: 8, color: Colors.white24),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 6,
+                    ),
                     child: AudioSettingRow(
                       title: l10n.sfx,
                       icon: Icons.volume_up,

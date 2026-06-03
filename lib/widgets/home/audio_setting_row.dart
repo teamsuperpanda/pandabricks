@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AudioSettingRow extends StatelessWidget {
-
   const AudioSettingRow({
-    required this.title, required this.icon, required this.initialValue, required this.onChanged, super.key,
+    required this.title,
+    required this.icon,
+    required this.initialValue,
+    required this.onChanged,
+    super.key,
   });
   final String title;
   final IconData icon;
@@ -30,7 +33,11 @@ class AudioSettingRow extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
               ),
             ),
             Semantics(
@@ -42,7 +49,7 @@ class AudioSettingRow extends StatelessWidget {
                   if (states.contains(WidgetState.selected)) return Colors.cyan;
                   return Colors.grey;
                 }),
-                inactiveTrackColor: Colors.grey.withValues(alpha: 128/255.0),
+                inactiveTrackColor: Colors.grey.withValues(alpha: 128 / 255.0),
               ),
             ),
           ],

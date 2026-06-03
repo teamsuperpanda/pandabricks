@@ -24,7 +24,10 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AudioProvider(musicEnabled: musicEnabled, sfxEnabled: sfxEnabled)),
+        ChangeNotifierProvider(
+          create: (_) =>
+              AudioProvider(musicEnabled: musicEnabled, sfxEnabled: sfxEnabled),
+        ),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
       child: const MyApp(),
@@ -67,7 +70,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final audio = context.read<AudioProvider>();
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
       audio.stopMusic();
       _umamiService.endSession();
     } else if (state == AppLifecycleState.resumed) {
@@ -84,7 +88,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (context, localeProvider, child) {
         _umamiService.language = localeProvider.locale?.languageCode ?? 'en';
         return MaterialApp.router(
-          onGenerateTitle: (context) => AppLocalizations.of(context)?.appTitle ?? _defaultTitle,
+          onGenerateTitle: (context) =>
+              AppLocalizations.of(context)?.appTitle ?? _defaultTitle,
           routerConfig: _appRouter.router,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -94,8 +99,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               bodyLarge: TextStyle(fontFamily: 'Fredoka'),
               bodyMedium: TextStyle(fontFamily: 'Fredoka'),
               bodySmall: TextStyle(fontFamily: 'Fredoka'),
-              titleLarge: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.w700),
-              titleMedium: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.w600),
+              titleLarge: TextStyle(
+                fontFamily: 'Fredoka',
+                fontWeight: FontWeight.w700,
+              ),
+              titleMedium: TextStyle(
+                fontFamily: 'Fredoka',
+                fontWeight: FontWeight.w600,
+              ),
               labelLarge: TextStyle(fontFamily: 'Fredoka'),
             ),
           ),

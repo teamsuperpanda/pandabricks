@@ -13,7 +13,9 @@ void main() {
       localeProvider = LocaleProvider();
     });
 
-    testWidgets('should display game over information correctly', (WidgetTester tester) async {
+    testWidgets('should display game over information correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -50,7 +52,9 @@ void main() {
       expect(find.text('Main Menu'), findsOneWidget);
     });
 
-    testWidgets('should call onRestart when restart button is tapped', (WidgetTester tester) async {
+    testWidgets('should call onRestart when restart button is tapped', (
+      WidgetTester tester,
+    ) async {
       var restartCalled = false;
       var mainMenuCalled = false;
 
@@ -82,7 +86,9 @@ void main() {
       expect(mainMenuCalled, isFalse);
     });
 
-    testWidgets('should call onMainMenu when main menu button is tapped', (WidgetTester tester) async {
+    testWidgets('should call onMainMenu when main menu button is tapped', (
+      WidgetTester tester,
+    ) async {
       var restartCalled = false;
       var mainMenuCalled = false;
 
@@ -114,7 +120,9 @@ void main() {
       expect(mainMenuCalled, isTrue);
     });
 
-    testWidgets('should format large scores with commas', (WidgetTester tester) async {
+    testWidgets('should format large scores with commas', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -139,7 +147,9 @@ void main() {
       expect(find.text('1,234,567'), findsOneWidget);
     });
 
-    testWidgets('should display zero values correctly', (WidgetTester tester) async {
+    testWidgets('should display zero values correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,

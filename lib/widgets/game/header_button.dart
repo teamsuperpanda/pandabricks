@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class HeaderButton extends StatelessWidget {
-
   const HeaderButton({
     required this.icon,
     required this.label,
@@ -37,7 +36,7 @@ class HeaderButton extends StatelessWidget {
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

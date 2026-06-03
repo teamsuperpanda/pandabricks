@@ -75,14 +75,22 @@ void main() {
 
       test('ghost piece is below current piece', () {
         final currentY = game.current?.position.y ?? 0;
-        final ghostY = game.filledCellsWithGhost().where((c) => c.isGhost).map((c) => c.y).reduce(min);
+        final ghostY = game
+            .filledCellsWithGhost()
+            .where((c) => c.isGhost)
+            .map((c) => c.y)
+            .reduce(min);
         expect(ghostY, greaterThanOrEqualTo(currentY));
       });
 
       test('ghost piece stays same when piece cannot fall', () {
         while (game.softDrop()) {}
         final currentY = game.current?.position.y ?? 0;
-        final ghostY = game.filledCellsWithGhost().where((c) => c.isGhost).map((c) => c.y).reduce(min);
+        final ghostY = game
+            .filledCellsWithGhost()
+            .where((c) => c.isGhost)
+            .map((c) => c.y)
+            .reduce(min);
         expect(ghostY, currentY);
       });
     });
@@ -96,7 +104,7 @@ void main() {
 
       test('moving out of bounds fails', () {
         // Move piece to far left
-        while(game.moveLeft()) {}
+        while (game.moveLeft()) {}
         final initialX = game.current!.position.x;
         game.moveLeft();
         expect(game.current!.position.x, initialX);
@@ -107,9 +115,9 @@ void main() {
         for (var x = 0; x < game.width; x++) {
           game.board[game.height - 1][x] = 0;
         }
-        
+
         // Move piece to bottom
-        while(game.softDrop()) {}
+        while (game.softDrop()) {}
 
         final initialY = game.current!.position.y;
         game.softDrop();
@@ -251,8 +259,6 @@ void main() {
       test('effects are empty initially', () {
         expect(game.currentEffects(), isEmpty);
       });
-
-      
     });
 
     group('Color Mapping', () {

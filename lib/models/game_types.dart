@@ -15,11 +15,11 @@ class CustomGameConfig {
     this.enableSpecialBricks = true,
     this.boardWidth = 10,
     this.boardHeight = 20,
-  })  : assert(startingLevel >= 1 && startingLevel <= 20),
-        assert(speedMultiplier > 0 && speedMultiplier <= 10),
-        assert(scoreMultiplier > 0 && scoreMultiplier <= 10),
-        assert(boardWidth >= 4 && boardWidth <= 20),
-        assert(boardHeight >= 8 && boardHeight <= 40);
+  }) : assert(startingLevel >= 1 && startingLevel <= 20),
+       assert(speedMultiplier > 0 && speedMultiplier <= 10),
+       assert(scoreMultiplier > 0 && scoreMultiplier <= 10),
+       assert(boardWidth >= 4 && boardWidth <= 20),
+       assert(boardHeight >= 8 && boardHeight <= 40);
 
   final Duration? timeLimit;
   final int startingLevel;
@@ -41,7 +41,9 @@ class CustomGameConfig {
     int? boardHeight,
   }) {
     return CustomGameConfig(
-      timeLimit: identical(timeLimit, _keep) ? this.timeLimit : timeLimit as Duration?,
+      timeLimit: identical(timeLimit, _keep)
+          ? this.timeLimit
+          : timeLimit as Duration?,
       startingLevel: startingLevel ?? this.startingLevel,
       speedMultiplier: speedMultiplier ?? this.speedMultiplier,
       scoreMultiplier: scoreMultiplier ?? this.scoreMultiplier,
@@ -65,17 +67,18 @@ class CustomGameConfig {
 
   @override
   int get hashCode => Object.hash(
-        timeLimit,
-        startingLevel,
-        speedMultiplier,
-        scoreMultiplier,
-        enableSpecialBricks,
-        boardWidth,
-        boardHeight,
-      );
+    timeLimit,
+    startingLevel,
+    speedMultiplier,
+    scoreMultiplier,
+    enableSpecialBricks,
+    boardWidth,
+    boardHeight,
+  );
 
   @override
-  String toString() => 'CustomGameConfig('
+  String toString() =>
+      'CustomGameConfig('
       'timeLimit: $timeLimit, '
       'startingLevel: $startingLevel, '
       'speedMultiplier: $speedMultiplier, '
@@ -126,14 +129,29 @@ class ActivePiece {
 }
 
 enum FallingBlock {
-  I, O, T, S, Z, J, L,
-  PANDA, GHOST, CAT, TORNADO, BOMB,
+  I,
+  O,
+  T,
+  S,
+  Z,
+  J,
+  L,
+  PANDA,
+  GHOST,
+  CAT,
+  TORNADO,
+  BOMB,
 }
 
 enum EffectType { column, row }
 
 class CellRender {
-  const CellRender({required this.x, required this.y, required this.colorIndex, required this.isGhost});
+  const CellRender({
+    required this.x,
+    required this.y,
+    required this.colorIndex,
+    required this.isGhost,
+  });
   final int x;
   final int y;
   final int colorIndex;
@@ -141,7 +159,12 @@ class CellRender {
 }
 
 class EffectRender {
-  const EffectRender({required this.x, required this.y, required this.type, required this.alpha});
+  const EffectRender({
+    required this.x,
+    required this.y,
+    required this.type,
+    required this.alpha,
+  });
   final int x;
   final int y;
   final EffectType type;

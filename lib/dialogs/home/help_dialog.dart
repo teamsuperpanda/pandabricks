@@ -16,7 +16,11 @@ class HelpDialog extends StatelessWidget {
       child: GameDialogWrapper(
         icon: Semantics(
           header: true,
-          child: const Icon(Icons.help_outline_rounded, size: 48, color: Colors.cyanAccent),
+          child: const Icon(
+            Icons.help_outline_rounded,
+            size: 48,
+            color: Colors.cyanAccent,
+          ),
         ),
         title: l10n.specialBricks,
         actions: [
@@ -33,15 +37,35 @@ class HelpDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _helpRow(kSpecialBlockEmojis[7] ?? '🐼', l10n.pandaBrick, l10n.pandaBrickDescription),
+            _helpRow(
+              kSpecialBlockEmojis[7] ?? '🐼',
+              l10n.pandaBrick,
+              l10n.pandaBrickDescription,
+            ),
             const SizedBox(height: 12),
-            _helpRow(kSpecialBlockEmojis[8] ?? '👻', l10n.ghostBrick, l10n.ghostBrickDescription),
+            _helpRow(
+              kSpecialBlockEmojis[8] ?? '👻',
+              l10n.ghostBrick,
+              l10n.ghostBrickDescription,
+            ),
             const SizedBox(height: 12),
-            _helpRow(kSpecialBlockEmojis[9] ?? '🐱', l10n.catBrick, l10n.catBrickDescription),
+            _helpRow(
+              kSpecialBlockEmojis[9] ?? '🐱',
+              l10n.catBrick,
+              l10n.catBrickDescription,
+            ),
             const SizedBox(height: 12),
-            _helpRow(kSpecialBlockEmojis[10] ?? '🌪️', l10n.tornadoBrick, l10n.tornadoBrickDescription),
+            _helpRow(
+              kSpecialBlockEmojis[10] ?? '🌪️',
+              l10n.tornadoBrick,
+              l10n.tornadoBrickDescription,
+            ),
             const SizedBox(height: 12),
-            _helpRow(kSpecialBlockEmojis[11] ?? '💣', l10n.bombBrick, l10n.bombBrickDescription),
+            _helpRow(
+              kSpecialBlockEmojis[11] ?? '💣',
+              l10n.bombBrick,
+              l10n.bombBrickDescription,
+            ),
           ],
         ),
       ),
@@ -59,7 +83,13 @@ class HelpDialog extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
-            child: Text(emoji, style: const TextStyle(fontSize: 24, fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'])),
+            child: Text(
+              emoji,
+              style: const TextStyle(
+                fontSize: 24,
+                fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'],
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 16),

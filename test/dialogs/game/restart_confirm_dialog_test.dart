@@ -13,7 +13,9 @@ void main() {
       localeProvider = LocaleProvider();
     });
 
-    testWidgets('should display restart confirmation content correctly', (WidgetTester tester) async {
+    testWidgets('should display restart confirmation content correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -33,8 +35,12 @@ void main() {
 
       // Check for restart confirmation title and message
       expect(find.text('Restart Game?'), findsOneWidget);
-      expect(find.text('Are you sure you want to restart?\nYour current progress will be lost.'),
-          findsOneWidget);
+      expect(
+        find.text(
+          'Are you sure you want to restart?\nYour current progress will be lost.',
+        ),
+        findsOneWidget,
+      );
 
       // Check for restart icon (appears in header and button)
       expect(find.byIcon(Icons.refresh_rounded), findsAtLeastNWidgets(1));
@@ -47,7 +53,9 @@ void main() {
       expect(find.byIcon(Icons.close_rounded), findsOneWidget);
     });
 
-    testWidgets('should call onCancel when cancel button is tapped', (WidgetTester tester) async {
+    testWidgets('should call onCancel when cancel button is tapped', (
+      WidgetTester tester,
+    ) async {
       var restartCalled = false;
       var cancelCalled = false;
 
@@ -76,7 +84,9 @@ void main() {
       expect(cancelCalled, isTrue);
     });
 
-    testWidgets('should call onRestart when restart button is tapped', (WidgetTester tester) async {
+    testWidgets('should call onRestart when restart button is tapped', (
+      WidgetTester tester,
+    ) async {
       var restartCalled = false;
       var cancelCalled = false;
 
@@ -105,7 +115,9 @@ void main() {
       expect(cancelCalled, isFalse);
     });
 
-    testWidgets('should have proper widget hierarchy', (WidgetTester tester) async {
+    testWidgets('should have proper widget hierarchy', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -133,7 +145,9 @@ void main() {
       expect(find.byType(Row), findsAtLeastNWidgets(1));
     });
 
-    testWidgets('should have cancel and restart buttons in correct order', (WidgetTester tester) async {
+    testWidgets('should have cancel and restart buttons in correct order', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -166,7 +180,9 @@ void main() {
       expect(cancelPosition.dx, lessThan(restartPosition.dx));
     });
 
-    testWidgets('should display warning message about progress loss', (WidgetTester tester) async {
+    testWidgets('should display warning message about progress loss', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,

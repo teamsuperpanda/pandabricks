@@ -12,7 +12,11 @@ import 'package:provider/provider.dart';
 
 import '../../mocks/mock_audio_provider.dart';
 
-Widget _buildApp(MockAudioProvider audio, LocaleProvider locale, {Widget? home}) {
+Widget _buildApp(
+  MockAudioProvider audio,
+  LocaleProvider locale, {
+  Widget? home,
+}) {
   return MultiProvider(
     providers: [
       ChangeNotifierProvider<AudioProvider>.value(value: audio),
@@ -27,7 +31,11 @@ Widget _buildApp(MockAudioProvider audio, LocaleProvider locale, {Widget? home})
   );
 }
 
-Widget _buildRouterApp(MockAudioProvider audio, LocaleProvider locale, Widget gameScreen) {
+Widget _buildRouterApp(
+  MockAudioProvider audio,
+  LocaleProvider locale,
+  Widget gameScreen,
+) {
   final router = GoRouter(
     initialLocation: '/',
     routes: [
@@ -89,7 +97,9 @@ void main() {
       expect(mockAudioProvider.isGameMusic, false);
     });
 
-    testWidgets('Custom Game button opens custom game dialog', (WidgetTester tester) async {
+    testWidgets('Custom Game button opens custom game dialog', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -101,12 +111,16 @@ void main() {
       expect(find.byType(Dialog), findsOneWidget);
     });
 
-    testWidgets('Classic Mode button navigates to game screen', (WidgetTester tester) async {
-      await tester.pumpWidget(_buildRouterApp(
-        mockAudioProvider,
-        localeProvider,
-        const Scaffold(body: Center(child: Text('Game Screen'))),
-      ));
+    testWidgets('Classic Mode button navigates to game screen', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _buildRouterApp(
+          mockAudioProvider,
+          localeProvider,
+          const Scaffold(body: Center(child: Text('Game Screen'))),
+        ),
+      );
 
       await tester.pump();
 
@@ -116,12 +130,16 @@ void main() {
       expect(find.text('Game Screen'), findsOneWidget);
     });
 
-    testWidgets('Time Challenge button navigates to game screen', (WidgetTester tester) async {
-      await tester.pumpWidget(_buildRouterApp(
-        mockAudioProvider,
-        localeProvider,
-        const Scaffold(body: Center(child: Text('Game Screen'))),
-      ));
+    testWidgets('Time Challenge button navigates to game screen', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _buildRouterApp(
+          mockAudioProvider,
+          localeProvider,
+          const Scaffold(body: Center(child: Text('Game Screen'))),
+        ),
+      );
 
       await tester.pump();
 
@@ -131,12 +149,16 @@ void main() {
       expect(find.text('Game Screen'), findsOneWidget);
     });
 
-    testWidgets('Blitz Mode button navigates to game screen', (WidgetTester tester) async {
-      await tester.pumpWidget(_buildRouterApp(
-        mockAudioProvider,
-        localeProvider,
-        const Scaffold(body: Center(child: Text('Game Screen'))),
-      ));
+    testWidgets('Blitz Mode button navigates to game screen', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _buildRouterApp(
+          mockAudioProvider,
+          localeProvider,
+          const Scaffold(body: Center(child: Text('Game Screen'))),
+        ),
+      );
 
       await tester.pump();
 
@@ -159,7 +181,9 @@ void main() {
       expect(find.text('Panda Brick'), findsOneWidget);
     });
 
-    testWidgets('Language button opens language selector dialog', (WidgetTester tester) async {
+    testWidgets('Language button opens language selector dialog', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -181,7 +205,9 @@ void main() {
       expect(find.byType(Switch), findsAtLeastNWidgets(1));
     });
 
-    testWidgets('Game mode cards have proper styling', (WidgetTester tester) async {
+    testWidgets('Game mode cards have proper styling', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -193,7 +219,9 @@ void main() {
       expect(find.byIcon(Icons.settings_rounded), findsOneWidget);
     });
 
-    testWidgets('Screen has proper layout structure', (WidgetTester tester) async {
+    testWidgets('Screen has proper layout structure', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -204,7 +232,9 @@ void main() {
       expect(find.byType(AmbientParticles), findsOneWidget);
     });
 
-    testWidgets('Language selector has language options', (WidgetTester tester) async {
+    testWidgets('Language selector has language options', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();

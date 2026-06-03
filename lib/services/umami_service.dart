@@ -50,25 +50,27 @@ class UmamiService {
   }
 
   void _send(String type, Map<String, dynamic> payload) {
-    unawaited(http
-        .post(
-          Uri.parse(endpoint),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'type': type,
-            'payload': {
-              'website': websiteId,
-              'language': _language,
-              ...payload,
-            },
+    unawaited(
+      http
+          .post(
+            Uri.parse(endpoint),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'type': type,
+              'payload': {
+                'website': websiteId,
+                'language': _language,
+                ...payload,
+              },
+            }),
+          )
+          .timeout(const Duration(seconds: 10))
+          .then((_) => null)
+          .catchError((Object e) {
+            logError('UmamiService', e);
+            return null;
           }),
-        )
-        .timeout(const Duration(seconds: 10))
-        .then((_) => null)
-        .catchError((Object e) {
-          logError('UmamiService', e);
-          return null;
-        }));
+    );
   }
 }
 
@@ -93,7 +95,9 @@ class UmamiNavigatorObserver extends NavigatorObserver {
 
   void _trackRoute(Route<dynamic> route) {
     if (route.settings.name != null) {
-      final title = route.settings.name!.replaceAll(RegExp(r'[/\-_]'), ' ').trim();
+      final title = route.settings.name!
+          .replaceAll(RegExp(r'[/\-_]'), ' ')
+          .trim();
       _umami.trackPageView(route.settings.name!, title: title);
     }
   }

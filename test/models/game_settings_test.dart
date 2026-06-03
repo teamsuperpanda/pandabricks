@@ -6,15 +6,18 @@ void main() {
     group('Constructor', () {
       test('creates settings with required mode', () {
         const settings = GameSettings(mode: GameMode.classic);
-        
+
         expect(settings.mode, GameMode.classic);
         expect(settings.customConfig, isNull);
       });
 
       test('creates settings with custom config', () {
         const config = CustomGameConfig(boardWidth: 8);
-        const settings = GameSettings(mode: GameMode.custom, customConfig: config);
-        
+        const settings = GameSettings(
+          mode: GameMode.custom,
+          customConfig: config,
+        );
+
         expect(settings.mode, GameMode.custom);
         expect(settings.customConfig, config);
       });
@@ -30,21 +33,21 @@ void main() {
     group('Factory constructors', () {
       test('classic() creates classic mode settings', () {
         const settings = GameSettings.classic();
-        
+
         expect(settings.mode, GameMode.classic);
         expect(settings.customConfig, isNull);
       });
 
       test('timeChallenge() creates time challenge mode settings', () {
         const settings = GameSettings.timeChallenge();
-        
+
         expect(settings.mode, GameMode.timeChallenge);
         expect(settings.customConfig, isNull);
       });
 
       test('blitz() creates blitz mode settings', () {
         const settings = GameSettings.blitz();
-        
+
         expect(settings.mode, GameMode.blitz);
         expect(settings.customConfig, isNull);
       });
@@ -56,7 +59,7 @@ void main() {
           speedMultiplier: 1.5,
         );
         final settings = GameSettings.custom(config);
-        
+
         expect(settings.mode, GameMode.custom);
         expect(settings.customConfig, config);
         expect(settings.boardWidth, 8);
@@ -67,7 +70,7 @@ void main() {
     group('Board dimensions', () {
       test('returns default dimensions for standard modes', () {
         const settings = GameSettings.classic();
-        
+
         expect(settings.boardWidth, 10);
         expect(settings.boardHeight, 20);
       });
@@ -75,7 +78,7 @@ void main() {
       test('returns custom dimensions when config provided', () {
         const config = CustomGameConfig(boardWidth: 12, boardHeight: 24);
         final settings = GameSettings.custom(config);
-        
+
         expect(settings.boardWidth, 12);
         expect(settings.boardHeight, 24);
       });
@@ -83,7 +86,7 @@ void main() {
       test('returns default dimensions when custom config has null values', () {
         const config = CustomGameConfig();
         final settings = GameSettings.custom(config);
-        
+
         expect(settings.boardWidth, 10);
         expect(settings.boardHeight, 20);
       });
@@ -93,14 +96,14 @@ void main() {
       test('same mode and config are equal', () {
         const settings1 = GameSettings.classic();
         const settings2 = GameSettings.classic();
-        
+
         expect(settings1, settings2);
       });
 
       test('different modes are not equal', () {
         const settings1 = GameSettings.classic();
         const settings2 = GameSettings.blitz();
-        
+
         expect(settings1, isNot(settings2));
       });
 
@@ -109,14 +112,14 @@ void main() {
         const config2 = CustomGameConfig(boardWidth: 12);
         final settings1 = GameSettings.custom(config1);
         final settings2 = GameSettings.custom(config2);
-        
+
         expect(settings1, isNot(settings2));
       });
 
       test('hashCode is consistent with equality', () {
         const settings1 = GameSettings.classic();
         const settings2 = GameSettings.classic();
-        
+
         expect(settings1.hashCode, settings2.hashCode);
       });
     });
@@ -125,7 +128,7 @@ void main() {
       test('includes mode and config information', () {
         const settings = GameSettings.classic();
         final string = settings.toString();
-        
+
         expect(string, contains('GameMode.classic'));
         expect(string, contains('GameSettings'));
       });
@@ -134,7 +137,7 @@ void main() {
         const config = CustomGameConfig(boardWidth: 8);
         final settings = GameSettings.custom(config);
         final string = settings.toString();
-        
+
         expect(string, contains('GameMode.custom'));
         expect(string, isNot('null'));
       });
@@ -144,7 +147,7 @@ void main() {
       test('can be used as route arguments', () {
         const settings = GameSettings.timeChallenge();
         const arguments = settings; // Would be passed to Navigator
-        
+
         expect(arguments, isA<GameSettings>());
         expect(arguments.mode, GameMode.timeChallenge);
       });
@@ -152,7 +155,7 @@ void main() {
       test('provides compile-time safety for game mode', () {
         // This test ensures type safety - if it compiles, it's safe
         const settings = GameSettings.blitz();
-        
+
         expect(settings.mode, isA<GameMode>());
       });
     });
@@ -164,7 +167,7 @@ void main() {
         const blitz = GameSettings.blitz();
         const config = CustomGameConfig(timeLimit: Duration(minutes: 5));
         final custom = GameSettings.custom(config);
-        
+
         expect(classic.mode, GameMode.classic);
         expect(timeChallenge.mode, GameMode.timeChallenge);
         expect(blitz.mode, GameMode.blitz);
@@ -182,7 +185,7 @@ void main() {
           boardHeight: 16,
         );
         final settings = GameSettings.custom(config);
-        
+
         expect(settings.mode, GameMode.custom);
         expect(settings.customConfig?.timeLimit, const Duration(minutes: 3));
         expect(settings.customConfig?.startingLevel, 5);

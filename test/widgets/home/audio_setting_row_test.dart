@@ -25,7 +25,9 @@ void main() {
       expect(find.byType(Switch), findsOneWidget);
     });
 
-    testWidgets('shows volume off icon when disabled', (WidgetTester tester) async {
+    testWidgets('shows volume off icon when disabled', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

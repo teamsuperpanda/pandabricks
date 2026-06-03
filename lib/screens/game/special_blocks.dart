@@ -26,17 +26,32 @@ void applySpecialBehaviors(Game game) {
       final movement = game._rng.nextInt(3) - 1;
       if (movement != 0) {
         final newPos = game.current!.position + PointInt(movement, 0);
-        _tryApplySpecialMove(game, game.current!.copyWith(position: newPos, lastMoveY: game.current!.position.y));
+        _tryApplySpecialMove(
+          game,
+          game.current!.copyWith(
+            position: newPos,
+            lastMoveY: game.current!.position.y,
+          ),
+        );
       } else {
-        game.current = game.current!.copyWith(lastMoveY: game.current!.position.y);
+        game.current = game.current!.copyWith(
+          lastMoveY: game.current!.position.y,
+        );
       }
     }
   }
 
   if (game.current!.type == FallingBlock.TORNADO) {
     if (game.current!.lastMoveY != game.current!.position.y) {
-      final nextRotation = Rotation.values[(game.current!.rotation.index + 1) % 4];
-      _tryApplySpecialMove(game, game.current!.copyWith(rotation: nextRotation, lastMoveY: game.current!.position.y));
+      final nextRotation =
+          Rotation.values[(game.current!.rotation.index + 1) % 4];
+      _tryApplySpecialMove(
+        game,
+        game.current!.copyWith(
+          rotation: nextRotation,
+          lastMoveY: game.current!.position.y,
+        ),
+      );
     }
   }
 }
@@ -100,7 +115,14 @@ void lockCurrentPiece(Game game) {
   final cleared = game.clearLines();
   if (cleared > 0) {
     game.linesCleared += cleared;
-    game.score += (Game.lineClearScores[cleared.clamp(0, Game.lineClearScores.length - 1)] * game.level * (game.customConfig?.scoreMultiplier ?? 1.0)).toInt();
+    game.score +=
+        (Game.lineClearScores[cleared.clamp(
+                  0,
+                  Game.lineClearScores.length - 1,
+                )] *
+                game.level *
+                (game.customConfig?.scoreMultiplier ?? 1.0))
+            .toInt();
     game.level = 1 + (game.linesCleared ~/ 10);
   }
   game._spawn();

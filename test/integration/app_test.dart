@@ -11,7 +11,9 @@ void main() {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => AudioProvider(enablePlatformAudio: false)),
+            ChangeNotifierProvider(
+              create: (_) => AudioProvider(enablePlatformAudio: false),
+            ),
             ChangeNotifierProvider(create: (_) => LocaleProvider()),
           ],
           child: const MaterialApp(
@@ -27,11 +29,15 @@ void main() {
       expect(AppLocalizations.localizationsDelegates, isNotEmpty);
     });
 
-    testWidgets('app launches and shows home screen', (WidgetTester tester) async {
+    testWidgets('app launches and shows home screen', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => AudioProvider(enablePlatformAudio: false)),
+            ChangeNotifierProvider(
+              create: (_) => AudioProvider(enablePlatformAudio: false),
+            ),
             ChangeNotifierProvider(create: (_) => LocaleProvider()),
           ],
           child: const MaterialApp(
@@ -51,7 +57,9 @@ void main() {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => AudioProvider(enablePlatformAudio: false)),
+            ChangeNotifierProvider(
+              create: (_) => AudioProvider(enablePlatformAudio: false),
+            ),
             ChangeNotifierProvider(create: (_) => LocaleProvider()),
           ],
           child: const MaterialApp(

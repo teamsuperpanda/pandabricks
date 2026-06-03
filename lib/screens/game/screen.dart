@@ -45,7 +45,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _bgController = AnimationController(duration: const Duration(seconds: 10), vsync: this)..repeat(reverse: true);
+    _bgController = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
+    )..repeat(reverse: true);
     _bgAnim = CurvedAnimation(parent: _bgController, curve: Curves.easeInOut);
 
     final callbacks = GameInputCallbacks(
@@ -72,7 +75,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       }
 
       final args = ModalRoute.of(context)?.settings.arguments;
-      final settings = (args is GameSettings ? args : null) ?? const GameSettings.classic();
+      final settings =
+          (args is GameSettings ? args : null) ?? const GameSettings.classic();
 
       _game = Game(
         audioProvider: _audioProvider,
@@ -179,7 +183,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                       child: HeaderButton(
                                         icon: Icons.home,
                                         label: l10n.mainMenu,
-                                        onPressed: _dialogMediator.showMainMenuConfirmDialog,
+                                        onPressed: _dialogMediator
+                                            .showMainMenuConfirmDialog,
                                       ),
                                     ),
                                     const Spacer(),
@@ -189,20 +194,29 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                       child: HeaderButton(
                                         icon: Icons.refresh,
                                         label: l10n.restart,
-                                        onPressed: () => _withMusic(_dialogMediator.showRestartDialog),
+                                        onPressed: () => _withMusic(
+                                          _dialogMediator.showRestartDialog,
+                                        ),
                                       ),
                                     ),
                                     const Spacer(),
                                     Consumer<Game>(
                                       builder: (context, game, _) => Semantics(
                                         button: true,
-                                        label: game.isPaused ? '${l10n.resume} button' : '${l10n.pause} button',
+                                        label: game.isPaused
+                                            ? '${l10n.resume} button'
+                                            : '${l10n.pause} button',
                                         child: HeaderButton(
-                                          icon: game.isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                                          label: game.isPaused ? l10n.resume : l10n.pause,
+                                          icon: game.isPaused
+                                              ? Icons.play_arrow_rounded
+                                              : Icons.pause_rounded,
+                                          label: game.isPaused
+                                              ? l10n.resume
+                                              : l10n.pause,
                                           onPressed: () => _withMusic(() {
                                             _game.togglePause();
-                                            if (_game.isPaused) _dialogMediator.showPauseDialog();
+                                            if (_game.isPaused)
+                                              _dialogMediator.showPauseDialog();
                                           }),
                                         ),
                                       ),
@@ -214,19 +228,30 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                             Semantics(
                               label: 'Score display',
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: GameHUD(score: _game.score, level: _game.level, lines: _game.linesCleared),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: GameHUD(
+                                  score: _game.score,
+                                  level: _game.level,
+                                  lines: _game.linesCleared,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 14),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
                                 child: Center(
                                   child: ConstrainedBox(
-                                    constraints: const BoxConstraints(maxWidth: 500),
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 500,
+                                    ),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
                                           flex: 5,
@@ -240,40 +265,66 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                             child: Column(
                                               children: [
                                                 Align(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     l10n.next,
                                                     style: TextStyle(
                                                       fontSize: 14,
-                                                      color: Colors.white.withValues(alpha: 220/255.0),
-                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.white
+                                                          .withValues(
+                                                            alpha: 220 / 255.0,
+                                                          ),
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Semantics(
                                                   label: 'Next piece preview',
-                                                  child: PiecePreview(next: _game.next),
+                                                  child: PiecePreview(
+                                                    next: _game.next,
+                                                  ),
                                                 ),
-                                                if ((_game.gameMode == GameMode.timeChallenge ||
-                                                     (_game.gameMode == GameMode.custom && _game.customConfig?.timeLimit != null)) &&
-                                                    _game.timeRemaining != null) ...[
+                                                if ((_game.gameMode ==
+                                                            GameMode
+                                                                .timeChallenge ||
+                                                        (_game.gameMode ==
+                                                                GameMode
+                                                                    .custom &&
+                                                            _game
+                                                                    .customConfig
+                                                                    ?.timeLimit !=
+                                                                null)) &&
+                                                    _game.timeRemaining !=
+                                                        null) ...[
                                                   const SizedBox(height: 16),
                                                   Align(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: Text(
                                                       l10n.timeLeft,
                                                       style: TextStyle(
                                                         fontSize: 14,
-                                                        color: Colors.white.withValues(alpha: 220/255.0),
-                                                        fontWeight: FontWeight.w600,
+                                                        color: Colors.white
+                                                            .withValues(
+                                                              alpha:
+                                                                  220 / 255.0,
+                                                            ),
+                                                        fontWeight:
+                                                            FontWeight.w600,
                                                       ),
                                                     ),
                                                   ),
                                                   const SizedBox(height: 8),
                                                   Semantics(
-                                                    label: 'Time remaining: ${_game.timeRemaining!.inMinutes}:${(_game.timeRemaining!.inSeconds % 60).toString().padLeft(2, '0')}',
-                                                    child: TimerDisplay(timeRemaining: _game.timeRemaining!),
+                                                    label:
+                                                        'Time remaining: ${_game.timeRemaining!.inMinutes}:${(_game.timeRemaining!.inSeconds % 60).toString().padLeft(2, '0')}',
+                                                    child: TimerDisplay(
+                                                      timeRemaining:
+                                                          _game.timeRemaining!,
+                                                    ),
                                                   ),
                                                 ],
                                               ],
@@ -289,7 +340,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                             Semantics(
                               label: 'Game controls',
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  8,
+                                  16,
+                                  32,
+                                ),
                                 child: GameControls(callbacks: _inputCallbacks),
                               ),
                             ),

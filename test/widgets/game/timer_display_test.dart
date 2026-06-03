@@ -8,7 +8,9 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: TimerDisplay(timeRemaining: Duration(minutes: 5, seconds: 30)),
+            body: TimerDisplay(
+              timeRemaining: Duration(minutes: 5, seconds: 30),
+            ),
           ),
         ),
       );
@@ -16,7 +18,9 @@ void main() {
       expect(find.text('05:30'), findsOneWidget);
     });
 
-    testWidgets('displays zero-padded minutes and seconds', (WidgetTester tester) async {
+    testWidgets('displays zero-padded minutes and seconds', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

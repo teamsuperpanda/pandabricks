@@ -11,9 +11,9 @@ class GameDialogMediator {
     required NavigatorState navigator,
     required Game game,
     required AudioProvider audioProvider,
-  })  : _navigator = navigator,
-        _game = game,
-        _audioProvider = audioProvider;
+  }) : _navigator = navigator,
+       _game = game,
+       _audioProvider = audioProvider;
 
   final NavigatorState _navigator;
   final Game _game;

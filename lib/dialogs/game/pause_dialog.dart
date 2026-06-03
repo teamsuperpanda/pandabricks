@@ -22,14 +22,26 @@ class PauseDialog extends StatelessWidget {
       child: GameDialogWrapper(
         icon: Semantics(
           label: l10n.gamePaused,
-          child: const Icon(Icons.pause_circle_filled_rounded, size: 64, color: Colors.white),
+          child: const Icon(
+            Icons.pause_circle_filled_rounded,
+            size: 64,
+            color: Colors.white,
+          ),
         ),
         title: l10n.gamePaused,
         subtitle: l10n.yourGameIsPaused,
         actions: [
-          DialogButton(icon: Icons.play_arrow_rounded, label: l10n.resume, onTap: onResume),
+          DialogButton(
+            icon: Icons.play_arrow_rounded,
+            label: l10n.resume,
+            onTap: onResume,
+          ),
           const SizedBox(height: 12),
-          DialogButton(icon: Icons.home_rounded, label: l10n.mainMenu, onTap: onMainMenu),
+          DialogButton(
+            icon: Icons.home_rounded,
+            label: l10n.mainMenu,
+            onTap: onMainMenu,
+          ),
         ],
       ),
     );

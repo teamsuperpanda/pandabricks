@@ -13,7 +13,9 @@ void main() {
       localeProvider = LocaleProvider();
     });
 
-    testWidgets('displays score, level, and lines', (WidgetTester tester) async {
+    testWidgets('displays score, level, and lines', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,

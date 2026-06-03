@@ -22,19 +22,26 @@ void main() {
 
       // Mock SharedPreferences.getInstance()
       SharedPreferences.setMockInitialValues({});
-      when(mockSharedPreferences.getBool(any)).thenReturn(true); // Default to enabled
-      when(mockSharedPreferences.setBool(any, any)).thenAnswer((_) async => true);
-      
+      when(
+        mockSharedPreferences.getBool(any),
+      ).thenReturn(true); // Default to enabled
+      when(
+        mockSharedPreferences.setBool(any, any),
+      ).thenAnswer((_) async => true);
+
       // Provide the mock instance when getInstance is called
       // This is a bit tricky as getInstance is static. We'll rely on setMockInitialValues
       // and ensure our mock is used by the provider.
-      
-      audioProvider = AudioProvider(enablePlatformAudio: false); // Prevent internal AudioPlayer creation
+
+      audioProvider = AudioProvider(
+        enablePlatformAudio: false,
+      ); // Prevent internal AudioPlayer creation
       audioProvider.player = mockPlayer;
       audioProvider.sfxPlayer = mockSfxPlayer;
-      await audioProvider.loadPreferences(mockSharedPreferences); // Manually load preferences
+      await audioProvider.loadPreferences(
+        mockSharedPreferences,
+      ); // Manually load preferences
     });
-
 
     test('toggleMusic toggles musicEnabled state', () {
       expect(audioProvider.musicEnabled, isTrue);
@@ -54,7 +61,18 @@ void main() {
 
     test('playMenuMusic plays menu track when music is enabled', () async {
       await audioProvider.playMenuMusic();
-      verify(mockPlayer.play(argThat(isA<AssetSource>().having((p0) => p0.path, 'path', AudioProvider.menuTrack)), volume: 0.5)).called(1);
+      verify(
+        mockPlayer.play(
+          argThat(
+            isA<AssetSource>().having(
+              (p0) => p0.path,
+              'path',
+              AudioProvider.menuTrack,
+            ),
+          ),
+          volume: 0.5,
+        ),
+      ).called(1);
       verify(mockPlayer.setReleaseMode(ReleaseMode.loop)).called(1);
     });
 
@@ -66,7 +84,18 @@ void main() {
 
     test('playGameMusic plays a game track when music is enabled', () async {
       await audioProvider.playGameMusic();
-      verify(mockPlayer.play(argThat(isA<AssetSource>().having((p0) => p0.path, 'path', isIn(AudioProvider.gameTracks))), volume: 0.5)).called(1);
+      verify(
+        mockPlayer.play(
+          argThat(
+            isA<AssetSource>().having(
+              (p0) => p0.path,
+              'path',
+              isIn(AudioProvider.gameTracks),
+            ),
+          ),
+          volume: 0.5,
+        ),
+      ).called(1);
       verify(mockPlayer.setReleaseMode(ReleaseMode.loop)).called(1);
     });
 
@@ -76,15 +105,29 @@ void main() {
       verifyNever(mockPlayer.play(any, volume: anyNamed('volume')));
     });
 
-    test('stopMusic stops the player and clears currently playing track', () async {
-      await audioProvider.stopMusic();
-      verify(mockPlayer.stop()).called(1);
-      expect(audioProvider.currentlyPlaying, isNull);
-    });
+    test(
+      'stopMusic stops the player and clears currently playing track',
+      () async {
+        await audioProvider.stopMusic();
+        verify(mockPlayer.stop()).called(1);
+        expect(audioProvider.currentlyPlaying, isNull);
+      },
+    );
 
     test('playSfx plays sfx when sfx is enabled', () async {
       await audioProvider.playSfx(GameSfx.rowClear);
-      verify(mockSfxPlayer.play(argThat(isA<AssetSource>().having((p0) => p0.path, 'path', 'audio/sfx/row_clear.mp3')), volume: 1)).called(1);
+      verify(
+        mockSfxPlayer.play(
+          argThat(
+            isA<AssetSource>().having(
+              (p0) => p0.path,
+              'path',
+              'audio/sfx/row_clear.mp3',
+            ),
+          ),
+          volume: 1,
+        ),
+      ).called(1);
     });
 
     test('playSfx does not play when sfx is disabled', () async {

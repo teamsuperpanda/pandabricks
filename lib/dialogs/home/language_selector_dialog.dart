@@ -21,7 +21,11 @@ class LanguageSelectorDialog extends StatelessWidget {
       child: GameDialogWrapper(
         icon: Semantics(
           header: true,
-          child: const Icon(Icons.language_rounded, size: 48, color: Colors.cyanAccent),
+          child: const Icon(
+            Icons.language_rounded,
+            size: 48,
+            color: Colors.cyanAccent,
+          ),
         ),
         title: l10n.language,
         child: SizedBox(
@@ -45,7 +49,8 @@ class LanguageSelectorDialog extends StatelessWidget {
                 );
               }
               final locale = supportedLocales[index - 1];
-              final languageName = languageNames[locale.languageCode] ?? locale.languageCode;
+              final languageName =
+                  languageNames[locale.languageCode] ?? locale.languageCode;
               return _LanguageCard(
                 languageName: languageName,
                 onTap: () {

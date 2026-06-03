@@ -13,8 +13,9 @@ void main() {
       localeProvider = LocaleProvider();
     });
 
-    testWidgets('should display main menu confirmation content correctly',
-        (WidgetTester tester) async {
+    testWidgets('should display main menu confirmation content correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -34,7 +35,10 @@ void main() {
 
       // Check for main menu confirmation title and message
       expect(find.text('Return to Main Menu?'), findsOneWidget);
-      expect(find.text('Your current game progress will be lost.'), findsOneWidget);
+      expect(
+        find.text('Your current game progress will be lost.'),
+        findsOneWidget,
+      );
 
       // Check for home icon (appears in header and button)
       expect(find.byIcon(Icons.home_rounded), findsAtLeastNWidgets(1));
@@ -47,8 +51,9 @@ void main() {
       expect(find.byIcon(Icons.close_rounded), findsOneWidget);
     });
 
-    testWidgets('should call onCancel when cancel button is tapped',
-        (WidgetTester tester) async {
+    testWidgets('should call onCancel when cancel button is tapped', (
+      WidgetTester tester,
+    ) async {
       var confirmCalled = false;
       var cancelCalled = false;
 
@@ -77,8 +82,9 @@ void main() {
       expect(cancelCalled, isTrue);
     });
 
-    testWidgets('should call onConfirm when confirm button is tapped',
-        (WidgetTester tester) async {
+    testWidgets('should call onConfirm when confirm button is tapped', (
+      WidgetTester tester,
+    ) async {
       var confirmCalled = false;
       var cancelCalled = false;
 
@@ -107,7 +113,9 @@ void main() {
       expect(cancelCalled, isFalse);
     });
 
-    testWidgets('should have proper widget hierarchy', (WidgetTester tester) async {
+    testWidgets('should have proper widget hierarchy', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -135,8 +143,9 @@ void main() {
       expect(find.byType(Row), findsAtLeastNWidgets(1));
     });
 
-    testWidgets('should have cancel and confirm buttons in correct order',
-        (WidgetTester tester) async {
+    testWidgets('should have cancel and confirm buttons in correct order', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -159,7 +168,10 @@ void main() {
       final confirmFinder = find.text('Main Menu');
 
       expect(cancelFinder, findsOneWidget);
-      expect(confirmFinder, findsAtLeastNWidgets(1)); // May appear multiple times
+      expect(
+        confirmFinder,
+        findsAtLeastNWidgets(1),
+      ); // May appear multiple times
 
       // Get their positions
       final cancelPosition = tester.getCenter(cancelFinder);
@@ -169,8 +181,9 @@ void main() {
       expect(cancelPosition.dx, lessThan(confirmPosition.dx));
     });
 
-    testWidgets('should display warning message about progress loss',
-        (WidgetTester tester) async {
+    testWidgets('should display warning message about progress loss', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -192,8 +205,9 @@ void main() {
       expect(find.textContaining('progress will be lost'), findsOneWidget);
     });
 
-    testWidgets('should use different action text than restart dialog',
-        (WidgetTester tester) async {
+    testWidgets('should use different action text than restart dialog', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,

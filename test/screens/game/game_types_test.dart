@@ -53,7 +53,7 @@ void main() {
       const point1 = PointInt(3, 4);
       const point2 = PointInt(2, 5);
       final result = point1 + point2;
-      
+
       expect(result.x, 5);
       expect(result.y, 9);
     });
@@ -62,7 +62,7 @@ void main() {
       const point1 = PointInt(5, 3);
       const point2 = PointInt(-2, -1);
       final result = point1 + point2;
-      
+
       expect(result.x, 3);
       expect(result.y, 2);
     });

@@ -54,7 +54,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pandaBrick => 'Кирпич-панда';
 
   @override
-  String get pandaBrickDescription => 'Очищает всю колонку, когда приземляется!';
+  String get pandaBrickDescription =>
+      'Очищает всю колонку, когда приземляется!';
 
   @override
   String get ghostBrick => 'Кирпич-призрак';
@@ -78,7 +79,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bombBrick => 'Кирпич-бомба';
 
   @override
-  String get bombBrickDescription => 'Очищает всю строку и столбец при размещении!';
+  String get bombBrickDescription =>
+      'Очищает всю строку и столбец при размещении!';
 
   @override
   String get close => 'Закрыть';
@@ -123,7 +125,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get returnToMainMenu => 'Вернуться в главное меню?';
 
   @override
-  String get progressWillBeLost => 'Ваш текущий игровой прогресс будет потерян.';
+  String get progressWillBeLost =>
+      'Ваш текущий игровой прогресс будет потерян.';
 
   @override
   String get cancel => 'Отмена';
@@ -138,7 +141,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get restartGame => 'Перезапустить игру?';
 
   @override
-  String get areYouSureYouWantToRestart => 'Вы уверены, что хотите перезапустить?\nВаш текущий прогресс будет потерян.';
+  String get areYouSureYouWantToRestart =>
+      'Вы уверены, что хотите перезапустить?\nВаш текущий прогресс будет потерян.';
 
   @override
   String get music => 'Музыка';

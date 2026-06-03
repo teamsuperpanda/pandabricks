@@ -4,7 +4,10 @@ import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class GameHUD extends StatelessWidget {
   const GameHUD({
-    required this.score, required this.level, required this.lines, super.key,
+    required this.score,
+    required this.level,
+    required this.lines,
+    super.key,
   });
 
   final int score;
@@ -21,7 +24,10 @@ class GameHUD extends StatelessWidget {
           Expanded(
             child: GlassMorphismCard(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -47,7 +53,7 @@ class GameHUD extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.cyanAccent.withValues(alpha: 200/255.0),
+              color: Colors.cyanAccent.withValues(alpha: 200 / 255.0),
               fontWeight: FontWeight.w800,
               letterSpacing: 1.2,
             ),

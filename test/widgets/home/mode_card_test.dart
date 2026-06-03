@@ -58,7 +58,5 @@ void main() {
       await tester.pump();
       expect(tapped, isTrue);
     });
-
-
   });
 }

@@ -58,7 +58,9 @@ void main() {
       expect(find.byType(InkWell), findsOneWidget);
     });
 
-    testWidgets('displays different icons correctly', (WidgetTester tester) async {
+    testWidgets('displays different icons correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -84,7 +86,9 @@ void main() {
       expect(find.byIcon(Icons.play_arrow), findsOneWidget);
     });
 
-    testWidgets('displays different labels correctly', (WidgetTester tester) async {
+    testWidgets('displays different labels correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

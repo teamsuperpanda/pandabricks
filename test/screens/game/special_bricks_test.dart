@@ -35,7 +35,10 @@ void main() {
 
       // Effects should contain column entries for x == 3
       final effects = game.currentEffects().toList();
-      expect(effects.where((e) => e.type == EffectType.column && e.x == 3), isNotEmpty);
+      expect(
+        effects.where((e) => e.type == EffectType.column && e.x == 3),
+        isNotEmpty,
+      );
     });
 
     test('Bomb clears its row and column and triggers both effects', () {
@@ -73,8 +76,14 @@ void main() {
 
       final effects = game.currentEffects().toList();
       // Look for at least one column effect for targetX and one row effect for targetY
-      expect(effects.where((e) => e.type == EffectType.column && e.x == targetX), isNotEmpty);
-      expect(effects.where((e) => e.type == EffectType.row && e.y == targetY), isNotEmpty);
+      expect(
+        effects.where((e) => e.type == EffectType.column && e.x == targetX),
+        isNotEmpty,
+      );
+      expect(
+        effects.where((e) => e.type == EffectType.row && e.y == targetY),
+        isNotEmpty,
+      );
     });
 
     test('Ghost brick reverses left/right controls', () {
@@ -99,21 +108,24 @@ void main() {
       expect(game.current!.position.x, equals(5));
     });
 
-    test('Cat brick updates lastMoveY on tick (autonomous movement bookkeeping)', () {
-      final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
+    test(
+      'Cat brick updates lastMoveY on tick (autonomous movement bookkeeping)',
+      () {
+        final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
 
-      game.current = const ActivePiece(
-        type: FallingBlock.CAT,
-        rotation: Rotation.up,
-        position: PointInt(5, 1),
-        isSpecialBlock: true,
-      );
+        game.current = const ActivePiece(
+          type: FallingBlock.CAT,
+          rotation: Rotation.up,
+          position: PointInt(5, 1),
+          isSpecialBlock: true,
+        );
 
-      game.tick();
+        game.tick();
 
-      // After tick, lastMoveY should be set to the current y
-      expect(game.current!.lastMoveY, equals(1));
-    });
+        // After tick, lastMoveY should be set to the current y
+        expect(game.current!.lastMoveY, equals(1));
+      },
+    );
 
     test('Tornado auto-rotates on tick', () {
       final game = Game(audioProvider: mockAudio, gameMode: GameMode.blitz);
@@ -144,7 +156,7 @@ void main() {
       // Force a line clear by calling tick() which will process the full line
       // First make sure there's no current piece to avoid complications
       game.current = null;
-      
+
       // Manually trigger line clearing by placing any piece and locking it
       // Place an O piece above the filled line
       game.current = ActivePiece(
@@ -157,14 +169,22 @@ void main() {
       game.hardDrop();
 
       // The bottom row should have been cleared
-      final hasNullsInBottomRow = game.board[targetY].any((cell) => cell == null);
-      expect(hasNullsInBottomRow, isTrue, 
-        reason: 'Bottom row should have been cleared');
+      final hasNullsInBottomRow = game.board[targetY].any(
+        (cell) => cell == null,
+      );
+      expect(
+        hasNullsInBottomRow,
+        isTrue,
+        reason: 'Bottom row should have been cleared',
+      );
 
       // Effects should contain row clear sparkles
       final effects = game.currentEffects().toList();
-      expect(effects.where((e) => e.type == EffectType.row), isNotEmpty, 
-        reason: 'Should have row clear effects after line clear');
+      expect(
+        effects.where((e) => e.type == EffectType.row),
+        isNotEmpty,
+        reason: 'Should have row clear effects after line clear',
+      );
     });
   });
 }

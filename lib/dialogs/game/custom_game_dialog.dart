@@ -83,10 +83,14 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.cyan.withValues(alpha: 100/255.0) : Colors.white.withValues(alpha: 20/255.0),
+            color: isSelected
+                ? Colors.cyan.withValues(alpha: 100 / 255.0)
+                : Colors.white.withValues(alpha: 20 / 255.0),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected ? Colors.cyan : Colors.white.withValues(alpha: 50/255.0),
+              color: isSelected
+                  ? Colors.cyan
+                  : Colors.white.withValues(alpha: 50 / 255.0),
             ),
           ),
           child: Text(
@@ -141,7 +145,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: Colors.cyan,
             thumbColor: Colors.cyan,
-            inactiveTrackColor: Colors.white.withValues(alpha: 50/255.0),
+            inactiveTrackColor: Colors.white.withValues(alpha: 50 / 255.0),
           ),
           child: Slider(
             value: config.speedMultiplier,
@@ -149,7 +153,9 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             max: 2,
             divisions: 6,
             label: '${config.speedMultiplier.toStringAsFixed(1)}x',
-            onChanged: (value) => setState(() => config = config.copyWith(speedMultiplier: value)),
+            onChanged: (value) => setState(
+              () => config = config.copyWith(speedMultiplier: value),
+            ),
           ),
         ),
       ],
@@ -160,14 +166,19 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     final isSelected = config.startingLevel == level;
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => config = config.copyWith(startingLevel: level)),
+        onTap: () =>
+            setState(() => config = config.copyWith(startingLevel: level)),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.purple.withValues(alpha: 100/255.0) : Colors.white.withValues(alpha: 20/255.0),
+            color: isSelected
+                ? Colors.purple.withValues(alpha: 100 / 255.0)
+                : Colors.white.withValues(alpha: 20 / 255.0),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected ? Colors.purple : Colors.white.withValues(alpha: 50/255.0),
+              color: isSelected
+                  ? Colors.purple
+                  : Colors.white.withValues(alpha: 50 / 255.0),
             ),
           ),
           child: Text(
@@ -197,7 +208,9 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           ),
         ),
         const SizedBox(height: 12),
-        _featureToggle(l10n.specialBricksToggle, config.enableSpecialBricks, (value) {
+        _featureToggle(l10n.specialBricksToggle, config.enableSpecialBricks, (
+          value,
+        ) {
           setState(() => config = config.copyWith(enableSpecialBricks: value));
         }),
         const SizedBox(height: 8),
@@ -214,7 +227,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: Colors.orange,
             thumbColor: Colors.orange,
-            inactiveTrackColor: Colors.white.withValues(alpha: 50/255.0),
+            inactiveTrackColor: Colors.white.withValues(alpha: 50 / 255.0),
           ),
           child: Slider(
             value: config.scoreMultiplier,
@@ -222,14 +235,20 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             max: 3,
             divisions: 10,
             label: '${config.scoreMultiplier.toStringAsFixed(1)}x',
-            onChanged: (value) => setState(() => config = config.copyWith(scoreMultiplier: value)),
+            onChanged: (value) => setState(
+              () => config = config.copyWith(scoreMultiplier: value),
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _featureToggle(String label, bool value, ValueChanged<bool> onChanged) {
+  Widget _featureToggle(
+    String label,
+    bool value,
+    ValueChanged<bool> onChanged,
+  ) {
     return Row(
       children: [
         Expanded(
@@ -249,13 +268,13 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             if (states.contains(WidgetState.selected)) {
               return Colors.cyan;
             }
-            return Colors.white.withValues(alpha: 150/255.0);
+            return Colors.white.withValues(alpha: 150 / 255.0);
           }),
           trackColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return Colors.cyan.withValues(alpha: 100/255.0);
+              return Colors.cyan.withValues(alpha: 100 / 255.0);
             }
-            return Colors.white.withValues(alpha: 50/255.0);
+            return Colors.white.withValues(alpha: 50 / 255.0);
           }),
         ),
       ],
@@ -270,7 +289,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           label: l10n.cancel,
           onTap: () => Navigator.of(context).pop(),
           compact: true,
-      ),
+        ),
         const SizedBox(width: 12),
         DialogButton(
           icon: Icons.play_arrow_rounded,

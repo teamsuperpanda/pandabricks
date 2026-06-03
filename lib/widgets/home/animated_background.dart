@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 
 class AnimatedBackground extends StatelessWidget {
-
   const AnimatedBackground({required this.gradientAnimation, super.key});
   final Animation<double> gradientAnimation;
 

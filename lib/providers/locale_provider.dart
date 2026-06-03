@@ -3,8 +3,8 @@ import 'package:pandabricks/services/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocaleProvider with ChangeNotifier {
-
-  LocaleProvider({bool enablePersistence = true}) : _enablePersistence = enablePersistence {
+  LocaleProvider({bool enablePersistence = true})
+    : _enablePersistence = enablePersistence {
     if (_enablePersistence) {
       _loadLocale();
     }
@@ -15,23 +15,34 @@ class LocaleProvider with ChangeNotifier {
 
   Locale? get locale => _locale;
 
-  static Locale? _buildLocale(String? languageCode, String? countryCode, String? scriptCode) {
+  static Locale? _buildLocale(
+    String? languageCode,
+    String? countryCode,
+    String? scriptCode,
+  ) {
     if (languageCode == null) return null;
     if (countryCode != null && scriptCode != null) {
-      return Locale.fromSubtags(languageCode: languageCode, countryCode: countryCode, scriptCode: scriptCode);
+      return Locale.fromSubtags(
+        languageCode: languageCode,
+        countryCode: countryCode,
+        scriptCode: scriptCode,
+      );
     }
     if (countryCode != null) {
       return Locale(languageCode, countryCode);
     }
     if (scriptCode != null) {
-      return Locale.fromSubtags(languageCode: languageCode, scriptCode: scriptCode);
+      return Locale.fromSubtags(
+        languageCode: languageCode,
+        scriptCode: scriptCode,
+      );
     }
     return Locale(languageCode);
   }
 
   Future<void> _loadLocale() async {
     if (!_enablePersistence) return;
-    
+
     try {
       final prefs = await SharedPreferences.getInstance();
       final languageCode = prefs.getString('locale_language');
@@ -50,14 +61,14 @@ class LocaleProvider with ChangeNotifier {
   /// Sets the locale. Persistence errors are silently logged; UI updates optimistically.
   Future<void> setLocale(Locale? locale) async {
     if (_locale == locale) return;
-    
+
     _locale = locale;
     if (!_disposed) {
       notifyListeners();
     }
-    
+
     if (!_enablePersistence) return;
-    
+
     try {
       final prefs = await SharedPreferences.getInstance();
       if (locale != null) {

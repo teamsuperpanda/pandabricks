@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class GlassIconButton extends StatelessWidget {
   const GlassIconButton({
-    required this.icon, required this.onTap, super.key,
+    required this.icon,
+    required this.onTap,
+    super.key,
     this.tooltip,
   });
 
@@ -27,7 +29,9 @@ class GlassIconButton extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               customBorder: const CircleBorder(),
-              splashColor: theme.colorScheme.primary.withValues(alpha: 76/255.0),
+              splashColor: theme.colorScheme.primary.withValues(
+                alpha: 76 / 255.0,
+              ),
               child: Container(
                 width: 48,
                 height: 48,
@@ -35,12 +39,16 @@ class GlassIconButton extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: theme.colorScheme.primary.withValues(alpha: 76/255.0),
+                    color: theme.colorScheme.primary.withValues(
+                      alpha: 76 / 255.0,
+                    ),
                     width: 1.2,
                   ),
                   boxShadow: [
                     BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: 36/255.0),
+                      color: theme.colorScheme.primary.withValues(
+                        alpha: 36 / 255.0,
+                      ),
                       blurRadius: 10,
                       spreadRadius: 4,
                     ),

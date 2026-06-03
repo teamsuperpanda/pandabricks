@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
 
 class AnimatedTitle extends StatelessWidget {
-
   const AnimatedTitle({required this.floatingAnimation, super.key});
   final Animation<double> floatingAnimation;
 
@@ -16,7 +15,11 @@ class AnimatedTitle extends StatelessWidget {
           offset: Offset(0, floatingAnimation.value),
           child: ShaderMask(
             shaderCallback: (bounds) => LinearGradient(
-              colors: [Colors.white, Colors.cyan.withValues(alpha: 0.7), Colors.white],
+              colors: [
+                Colors.white,
+                Colors.cyan.withValues(alpha: 0.7),
+                Colors.white,
+              ],
               stops: const [0.0, 0.5, 1.0],
             ).createShader(bounds),
             blendMode: BlendMode.srcIn,

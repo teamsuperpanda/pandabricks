@@ -6,9 +6,13 @@ import 'package:pandabricks/widgets/game/dialog_button.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class GameOverDialog extends StatelessWidget {
-
   const GameOverDialog({
-    required this.score, required this.level, required this.lines, required this.onRestart, required this.onMainMenu, super.key,
+    required this.score,
+    required this.level,
+    required this.lines,
+    required this.onRestart,
+    required this.onMainMenu,
+    super.key,
   });
   final int score;
   final int level;
@@ -25,7 +29,11 @@ class GameOverDialog extends StatelessWidget {
       child: GameDialogWrapper(
         icon: Semantics(
           label: l10n.gameOver,
-          child: const Icon(Icons.gamepad_rounded, size: 64, color: Colors.redAccent),
+          child: const Icon(
+            Icons.gamepad_rounded,
+            size: 64,
+            color: Colors.redAccent,
+          ),
         ),
         title: l10n.gameOver,
         actions: [
@@ -36,7 +44,14 @@ class GameOverDialog extends StatelessWidget {
                 children: [
                   Semantics(
                     label: '${l10n.finalScore} $formattedScore',
-                    child: Text(l10n.finalScore, style: const TextStyle(fontSize: 16, color: Colors.white70, fontWeight: FontWeight.w500)),
+                    child: Text(
+                      l10n.finalScore,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -57,9 +72,19 @@ class GameOverDialog extends StatelessWidget {
             label: l10n.playAgain,
             child: Row(
               children: [
-                DialogButton(icon: Icons.refresh, label: l10n.playAgain, onTap: onRestart, compact: true),
+                DialogButton(
+                  icon: Icons.refresh,
+                  label: l10n.playAgain,
+                  onTap: onRestart,
+                  compact: true,
+                ),
                 const SizedBox(width: 12),
-                DialogButton(icon: Icons.home, label: l10n.mainMenu, onTap: onMainMenu, compact: true),
+                DialogButton(
+                  icon: Icons.home,
+                  label: l10n.mainMenu,
+                  onTap: onMainMenu,
+                  compact: true,
+                ),
               ],
             ),
           ),
@@ -75,9 +100,23 @@ class GameOverDialog extends StatelessWidget {
       label: '$label $value',
       child: Column(
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w500)),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.white70,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w700)),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ],
       ),
     );
