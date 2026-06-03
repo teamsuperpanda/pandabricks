@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/home/ambient_particles.dart';
 
 void main() {
   group('AmbientParticles', () {
-    testWidgets('renders particles', (WidgetTester tester) async {
+    testWidgets('renders particles', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

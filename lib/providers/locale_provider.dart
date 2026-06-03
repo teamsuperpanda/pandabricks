@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pandabricks/services/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,7 +8,7 @@ class LocaleProvider with ChangeNotifier {
   LocaleProvider({bool enablePersistence = true})
     : _enablePersistence = enablePersistence {
     if (_enablePersistence) {
-      _loadLocale();
+      unawaited(_loadLocale());
     }
   }
   Locale? _locale;

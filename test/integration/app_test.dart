@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   group('App Integration Tests', () {
-    testWidgets('app supports localization', (WidgetTester tester) async {
+    testWidgets('app supports localization', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
@@ -30,7 +30,7 @@ void main() {
     });
 
     testWidgets('app launches and shows home screen', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         MultiProvider(
@@ -53,7 +53,7 @@ void main() {
       expect(find.byType(MaterialApp), findsOneWidget);
     });
 
-    testWidgets('app has proper providers', (WidgetTester tester) async {
+    testWidgets('app has proper providers', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [

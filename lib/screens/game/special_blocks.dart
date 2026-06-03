@@ -69,7 +69,7 @@ void handleSpecialBlockEffects(Game game) {
         }
       }
       game.score += Game.pandaBrickBonus;
-      game.audioProvider.playSfx(GameSfx.columnClear);
+      unawaited(game.audioProvider.playSfx(GameSfx.columnClear));
 
     case FallingBlock.BOMB:
       for (final c in cells) {
@@ -79,7 +79,7 @@ void handleSpecialBlockEffects(Game game) {
         }
       }
       game.score += Game.bombBrickBonus;
-      game.audioProvider.playSfx(GameSfx.bombExplosion);
+      unawaited(game.audioProvider.playSfx(GameSfx.bombExplosion));
 
     case FallingBlock.GHOST:
     case FallingBlock.CAT:

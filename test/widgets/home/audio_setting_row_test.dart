@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/home/audio_setting_row.dart';
 
 void main() {
   group('AudioSettingRow', () {
-    testWidgets('displays title and icon', (WidgetTester tester) async {
+    testWidgets('displays title and icon', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -26,7 +26,7 @@ void main() {
     });
 
     testWidgets('shows volume off icon when disabled', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -46,7 +46,7 @@ void main() {
       expect(find.byIcon(Icons.volume_off_rounded), findsOneWidget);
     });
 
-    testWidgets('calls onChanged when tapped', (WidgetTester tester) async {
+    testWidgets('calls onChanged when tapped', (tester) async {
       var toggled = false;
 
       await tester.pumpWidget(

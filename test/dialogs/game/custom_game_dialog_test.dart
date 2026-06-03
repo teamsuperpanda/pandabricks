@@ -35,7 +35,7 @@ void main() {
     }
 
     testWidgets('renders custom game dialog content', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(buildTestWidget());
 
@@ -45,7 +45,7 @@ void main() {
       expect(find.text('Speed Multiplier'), findsOneWidget);
     });
 
-    testWidgets('renders time limit buttons', (WidgetTester tester) async {
+    testWidgets('renders time limit buttons', (tester) async {
       await tester.pumpWidget(buildTestWidget());
 
       expect(find.text('1 min'), findsOneWidget);
@@ -56,7 +56,7 @@ void main() {
     });
 
     testWidgets('renders cancel and start buttons', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(buildTestWidget());
 
@@ -65,7 +65,7 @@ void main() {
     });
 
     testWidgets('renders special features section', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(buildTestWidget());
 

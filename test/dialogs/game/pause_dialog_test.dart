@@ -23,13 +23,13 @@ Widget buildPauseDialog({
 
 void main() {
   group('PauseDialog', () {
-    testWidgets('displays pause icon', (WidgetTester tester) async {
+    testWidgets('displays pause icon', (tester) async {
       await tester.pumpWidget(buildPauseDialog());
       expect(find.byIcon(Icons.pause_circle_filled_rounded), findsOneWidget);
     });
 
     testWidgets('displays resume and main menu buttons', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(buildPauseDialog());
       expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);
@@ -37,7 +37,7 @@ void main() {
     });
 
     testWidgets('calls onResume when resume tapped', (
-      WidgetTester tester,
+      tester,
     ) async {
       var called = false;
       await tester.pumpWidget(buildPauseDialog(onResume: () => called = true));
@@ -47,7 +47,7 @@ void main() {
     });
 
     testWidgets('calls onMainMenu when main menu tapped', (
-      WidgetTester tester,
+      tester,
     ) async {
       var called = false;
       await tester.pumpWidget(
@@ -58,12 +58,12 @@ void main() {
       expect(called, isTrue);
     });
 
-    testWidgets('is wrapped in Dialog', (WidgetTester tester) async {
+    testWidgets('is wrapped in Dialog', (tester) async {
       await tester.pumpWidget(buildPauseDialog());
       expect(find.byType(Dialog), findsOneWidget);
     });
 
-    testWidgets('has two InkWell buttons', (WidgetTester tester) async {
+    testWidgets('has two InkWell buttons', (tester) async {
       await tester.pumpWidget(buildPauseDialog());
       expect(find.byType(InkWell), findsNWidgets(2));
     });

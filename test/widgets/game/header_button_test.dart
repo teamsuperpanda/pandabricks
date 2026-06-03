@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/game/header_button.dart';
 
 void main() {
   group('HeaderButton', () {
-    testWidgets('displays icon and label', (WidgetTester tester) async {
+    testWidgets('displays icon and label', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -21,7 +21,7 @@ void main() {
       expect(find.text('Pause'), findsOneWidget);
     });
 
-    testWidgets('calls onPressed when tapped', (WidgetTester tester) async {
+    testWidgets('calls onPressed when tapped', (tester) async {
       var pressed = false;
 
       await tester.pumpWidget(
@@ -42,7 +42,7 @@ void main() {
       expect(pressed, isTrue);
     });
 
-    testWidgets('uses glass morphism styling', (WidgetTester tester) async {
+    testWidgets('uses glass morphism styling', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -59,7 +59,7 @@ void main() {
     });
 
     testWidgets('displays different icons correctly', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -87,7 +87,7 @@ void main() {
     });
 
     testWidgets('displays different labels correctly', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         MaterialApp(

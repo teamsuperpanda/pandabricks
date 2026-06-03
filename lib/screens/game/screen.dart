@@ -48,7 +48,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     _bgController = AnimationController(
       duration: const Duration(seconds: 10),
       vsync: this,
-    )..repeat(reverse: true);
+    );
+    unawaited(_bgController.repeat(reverse: true));
     _bgAnim = CurvedAnimation(parent: _bgController, curve: Curves.easeInOut);
 
     final callbacks = GameInputCallbacks(
@@ -68,9 +69,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     super.didChangeDependencies();
     if (!_initialized) {
       _audioProvider = context.read<AudioProvider>();
-      _audioProvider.stopMusic();
+      unawaited(_audioProvider.stopMusic());
       if (_audioProvider.musicEnabled) {
-        _audioProvider.playGameMusic();
+        unawaited(_audioProvider.playGameMusic());
         _musicStarted = true;
       }
 
@@ -116,7 +117,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   void _startMusicOnFirstInteraction() {
     if (!_musicStarted && _audioProvider.musicEnabled) {
-      _audioProvider.playGameMusic();
+      unawaited(_audioProvider.playGameMusic());
       _musicStarted = true;
     }
   }
@@ -133,7 +134,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     _bgController.dispose();
     _inputHandler.dispose();
     _game.dispose();
-    _audioProvider.playMenuMusic();
+    unawaited(_audioProvider.playMenuMusic());
     super.dispose();
   }
 
@@ -215,8 +216,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                                               : l10n.pause,
                                           onPressed: () => _withMusic(() {
                                             _game.togglePause();
-                                            if (_game.isPaused)
-                                              _dialogMediator.showPauseDialog();
+            if (_game.isPaused) {
+              _dialogMediator.showPauseDialog();
+            }
                                           }),
                                         ),
                                       ),

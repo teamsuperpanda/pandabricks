@@ -14,7 +14,7 @@ void main() {
     });
 
     testWidgets('should display restart confirmation content correctly', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -54,7 +54,7 @@ void main() {
     });
 
     testWidgets('should call onCancel when cancel button is tapped', (
-      WidgetTester tester,
+      tester,
     ) async {
       var restartCalled = false;
       var cancelCalled = false;
@@ -85,7 +85,7 @@ void main() {
     });
 
     testWidgets('should call onRestart when restart button is tapped', (
-      WidgetTester tester,
+      tester,
     ) async {
       var restartCalled = false;
       var cancelCalled = false;
@@ -116,7 +116,7 @@ void main() {
     });
 
     testWidgets('should have proper widget hierarchy', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -146,7 +146,7 @@ void main() {
     });
 
     testWidgets('should have cancel and restart buttons in correct order', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -181,7 +181,7 @@ void main() {
     });
 
     testWidgets('should display warning message about progress loss', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(

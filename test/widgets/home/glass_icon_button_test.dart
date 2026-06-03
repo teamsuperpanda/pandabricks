@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/home/glass_icon_button.dart';
 
 void main() {
   group('GlassIconButton', () {
-    testWidgets('renders icon', (WidgetTester tester) async {
+    testWidgets('renders icon', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -19,7 +19,7 @@ void main() {
       expect(find.byIcon(Icons.help_outline_rounded), findsOneWidget);
     });
 
-    testWidgets('renders with tooltip', (WidgetTester tester) async {
+    testWidgets('renders with tooltip', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -36,7 +36,7 @@ void main() {
       expect(find.byType(Tooltip), findsOneWidget);
     });
 
-    testWidgets('calls onTap when tapped', (WidgetTester tester) async {
+    testWidgets('calls onTap when tapped', (tester) async {
       var tapped = false;
 
       await tester.pumpWidget(

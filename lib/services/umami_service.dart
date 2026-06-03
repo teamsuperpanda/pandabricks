@@ -37,6 +37,8 @@ class UmamiService {
     _send('event', {
       'url': path,
       'event_name': 'pageview',
+      // The '?' null-aware checks the map key, not value. A string literal is never null, so '?' is inapplicable.
+      // ignore: use_null_aware_elements
       if (title != null) 'title': title,
     });
   }
@@ -45,7 +47,7 @@ class UmamiService {
     if (!enabled) return;
     _send('event', {
       'event_name': event,
-      if (data != null) ...data,
+      ...?data,
     });
   }
 

@@ -8,7 +8,7 @@ void _void() {}
 
 void main() {
   group('GameControls', () {
-    testWidgets('renders all control buttons', (WidgetTester tester) async {
+    testWidgets('renders all control buttons', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -35,7 +35,7 @@ void main() {
     });
 
     testWidgets('calls callbacks when buttons are tapped', (
-      WidgetTester tester,
+      tester,
     ) async {
       var leftCalled = false;
       var rightCalled = false;
@@ -78,7 +78,7 @@ void main() {
     });
 
     testWidgets('has proper structure with columns and rows', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         MaterialApp(

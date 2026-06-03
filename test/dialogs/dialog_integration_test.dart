@@ -17,7 +17,7 @@ void main() {
     });
 
     testWidgets('all dialogs should be non-dismissible', (
-      WidgetTester tester,
+      tester,
     ) async {
       // Test Game Over Dialog
       await tester.pumpWidget(
@@ -62,7 +62,7 @@ void main() {
     });
 
     testWidgets('all dialogs should use GlassMorphismCard', (
-      WidgetTester tester,
+      tester,
     ) async {
       final dialogs = [
         GameOverDialog(
@@ -107,7 +107,7 @@ void main() {
     });
 
     testWidgets('all dialogs should have consistent styling', (
-      WidgetTester tester,
+      tester,
     ) async {
       final dialogs = [
         (
@@ -169,7 +169,7 @@ void main() {
 
     group('Dialog Accessibility Tests', () {
       testWidgets('dialogs should have semantic labels for buttons', (
-        WidgetTester tester,
+        tester,
       ) async {
         await tester.pumpWidget(
           ChangeNotifierProvider<LocaleProvider>.value(
@@ -197,7 +197,7 @@ void main() {
       });
 
       testWidgets('confirmation dialogs should clearly indicate consequences', (
-        WidgetTester tester,
+        tester,
       ) async {
         await tester.pumpWidget(
           ChangeNotifierProvider<LocaleProvider>.value(
@@ -223,7 +223,7 @@ void main() {
 
     group('Dialog Button Interaction Tests', () {
       testWidgets('multiple rapid taps should not cause issues', (
-        WidgetTester tester,
+        tester,
       ) async {
         var tapCount = 0;
 

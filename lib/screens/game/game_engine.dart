@@ -2,8 +2,9 @@ part of 'game.dart';
 
 bool collidesWithBoard(Game game, ActivePiece piece) {
   for (final c in game.cells(piece)) {
-    if (c.x < 0 || c.x >= game.width || c.y < 0 || c.y >= game.height)
+    if (c.x < 0 || c.x >= game.width || c.y < 0 || c.y >= game.height) {
       return true;
+    }
     if (game.board[c.y][c.x] != null) return true;
   }
   return false;

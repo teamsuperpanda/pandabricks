@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -55,7 +57,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
     WidgetsBinding.instance.addObserver(this);
     Future.delayed(const Duration(seconds: 1), FlutterNativeSplash.remove);
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    unawaited(SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]));
     _umamiService.startSession();
   }
 
@@ -72,11 +74,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final audio = context.read<AudioProvider>();
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
-      audio.stopMusic();
+      unawaited(audio.stopMusic());
       _umamiService.endSession();
     } else if (state == AppLifecycleState.resumed) {
       if (audio.musicEnabled) {
-        audio.playMenuMusic();
+        unawaited(audio.playMenuMusic());
       }
       _umamiService.startSession();
     }

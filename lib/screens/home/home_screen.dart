@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -40,12 +42,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _gradientController = AnimationController(
       duration: const Duration(seconds: 10),
       vsync: this,
-    )..repeat(reverse: true);
+    );
+    unawaited(_gradientController.repeat(reverse: true));
 
     _floatingController = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
-    )..repeat(reverse: true);
+    );
+    unawaited(_floatingController.repeat(reverse: true));
 
     _gradientAnimation =
         Tween<double>(
@@ -76,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     if (!_audioInitialized) {
       _audioProvider = context.read<AudioProvider>();
       if (_audioProvider!.musicEnabled) {
-        _audioProvider!.playMenuMusic();
+        unawaited(_audioProvider!.playMenuMusic());
       }
       _audioInitialized = true;
     }
@@ -219,24 +223,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _showLanguageSelector(BuildContext context) {
-    showDialog(
+    unawaited(showDialog(
       context: context,
       builder: (context) => const LanguageSelectorDialog(),
-    );
+    ));
   }
 
   void _showHelp(BuildContext context) {
-    showDialog(
+    unawaited(showDialog(
       context: context,
       builder: (context) => const HelpDialog(),
-    );
+    ));
   }
 
   void _showCustomGameDialog(BuildContext context) {
-    showDialog(
+    unawaited(showDialog(
       context: context,
       builder: (context) => const CustomGameDialog(),
-    );
+    ));
   }
 }
 

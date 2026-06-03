@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pandabricks/dialogs/game/game_dialog_wrapper.dart';
@@ -296,7 +298,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           label: l10n.startGame,
           onTap: () {
             Navigator.of(context).pop();
-            context.push('/game', extra: GameSettings.custom(config));
+            unawaited(context.push('/game', extra: GameSettings.custom(config)));
           },
           compact: true,
         ),

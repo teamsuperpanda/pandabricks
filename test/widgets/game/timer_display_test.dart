@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/game/timer_display.dart';
 
 void main() {
   group('TimerDisplay', () {
-    testWidgets('displays time in MM:SS format', (WidgetTester tester) async {
+    testWidgets('displays time in MM:SS format', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -19,7 +19,7 @@ void main() {
     });
 
     testWidgets('displays zero-padded minutes and seconds', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -32,7 +32,7 @@ void main() {
       expect(find.text('01:05'), findsOneWidget);
     });
 
-    testWidgets('shows timer icon', (WidgetTester tester) async {
+    testWidgets('shows timer icon', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -44,7 +44,7 @@ void main() {
       expect(find.byIcon(Icons.timer), findsOneWidget);
     });
 
-    testWidgets('displays zero time correctly', (WidgetTester tester) async {
+    testWidgets('displays zero time correctly', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

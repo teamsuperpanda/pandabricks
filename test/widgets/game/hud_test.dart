@@ -14,7 +14,7 @@ void main() {
     });
 
     testWidgets('displays score, level, and lines', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -38,7 +38,7 @@ void main() {
       expect(find.text('25'), findsOneWidget);
     });
 
-    testWidgets('displays zero values', (WidgetTester tester) async {
+    testWidgets('displays zero values', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -57,7 +57,7 @@ void main() {
       expect(find.text('1'), findsOneWidget);
     });
 
-    testWidgets('displays large scores', (WidgetTester tester) async {
+    testWidgets('displays large scores', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,

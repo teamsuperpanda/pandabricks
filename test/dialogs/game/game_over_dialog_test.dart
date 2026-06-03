@@ -14,7 +14,7 @@ void main() {
     });
 
     testWidgets('should display game over information correctly', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -53,7 +53,7 @@ void main() {
     });
 
     testWidgets('should call onRestart when restart button is tapped', (
-      WidgetTester tester,
+      tester,
     ) async {
       var restartCalled = false;
       var mainMenuCalled = false;
@@ -87,7 +87,7 @@ void main() {
     });
 
     testWidgets('should call onMainMenu when main menu button is tapped', (
-      WidgetTester tester,
+      tester,
     ) async {
       var restartCalled = false;
       var mainMenuCalled = false;
@@ -121,7 +121,7 @@ void main() {
     });
 
     testWidgets('should format large scores with commas', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -148,7 +148,7 @@ void main() {
     });
 
     testWidgets('should display zero values correctly', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(

@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/home/mode_card.dart';
 
 void main() {
   group('ModeCard', () {
-    testWidgets('displays title and subtitle', (WidgetTester tester) async {
+    testWidgets('displays title and subtitle', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -21,7 +21,7 @@ void main() {
       expect(find.text('Classic falling blocks.'), findsOneWidget);
     });
 
-    testWidgets('displays icon', (WidgetTester tester) async {
+    testWidgets('displays icon', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -38,7 +38,7 @@ void main() {
       expect(find.byIcon(Icons.chevron_right_rounded), findsOneWidget);
     });
 
-    testWidgets('calls onTap when tapped', (WidgetTester tester) async {
+    testWidgets('calls onTap when tapped', (tester) async {
       var tapped = false;
 
       await tester.pumpWidget(

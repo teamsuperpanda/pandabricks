@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pandabricks/data/locale_display_names.dart';
 import 'package:pandabricks/dialogs/game/game_dialog_wrapper.dart';
@@ -43,7 +45,7 @@ class LanguageSelectorDialog extends StatelessWidget {
                 return _LanguageCard(
                   languageName: l10n.system,
                   onTap: () {
-                    localeProvider.setLocale(null);
+                    unawaited(localeProvider.setLocale(null));
                     Navigator.of(context).pop();
                   },
                 );
@@ -54,7 +56,7 @@ class LanguageSelectorDialog extends StatelessWidget {
               return _LanguageCard(
                 languageName: languageName,
                 onTap: () {
-                  localeProvider.setLocale(locale);
+                  unawaited(localeProvider.setLocale(locale));
                   Navigator.of(context).pop();
                 },
               );

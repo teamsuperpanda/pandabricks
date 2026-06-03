@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   group('AudioSettings', () {
-    testWidgets('renders music and sfx toggles', (WidgetTester tester) async {
+    testWidgets('renders music and sfx toggles', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
@@ -32,7 +32,7 @@ void main() {
       expect(find.byType(Switch), findsNWidgets(2));
     });
 
-    testWidgets('toggles music on tap', (WidgetTester tester) async {
+    testWidgets('toggles music on tap', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [

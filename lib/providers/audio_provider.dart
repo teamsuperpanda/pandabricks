@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -25,7 +26,7 @@ class AudioProvider extends ChangeNotifier {
       _player = AudioPlayer();
       _sfxPlayer = AudioPlayer(playerId: 'sfx');
       if (musicEnabled == null && sfxEnabled == null) {
-        loadPreferences(null);
+        unawaited(loadPreferences(null));
       }
     }
   }
@@ -69,15 +70,15 @@ class AudioProvider extends ChangeNotifier {
     _musicEnabled = !_musicEnabled;
     if (_musicEnabled) {
       if (_isGameMusic) {
-        playGameMusic();
+        unawaited(playGameMusic());
       } else {
-        playMenuMusic();
+        unawaited(playMenuMusic());
       }
     } else {
-      stopMusic();
+      unawaited(stopMusic());
     }
     if (_enablePlatformAudio) {
-      savePreferences(null);
+      unawaited(savePreferences(null));
     }
     notifyListeners();
   }
@@ -85,15 +86,15 @@ class AudioProvider extends ChangeNotifier {
   void toggleSfx() {
     _sfxEnabled = !_sfxEnabled;
     if (_enablePlatformAudio) {
-      savePreferences(null);
+      unawaited(savePreferences(null));
     }
     notifyListeners();
   }
 
   @override
   void dispose() {
-    _player?.dispose();
-    _sfxPlayer?.dispose();
+    unawaited(_player?.dispose());
+    unawaited(_sfxPlayer?.dispose());
     super.dispose();
   }
 

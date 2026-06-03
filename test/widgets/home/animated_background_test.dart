@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/home/animated_background.dart';
 
 void main() {
   group('AnimatedBackground', () {
-    testWidgets('renders with animation', (WidgetTester tester) async {
+    testWidgets('renders with animation', (tester) async {
       final controller = AnimationController(
         vsync: tester,
         duration: const Duration(seconds: 1),

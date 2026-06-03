@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 void main() {
   group('GlassMorphismCard', () {
-    testWidgets('renders child widget correctly', (WidgetTester tester) async {
+    testWidgets('renders child widget correctly', (tester) async {
       const testText = 'Test Content';
 
       await tester.pumpWidget(
@@ -20,7 +20,7 @@ void main() {
       expect(find.text(testText), findsOneWidget);
     });
 
-    testWidgets('applies blur effect', (WidgetTester tester) async {
+    testWidgets('applies blur effect', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -36,7 +36,7 @@ void main() {
     });
 
     testWidgets('uses ClipRRect for rounded corners', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -51,7 +51,7 @@ void main() {
       expect(find.byType(ClipRRect), findsOneWidget);
     });
 
-    testWidgets('wraps content in Container', (WidgetTester tester) async {
+    testWidgets('wraps content in Container', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   group('AnimatedTitle', () {
-    testWidgets('displays app title', (WidgetTester tester) async {
+    testWidgets('displays app title', (tester) async {
       final controller = AnimationController(
         vsync: tester,
         duration: const Duration(seconds: 1),

@@ -73,7 +73,7 @@ void main() {
       localeProvider = LocaleProvider();
     });
 
-    testWidgets('Home screen renders correctly', (WidgetTester tester) async {
+    testWidgets('Home screen renders correctly', (tester) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -88,7 +88,7 @@ void main() {
       expect(find.byIcon(Icons.language_rounded), findsOneWidget);
     });
 
-    testWidgets('Menu music plays on init', (WidgetTester tester) async {
+    testWidgets('Menu music plays on init', (tester) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -98,7 +98,7 @@ void main() {
     });
 
     testWidgets('Custom Game button opens custom game dialog', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
@@ -112,7 +112,7 @@ void main() {
     });
 
     testWidgets('Classic Mode button navigates to game screen', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         _buildRouterApp(
@@ -131,7 +131,7 @@ void main() {
     });
 
     testWidgets('Time Challenge button navigates to game screen', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         _buildRouterApp(
@@ -150,7 +150,7 @@ void main() {
     });
 
     testWidgets('Blitz Mode button navigates to game screen', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(
         _buildRouterApp(
@@ -168,7 +168,7 @@ void main() {
       expect(find.text('Game Screen'), findsOneWidget);
     });
 
-    testWidgets('Help button opens help dialog', (WidgetTester tester) async {
+    testWidgets('Help button opens help dialog', (tester) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -182,7 +182,7 @@ void main() {
     });
 
     testWidgets('Language button opens language selector dialog', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
@@ -196,7 +196,7 @@ void main() {
       expect(find.text('System'), findsOneWidget);
     });
 
-    testWidgets('Audio settings are visible', (WidgetTester tester) async {
+    testWidgets('Audio settings are visible', (tester) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
       await tester.pump();
@@ -206,7 +206,7 @@ void main() {
     });
 
     testWidgets('Game mode cards have proper styling', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
@@ -220,7 +220,7 @@ void main() {
     });
 
     testWidgets('Screen has proper layout structure', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 
@@ -233,7 +233,7 @@ void main() {
     });
 
     testWidgets('Language selector has language options', (
-      WidgetTester tester,
+      tester,
     ) async {
       await tester.pumpWidget(_buildApp(mockAudioProvider, localeProvider));
 

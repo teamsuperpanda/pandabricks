@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
 import 'package:pandabricks/dialogs/game/main_menu_confirm_dialog.dart';
@@ -29,7 +31,7 @@ class GameDialogMediator {
   }
 
   void showPauseDialog() {
-    showDialog(
+    unawaited(showDialog(
       context: _navigator.context,
       barrierDismissible: false,
       builder: (context) => PauseDialog(
@@ -47,7 +49,7 @@ class GameDialogMediator {
           showMainMenuConfirmDialog();
         },
       ),
-    );
+    ));
   }
 
   void showRestartDialog() {
@@ -55,7 +57,7 @@ class GameDialogMediator {
     if (!wasPaused) {
       _game.togglePause();
     }
-    showDialog(
+    unawaited(showDialog(
       context: _navigator.context,
       barrierDismissible: false,
       builder: (context) => RestartConfirmDialog(
@@ -73,12 +75,12 @@ class GameDialogMediator {
           }
         },
       ),
-    );
+    ));
   }
 
   void showGameOverDialog() {
     if (!_game.isGameOver) return;
-    showDialog(
+    unawaited(showDialog(
       context: _navigator.context,
       barrierDismissible: false,
       builder: (context) => GameOverDialog(
@@ -95,7 +97,7 @@ class GameDialogMediator {
           showMainMenuConfirmDialog();
         },
       ),
-    );
+    ));
   }
 
   void showMainMenuConfirmDialog() {
@@ -103,13 +105,13 @@ class GameDialogMediator {
     if (!wasPaused) {
       _game.togglePause();
     }
-    showDialog(
+    unawaited(showDialog(
       context: _navigator.context,
       barrierDismissible: false,
       builder: (context) => MainMenuConfirmDialog(
         onConfirm: () {
           Navigator.of(context).pop();
-          _audioProvider.playMenuMusic();
+          unawaited(_audioProvider.playMenuMusic());
           _navigator.pop();
         },
         onCancel: () {
@@ -119,6 +121,6 @@ class GameDialogMediator {
           }
         },
       ),
-    );
+    ));
   }
 }

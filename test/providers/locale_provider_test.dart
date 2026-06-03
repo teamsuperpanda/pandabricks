@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
@@ -16,7 +18,7 @@ void main() {
 
     test('should set locale to a specific value', () {
       const locale = Locale('en', 'US');
-      localeProvider.setLocale(locale);
+      unawaited(localeProvider.setLocale(locale));
 
       expect(localeProvider.locale, equals(locale));
     });
@@ -24,11 +26,11 @@ void main() {
     test('should set locale to null', () {
       // First set a locale
       const locale = Locale('fr', 'FR');
-      localeProvider.setLocale(locale);
+      unawaited(localeProvider.setLocale(locale));
       expect(localeProvider.locale, equals(locale));
 
       // Then set it back to null
-      localeProvider.setLocale(null);
+      unawaited(localeProvider.setLocale(null));
       expect(localeProvider.locale, isNull);
     });
 
@@ -38,26 +40,26 @@ void main() {
         notified = true;
       });
 
-      localeProvider.setLocale(const Locale('es', 'ES'));
+      unawaited(localeProvider.setLocale(const Locale('es', 'ES')));
       expect(notified, isTrue);
     });
 
     test('should notify listeners when locale is set to null', () {
       // First set a locale to establish a baseline
-      localeProvider.setLocale(const Locale('de', 'DE'));
+      unawaited(localeProvider.setLocale(const Locale('de', 'DE')));
 
       var notified = false;
       localeProvider.addListener(() {
         notified = true;
       });
 
-      localeProvider.setLocale(null);
+      unawaited(localeProvider.setLocale(null));
       expect(notified, isTrue);
     });
 
     test('should not notify listeners when setting the same locale', () {
       const locale = Locale('ja', 'JP');
-      localeProvider.setLocale(locale);
+      unawaited(localeProvider.setLocale(locale));
 
       var notified = false;
       localeProvider.addListener(() {
@@ -65,24 +67,24 @@ void main() {
       });
 
       // Set the same locale again
-      localeProvider.setLocale(locale);
+      unawaited(localeProvider.setLocale(locale));
       expect(notified, isFalse);
     });
 
     test('should handle different locale variations', () {
       // Test language only
       const english = Locale('en');
-      localeProvider.setLocale(english);
+      unawaited(localeProvider.setLocale(english));
       expect(localeProvider.locale, equals(english));
 
       // Test language with country
       const britishEnglish = Locale('en', 'GB');
-      localeProvider.setLocale(britishEnglish);
+      unawaited(localeProvider.setLocale(britishEnglish));
       expect(localeProvider.locale, equals(britishEnglish));
 
       // Test different language
       const spanish = Locale('es');
-      localeProvider.setLocale(spanish);
+      unawaited(localeProvider.setLocale(spanish));
       expect(localeProvider.locale, equals(spanish));
 
       // Test language with script
@@ -90,7 +92,7 @@ void main() {
         languageCode: 'zh',
         scriptCode: 'Hans',
       );
-      localeProvider.setLocale(simplifiedChinese);
+      unawaited(localeProvider.setLocale(simplifiedChinese));
       expect(localeProvider.locale, equals(simplifiedChinese));
     });
 
@@ -102,7 +104,7 @@ void main() {
       localeProvider.addListener(listener);
       localeProvider.addListener(listener);
 
-      localeProvider.setLocale(const Locale('ko', 'KR'));
+      unawaited(localeProvider.setLocale(const Locale('ko', 'KR')));
       expect(notificationCount, 3);
     });
 
@@ -120,7 +122,7 @@ void main() {
       localeProvider.addListener(() => notificationCount++);
 
       for (final locale in locales) {
-        localeProvider.setLocale(locale);
+        unawaited(localeProvider.setLocale(locale));
       }
 
       expect(notificationCount, locales.length);
@@ -152,7 +154,7 @@ void main() {
 
       test('should support all app locales', () {
         for (final locale in supportedLocales) {
-          localeProvider.setLocale(locale);
+          unawaited(localeProvider.setLocale(locale));
           expect(
             localeProvider.locale,
             equals(locale),
@@ -163,16 +165,16 @@ void main() {
 
       test('should handle locale switching between supported languages', () {
         // Simulate user switching between different languages
-        localeProvider.setLocale(supportedLocales[0]); // English
+        unawaited(localeProvider.setLocale(supportedLocales[0])); // English
         expect(localeProvider.locale?.languageCode, equals('en'));
 
-        localeProvider.setLocale(supportedLocales[3]); // German
+        unawaited(localeProvider.setLocale(supportedLocales[3])); // German
         expect(localeProvider.locale?.languageCode, equals('de'));
 
-        localeProvider.setLocale(supportedLocales[6]); // Hindi
+        unawaited(localeProvider.setLocale(supportedLocales[6])); // Hindi
         expect(localeProvider.locale?.languageCode, equals('hi'));
 
-        localeProvider.setLocale(supportedLocales[10]); // Russian
+        unawaited(localeProvider.setLocale(supportedLocales[10])); // Russian
         expect(localeProvider.locale?.languageCode, equals('ru'));
       });
     });
@@ -181,7 +183,7 @@ void main() {
       test('should handle locale with only country code', () {
         // Unusual but should be handled
         const countryOnly = Locale.fromSubtags(countryCode: 'US');
-        localeProvider.setLocale(countryOnly);
+        unawaited(localeProvider.setLocale(countryOnly));
         expect(localeProvider.locale, equals(countryOnly));
       });
 
@@ -191,7 +193,7 @@ void main() {
           scriptCode: 'Hant',
           countryCode: 'TW',
         );
-        localeProvider.setLocale(complexLocale);
+        unawaited(localeProvider.setLocale(complexLocale));
         expect(localeProvider.locale, equals(complexLocale));
       });
     });

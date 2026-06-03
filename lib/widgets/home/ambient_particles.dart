@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,8 @@ class _AmbientParticlesState extends State<AmbientParticles>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
-    )..repeat();
+    );
+    unawaited(_controller.repeat());
     _particles = List.generate(_count, (i) => _Particle.random());
   }
 

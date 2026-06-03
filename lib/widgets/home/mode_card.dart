@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
@@ -32,7 +34,7 @@ class _ModeCardState extends State<ModeCard> {
   }
 
   void _handleTap() {
-    HapticFeedback.lightImpact();
+    unawaited(HapticFeedback.lightImpact());
     widget.onTap?.call();
   }
 

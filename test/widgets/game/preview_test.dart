@@ -5,7 +5,7 @@ import 'package:pandabricks/widgets/game/preview.dart';
 
 void main() {
   group('PiecePreview', () {
-    testWidgets('renders with a piece', (WidgetTester tester) async {
+    testWidgets('renders with a piece', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -17,7 +17,7 @@ void main() {
       expect(find.byType(PiecePreview), findsOneWidget);
     });
 
-    testWidgets('renders with null piece', (WidgetTester tester) async {
+    testWidgets('renders with null piece', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -29,7 +29,7 @@ void main() {
       expect(find.byType(PiecePreview), findsOneWidget);
     });
 
-    testWidgets('renders special block piece', (WidgetTester tester) async {
+    testWidgets('renders special block piece', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -41,7 +41,7 @@ void main() {
       expect(find.byType(PiecePreview), findsOneWidget);
     });
 
-    testWidgets('renders multiple piece types', (WidgetTester tester) async {
+    testWidgets('renders multiple piece types', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

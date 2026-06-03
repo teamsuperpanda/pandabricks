@@ -173,7 +173,7 @@ class Game extends ChangeNotifier {
     notifyListeners();
   }
 
-  static const _standardPieces = [
+  static const List<FallingBlock> _standardPieces = [
     FallingBlock.I,
     FallingBlock.O,
     FallingBlock.T,
@@ -182,7 +182,7 @@ class Game extends ChangeNotifier {
     FallingBlock.J,
     FallingBlock.L,
   ];
-  static const _specialPieces = [
+  static const List<FallingBlock> _specialPieces = [
     FallingBlock.PANDA,
     FallingBlock.GHOST,
     FallingBlock.CAT,
@@ -445,14 +445,14 @@ class Game extends ChangeNotifier {
     FallingBlock.BOMB: _singleCell,
   };
 
-  static const _singleCell = {
+  static const Map<Rotation, List<PointInt>> _singleCell = {
     Rotation.up: [PointInt(0, 0)],
     Rotation.right: [PointInt(0, 0)],
     Rotation.down: [PointInt(0, 0)],
     Rotation.left: [PointInt(0, 0)],
   };
 
-  static const _squareCell = {
+  static const Map<Rotation, List<PointInt>> _squareCell = {
     Rotation.up: [
       PointInt(0, 0),
       PointInt(1, 0),
@@ -571,7 +571,7 @@ class Game extends ChangeNotifier {
       triggerRowEffect(this, rowY);
     }
     if (cleared > 0) {
-      audioProvider.playSfx(GameSfx.rowClear);
+      unawaited(audioProvider.playSfx(GameSfx.rowClear));
     }
     return cleared;
   }
@@ -588,8 +588,9 @@ class Game extends ChangeNotifier {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         final v = board[y][x];
-        if (v != null)
+        if (v != null) {
           yield CellRender(x: x, y: y, colorIndex: v, isGhost: false);
+        }
       }
     }
     if (current != null) {

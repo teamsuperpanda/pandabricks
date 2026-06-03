@@ -4,7 +4,7 @@ import 'package:pandabricks/widgets/game/dialog_button.dart';
 
 void main() {
   group('DialogButton', () {
-    testWidgets('displays icon and label', (WidgetTester tester) async {
+    testWidgets('displays icon and label', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -21,7 +21,7 @@ void main() {
       expect(find.text('Resume'), findsOneWidget);
     });
 
-    testWidgets('calls onTap when tapped', (WidgetTester tester) async {
+    testWidgets('calls onTap when tapped', (tester) async {
       var tapped = false;
 
       await tester.pumpWidget(
@@ -40,7 +40,7 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('is full width', (WidgetTester tester) async {
+    testWidgets('is full width', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -59,7 +59,7 @@ void main() {
   });
 
   group('DialogButton compact', () {
-    testWidgets('displays icon and label', (WidgetTester tester) async {
+    testWidgets('displays icon and label', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -81,7 +81,7 @@ void main() {
       expect(find.text('Cancel'), findsOneWidget);
     });
 
-    testWidgets('calls onTap when tapped', (WidgetTester tester) async {
+    testWidgets('calls onTap when tapped', (tester) async {
       var tapped = false;
 
       await tester.pumpWidget(
