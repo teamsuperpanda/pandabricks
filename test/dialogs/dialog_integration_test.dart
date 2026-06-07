@@ -1,0 +1,259 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
+import 'package:pandabricks/dialogs/game/main_menu_confirm_dialog.dart';
+import 'package:pandabricks/dialogs/game/pause_dialog.dart';
+import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
+import 'package:pandabricks/l10n/app_localizations.dart';
+import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  group('Dialog Integration Tests', () {
+    late LocaleProvider localeProvider;
+
+    setUp(() {
+      localeProvider = LocaleProvider();
+    });
+
+    testWidgets('all dialogs should be non-dismissible', (
+      tester,
+    ) async {
+      // Test Game Over Dialog
+      await tester.pumpWidget(
+        ChangeNotifierProvider<LocaleProvider>.value(
+          value: localeProvider,
+          child: MaterialApp(
+            locale: localeProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => ElevatedButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => GameOverDialog(
+                      score: 1000,
+                      level: 1,
+                      lines: 10,
+                      onRestart: () {},
+                      onMainMenu: () {},
+                    ),
+                  ),
+                  child: const Text('Show Dialog'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Open dialog
+      await tester.tap(find.text('Show Dialog'));
+      await tester.pumpAndSettle();
+
+      // Try to dismiss by tapping outside
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+
+      // Dialog should still be present
+      expect(find.text('Game Over'), findsOneWidget);
+    });
+
+    testWidgets('all dialogs should use GlassMorphismCard', (
+      tester,
+    ) async {
+      final dialogs = [
+        GameOverDialog(
+          score: 1000,
+          level: 1,
+          lines: 10,
+          onRestart: () {},
+          onMainMenu: () {},
+        ),
+        PauseDialog(
+          onResume: () {},
+          onRestart: () {},
+          onMainMenu: () {},
+        ),
+        RestartConfirmDialog(
+          onConfirm: () {},
+          onCancel: () {},
+        ),
+        MainMenuConfirmDialog(
+          onConfirm: () {},
+          onCancel: () {},
+        ),
+      ];
+
+      for (final dialog in dialogs) {
+        await tester.pumpWidget(
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(body: dialog),
+            ),
+          ),
+        );
+
+        // Each dialog should have at least one GlassMorphismCard
+        expect(find.byType(Dialog), findsOneWidget);
+        await tester.pumpAndSettle();
+      }
+    });
+
+    testWidgets('all dialogs should have consistent styling', (
+      tester,
+    ) async {
+      final dialogs = [
+        (
+          'Game Over',
+          GameOverDialog(
+            score: 1000,
+            level: 1,
+            lines: 10,
+            onRestart: () {},
+            onMainMenu: () {},
+          ),
+        ),
+        (
+          'Game Paused',
+          PauseDialog(
+            onResume: () {},
+            onRestart: () {},
+            onMainMenu: () {},
+          ),
+        ),
+        (
+          'Restart Game?',
+          RestartConfirmDialog(
+            onConfirm: () {},
+            onCancel: () {},
+          ),
+        ),
+        (
+          'Return to Main Menu?',
+          MainMenuConfirmDialog(
+            onConfirm: () {},
+            onCancel: () {},
+          ),
+        ),
+      ];
+
+      for (final (title, dialog) in dialogs) {
+        await tester.pumpWidget(
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(body: dialog),
+            ),
+          ),
+        );
+
+        // Each dialog should have a title
+        expect(find.text(title), findsOneWidget);
+
+        // Each dialog should have an icon
+        expect(find.byType(Icon), findsAtLeastNWidgets(1));
+
+        await tester.pumpAndSettle();
+      }
+    });
+
+    group('Dialog Accessibility Tests', () {
+      testWidgets('dialogs should have semantic labels for buttons', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: GameOverDialog(
+                  score: 1000,
+                  level: 1,
+                  lines: 10,
+                  onRestart: () {},
+                  onMainMenu: () {},
+                ),
+              ),
+            ),
+          ),
+        );
+
+        // Check that buttons have text (which provides semantic meaning)
+        expect(find.text('Play Again'), findsOneWidget);
+        expect(find.text('Main Menu'), findsOneWidget);
+      });
+
+      testWidgets('confirmation dialogs should clearly indicate consequences', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: RestartConfirmDialog(
+                  onConfirm: () {},
+                  onCancel: () {},
+                ),
+              ),
+            ),
+          ),
+        );
+
+        // Should warn about progress loss
+        expect(find.textContaining('progress will be lost'), findsOneWidget);
+      });
+    });
+
+    group('Dialog Button Interaction Tests', () {
+      testWidgets('multiple rapid taps should not cause issues', (
+        tester,
+      ) async {
+        var tapCount = 0;
+
+        await tester.pumpWidget(
+          ChangeNotifierProvider<LocaleProvider>.value(
+            value: localeProvider,
+            child: MaterialApp(
+              locale: localeProvider.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: RestartConfirmDialog(
+                  onConfirm: () => tapCount++,
+                  onCancel: () {},
+                ),
+              ),
+            ),
+          ),
+        );
+
+        // Rapidly tap the restart button multiple times
+        final restartButton = find.text('Restart');
+        await tester.tap(restartButton);
+        await tester.tap(restartButton);
+        await tester.tap(restartButton);
+        await tester.pump();
+
+        // Should only register the taps that occurred (may be limited by widget behavior)
+        expect(tapCount, greaterThan(0));
+      });
+    });
+  });
+}

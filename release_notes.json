@@ -1,0 +1,82 @@
+[
+  {
+    "language": "en-US",
+    "text": "What's new in version 2.2.1:\n• Fixed a crash when clearing multiple lines with special blocks\n• Fixed bomb explosion sound effect not playing\n• Fixed score calculation for hard drops with custom multipliers\n• Improved game stability and performance\n• Various UI and accessibility fixes\nEnjoy!"
+  },
+  {
+    "language": "en-GB",
+    "text": "What's new in version 2.2.1:\n• Fixed a crash when clearing multiple lines with special blocks\n• Fixed bomb explosion sound effect not playing\n• Fixed score calculation for hard drops with custom multipliers\n• Improved game stability and performance\n• Various UI and accessibility fixes\nEnjoy!"
+  },
+  {
+    "language": "es-ES",
+    "text": "Novedades en la versión 2.2.1:\n• Corregido un fallo al limpiar varias líneas con bloques especiales\n• Corregido el efecto de sonido de explosión de bomba que no se reproducía\n• Corregido el cálculo de puntuación para caídas rápidas con multiplicadores personalizados\n• Mejorada la estabilidad y el rendimiento del juego\n• Varias correcciones de UI y accesibilidad\n¡Disfruta!"
+  },
+  {
+    "language": "fr-FR",
+    "text": "Nouveautés de la version 2.2.1 :\n• Correction d'un crash lors de la suppression de plusieurs lignes avec des blocs spéciaux\n• Correction de l'effet sonore d'explosion de bombe qui ne jouait pas\n• Correction du calcul du score pour les chutes rapides avec multiplicateurs personnalisés\n• Amélioration de la stabilité et des performances du jeu\n• Divers correctifs d'interface et d'accessibilité\nProfitez-en !"
+  },
+  {
+    "language": "de-DE",
+    "text": "Neu in Version 2.2.1:\n• Absturz behoben beim Löschen mehrerer Zeilen mit Spezialblöcken\n• Bombenexplosions-Soundeffekt repariert, der nicht abgespielt wurde\n• Punkteberechnung für Schnellablagen mit benutzerdefinierten Multiplikatoren korrigiert\n• Verbesserte Spielstabilität und Leistung\n• Verschiedene UI- und Barrierefreiheitskorrekturen\nViel Spaß!"
+  },
+  {
+    "language": "pt-BR",
+    "text": "Novidades na versão 2.2.1:\n• Corrigido um travamento ao limpar várias linhas com blocos especiais\n• Corrigido o efeito sonoro de explosão de bomba que não tocava\n• Corrigido o cálculo de pontuação para quedas rápidas com multiplicadores personalizados\n• Estabilidade e desempenho do jogo melhorados\n• Várias correções de UI e acessibilidade\nAproveite!"
+  },
+  {
+    "language": "it-IT",
+    "text": "Novità della versione 2.2.1:\n• Risolto un crash durante la cancellazione di più righe con blocchi speciali\n• Risolto l'effetto sonoro dell'esplosione della bomba che non veniva riprodotto\n• Corretto il calcolo del punteggio per i drop rapidi con moltiplicatori personalizzati\n• Migliorata la stabilità e le prestazioni del gioco\n• Vari fix dell'interfaccia e dell'accessibilità\nBuon divertimento!"
+  },
+  {
+    "language": "ja-JP",
+    "text": "バージョン 2.2.1 の新機能：\n• 特殊ブロックで複数ラインを消去する際のクラッシュを修正\n• 爆弾の爆発効果音が再生されない問題を修正\n• カスタム倍率でのハードドロップのスコア計算を修正\n• ゲームの安定性とパフォーマンスを向上\n• 各種UIとアクセシビリティの修正\nお楽しみください！"
+  },
+  {
+    "language": "ko-KR",
+    "text": "버전 2.2.1 변경사항:\n• 특수 블록으로 여러 줄을 지울 때 발생하는 충돌 수정\n• 폭탄 폭발 효과음이 재생되지 않는 문제 수정\n• 사용자 지정 배수에서 하드 드롭 점수 계산 수정\n• 게임 안정성 및 성능 향상\n• 다양한 UI 및 접근성 수정\n즐겨보세요!"
+  },
+  {
+    "language": "zh-CN",
+    "text": "版本 2.2.1 更新内容：\n• 修复了使用特殊方块清除多行时的崩溃问题\n• 修复了炸弹爆炸音效无法播放的问题\n• 修复了自定义倍率下硬降的分数计算问题\n• 提升了游戏稳定性和性能\n• 多项界面和辅助功能改进\n敬请体验！"
+  },
+  {
+    "language": "zh-TW",
+    "text": "版本 2.2.1 更新內容：\n• 修復了使用特殊方塊清除多行時的崩潰問題\n• 修復了炸彈爆炸音效無法播放的問題\n• 修復了自訂倍率下硬降的分數計算問題\n• 提升了遊戲穩定性和效能\n• 多項介面和辅助功能改進\n歡迎體驗！"
+  },
+  {
+    "language": "ru-RU",
+    "text": "Новое в версии 2.2.1:\n• Исправлен вылет при очистке нескольких линий специальными блоками\n• Исправлен звук взрыва бомбы, который не воспроизводился\n• Исправлен расчёт очков за быстрое падение с пользовательскими множителями\n• Улучшена стабильность и производительность игры\n• Различные исправления интерфейса и доступности\nПриятной игры!"
+  },
+  {
+    "language": "tr-TR",
+    "text": "Sürüm 2.2.1'deki yenilikler:\n• Özel bloklarla birden fazla satır temizlerken oluşan çökme hatası düzeltildi\n• Bomba patlama ses efektinin çalınmaması sorunu düzeltildi\n• Özel çarpanlarla hızlı düşüşlerde puan hesaplaması düzeltildi\n• Oyun kararlılığı ve performansı iyileştirildi\n• Çeşitli UI ve erişilebilirlik düzeltmeleri\nİyi eğlenceler!"
+  },
+  {
+    "language": "nl-NL",
+    "text": "Nieuw in versie 2.2.1:\n• Een crash verholpen bij het wissen van meerdere rijen met speciale blokken\n• Het geluidseffect van de bomexplosie dat niet afspeelde is verholpen\n• De scoreberekening voor harde drops met aangepaste multipliers is gecorrigeerd\n• Verbeterde spelstabiliteit en prestaties\n• Diverse UI- en toegankelijkheidsfixes\nVeel plezier!"
+  },
+  {
+    "language": "sv-SE",
+    "text": "Nyheter i version 2.2.1:\n• Åtgärdade en krasch vid rensning av flera rader med specialblock\n• Åtgärdade bombexplosionens ljudeffekt som inte spelades upp\n• Korrigerade poängberäkning för hårda droppar med anpassade multiplikatorer\n• Förbättrad spelstabilitet och prestanda\n• Diverse UI- och tillgänglighetsfixar\nNjut!"
+  },
+  {
+    "language": "pl-PL",
+    "text": "Co nowego w wersji 2.2.1:\n• Naprawiono awarię podczas czyszczenia wielu linii specjalnymi blokami\n• Naprawiono efekt dźwiękowy wybuchu bomby, który się nie odtwarzał\n• Poprawiono obliczanie punktów za twarde upuszczenie z niestandardowymi mnożnikami\n• Poprawiona stabilność i wydajność gry\n• Różne poprawki interfejsu i dostępności\nMiłej zabawy!"
+  },
+  {
+    "language": "ar-SA",
+    "text": "الجديد في الإصدار 2.2.1:\n• إصلاح تعطل عند مسح عدة أسطر باستخدام المكعبات الخاصة\n• إصلاح مشكلة عدم تشغيل مؤثر صوت انفجار القنبلة\n• إصلاح حساب النقاط للهبوط السريع مع المضاعفات المخصصة\n• تحسين استقرار وأداء اللعبة\n• إصلاحات متنوعة لواجهة المستخدم وإمكانية الوصول\nاستمتع!"
+  },
+  {
+    "language": "hi-IN",
+    "text": "संस्करण 2.2.1 में नया क्या है:\n• विशेष ब्लॉकों से कई पंक्तियाँ साफ़ करते समय क्रैश ठीक किया गया\n• बम विस्फोट ध्वनि प्रभाव नहीं बजने की समस्या ठीक की गई\n• कस्टम गुणकों के साथ हार्ड ड्रॉप के स्कोर गणना में सुधार\n• गेम स्थिरता और प्रदर्शन में सुधार\n• विभिन्न UI और एक्सेसिबिलिटी सुधार\nआनंद लें!"
+  },
+  {
+    "language": "id-ID",
+    "text": "Baru di versi 2.2.1:\n• Memperbaiki crash saat membersihkan beberapa baris dengan blok khusus\n• Memperbaiki efek suara ledakan bom yang tidak dimainkan\n• Memperbaiki perhitungan skor untuk hard drop dengan pengali kustom\n• Meningkatkan stabilitas dan performa game\n• Berbagai perbaikan UI dan aksesibilitas\nSelamat mencoba!"
+  },
+  {
+    "language": "vi-VN",
+    "text": "Có gì mới trong phiên bản 2.2.1:\n• Sửa lỗi treo khi xóa nhiều dòng bằng các khối đặc biệt\n• Sửa hiệu ứng âm thanh vụ nổ bom không phát\n• Sửa cách tính điểm cho thả nhanh với hệ số nhân tùy chỉnh\n• Cải thiện độ ổn định và hiệu suất trò chơi\n• Nhiều bản sửa lỗi giao diện và trợ năng\nThưởng thức!"
+  }
+]

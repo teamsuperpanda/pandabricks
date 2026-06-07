@@ -1,0 +1,45 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+/build/
+
+# Generated localization
+lib/l10n/*.dart
+
+# Coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Platform-specific
+ios/Flutter/
+ios/.generated/
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Android
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+/android/app/debug
+/android/app/profile
+/android/app/release
+/android/key.properties
+
+# OS
+.DS_Store
+*.swp
+
+# Obfuscation/Symbolication
+app.*.symbols
+app.*.map.json

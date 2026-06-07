@@ -1,0 +1,7 @@
+Nyheter i version 2.2.1:
+• Åtgärdade en krasch vid rensning av flera rader med specialblock
+• Åtgärdade bombexplosionens ljudeffekt som inte spelades upp
+• Korrigerade poängberäkning för hårda droppar med anpassade multiplikatorer
+• Förbättrad spelstabilitet och prestanda
+• Diverse UI- och tillgänglighetsfixar
+Njut!

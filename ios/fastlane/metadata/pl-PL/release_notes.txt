@@ -1,0 +1,7 @@
+Co nowego w wersji 2.2.1:
+• Naprawiono awarię podczas czyszczenia wielu linii specjalnymi blokami
+• Naprawiono efekt dźwiękowy wybuchu bomby, który się nie odtwarzał
+• Poprawiono obliczanie punktów za twarde upuszczenie z niestandardowymi mnożnikami
+• Poprawiona stabilność i wydajność gry
+• Różne poprawki interfejsu i dostępności
+Miłej zabawy!
