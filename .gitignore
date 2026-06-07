@@ -19,7 +19,9 @@ coverage/
 *.iws
 
 # Platform-specific
-ios/Flutter/
+ios/Flutter/ephemeral/
+ios/Flutter/Flutter.framework
+ios/Flutter/Generated.xcconfig
 ios/.generated/
 ios/Runner/GeneratedPluginRegistrant.*
 
