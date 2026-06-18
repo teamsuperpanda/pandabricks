@@ -1,0 +1,7 @@
+Baru di versi 2.2.1:
+• Memperbaiki crash saat membersihkan beberapa baris dengan blok khusus
+• Memperbaiki efek suara ledakan bom yang tidak dimainkan
+• Memperbaiki perhitungan skor untuk hard drop dengan pengali kustom
+• Meningkatkan stabilitas dan performa game
+• Berbagai perbaikan UI dan aksesibilitas
+Selamat mencoba!

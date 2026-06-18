@@ -1,0 +1,7 @@
+Nieuw in versie 2.2.1:
+• Een crash verholpen bij het wissen van meerdere rijen met speciale blokken
+• Het geluidseffect van de bomexplosie dat niet afspeelde is verholpen
+• De scoreberekening voor harde drops met aangepaste multipliers is gecorrigeerd
+• Verbeterde spelstabiliteit en prestaties
+• Diverse UI- en toegankelijkheidsfixes
+Veel plezier!
