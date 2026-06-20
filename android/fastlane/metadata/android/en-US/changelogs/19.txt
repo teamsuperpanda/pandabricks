@@ -1,7 +1,4 @@
-What's new in version 2.2.1:
-• Fixed a crash when clearing multiple lines with special blocks
-• Fixed bomb explosion sound effect not playing
-• Fixed score calculation for hard drops with custom multipliers
-• Improved game stability and performance
-• Various UI and accessibility fixes
+What's new in version 2.2.2:
+• Bug fixes and performance improvements
+• General stability enhancements
 Enjoy!

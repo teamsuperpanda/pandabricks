@@ -1,7 +1,4 @@
-Nouveautés de la version 2.2.1 :
-• Correction d'un crash lors de la suppression de plusieurs lignes avec des blocs spéciaux
-• Correction de l'effet sonore d'explosion de bombe qui ne jouait pas
-• Correction du calcul du score pour les chutes rapides avec multiplicateurs personnalisés
-• Amélioration de la stabilité et des performances du jeu
-• Divers correctifs d'interface et d'accessibilité
+Nouveautés de la version 2.2.2 :
+• Corrections de bugs et améliorations de performances
+• Améliorations générales de la stabilité
 Profitez-en !

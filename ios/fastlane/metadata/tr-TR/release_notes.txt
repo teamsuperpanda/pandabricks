@@ -1,7 +1,4 @@
-Sürüm 2.2.1'deki yenilikler:
-• Özel bloklarla birden fazla satır temizlerken oluşan çökme hatası düzeltildi
-• Bomba patlama ses efektinin çalınmaması sorunu düzeltildi
-• Özel çarpanlarla hızlı düşüşlerde puan hesaplaması düzeltildi
-• Oyun kararlılığı ve performansı iyileştirildi
-• Çeşitli UI ve erişilebilirlik düzeltmeleri
-İyi eğlenceler!
+Sürüm 2.2.2'deki yenilikler:
+• Hata düzeltmeleri ve performans iyileştirmeleri
+• Genel kararlılık iyileştirmeleri
+Keyfini çıkarın!

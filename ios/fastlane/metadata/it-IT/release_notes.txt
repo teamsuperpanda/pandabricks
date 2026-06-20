@@ -1,7 +1,4 @@
-Novità della versione 2.2.1:
-• Risolto un crash durante la cancellazione di più righe con blocchi speciali
-• Risolto l'effetto sonoro dell'esplosione della bomba che non veniva riprodotto
-• Corretto il calcolo del punteggio per i drop rapidi con moltiplicatori personalizzati
-• Migliorata la stabilità e le prestazioni del gioco
-• Vari fix dell'interfaccia e dell'accessibilità
+Novità nella versione 2.2.2:
+• Correzioni di bug e miglioramenti delle prestazioni
+• Miglioramenti generali della stabilità
 Buon divertimento!

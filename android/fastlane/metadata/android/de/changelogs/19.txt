@@ -1,7 +1,4 @@
-Neu in Version 2.2.1:
-• Absturz behoben beim Löschen mehrerer Zeilen mit Spezialblöcken
-• Bombenexplosions-Soundeffekt repariert, der nicht abgespielt wurde
-• Punkteberechnung für Schnellablagen mit benutzerdefinierten Multiplikatoren korrigiert
-• Verbesserte Spielstabilität und Leistung
-• Verschiedene UI- und Barrierefreiheitskorrekturen
+Neu in Version 2.2.2:
+• Fehlerbehebungen und Leistungsverbesserungen
+• Allgemeine Stabilitätsverbesserungen
 Viel Spaß!
