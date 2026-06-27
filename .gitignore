@@ -8,6 +8,9 @@
 # Generated localization
 lib/l10n/*.dart
 
+# Web (local dev only)
+web/
+
 # Coverage
 coverage/
 
