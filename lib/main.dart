@@ -8,7 +8,6 @@ import 'package:pandabricks/navigation/app_router.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
 import 'package:pandabricks/services/logging.dart';
-import 'package:pandabricks/services/umami_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,24 +45,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   static const _defaultTitle = 'Panda Bricks';
-  final UmamiService _umamiService = UmamiService();
   late final AppRouter _appRouter;
 
   @override
   void initState() {
     super.initState();
-    _appRouter = AppRouter(
-      navigatorObservers: [UmamiNavigatorObserver(_umamiService)],
-    );
+    _appRouter = AppRouter();
     WidgetsBinding.instance.addObserver(this);
     Future.delayed(const Duration(seconds: 1), FlutterNativeSplash.remove);
     unawaited(SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]));
-    _umamiService.startSession();
   }
 
   @override
   void dispose() {
-    _umamiService.endSession();
     _appRouter.router.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -75,12 +69,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       unawaited(audio.stopMusic());
-      _umamiService.endSession();
     } else if (state == AppLifecycleState.resumed) {
       if (audio.musicEnabled) {
         unawaited(audio.playMenuMusic());
       }
-      _umamiService.startSession();
     }
   }
 
@@ -88,7 +80,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Consumer<LocaleProvider>(
       builder: (context, localeProvider, child) {
-        _umamiService.language = localeProvider.locale?.languageCode ?? 'en';
         return MaterialApp.router(
           onGenerateTitle: (context) =>
               AppLocalizations.of(context)?.appTitle ?? _defaultTitle,
