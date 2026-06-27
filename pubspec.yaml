@@ -51,6 +51,27 @@ flutter:
           weight: 500
         - asset: assets/fonts/Fredoka-Bold.ttf
           weight: 700
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/noto/NotoSans.ttf
+    - family: NotoSansArabic
+      fonts:
+        - asset: assets/fonts/noto/NotoSansArabic.ttf
+    - family: NotoSansDevanagari
+      fonts:
+        - asset: assets/fonts/noto/NotoSansDevanagari.ttf
+    - family: NotoSansBengali
+      fonts:
+        - asset: assets/fonts/noto/NotoSansBengali.ttf
+    - family: NotoSansSC
+      fonts:
+        - asset: assets/fonts/noto/NotoSansSC.ttf
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/noto/NotoSansJP.ttf
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/noto/NotoSansKR.ttf
 
 flutter_launcher_icons:
   android: true
