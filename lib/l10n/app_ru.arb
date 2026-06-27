@@ -57,6 +57,8 @@
   "specialFeatures": "Специальные возможности",
   "specialBricksToggle": "Особые кирпичи",
   "scoreMultiplier": "Множитель очков",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "Начать игру",
   "system": "Система",
   "nativeName": "Русский"

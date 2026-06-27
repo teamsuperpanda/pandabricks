@@ -70,7 +70,7 @@ void main() {
 
     setUp(() {
       mockAudioProvider = MockAudioProvider();
-      localeProvider = LocaleProvider();
+      localeProvider =         LocaleProvider(enablePersistence: false);
     });
 
     testWidgets('Home screen renders correctly', (tester) async {

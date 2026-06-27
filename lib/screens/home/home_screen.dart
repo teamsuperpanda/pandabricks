@@ -25,15 +25,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  static const _showCustomDialogArg = Object();
-
   late AnimationController _gradientController;
   late AnimationController _floatingController;
   late Animation<double> _gradientAnimation;
   late Animation<double> _floatingAnimation;
   AudioProvider? _audioProvider;
   bool _audioInitialized = false;
-  bool _customDialogShown = false;
 
   @override
   void initState() {
@@ -85,13 +82,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       _audioInitialized = true;
     }
 
-    final args = ModalRoute.of(context)?.settings.arguments;
-    if (identical(args, _showCustomDialogArg) && !_customDialogShown) {
-      _customDialogShown = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showCustomGameDialog(context);
-      });
-    }
   }
 
   @override

@@ -183,6 +183,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get scoreMultiplier => '得分倍率';
 
   @override
+  String get boardWidth => 'Width';
+
+  @override
+  String get boardHeight => 'Height';
+
+  @override
   String get startGame => '开始游戏';
 
   @override

@@ -16,7 +16,7 @@ void main() {
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>(
-          create: (_) => LocaleProvider(),
+          create: (_) =>         LocaleProvider(enablePersistence: false),
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

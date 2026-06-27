@@ -138,8 +138,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get restartGame => 'إعادة تشغيل اللعبة؟';
 
   @override
-  String get areYouSureYouWantToRestart =>
-      'هل أنت متأكد أنك تريد إعادة التشغيل؟\nسيتم فقد تقدمك الحالي.';
+  String get areYouSureYouWantToRestart => 'هل أنت متأكد أنك تريد إعادة التشغيل؟\nسيتم فقد تقدمك الحالي.';
 
   @override
   String get music => 'الموسيقى';
@@ -182,6 +181,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get scoreMultiplier => 'مضاعف النقاط';
+
+  @override
+  String get boardWidth => 'Width';
+
+  @override
+  String get boardHeight => 'Height';
 
   @override
   String get startGame => 'ابدأ اللعبة';

@@ -183,6 +183,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get scoreMultiplier => 'スコア倍率';
 
   @override
+  String get boardWidth => 'Width';
+
+  @override
+  String get boardHeight => 'Height';
+
+  @override
   String get startGame => 'ゲーム開始';
 
   @override

@@ -57,6 +57,8 @@
   "specialFeatures": "Fonctionnalités spéciales",
   "specialBricksToggle": "Briques spéciales",
   "scoreMultiplier": "Multiplicateur de score",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "Lancer la partie",
   "system": "Système",
   "nativeName": "Français"

@@ -57,6 +57,8 @@
   "specialFeatures": "ميزات خاصة",
   "specialBricksToggle": "الطوب الخاص",
   "scoreMultiplier": "مضاعف النقاط",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "ابدأ اللعبة",
   "system": "النظام",
   "nativeName": "العربية"

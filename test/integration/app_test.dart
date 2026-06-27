@@ -14,7 +14,7 @@ void main() {
             ChangeNotifierProvider(
               create: (_) => AudioProvider(enablePlatformAudio: false),
             ),
-            ChangeNotifierProvider(create: (_) => LocaleProvider()),
+            ChangeNotifierProvider(create: (_) =>         LocaleProvider(enablePersistence: false)),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -38,7 +38,7 @@ void main() {
             ChangeNotifierProvider(
               create: (_) => AudioProvider(enablePlatformAudio: false),
             ),
-            ChangeNotifierProvider(create: (_) => LocaleProvider()),
+            ChangeNotifierProvider(create: (_) =>         LocaleProvider(enablePersistence: false)),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -60,7 +60,7 @@ void main() {
             ChangeNotifierProvider(
               create: (_) => AudioProvider(enablePlatformAudio: false),
             ),
-            ChangeNotifierProvider(create: (_) => LocaleProvider()),
+            ChangeNotifierProvider(create: (_) =>         LocaleProvider(enablePersistence: false)),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,

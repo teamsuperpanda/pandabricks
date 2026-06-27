@@ -57,6 +57,8 @@
   "specialFeatures": "특수 기능",
   "specialBricksToggle": "특수 벽돌",
   "scoreMultiplier": "점수 배율",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "게임 시작",
   "system": "시스템",
   "nativeName": "한국어"

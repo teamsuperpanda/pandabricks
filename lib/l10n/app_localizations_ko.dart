@@ -183,6 +183,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scoreMultiplier => '점수 배율';
 
   @override
+  String get boardWidth => 'Width';
+
+  @override
+  String get boardHeight => 'Height';
+
+  @override
   String get startGame => '게임 시작';
 
   @override

@@ -10,7 +10,7 @@ void main() {
     late LocaleProvider localeProvider;
 
     setUp(() {
-      localeProvider = LocaleProvider();
+      localeProvider =         LocaleProvider(enablePersistence: false);
     });
 
     testWidgets('displays score, level, and lines', (

@@ -57,6 +57,8 @@
   "specialFeatures": "विशेष सुविधाएँ",
   "specialBricksToggle": "विशेष ईंटें",
   "scoreMultiplier": "स्कोर गुणक",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "खेल शुरू करें",
   "system": "सिस्टम",
   "nativeName": "हिन्दी"

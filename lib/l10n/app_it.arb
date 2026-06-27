@@ -57,6 +57,8 @@
   "specialFeatures": "Funzioni speciali",
   "specialBricksToggle": "Mattoni speciali",
   "scoreMultiplier": "Moltiplicatore punteggio",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "Inizia partita",
   "system": "Sistema",
   "nativeName": "Italiano"

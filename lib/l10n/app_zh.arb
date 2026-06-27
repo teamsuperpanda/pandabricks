@@ -57,6 +57,8 @@
   "specialFeatures": "特殊功能",
   "specialBricksToggle": "特殊砖块",
   "scoreMultiplier": "得分倍率",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "开始游戏",
   "system": "系统",
   "nativeName": "中文"

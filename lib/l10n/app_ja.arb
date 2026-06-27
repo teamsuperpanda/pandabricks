@@ -57,6 +57,8 @@
   "specialFeatures": "特殊機能",
   "specialBricksToggle": "特殊ブロック",
   "scoreMultiplier": "スコア倍率",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "ゲーム開始",
   "system": "システム",
   "nativeName": "日本語"

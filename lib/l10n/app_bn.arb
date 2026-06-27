@@ -57,6 +57,8 @@
   "specialFeatures": "বিশেষ সুবিধা",
   "specialBricksToggle": "বিশেষ ইট",
   "scoreMultiplier": "স্কোর গুণক",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "গেম শুরু করুন",
   "system": "সিস্টেম",
   "nativeName": "বাংলা"

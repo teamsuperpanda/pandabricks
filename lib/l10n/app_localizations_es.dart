@@ -54,8 +54,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get pandaBrick => 'Bloque Panda';
 
   @override
-  String get pandaBrickDescription =>
-      '¡Despeja toda la columna cuando aterriza!';
+  String get pandaBrickDescription => '¡Despeja toda la columna cuando aterriza!';
 
   @override
   String get ghostBrick => 'Bloque Fantasma';
@@ -67,8 +66,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get catBrick => 'Bloque Gato';
 
   @override
-  String get catBrickDescription =>
-      '¡Se mueve de forma impredecible mientras cae!';
+  String get catBrickDescription => '¡Se mueve de forma impredecible mientras cae!';
 
   @override
   String get tornadoBrick => 'Bloque Tornado';
@@ -80,8 +78,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bombBrick => 'Bloque Bomba';
 
   @override
-  String get bombBrickDescription =>
-      '¡Despeja toda la fila y columna cuando se coloca!';
+  String get bombBrickDescription => '¡Despeja toda la fila y columna cuando se coloca!';
 
   @override
   String get close => 'Cerrar';
@@ -141,8 +138,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get restartGame => '¿Reiniciar Juego?';
 
   @override
-  String get areYouSureYouWantToRestart =>
-      '¿Estás seguro de que quieres reiniciar?\nTu progreso actual se perderá.';
+  String get areYouSureYouWantToRestart => '¿Estás seguro de que quieres reiniciar?\nTu progreso actual se perderá.';
 
   @override
   String get music => 'Música';
@@ -185,6 +181,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get scoreMultiplier => 'Multiplicador de Puntuación';
+
+  @override
+  String get boardWidth => 'Width';
+
+  @override
+  String get boardHeight => 'Height';
 
   @override
   String get startGame => 'Iniciar Juego';

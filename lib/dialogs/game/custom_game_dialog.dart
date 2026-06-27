@@ -37,6 +37,8 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           const SizedBox(height: 16),
           _buildDifficultySection(l10n),
           const SizedBox(height: 16),
+          _buildBoardSizeSection(l10n),
+          const SizedBox(height: 16),
           _buildSpecialFeaturesSection(l10n),
         ],
       ),
@@ -194,6 +196,111 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBoardSizeSection(AppLocalizations l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.boardWidth,
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [8, 10, 12, 15, 20].map((w) {
+            final isSelected = config.boardWidth == w;
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: GestureDetector(
+                  onTap: () => setState(
+                    () => config = config.copyWith(boardWidth: w),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? Colors.cyan.withValues(alpha: 100 / 255.0)
+                          : Colors.white.withValues(alpha: 20 / 255.0),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: isSelected
+                            ? Colors.cyan
+                            : Colors.white.withValues(alpha: 50 / 255.0),
+                      ),
+                    ),
+                    child: Text(
+                      '$w',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          l10n.boardHeight,
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [10, 15, 20, 30, 40].map((h) {
+            final isSelected = config.boardHeight == h;
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: GestureDetector(
+                  onTap: () => setState(
+                    () => config = config.copyWith(boardHeight: h),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? Colors.purple.withValues(alpha: 100 / 255.0)
+                          : Colors.white.withValues(alpha: 20 / 255.0),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: isSelected
+                            ? Colors.purple
+                            : Colors.white.withValues(alpha: 50 / 255.0),
+                      ),
+                    ),
+                    child: Text(
+                      '$h',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 

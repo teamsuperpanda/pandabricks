@@ -13,7 +13,7 @@ void main() {
     late LocaleProvider localeProvider;
 
     setUp(() {
-      localeProvider = LocaleProvider();
+      localeProvider =         LocaleProvider(enablePersistence: false);
     });
 
     testWidgets('all dialogs should be non-dismissible', (

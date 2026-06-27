@@ -57,6 +57,8 @@
   "specialFeatures": "Special Features",
   "specialBricksToggle": "Special Bricks",
   "scoreMultiplier": "Score Multiplier",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "Start Game",
   "system": "System",
   "nativeName": "English",

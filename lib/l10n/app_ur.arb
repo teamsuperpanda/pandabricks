@@ -57,6 +57,8 @@
   "specialFeatures": "خصوصی خصوصیات",
   "specialBricksToggle": "خصوصی اینٹیں",
   "scoreMultiplier": "اسکور ضرب",
+  "boardWidth": "Width",
+  "boardHeight": "Height",
   "startGame": "گیم شروع کریں",
   "system": "سسٹم",
   "nativeName": "اردو"

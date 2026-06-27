@@ -78,8 +78,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bombBrick => 'Bomb Brick';
 
   @override
-  String get bombBrickDescription =>
-      'Clears entire row and column when placed!';
+  String get bombBrickDescription => 'Clears entire row and column when placed!';
 
   @override
   String get close => 'Close';
@@ -139,8 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get restartGame => 'Restart Game?';
 
   @override
-  String get areYouSureYouWantToRestart =>
-      'Are you sure you want to restart?\nYour current progress will be lost.';
+  String get areYouSureYouWantToRestart => 'Are you sure you want to restart?\nYour current progress will be lost.';
 
   @override
   String get music => 'Music';
@@ -183,6 +181,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scoreMultiplier => 'Score Multiplier';
+
+  @override
+  String get boardWidth => 'Width';
+
+  @override
+  String get boardHeight => 'Height';
 
   @override
   String get startGame => 'Start Game';
