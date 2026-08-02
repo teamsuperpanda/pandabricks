@@ -8,8 +8,6 @@ class MockAudioProvider extends AudioProvider {
   // Keep separate mock state for assertions in tests.
   bool _isGameMusic = false;
   String? _currentlyPlaying;
-  GameSfx? _lastSfx;
-  bool _toggleMusicEnabledCalled = false;
 
   // Static constants matching the real AudioProvider
   static const String menuTrack = 'audio/music/menu.mp3';
@@ -24,7 +22,6 @@ class MockAudioProvider extends AudioProvider {
 
   @override
   void toggleMusic() {
-    _toggleMusicEnabledCalled = true;
     // Store current state before toggling
     final wasEnabled = musicEnabled;
     final wasGameMusic = _isGameMusic;
@@ -47,12 +44,6 @@ class MockAudioProvider extends AudioProvider {
       // Music was just disabled
       _currentlyPlaying = null;
     }
-  }
-
-  @override
-  void toggleSfx() {
-    // Call the parent implementation to toggle the state
-    super.toggleSfx();
   }
 
   @override
@@ -80,13 +71,10 @@ class MockAudioProvider extends AudioProvider {
   @override
   Future<void> playSfx(GameSfx effect) async {
     if (!sfxEnabled) return;
-    _lastSfx = effect;
   }
 
   // Test helper accessors
   @override
   String? get currentlyPlaying => _currentlyPlaying;
   bool get isGameMusic => _isGameMusic;
-  GameSfx? get lastPlayedSfx => _lastSfx;
-  bool get toggleMusicEnabledCalled => _toggleMusicEnabledCalled;
 }

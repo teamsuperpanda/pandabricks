@@ -93,15 +93,16 @@ class _ParticlePainter extends CustomPainter {
   final List<_Particle> particles;
   final double t;
 
+  static final Paint _glowPaint = Paint()
+    ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
   @override
   void paint(Canvas canvas, Size size) {
     for (final p in particles) {
       final dx = p.x * size.width + sin(t * 2 * pi * p.speed + p.phase) * 16;
       final dy = p.y * size.height + cos(t * 2 * pi * p.speed + p.phase) * 16;
-      final paint = Paint()
-        ..color = p.color
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
-      canvas.drawCircle(Offset(dx, dy), p.r, paint);
+      _glowPaint.color = p.color;
+      canvas.drawCircle(Offset(dx, dy), p.r, _glowPaint);
     }
   }
 

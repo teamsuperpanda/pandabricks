@@ -21,35 +21,40 @@ class GlassMorphismCard extends StatelessWidget {
   /// modal dialogs over the game board.
   final bool blur;
 
+  static final Map<(Color, bool), BoxDecoration> _decorationCache = {};
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final primary = Theme.of(context).colorScheme.primary;
     final card = Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.primary.withValues(alpha: 76 / 255.0),
-            theme.colorScheme.primary.withValues(alpha: 38 / 255.0),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 51 / 255.0),
-          width: 1.5,
-        ),
-        boxShadow: showShadow
-            ? [
-                BoxShadow(
-                  color: theme.colorScheme.primary.withValues(
-                    alpha: 25 / 255.0,
+      decoration: _decorationCache.putIfAbsent(
+        (primary, showShadow),
+        () => BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              primary.withValues(alpha: 76 / 255.0),
+              primary.withValues(alpha: 38 / 255.0),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: primary.withValues(alpha: 51 / 255.0),
+            width: 1.5,
+          ),
+          boxShadow: showShadow
+              ? [
+                  BoxShadow(
+                    color: primary.withValues(
+                      alpha: 25 / 255.0,
+                    ),
+                    blurRadius: 10,
+                    spreadRadius: 5,
                   ),
-                  blurRadius: 10,
-                  spreadRadius: 5,
-                ),
-              ]
-            : null,
+                ]
+              : null,
+        ),
       ),
       child: child,
     );

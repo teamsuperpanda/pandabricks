@@ -49,65 +49,32 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.timeLimit,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionTitle(l10n.timeLimit),
         const SizedBox(height: 8),
         Row(
           children: [
-            _timeButton(l10n.oneMin, const Duration(minutes: 1)),
+            _timeChip(l10n.oneMin, const Duration(minutes: 1)),
             const SizedBox(width: 8),
-            _timeButton(l10n.threeMin, const Duration(minutes: 3)),
+            _timeChip(l10n.threeMin, const Duration(minutes: 3)),
             const SizedBox(width: 8),
-            _timeButton(l10n.fiveMin, const Duration(minutes: 5)),
+            _timeChip(l10n.fiveMin, const Duration(minutes: 5)),
             const SizedBox(width: 8),
-            _timeButton(l10n.tenMin, const Duration(minutes: 10)),
+            _timeChip(l10n.tenMin, const Duration(minutes: 10)),
             const SizedBox(width: 8),
-            _timeButton(l10n.unlimited, null),
+            _timeChip(l10n.unlimited, null),
           ],
         ),
       ],
     );
   }
 
-  Widget _timeButton(String label, Duration? duration) {
-    final isSelected = config.timeLimit == duration;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            config = config.copyWith(timeLimit: duration);
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? Colors.cyan.withValues(alpha: 100 / 255.0)
-                : Colors.white.withValues(alpha: 20 / 255.0),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isSelected
-                  ? Colors.cyan
-                  : Colors.white.withValues(alpha: 50 / 255.0),
-            ),
-          ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.white,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
+  Widget _timeChip(String label, Duration? duration) {
+    return _optionChip(
+      label,
+      config.timeLimit == duration,
+      Colors.cyan,
+      () => setState(() => config = config.copyWith(timeLimit: duration)),
+      labelStyle: const TextStyle(fontSize: 12, color: Colors.white),
     );
   }
 
@@ -115,87 +82,57 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.startingLevel,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionTitle(l10n.startingLevel),
         const SizedBox(height: 8),
         Row(
           children: [
-            _levelButton('1', 1),
+            _optionChip(
+              '1',
+              config.startingLevel == 1,
+              Colors.purple,
+              () => setState(() => config = config.copyWith(startingLevel: 1)),
+            ),
             const SizedBox(width: 8),
-            _levelButton('5', 5),
+            _optionChip(
+              '5',
+              config.startingLevel == 5,
+              Colors.purple,
+              () => setState(() => config = config.copyWith(startingLevel: 5)),
+            ),
             const SizedBox(width: 8),
-            _levelButton('10', 10),
+            _optionChip(
+              '10',
+              config.startingLevel == 10,
+              Colors.purple,
+              () => setState(
+                () => config = config.copyWith(startingLevel: 10),
+              ),
+            ),
             const SizedBox(width: 8),
-            _levelButton('15', 15),
+            _optionChip(
+              '15',
+              config.startingLevel == 15,
+              Colors.purple,
+              () => setState(
+                () => config = config.copyWith(startingLevel: 15),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
-        Text(
-          l10n.speedMultiplier,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionTitle(l10n.speedMultiplier, small: true),
         const SizedBox(height: 8),
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            activeTrackColor: Colors.cyan,
-            thumbColor: Colors.cyan,
-            inactiveTrackColor: Colors.white.withValues(alpha: 50 / 255.0),
-          ),
-          child: Slider(
-            value: config.speedMultiplier,
-            min: 0.5,
-            max: 2,
-            divisions: 6,
-            label: '${config.speedMultiplier.toStringAsFixed(1)}x',
-            onChanged: (value) => setState(
-              () => config = config.copyWith(speedMultiplier: value),
-            ),
+        _buildSlider(
+          color: Colors.cyan,
+          value: config.speedMultiplier,
+          min: 0.5,
+          max: 2,
+          divisions: 6,
+          onChanged: (value) => setState(
+            () => config = config.copyWith(speedMultiplier: value),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _levelButton(String label, int level) {
-    final isSelected = config.startingLevel == level;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () =>
-            setState(() => config = config.copyWith(startingLevel: level)),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? Colors.purple.withValues(alpha: 100 / 255.0)
-                : Colors.white.withValues(alpha: 20 / 255.0),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isSelected
-                  ? Colors.purple
-                  : Colors.white.withValues(alpha: 50 / 255.0),
-            ),
-          ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -203,102 +140,38 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.boardWidth,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionTitle(l10n.boardWidth),
         const SizedBox(height: 8),
         Row(
-          children: [8, 10, 12, 15, 20].map((w) {
-            final isSelected = config.boardWidth == w;
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(end: 8),
-                child: GestureDetector(
-                  onTap: () => setState(
-                    () => config = config.copyWith(boardWidth: w),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Colors.cyan.withValues(alpha: 100 / 255.0)
-                          : Colors.white.withValues(alpha: 20 / 255.0),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isSelected
-                            ? Colors.cyan
-                            : Colors.white.withValues(alpha: 50 / 255.0),
-                      ),
-                    ),
-                    child: Text(
-                      '$w',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight:
-                            isSelected ? FontWeight.w700 : FontWeight.w500,
-                      ),
-                    ),
-                  ),
+          children: [8, 10, 12, 15, 20]
+              .map(
+                (w) => _optionChip(
+                  '$w',
+                  config.boardWidth == w,
+                  Colors.cyan,
+                  () => setState(() => config = config.copyWith(boardWidth: w)),
+                  outerPadding: const EdgeInsetsDirectional.only(end: 8),
                 ),
-              ),
-            );
-          }).toList(),
+              )
+              .toList(),
         ),
         const SizedBox(height: 12),
-        Text(
-          l10n.boardHeight,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionTitle(l10n.boardHeight),
         const SizedBox(height: 8),
         Row(
-          children: [10, 15, 20, 30, 40].map((h) {
-            final isSelected = config.boardHeight == h;
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(end: 8),
-                child: GestureDetector(
-                  onTap: () => setState(
+          children: [10, 15, 20, 30, 40]
+              .map(
+                (h) => _optionChip(
+                  '$h',
+                  config.boardHeight == h,
+                  Colors.purple,
+                  () => setState(
                     () => config = config.copyWith(boardHeight: h),
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Colors.purple.withValues(alpha: 100 / 255.0)
-                          : Colors.white.withValues(alpha: 20 / 255.0),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isSelected
-                            ? Colors.purple
-                            : Colors.white.withValues(alpha: 50 / 255.0),
-                      ),
-                    ),
-                    child: Text(
-                      '$h',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight:
-                            isSelected ? FontWeight.w700 : FontWeight.w500,
-                      ),
-                    ),
-                  ),
+                  outerPadding: const EdgeInsetsDirectional.only(end: 8),
                 ),
-              ),
-            );
-          }).toList(),
+              )
+              .toList(),
         ),
       ],
     );
@@ -308,14 +181,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.specialFeatures,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionTitle(l10n.specialFeatures),
         const SizedBox(height: 12),
         _featureToggle(l10n.specialBricksToggle, config.enableSpecialBricks, (
           value,
@@ -323,33 +189,95 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           setState(() => config = config.copyWith(enableSpecialBricks: value));
         }),
         const SizedBox(height: 8),
-        Text(
-          l10n.scoreMultiplier,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _sectionTitle(l10n.scoreMultiplier, small: true),
         const SizedBox(height: 8),
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            activeTrackColor: Colors.orange,
-            thumbColor: Colors.orange,
-            inactiveTrackColor: Colors.white.withValues(alpha: 50 / 255.0),
-          ),
-          child: Slider(
-            value: config.scoreMultiplier,
-            min: 0.5,
-            max: 3,
-            divisions: 10,
-            label: '${config.scoreMultiplier.toStringAsFixed(1)}x',
-            onChanged: (value) => setState(
-              () => config = config.copyWith(scoreMultiplier: value),
-            ),
+        _buildSlider(
+          color: Colors.orange,
+          value: config.scoreMultiplier,
+          min: 0.5,
+          max: 3,
+          divisions: 10,
+          onChanged: (value) => setState(
+            () => config = config.copyWith(scoreMultiplier: value),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _optionChip(
+    String label,
+    bool selected,
+    Color selectedColor,
+    VoidCallback onTap, {
+    TextStyle? labelStyle,
+    EdgeInsetsGeometry? outerPadding,
+  }) {
+    final style =
+        (labelStyle ?? const TextStyle(fontSize: 14, color: Colors.white))
+            .copyWith(fontWeight: selected ? FontWeight.w700 : FontWeight.w500);
+    return Expanded(
+      child: Padding(
+        padding: outerPadding ?? EdgeInsets.zero,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: selected
+                  ? selectedColor.withValues(alpha: 100 / 255.0)
+                  : Colors.white.withValues(alpha: 20 / 255.0),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: selected
+                    ? selectedColor
+                    : Colors.white.withValues(alpha: 50 / 255.0),
+              ),
+            ),
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: style,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSlider({
+    required Color color,
+    required double value,
+    required double min,
+    required double max,
+    required int divisions,
+    required void Function(double) onChanged,
+  }) {
+    return SliderTheme(
+      data: SliderTheme.of(context).copyWith(
+        activeTrackColor: color,
+        thumbColor: color,
+        inactiveTrackColor: Colors.white.withValues(alpha: 50 / 255.0),
+      ),
+      child: Slider(
+        value: value,
+        min: min,
+        max: max,
+        divisions: divisions,
+        label: '${value.toStringAsFixed(1)}x',
+        onChanged: onChanged,
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String text, {bool small = false}) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: small ? 16 : 18,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 
@@ -404,8 +332,9 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           icon: Icons.play_arrow_rounded,
           label: l10n.startGame,
           onTap: () {
+            final router = GoRouter.of(context);
             Navigator.of(context).pop();
-            unawaited(context.push('/game', extra: GameSettings.custom(config)));
+            unawaited(router.push('/game', extra: GameSettings.custom(config)));
           },
           compact: true,
         ),

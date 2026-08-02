@@ -197,3 +197,267 @@ class EffectRender {
   final EffectType type;
   final int alpha;
 }
+
+const Map<FallingBlock, int> colorFor = {
+  FallingBlock.I: 0,
+  FallingBlock.O: 1,
+  FallingBlock.T: 2,
+  FallingBlock.S: 3,
+  FallingBlock.Z: 4,
+  FallingBlock.J: 5,
+  FallingBlock.L: 6,
+  FallingBlock.PANDA: 7,
+  FallingBlock.GHOST: 8,
+  FallingBlock.CAT: 9,
+  FallingBlock.TORNADO: 10,
+  FallingBlock.BOMB: 11,
+};
+
+const Map<Rotation, List<PointInt>> _singleCell = {
+  Rotation.up: [PointInt(0, 0)],
+  Rotation.right: [PointInt(0, 0)],
+  Rotation.down: [PointInt(0, 0)],
+  Rotation.left: [PointInt(0, 0)],
+};
+
+const Map<Rotation, List<PointInt>> _squareCell = {
+  Rotation.up: [
+    PointInt(0, 0),
+    PointInt(1, 0),
+    PointInt(0, 1),
+    PointInt(1, 1),
+  ],
+  Rotation.right: [
+    PointInt(0, 0),
+    PointInt(1, 0),
+    PointInt(0, 1),
+    PointInt(1, 1),
+  ],
+  Rotation.down: [
+    PointInt(0, 0),
+    PointInt(1, 0),
+    PointInt(0, 1),
+    PointInt(1, 1),
+  ],
+  Rotation.left: [
+    PointInt(0, 0),
+    PointInt(1, 0),
+    PointInt(0, 1),
+    PointInt(1, 1),
+  ],
+};
+
+const Map<FallingBlock, Map<Rotation, List<PointInt>>> shapes = {
+  FallingBlock.I: {
+    Rotation.up: [
+      PointInt(-2, 0),
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+    ],
+    Rotation.right: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(0, 2),
+    ],
+    Rotation.down: [
+      PointInt(-2, 1),
+      PointInt(-1, 1),
+      PointInt(0, 1),
+      PointInt(1, 1),
+    ],
+    Rotation.left: [
+      PointInt(-1, -1),
+      PointInt(-1, 0),
+      PointInt(-1, 1),
+      PointInt(-1, 2),
+    ],
+  },
+  FallingBlock.O: {
+    Rotation.up: [
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, 1),
+      PointInt(1, 1),
+    ],
+    Rotation.right: [
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, 1),
+      PointInt(1, 1),
+    ],
+    Rotation.down: [
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, 1),
+      PointInt(1, 1),
+    ],
+    Rotation.left: [
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, 1),
+      PointInt(1, 1),
+    ],
+  },
+  FallingBlock.T: {
+    Rotation.up: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, 1),
+    ],
+    Rotation.right: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(1, 0),
+    ],
+    Rotation.down: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, -1),
+    ],
+    Rotation.left: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(-1, 0),
+    ],
+  },
+  FallingBlock.S: {
+    Rotation.up: [
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(-1, 1),
+      PointInt(0, 1),
+    ],
+    Rotation.right: [
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(1, -1),
+      PointInt(1, 0),
+    ],
+    Rotation.down: [
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(-1, 1),
+      PointInt(0, 1),
+    ],
+    Rotation.left: [
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(1, -1),
+      PointInt(1, 0),
+    ],
+  },
+  FallingBlock.Z: {
+    Rotation.up: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(1, 1),
+    ],
+    Rotation.right: [
+      PointInt(1, 0),
+      PointInt(1, 1),
+      PointInt(0, -1),
+      PointInt(0, 0),
+    ],
+    Rotation.down: [
+      PointInt(-1, -1),
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(1, 0),
+    ],
+    Rotation.left: [
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(-1, -1),
+      PointInt(-1, 0),
+    ],
+  },
+  FallingBlock.J: {
+    Rotation.up: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(-1, 1),
+    ],
+    Rotation.right: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(1, -1),
+    ],
+    Rotation.down: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(1, -1),
+    ],
+    Rotation.left: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(-1, 1),
+    ],
+  },
+  FallingBlock.L: {
+    Rotation.up: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(1, 1),
+    ],
+    Rotation.right: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(1, 1),
+    ],
+    Rotation.down: [
+      PointInt(-1, -1),
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+    ],
+    Rotation.left: [
+      PointInt(-1, -1),
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+    ],
+  },
+  FallingBlock.PANDA: _singleCell,
+  FallingBlock.GHOST: _singleCell,
+  FallingBlock.CAT: _squareCell,
+  FallingBlock.TORNADO: {
+    Rotation.up: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, 1),
+    ],
+    Rotation.right: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(1, 0),
+    ],
+    Rotation.down: [
+      PointInt(-1, 0),
+      PointInt(0, 0),
+      PointInt(1, 0),
+      PointInt(0, -1),
+    ],
+    Rotation.left: [
+      PointInt(0, -1),
+      PointInt(0, 0),
+      PointInt(0, 1),
+      PointInt(-1, 0),
+    ],
+  },
+  FallingBlock.BOMB: _singleCell,
+};

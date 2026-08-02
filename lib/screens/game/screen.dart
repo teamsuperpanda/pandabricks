@@ -11,8 +11,8 @@ import 'package:pandabricks/screens/game/game_dialog_mediator.dart';
 import 'package:pandabricks/screens/game/game_input_handler.dart';
 import 'package:pandabricks/widgets/game/board_painter.dart';
 import 'package:pandabricks/widgets/game/controls.dart';
+import 'package:pandabricks/widgets/game/dialog_button.dart';
 import 'package:pandabricks/widgets/game/game_palette.dart';
-import 'package:pandabricks/widgets/game/header_button.dart';
 import 'package:pandabricks/widgets/game/hud.dart';
 import 'package:pandabricks/widgets/game/preview.dart';
 import 'package:pandabricks/widgets/game/timer_display.dart';
@@ -105,10 +105,15 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   }
 
   void _onGameChanged() {
-    final newTick = _game.currentSpeed();
-    if (newTick != _tick) {
-      _tick = newTick;
-      _restartTimer();
+    if (_game.isPaused || _game.isGameOver) {
+      _timer?.cancel();
+      _timer = null;
+    } else {
+      final newTick = _game.currentSpeed();
+      if (newTick != _tick || _timer == null) {
+        _tick = newTick;
+        _restartTimer();
+      }
     }
     _dialogMediator.checkGameOver();
   }
@@ -133,10 +138,14 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _timer?.cancel();
+    _inputHandler.dispose();
+    _bgController.dispose();
+    if (!_initialized) {
+      super.dispose();
+      return;
+    }
     _game.removeListener(_onGameChanged);
     _dialogMediator.dispose();
-    _bgController.dispose();
-    _inputHandler.dispose();
     _game.dispose();
     unawaited(_audioProvider.playMenuMusic());
     super.dispose();
@@ -144,31 +153,37 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Game>.value(
-      value: _game,
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.light,
-        ),
-        child: KeyboardListener(
-          focusNode: _inputHandler.focusNode,
-          autofocus: true,
-          onKeyEvent: _inputHandler.handleKeyEvent,
-          child: _GameView(
-            backgroundAnimation: _bgAnim,
-            inputHandler: _inputHandler,
-            inputCallbacks: _inputCallbacks,
-            onMainMenu: _dialogMediator.showMainMenuConfirmDialog,
-            onRestart: () => _withMusic(
-              _dialogMediator.showRestartDialog,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _dialogMediator.showMainMenuConfirmDialog();
+      },
+      child: ChangeNotifierProvider<Game>.value(
+        value: _game,
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+          ),
+          child: KeyboardListener(
+            focusNode: _inputHandler.focusNode,
+            autofocus: true,
+            onKeyEvent: _inputHandler.handleKeyEvent,
+            child: _GameView(
+              backgroundAnimation: _bgAnim,
+              inputHandler: _inputHandler,
+              inputCallbacks: _inputCallbacks,
+              onMainMenu: _dialogMediator.showMainMenuConfirmDialog,
+              onRestart: () => _withMusic(
+                _dialogMediator.showRestartDialog,
+              ),
+              onPause: () => _withMusic(() {
+                _game.togglePause();
+                if (_game.isPaused) {
+                  _dialogMediator.showPauseDialog();
+                }
+              }),
+              onRotate: () => _withMusic(_game.rotateCW),
             ),
-            onPause: () => _withMusic(() {
-              _game.togglePause();
-              if (_game.isPaused) {
-                _dialogMediator.showPauseDialog();
-              }
-            }),
-            onRotate: () => _withMusic(_game.rotateCW),
           ),
         ),
       ),

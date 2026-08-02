@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:pandabricks/models/game_input_callbacks.dart';
 
 class GameInputHandler {
-  GameInputHandler(GameInputCallbacks callbacks) : _callbacks = callbacks;
+  GameInputHandler(GameInputCallbacks callbacks) : _callbacks = callbacks {
+    focusNode.addListener(_onFocusChanged);
+  }
 
   final GameInputCallbacks _callbacks;
 
@@ -14,11 +16,20 @@ class GameInputHandler {
   static const int keyboardSoftDropMs = 120;
 
   double _dragAccum = 0;
+  double _verticalDragAccum = 0;
   Timer? _keyboardDownTimer;
 
   final FocusNode focusNode = FocusNode();
 
+  void _onFocusChanged() {
+    if (!focusNode.hasFocus) {
+      _keyboardDownTimer?.cancel();
+      _keyboardDownTimer = null;
+    }
+  }
+
   void dispose() {
+    focusNode.removeListener(_onFocusChanged);
     _keyboardDownTimer?.cancel();
     focusNode.dispose();
   }
@@ -85,8 +96,12 @@ class GameInputHandler {
   }
 
   void onVerticalDragUpdate(DragUpdateDetails d) {
-    if (d.primaryDelta != null && d.primaryDelta! > 6) {
+    final dy = d.primaryDelta ?? d.delta.dy;
+    if (dy <= 0) return;
+    _verticalDragAccum += dy;
+    while (_verticalDragAccum > dragThreshold) {
       _callbacks.onSoftDrop();
+      _verticalDragAccum -= dragThreshold;
     }
   }
 

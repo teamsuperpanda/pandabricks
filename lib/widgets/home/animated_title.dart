@@ -5,6 +5,15 @@ class AnimatedTitle extends StatelessWidget {
   const AnimatedTitle({required this.floatingAnimation, super.key});
   final Animation<double> floatingAnimation;
 
+  static final LinearGradient _textGradient = LinearGradient(
+    colors: [
+      Colors.white,
+      Colors.cyan.withValues(alpha: 0.7),
+      Colors.white,
+    ],
+    stops: const [0.0, 0.5, 1.0],
+  );
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -14,14 +23,7 @@ class AnimatedTitle extends StatelessWidget {
         return Transform.translate(
           offset: Offset(0, floatingAnimation.value),
           child: ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(
-              colors: [
-                Colors.white,
-                Colors.cyan.withValues(alpha: 0.7),
-                Colors.white,
-              ],
-              stops: const [0.0, 0.5, 1.0],
-            ).createShader(bounds),
+            shaderCallback: _textGradient.createShader,
             blendMode: BlendMode.srcIn,
             child: Text(
               l10n.appTitle.toUpperCase(),

@@ -60,15 +60,20 @@ class BoardPainter extends CustomPainter {
     return cache;
   }
 
-  static TextPainter _emojiPainter(String emoji, double cellHeight) {
-    final cacheKey = '$emoji-$cellHeight';
+  static TextPainter cachedEmojiPainter({
+    required String emoji,
+    required double sizeFactor,
+    required double cellSize,
+  }) {
+    final fontSize = cellSize * sizeFactor;
+    final cacheKey = '$emoji-$fontSize';
     final cached = _emojiPainters[cacheKey];
     if (cached != null) return cached;
     final tp = TextPainter(
       text: TextSpan(
         text: emoji,
         style: TextStyle(
-          fontSize: cellHeight * 0.6,
+          fontSize: fontSize,
           fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'],
         ),
       ),
@@ -185,7 +190,11 @@ class BoardPainter extends CustomPainter {
       if (cell.colorIndex >= kSpecialBlockStartIndex) {
         final emoji = kSpecialBlockEmojis[cell.colorIndex] ?? '';
         if (emoji.isNotEmpty) {
-          final tp = _emojiPainter(emoji, fillRect.height);
+          final tp = cachedEmojiPainter(
+            emoji: emoji,
+            sizeFactor: 0.6,
+            cellSize: fillRect.height,
+          );
           final dx = (fillRect.width - tp.width) / 2;
           final dy = (fillRect.height - tp.height) / 2;
           tp.paint(canvas, Offset(dx, dy));
@@ -286,18 +295,16 @@ class BoardPainter extends CustomPainter {
       final sy = base.dy + oy * t * (isColumn ? 2 : 3);
       final r = (4.0 + (seed % 6)) * (1.0 - t * 0.8);
       final a = (alpha * (1.0 - t * t)).toInt().clamp(0, 255);
-      if (r > 0.5) {
-        _sparkleGlowPaint.color = sparkleColor.withValues(
-          alpha: (a * 0.4 / 255).clamp(0.0, 1.0),
-        );
-        canvas.drawCircle(Offset(sx, sy), r * 2, _sparkleGlowPaint);
-        _sparkleCorePaint.color = sparkleColor.withValues(alpha: a / 255.0);
-        canvas.drawCircle(Offset(sx, sy), r, _sparkleCorePaint);
-        _sparkleWhitePaint.color = Colors.white.withValues(
-          alpha: ((a * 0.8) / 255.0).clamp(0.0, 1.0),
-        );
-        canvas.drawCircle(Offset(sx, sy), r * 0.5, _sparkleWhitePaint);
-      }
+      _sparkleGlowPaint.color = sparkleColor.withValues(
+        alpha: (a * 0.4 / 255).clamp(0.0, 1.0),
+      );
+      canvas.drawCircle(Offset(sx, sy), r * 2, _sparkleGlowPaint);
+      _sparkleCorePaint.color = sparkleColor.withValues(alpha: a / 255.0);
+      canvas.drawCircle(Offset(sx, sy), r, _sparkleCorePaint);
+      _sparkleWhitePaint.color = Colors.white.withValues(
+        alpha: ((a * 0.8) / 255.0).clamp(0.0, 1.0),
+      );
+      canvas.drawCircle(Offset(sx, sy), r * 0.5, _sparkleWhitePaint);
     }
   }
 

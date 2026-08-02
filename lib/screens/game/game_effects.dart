@@ -22,17 +22,20 @@ void _triggerEffect(
   }
   game.notifyListeners();
   final generation = game._effectGeneration;
-  Future.delayed(const Duration(milliseconds: Game.effectDurationMs), () {
-    if (game._disposed) return;
-    if (game._effectGeneration != generation) return;
-    game._effects.removeWhere(
-      (e) =>
-          e.type == type &&
-          (type == EffectType.column ? e.x : e.y) == fixed &&
-          e.start == start,
-    );
-    game.notifyListeners();
-  });
+  for (var i = 1; i <= 5; i++) {
+    Future.delayed(Duration(milliseconds: Game.effectDurationMs * i ~/ 5), () {
+      if (game._disposed || game._effectGeneration != generation) return;
+      if (i == 5) {
+        game._effects.removeWhere(
+          (e) =>
+              e.type == type &&
+              (type == EffectType.column ? e.x : e.y) == fixed &&
+              e.start == start,
+        );
+      }
+      game.notifyListeners();
+    });
+  }
 }
 
 void triggerColumnEffect(Game game, int x) =>

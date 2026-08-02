@@ -14,7 +14,7 @@ void _writePieceToBoard(Game game) {
       game.isGameOver = true;
       return;
     }
-    game.board[c.y][c.x] = Game.colorFor[game.current!.type];
+    game.board[c.y][c.x] = colorFor[game.current!.type];
   }
 }
 
@@ -84,9 +84,13 @@ void handleSpecialBlockEffects(Game game) {
     case FallingBlock.GHOST:
     case FallingBlock.CAT:
     case FallingBlock.TORNADO:
-      _writePieceToBoard(game);
-
-    default:
+    case FallingBlock.I:
+    case FallingBlock.O:
+    case FallingBlock.T:
+    case FallingBlock.S:
+    case FallingBlock.Z:
+    case FallingBlock.J:
+    case FallingBlock.L:
       _writePieceToBoard(game);
   }
 }

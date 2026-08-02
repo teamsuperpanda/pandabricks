@@ -129,21 +129,21 @@ void main() {
 
   group('Game colorFor map', () {
     test('maps all standard blocks to colors', () {
-      expect(Game.colorFor[FallingBlock.I], 0);
-      expect(Game.colorFor[FallingBlock.O], 1);
-      expect(Game.colorFor[FallingBlock.T], 2);
-      expect(Game.colorFor[FallingBlock.S], 3);
-      expect(Game.colorFor[FallingBlock.Z], 4);
-      expect(Game.colorFor[FallingBlock.J], 5);
-      expect(Game.colorFor[FallingBlock.L], 6);
+      expect(colorFor[FallingBlock.I], 0);
+      expect(colorFor[FallingBlock.O], 1);
+      expect(colorFor[FallingBlock.T], 2);
+      expect(colorFor[FallingBlock.S], 3);
+      expect(colorFor[FallingBlock.Z], 4);
+      expect(colorFor[FallingBlock.J], 5);
+      expect(colorFor[FallingBlock.L], 6);
     });
 
     test('maps all special blocks to colors', () {
-      expect(Game.colorFor[FallingBlock.PANDA], 7);
-      expect(Game.colorFor[FallingBlock.GHOST], 8);
-      expect(Game.colorFor[FallingBlock.CAT], 9);
-      expect(Game.colorFor[FallingBlock.TORNADO], 10);
-      expect(Game.colorFor[FallingBlock.BOMB], 11);
+      expect(colorFor[FallingBlock.PANDA], 7);
+      expect(colorFor[FallingBlock.GHOST], 8);
+      expect(colorFor[FallingBlock.CAT], 9);
+      expect(colorFor[FallingBlock.TORNADO], 10);
+      expect(colorFor[FallingBlock.BOMB], 11);
     });
   });
 

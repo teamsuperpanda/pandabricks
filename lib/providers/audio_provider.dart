@@ -180,6 +180,9 @@ class AudioProvider extends ChangeNotifier {
     if (asset == null) return;
     final player = _sfxPlayers[effect];
     if (player == null) return;
+    // Ignore re-triggers while the same SFX is mid-play to avoid
+    // stop()/play() interleaving truncating the current playback.
+    if (player.state == PlayerState.playing) return;
 
     try {
       await player.stop();

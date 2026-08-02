@@ -8,7 +8,7 @@ import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/screens/game/game.dart';
 import 'package:pandabricks/screens/game/screen.dart';
 import 'package:pandabricks/widgets/game/controls.dart';
-import 'package:pandabricks/widgets/game/header_button.dart';
+import 'package:pandabricks/widgets/game/dialog_button.dart';
 import 'package:pandabricks/widgets/game/hud.dart';
 import 'package:pandabricks/widgets/game/preview.dart';
 import 'package:pandabricks/widgets/game/timer_display.dart';
@@ -127,7 +127,7 @@ void main() {
     expect(find.byType(PiecePreview), findsOneWidget);
     expect(find.byType(TimerDisplay), findsOneWidget);
     expect(find.byType(GameControls), findsOneWidget);
-    expect(find.byType(HeaderButton), findsNWidgets(3));
+    expect(find.byType(DialogButton), findsNWidgets(3));
 
     final game = Provider.of<Game>(
       tester.element(find.byType(GameHUD)),
@@ -135,13 +135,18 @@ void main() {
     );
     expect(game.isPaused, isFalse);
 
-    await tester.tap(find.widgetWithIcon(HeaderButton, Icons.pause_rounded));
+    await tester.tap(find.widgetWithIcon(DialogButton, Icons.pause_rounded));
     await tester.pump();
 
     expect(game.isPaused, isTrue);
     expect(find.byType(PauseDialog), findsOneWidget);
     expect(
-      find.widgetWithIcon(HeaderButton, Icons.play_arrow_rounded),
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is DialogButton &&
+            widget.shrinkWrap &&
+            widget.icon == Icons.play_arrow_rounded,
+      ),
       findsOneWidget,
     );
   });

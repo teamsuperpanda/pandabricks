@@ -478,28 +478,28 @@ void main() {
     group('Color Mapping', () {
       test('all falling blocks have color mappings', () {
         for (final block in FallingBlock.values) {
-          expect(Game.colorFor[block], isNotNull);
-          expect(Game.colorFor[block], isA<int>());
-          expect(Game.colorFor[block], greaterThanOrEqualTo(0));
+          expect(colorFor[block], isNotNull);
+          expect(colorFor[block], isA<int>());
+          expect(colorFor[block], greaterThanOrEqualTo(0));
         }
       });
 
       test('regular blocks have sequential color indices', () {
-        expect(Game.colorFor[FallingBlock.I], equals(0));
-        expect(Game.colorFor[FallingBlock.O], equals(1));
-        expect(Game.colorFor[FallingBlock.T], equals(2));
-        expect(Game.colorFor[FallingBlock.S], equals(3));
-        expect(Game.colorFor[FallingBlock.Z], equals(4));
-        expect(Game.colorFor[FallingBlock.J], equals(5));
-        expect(Game.colorFor[FallingBlock.L], equals(6));
+        expect(colorFor[FallingBlock.I], equals(0));
+        expect(colorFor[FallingBlock.O], equals(1));
+        expect(colorFor[FallingBlock.T], equals(2));
+        expect(colorFor[FallingBlock.S], equals(3));
+        expect(colorFor[FallingBlock.Z], equals(4));
+        expect(colorFor[FallingBlock.J], equals(5));
+        expect(colorFor[FallingBlock.L], equals(6));
       });
 
       test('special blocks have higher color indices', () {
-        expect(Game.colorFor[FallingBlock.PANDA], equals(7));
-        expect(Game.colorFor[FallingBlock.GHOST], equals(8));
-        expect(Game.colorFor[FallingBlock.CAT], equals(9));
-        expect(Game.colorFor[FallingBlock.TORNADO], equals(10));
-        expect(Game.colorFor[FallingBlock.BOMB], equals(11));
+        expect(colorFor[FallingBlock.PANDA], equals(7));
+        expect(colorFor[FallingBlock.GHOST], equals(8));
+        expect(colorFor[FallingBlock.CAT], equals(9));
+        expect(colorFor[FallingBlock.TORNADO], equals(10));
+        expect(colorFor[FallingBlock.BOMB], equals(11));
       });
     });
 

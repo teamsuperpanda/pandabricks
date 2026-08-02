@@ -24,28 +24,8 @@ class LocaleProvider with ChangeNotifier {
     return _prefs ??= await SharedPreferences.getInstance();
   }
 
-  static Locale? _buildLocale(
-    String? languageCode,
-    String? countryCode,
-    String? scriptCode,
-  ) {
+  static Locale? _buildLocale(String? languageCode) {
     if (languageCode == null) return null;
-    if (countryCode != null && scriptCode != null) {
-      return Locale.fromSubtags(
-        languageCode: languageCode,
-        countryCode: countryCode,
-        scriptCode: scriptCode,
-      );
-    }
-    if (countryCode != null) {
-      return Locale(languageCode, countryCode);
-    }
-    if (scriptCode != null) {
-      return Locale.fromSubtags(
-        languageCode: languageCode,
-        scriptCode: scriptCode,
-      );
-    }
     return Locale(languageCode);
   }
 
@@ -56,10 +36,8 @@ class LocaleProvider with ChangeNotifier {
     try {
       final prefs = await _prefsInstance();
       final languageCode = prefs.getString('locale_language');
-      final countryCode = prefs.getString('locale_country');
-      final scriptCode = prefs.getString('locale_script');
       if (_localeRevision != loadRevision) return;
-      _locale = _buildLocale(languageCode, countryCode, scriptCode);
+      _locale = _buildLocale(languageCode);
     } catch (e) {
       logError('LocaleProvider', e);
     } finally {

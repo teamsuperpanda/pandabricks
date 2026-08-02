@@ -166,6 +166,7 @@ void main() {
     });
 
     test('playSfx plays sfx when sfx is enabled', () async {
+      when(mockSfxPlayer.state).thenReturn(PlayerState.completed);
       await audioProvider.playSfx(GameSfx.rowClear);
       verify(
         mockSfxPlayer.play(

@@ -5,10 +5,10 @@ import 'package:pandabricks/screens/game/screen.dart';
 import 'package:pandabricks/screens/home/home_screen.dart';
 
 class AppRouter {
-  AppRouter({List<NavigatorObserver>? navigatorObservers})
+  AppRouter()
     : router = GoRouter(
         initialLocation: '/',
-        observers: navigatorObservers ?? [],
+        observers: const <NavigatorObserver>[],
         routes: [
           GoRoute(
             path: '/',

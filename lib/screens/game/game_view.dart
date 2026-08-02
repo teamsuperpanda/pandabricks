@@ -54,11 +54,16 @@ class _GameView extends StatelessWidget {
                         label: 'Score display',
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Consumer<Game>(
-                            builder: (context, game, _) => GameHUD(
-                              score: game.score,
-                              level: game.level,
-                              lines: game.linesCleared,
+                          child: Selector<Game, (int, int, int)>(
+                            selector: (context, game) => (
+                              game.score,
+                              game.level,
+                              game.linesCleared,
+                            ),
+                            builder: (context, values, _) => GameHUD(
+                              score: values.$1,
+                              level: values.$2,
+                              lines: values.$3,
                             ),
                           ),
                         ),
@@ -107,39 +112,28 @@ class _GameHeader extends StatelessWidget {
         label: 'Game controls header',
         child: Row(
           children: [
-            Semantics(
-              button: true,
-              label: '${l10n.mainMenu} button',
-              child: HeaderButton(
-                icon: Icons.home,
-                label: l10n.mainMenu,
-                onPressed: onMainMenu,
-              ),
+            DialogButton(
+              shrinkWrap: true,
+              icon: Icons.home,
+              label: l10n.mainMenu,
+              onTap: onMainMenu,
             ),
             const Spacer(),
-            Semantics(
-              button: true,
-              label: '${l10n.restart} button',
-              child: HeaderButton(
-                icon: Icons.refresh,
-                label: l10n.restart,
-                onPressed: onRestart,
-              ),
+            DialogButton(
+              shrinkWrap: true,
+              icon: Icons.refresh,
+              label: l10n.restart,
+              onTap: onRestart,
             ),
             const Spacer(),
             Consumer<Game>(
-              builder: (context, game, _) => Semantics(
-                button: true,
-                label: game.isPaused
-                    ? '${l10n.resume} button'
-                    : '${l10n.pause} button',
-                child: HeaderButton(
-                  icon: game.isPaused
-                      ? Icons.play_arrow_rounded
-                      : Icons.pause_rounded,
-                  label: game.isPaused ? l10n.resume : l10n.pause,
-                  onPressed: onPause,
-                ),
+              builder: (context, game, _) => DialogButton(
+                shrinkWrap: true,
+                icon: game.isPaused
+                    ? Icons.play_arrow_rounded
+                    : Icons.pause_rounded,
+                label: game.isPaused ? l10n.resume : l10n.pause,
+                onTap: onPause,
               ),
             ),
           ],
@@ -208,9 +202,12 @@ class _GameSidePanel extends StatelessWidget {
             child: Text(l10n.next, style: _labelStyle),
           ),
           const SizedBox(height: 8),
-          Semantics(
-            label: 'Next piece preview',
-            child: PiecePreview(next: game.next),
+          Selector<Game, FallingBlock?>(
+            selector: (context, game) => game.next,
+            builder: (context, next, _) => Semantics(
+              label: 'Next piece preview',
+              child: PiecePreview(next: next),
+            ),
           ),
           if (showTimer) ...[
             const SizedBox(height: 16),
@@ -260,16 +257,18 @@ class _GamePlayfield extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: AspectRatio(
                 aspectRatio: game.width / game.height,
-                child: CustomPaint(
-                  painter: BoardPainter(
-                    width: game.width,
-                    height: game.height,
-                    cells: game.filledCellsWithGhost(),
-                    effects: game.currentEffects(),
-                    palette: kGamePalette,
-                    version: game.version,
+                child: RepaintBoundary(
+                  child: CustomPaint(
+                    painter: BoardPainter(
+                      width: game.width,
+                      height: game.height,
+                      cells: game.filledCellsWithGhost(),
+                      effects: game.currentEffects(),
+                      palette: kGamePalette,
+                      version: game.version,
+                    ),
+                    size: Size.infinite,
                   ),
-                  size: Size.infinite,
                 ),
               ),
             ),

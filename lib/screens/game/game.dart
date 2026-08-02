@@ -107,21 +107,6 @@ class Game extends ChangeNotifier {
     super.notifyListeners();
   }
 
-  static const Map<FallingBlock, int> colorFor = {
-    FallingBlock.I: 0,
-    FallingBlock.O: 1,
-    FallingBlock.T: 2,
-    FallingBlock.S: 3,
-    FallingBlock.Z: 4,
-    FallingBlock.J: 5,
-    FallingBlock.L: 6,
-    FallingBlock.PANDA: 7,
-    FallingBlock.GHOST: 8,
-    FallingBlock.CAT: 9,
-    FallingBlock.TORNADO: 10,
-    FallingBlock.BOMB: 11,
-  };
-
   void _resetBoard() {
     board = List.generate(height, (_) => List<int?>.filled(width, null));
     isGameOver = false;
@@ -230,255 +215,6 @@ class Game extends ChangeNotifier {
     notifyListeners();
   }
 
-  static const Map<FallingBlock, Map<Rotation, List<PointInt>>> shapes = {
-    FallingBlock.I: {
-      Rotation.up: [
-        PointInt(-2, 0),
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-      ],
-      Rotation.right: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(0, 2),
-      ],
-      Rotation.down: [
-        PointInt(-2, 1),
-        PointInt(-1, 1),
-        PointInt(0, 1),
-        PointInt(1, 1),
-      ],
-      Rotation.left: [
-        PointInt(-1, -1),
-        PointInt(-1, 0),
-        PointInt(-1, 1),
-        PointInt(-1, 2),
-      ],
-    },
-    FallingBlock.O: {
-      Rotation.up: [
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, 1),
-        PointInt(1, 1),
-      ],
-      Rotation.right: [
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, 1),
-        PointInt(1, 1),
-      ],
-      Rotation.down: [
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, 1),
-        PointInt(1, 1),
-      ],
-      Rotation.left: [
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, 1),
-        PointInt(1, 1),
-      ],
-    },
-    FallingBlock.T: {
-      Rotation.up: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, 1),
-      ],
-      Rotation.right: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(1, 0),
-      ],
-      Rotation.down: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, -1),
-      ],
-      Rotation.left: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(-1, 0),
-      ],
-    },
-    FallingBlock.S: {
-      Rotation.up: [
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(-1, 1),
-        PointInt(0, 1),
-      ],
-      Rotation.right: [
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(1, -1),
-        PointInt(1, 0),
-      ],
-      Rotation.down: [
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(-1, 1),
-        PointInt(0, 1),
-      ],
-      Rotation.left: [
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(1, -1),
-        PointInt(1, 0),
-      ],
-    },
-    FallingBlock.Z: {
-      Rotation.up: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(1, 1),
-      ],
-      Rotation.right: [
-        PointInt(1, 0),
-        PointInt(1, 1),
-        PointInt(0, -1),
-        PointInt(0, 0),
-      ],
-      Rotation.down: [
-        PointInt(-1, -1),
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(1, 0),
-      ],
-      Rotation.left: [
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(-1, -1),
-        PointInt(-1, 0),
-      ],
-    },
-    FallingBlock.J: {
-      Rotation.up: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(-1, 1),
-      ],
-      Rotation.right: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(1, -1),
-      ],
-      Rotation.down: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(1, -1),
-      ],
-      Rotation.left: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(-1, 1),
-      ],
-    },
-    FallingBlock.L: {
-      Rotation.up: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(1, 1),
-      ],
-      Rotation.right: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(1, 1),
-      ],
-      Rotation.down: [
-        PointInt(-1, -1),
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-      ],
-      Rotation.left: [
-        PointInt(-1, -1),
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-      ],
-    },
-    FallingBlock.PANDA: _singleCell,
-    FallingBlock.GHOST: _singleCell,
-    FallingBlock.CAT: _squareCell,
-    FallingBlock.TORNADO: {
-      Rotation.up: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, 1),
-      ],
-      Rotation.right: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(1, 0),
-      ],
-      Rotation.down: [
-        PointInt(-1, 0),
-        PointInt(0, 0),
-        PointInt(1, 0),
-        PointInt(0, -1),
-      ],
-      Rotation.left: [
-        PointInt(0, -1),
-        PointInt(0, 0),
-        PointInt(0, 1),
-        PointInt(-1, 0),
-      ],
-    },
-    FallingBlock.BOMB: _singleCell,
-  };
-
-  static const Map<Rotation, List<PointInt>> _singleCell = {
-    Rotation.up: [PointInt(0, 0)],
-    Rotation.right: [PointInt(0, 0)],
-    Rotation.down: [PointInt(0, 0)],
-    Rotation.left: [PointInt(0, 0)],
-  };
-
-  static const Map<Rotation, List<PointInt>> _squareCell = {
-    Rotation.up: [
-      PointInt(0, 0),
-      PointInt(1, 0),
-      PointInt(0, 1),
-      PointInt(1, 1),
-    ],
-    Rotation.right: [
-      PointInt(0, 0),
-      PointInt(1, 0),
-      PointInt(0, 1),
-      PointInt(1, 1),
-    ],
-    Rotation.down: [
-      PointInt(0, 0),
-      PointInt(1, 0),
-      PointInt(0, 1),
-      PointInt(1, 1),
-    ],
-    Rotation.left: [
-      PointInt(0, 0),
-      PointInt(1, 0),
-      PointInt(0, 1),
-      PointInt(1, 1),
-    ],
-  };
-
   bool moveLeft() {
     // Ghost brick moves in opposite direction for chaotic behavior
     if (current?.type == FallingBlock.GHOST) {
@@ -530,6 +266,7 @@ class Game extends ChangeNotifier {
     lockCurrentPiece(this);
     score += (distance * 2 * level * (customConfig?.scoreMultiplier ?? 1.0))
         .round();
+    notifyListeners();
   }
 
   void tick() {
@@ -584,12 +321,24 @@ class Game extends ChangeNotifier {
     return Duration(milliseconds: speedMs);
   }
 
-  Iterable<CellRender> filledCellsWithGhost() sync* {
+  List<CellRender>? _filledCellsCache;
+  int _filledCellsCacheVersion = -1;
+
+  Iterable<CellRender> filledCellsWithGhost() {
+    if (_filledCellsCacheVersion != _version) {
+      _filledCellsCacheVersion = _version;
+      _filledCellsCache = _computeFilledCellsWithGhost();
+    }
+    return _filledCellsCache!;
+  }
+
+  List<CellRender> _computeFilledCellsWithGhost() {
+    final result = <CellRender>[];
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         final v = board[y][x];
         if (v != null) {
-          yield CellRender(x: x, y: y, colorIndex: v, isGhost: false);
+          result.add(CellRender(x: x, y: y, colorIndex: v, isGhost: false));
         }
       }
     }
@@ -600,22 +349,27 @@ class Game extends ChangeNotifier {
       final offsets = shapes[current!.type]![current!.rotation]!;
       for (final offset in offsets) {
         final c = position + offset;
-        yield CellRender(
-          x: c.x,
-          y: c.y,
-          colorIndex: colorIndex,
-          isGhost: false,
+        result.add(
+          CellRender(
+            x: c.x,
+            y: c.y,
+            colorIndex: colorIndex,
+            isGhost: false,
+          ),
         );
       }
       for (final c in ghost) {
-        yield CellRender(
-          x: c.x,
-          y: c.y,
-          colorIndex: colorIndex,
-          isGhost: true,
+        result.add(
+          CellRender(
+            x: c.x,
+            y: c.y,
+            colorIndex: colorIndex,
+            isGhost: true,
+          ),
         );
       }
     }
+    return result;
   }
 
   Iterable<EffectRender> currentEffects() sync* {

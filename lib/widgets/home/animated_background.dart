@@ -4,6 +4,11 @@ class AnimatedBackground extends StatelessWidget {
   const AnimatedBackground({required this.gradientAnimation, super.key});
   final Animation<double> gradientAnimation;
 
+  static const Color _start1 = Color(0xFF1a1a2e);
+  static const Color _end1 = Color(0xFF16213e);
+  static const Color _start2 = Color(0xFF0f3460);
+  static const Color _end2 = Color(0xFF533483);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -15,16 +20,8 @@ class AnimatedBackground extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.lerp(
-                  const Color(0xFF1a1a2e),
-                  const Color(0xFF16213e),
-                  gradientAnimation.value,
-                )!,
-                Color.lerp(
-                  const Color(0xFF0f3460),
-                  const Color(0xFF533483),
-                  gradientAnimation.value,
-                )!,
+                Color.lerp(_start1, _end1, gradientAnimation.value)!,
+                Color.lerp(_start2, _end2, gradientAnimation.value)!,
               ],
             ),
           ),

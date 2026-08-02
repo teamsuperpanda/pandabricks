@@ -263,14 +263,14 @@ void main() {
 
     group('Color Mapping', () {
       test('colorFor returns valid color index', () {
-        final colorIndex = Game.colorFor[FallingBlock.I];
+        final colorIndex = colorFor[FallingBlock.I];
         expect(colorIndex, isNotNull);
         expect(colorIndex, greaterThanOrEqualTo(0));
       });
 
       test('all block types have color mappings', () {
         for (final block in FallingBlock.values) {
-          final colorIndex = Game.colorFor[block];
+          final colorIndex = colorFor[block];
           expect(colorIndex, isNotNull);
           expect(colorIndex, greaterThanOrEqualTo(0));
         }
@@ -320,7 +320,7 @@ void main() {
           FallingBlock.L,
         ]) {
           // Should not crash when getting shape
-          final shape = Game.shapes[block];
+          final shape = shapes[block];
           expect(shape, isNotNull);
           expect(shape, isNotEmpty);
         }
