@@ -9,17 +9,44 @@ enum GameMode { classic, timeChallenge, blitz, custom }
 class CustomGameConfig {
   const CustomGameConfig({
     this.timeLimit,
-    this.startingLevel = 1,
-    this.speedMultiplier = 1.0,
-    this.scoreMultiplier = 1.0,
+    int startingLevel = 1,
+    double speedMultiplier = 1.0,
+    double scoreMultiplier = 1.0,
     this.enableSpecialBricks = true,
-    this.boardWidth = 10,
-    this.boardHeight = 20,
+    int boardWidth = 10,
+    int boardHeight = 20,
   }) : assert(startingLevel >= 1 && startingLevel <= 20),
        assert(speedMultiplier > 0 && speedMultiplier <= 10),
        assert(scoreMultiplier > 0 && scoreMultiplier <= 10),
        assert(boardWidth >= 4 && boardWidth <= 20),
-       assert(boardHeight >= 8 && boardHeight <= 40);
+       assert(boardHeight >= 8 && boardHeight <= 40),
+       startingLevel = startingLevel < 1
+           ? 1
+           : startingLevel > 20
+           ? 20
+           : startingLevel,
+       speedMultiplier =
+           speedMultiplier != speedMultiplier || speedMultiplier <= 0
+           ? 1.0
+           : speedMultiplier > 10
+           ? 10
+           : speedMultiplier,
+       scoreMultiplier =
+           scoreMultiplier != scoreMultiplier || scoreMultiplier <= 0
+           ? 1.0
+           : scoreMultiplier > 10
+           ? 10
+           : scoreMultiplier,
+       boardWidth = boardWidth < 4
+           ? 4
+           : boardWidth > 20
+           ? 20
+           : boardWidth,
+       boardHeight = boardHeight < 8
+           ? 8
+           : boardHeight > 40
+           ? 40
+           : boardHeight;
 
   final Duration? timeLimit;
   final int startingLevel;

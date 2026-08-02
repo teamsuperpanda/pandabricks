@@ -18,8 +18,30 @@ class BoardPainter extends CustomPainter {
   final List<Color> palette;
   final int version;
 
-  // Immortal cache — bounded by ~5 unique emoji+size combos in practice
+  // Bounded static caches: the oldest entry is evicted once the cap is hit.
+  static const int _cacheMaxEntries = 20;
   static final Map<String, TextPainter> _emojiPainters = {};
+
+  static final Paint _gridPaint = Paint()
+    ..color = Colors.white.withValues(alpha: 15 / 255.0)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.5;
+  static final Paint _gridGlow = Paint()
+    ..color = Colors.cyanAccent.withValues(alpha: 10 / 255.0)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 3
+    ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+  static final Paint _cellPaint = Paint();
+  static final Paint _sparkleGlowPaint = Paint();
+  static final Paint _sparkleCorePaint = Paint();
+  static final Paint _sparkleWhitePaint = Paint();
+
+  // Hoisted gradient used for the per-cell inner highlight.
+  static const LinearGradient _innerHighlightGradient = LinearGradient(
+    colors: [Colors.white54, Colors.transparent],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 
   final Map<int, LinearGradient> _cachedShaderGradient;
 
@@ -38,6 +60,28 @@ class BoardPainter extends CustomPainter {
     return cache;
   }
 
+  static TextPainter _emojiPainter(String emoji, double cellHeight) {
+    final cacheKey = '$emoji-$cellHeight';
+    final cached = _emojiPainters[cacheKey];
+    if (cached != null) return cached;
+    final tp = TextPainter(
+      text: TextSpan(
+        text: emoji,
+        style: TextStyle(
+          fontSize: cellHeight * 0.6,
+          fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'],
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    tp.layout();
+    if (_emojiPainters.length >= _cacheMaxEntries) {
+      _emojiPainters.remove(_emojiPainters.keys.first)?.dispose();
+    }
+    _emojiPainters[cacheKey] = tp;
+    return tp;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final cellW = size.width / width;
@@ -49,29 +93,17 @@ class BoardPainter extends CustomPainter {
     final offsetX = (size.width - boardWidth) / 2.0;
     final offsetY = (size.height - boardHeight) / 2.0;
 
-    final paint = Paint();
-
-    final gridPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 15 / 255.0)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-    final gridGlow = Paint()
-      ..color = Colors.cyanAccent.withValues(alpha: 10 / 255.0)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
-
     for (var x = 0; x <= width; x++) {
       final dx = offsetX + x * cellSize;
       canvas.drawLine(
         Offset(dx, offsetY),
         Offset(dx, offsetY + boardHeight),
-        gridGlow,
+        _gridGlow,
       );
       canvas.drawLine(
         Offset(dx, offsetY),
         Offset(dx, offsetY + boardHeight),
-        gridPaint,
+        _gridPaint,
       );
     }
     for (var y = 0; y <= height; y++) {
@@ -79,12 +111,12 @@ class BoardPainter extends CustomPainter {
       canvas.drawLine(
         Offset(offsetX, dy),
         Offset(offsetX + boardWidth, dy),
-        gridGlow,
+        _gridGlow,
       );
       canvas.drawLine(
         Offset(offsetX, dy),
         Offset(offsetX + boardWidth, dy),
-        gridPaint,
+        _gridPaint,
       );
     }
 
@@ -98,80 +130,69 @@ class BoardPainter extends CustomPainter {
       }
     }
 
+    // Shaders are anchored to the rect they were created with, so each cell is
+    // drawn in a translated local space. That allows one shader per palette
+    // color and a single inner shader to be reused across all cells.
+    final fillRect = Rect.fromLTWH(0, 0, cellSize - 3, cellSize - 3);
+    final fillRRect = RRect.fromRectAndRadius(
+      fillRect,
+      const Radius.circular(6),
+    );
+    final innerRRect = fillRRect.deflate(2);
+    final innerShader = _innerHighlightGradient.createShader(
+      innerRRect.outerRect,
+    );
+    final fillShaders = <int, Shader>{};
+
     for (final cell in filledCells) {
       final x = cell.x;
       final y = cell.y;
-      final colorIndex = cell.colorIndex;
+      final idx = cell.colorIndex % palette.length;
+      final base = palette[idx];
       final rect = Rect.fromLTWH(
         offsetX + x * cellSize,
         offsetY + y * cellSize,
         cellSize,
         cellSize,
       ).deflate(1.5);
-      final idx = colorIndex;
-      final base = palette[idx % palette.length];
 
-      final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(6));
+      canvas.save();
+      canvas.translate(rect.left, rect.top);
 
-      paint
+      _cellPaint
         ..color = base.withValues(alpha: 0.4)
         ..style = PaintingStyle.fill
         ..shader = null
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-      canvas.drawRRect(rrect, paint);
+      canvas.drawRRect(fillRRect, _cellPaint);
 
-      paint
+      _cellPaint
         ..maskFilter = null
-        ..shader =
-            (_cachedShaderGradient[idx % palette.length] ??
-                    LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        base.withValues(alpha: 1),
-                        base.withValues(alpha: 0.6),
-                      ],
-                    ))
-                .createShader(rect);
-      canvas.drawRRect(rrect, paint);
+        ..shader = fillShaders[idx] ??= _cachedShaderGradient[idx]!
+            .createShader(fillRect);
+      canvas.drawRRect(fillRRect, _cellPaint);
 
-      final inner = rrect.deflate(2);
-      paint.shader = const LinearGradient(
-        colors: [Colors.white54, Colors.transparent],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ).createShader(inner.outerRect);
-      canvas.drawRRect(inner, paint);
-      paint.shader = null;
+      _cellPaint.shader = innerShader;
+      canvas.drawRRect(innerRRect, _cellPaint);
+      _cellPaint.shader = null;
 
-      paint
+      _cellPaint
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.0
         ..color = Colors.white.withValues(alpha: 0.4);
-      canvas.drawRRect(rrect, paint);
+      canvas.drawRRect(fillRRect, _cellPaint);
 
-      if (idx >= kSpecialBlockStartIndex) {
-        final emoji = kSpecialBlockEmojis[idx] ?? '';
+      if (cell.colorIndex >= kSpecialBlockStartIndex) {
+        final emoji = kSpecialBlockEmojis[cell.colorIndex] ?? '';
         if (emoji.isNotEmpty) {
-          final cacheKey = '$emoji-${rect.height}';
-          var tp = _emojiPainters[cacheKey];
-          if (tp == null) {
-            final textStyle = TextStyle(
-              fontSize: rect.height * 0.6,
-              fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'],
-            );
-            tp = TextPainter(
-              text: TextSpan(text: emoji, style: textStyle),
-              textDirection: TextDirection.ltr,
-            );
-            tp.layout();
-            _emojiPainters[cacheKey] = tp;
-          }
-          final dx = rect.left + (rect.width - tp.width) / 2;
-          final dy = rect.top + (rect.height - tp.height) / 2;
+          final tp = _emojiPainter(emoji, fillRect.height);
+          final dx = (fillRect.width - tp.width) / 2;
+          final dy = (fillRect.height - tp.height) / 2;
           tp.paint(canvas, Offset(dx, dy));
         }
       }
+
+      canvas.restore();
     }
 
     for (final cell in ghostCells) {
@@ -188,13 +209,13 @@ class BoardPainter extends CustomPainter {
       final color = base.withValues(alpha: 0.15);
 
       final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(6));
-      paint
+      _cellPaint
         ..color = color
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2
         ..shader = null
         ..maskFilter = null;
-      canvas.drawRRect(rrect, paint);
+      canvas.drawRRect(rrect, _cellPaint);
     }
 
     for (final eff in effects) {
@@ -246,9 +267,6 @@ class BoardPainter extends CustomPainter {
     int seed0,
   ) {
     final count = isColumn ? 20 : 25;
-    final glowPaint = Paint();
-    final corePaint = Paint();
-    final whitePaint = Paint();
     for (var i = 0; i < count; i++) {
       final seed = seed0 * (isColumn ? 31 : 37) + i * (isColumn ? 17 : 19);
       final base = isColumn
@@ -269,16 +287,16 @@ class BoardPainter extends CustomPainter {
       final r = (4.0 + (seed % 6)) * (1.0 - t * 0.8);
       final a = (alpha * (1.0 - t * t)).toInt().clamp(0, 255);
       if (r > 0.5) {
-        glowPaint.color = sparkleColor.withValues(
+        _sparkleGlowPaint.color = sparkleColor.withValues(
           alpha: (a * 0.4 / 255).clamp(0.0, 1.0),
         );
-        canvas.drawCircle(Offset(sx, sy), r * 2, glowPaint);
-        corePaint.color = sparkleColor.withValues(alpha: a / 255.0);
-        canvas.drawCircle(Offset(sx, sy), r, corePaint);
-        whitePaint.color = Colors.white.withValues(
+        canvas.drawCircle(Offset(sx, sy), r * 2, _sparkleGlowPaint);
+        _sparkleCorePaint.color = sparkleColor.withValues(alpha: a / 255.0);
+        canvas.drawCircle(Offset(sx, sy), r, _sparkleCorePaint);
+        _sparkleWhitePaint.color = Colors.white.withValues(
           alpha: ((a * 0.8) / 255.0).clamp(0.0, 1.0),
         );
-        canvas.drawCircle(Offset(sx, sy), r * 0.5, whitePaint);
+        canvas.drawCircle(Offset(sx, sy), r * 0.5, _sparkleWhitePaint);
       }
     }
   }

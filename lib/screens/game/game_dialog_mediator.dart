@@ -22,34 +22,47 @@ class GameDialogMediator {
   final AudioProvider _audioProvider;
 
   bool _gameOverDialogShown = false;
+  Timer? _gameOverDialogTimer;
+  bool _disposed = false;
 
   void checkGameOver() {
-    if (_game.isGameOver && !_gameOverDialogShown) {
+    if (!_disposed && _game.isGameOver && !_gameOverDialogShown) {
       _gameOverDialogShown = true;
-      Future.delayed(const Duration(milliseconds: 500), showGameOverDialog);
+      _gameOverDialogTimer = Timer(
+        const Duration(milliseconds: 500),
+        showGameOverDialog,
+      );
     }
   }
 
+  void dispose() {
+    _disposed = true;
+    _gameOverDialogTimer?.cancel();
+    _gameOverDialogTimer = null;
+  }
+
   void showPauseDialog() {
-    unawaited(showDialog(
-      context: _navigator.context,
-      barrierDismissible: false,
-      builder: (context) => PauseDialog(
-        onResume: () {
-          Navigator.of(context).pop();
-          _game.togglePause();
-        },
-        onRestart: () {
-          Navigator.of(context).pop();
-          _gameOverDialogShown = false;
-          _game.reset();
-        },
-        onMainMenu: () {
-          Navigator.of(context).pop();
-          showMainMenuConfirmDialog();
-        },
+    unawaited(
+      showDialog(
+        context: _navigator.context,
+        barrierDismissible: false,
+        builder: (context) => PauseDialog(
+          onResume: () {
+            Navigator.of(context).pop();
+            _game.togglePause();
+          },
+          onRestart: () {
+            Navigator.of(context).pop();
+            _gameOverDialogShown = false;
+            _game.reset();
+          },
+          onMainMenu: () {
+            Navigator.of(context).pop();
+            showMainMenuConfirmDialog();
+          },
+        ),
       ),
-    ));
+    );
   }
 
   void showRestartDialog() {
@@ -57,47 +70,51 @@ class GameDialogMediator {
     if (!wasPaused) {
       _game.togglePause();
     }
-    unawaited(showDialog(
-      context: _navigator.context,
-      barrierDismissible: false,
-      builder: (context) => RestartConfirmDialog(
-        onConfirm: () {
-          Navigator.of(context).pop();
-          _game.reset();
-          if (wasPaused) {
-            _game.togglePause();
-          }
-        },
-        onCancel: () {
-          Navigator.of(context).pop();
-          if (!wasPaused) {
-            _game.togglePause();
-          }
-        },
+    unawaited(
+      showDialog(
+        context: _navigator.context,
+        barrierDismissible: false,
+        builder: (context) => RestartConfirmDialog(
+          onConfirm: () {
+            Navigator.of(context).pop();
+            _game.reset();
+            if (wasPaused) {
+              _game.togglePause();
+            }
+          },
+          onCancel: () {
+            Navigator.of(context).pop();
+            if (!wasPaused) {
+              _game.togglePause();
+            }
+          },
+        ),
       ),
-    ));
+    );
   }
 
   void showGameOverDialog() {
-    if (!_game.isGameOver) return;
-    unawaited(showDialog(
-      context: _navigator.context,
-      barrierDismissible: false,
-      builder: (context) => GameOverDialog(
-        score: _game.score,
-        level: _game.level,
-        lines: _game.linesCleared,
-        onRestart: () {
-          Navigator.of(context).pop();
-          _gameOverDialogShown = false;
-          _game.reset();
-        },
-        onMainMenu: () {
-          Navigator.of(context).pop();
-          showMainMenuConfirmDialog();
-        },
+    if (_disposed || !_game.isGameOver) return;
+    unawaited(
+      showDialog(
+        context: _navigator.context,
+        barrierDismissible: false,
+        builder: (context) => GameOverDialog(
+          score: _game.score,
+          level: _game.level,
+          lines: _game.linesCleared,
+          onRestart: () {
+            Navigator.of(context).pop();
+            _gameOverDialogShown = false;
+            _game.reset();
+          },
+          onMainMenu: () {
+            Navigator.of(context).pop();
+            showMainMenuConfirmDialog();
+          },
+        ),
       ),
-    ));
+    );
   }
 
   void showMainMenuConfirmDialog() {
@@ -105,22 +122,24 @@ class GameDialogMediator {
     if (!wasPaused) {
       _game.togglePause();
     }
-    unawaited(showDialog(
-      context: _navigator.context,
-      barrierDismissible: false,
-      builder: (context) => MainMenuConfirmDialog(
-        onConfirm: () {
-          Navigator.of(context).pop();
-          unawaited(_audioProvider.playMenuMusic());
-          _navigator.pop();
-        },
-        onCancel: () {
-          Navigator.of(context).pop();
-          if (!wasPaused) {
-            _game.togglePause();
-          }
-        },
+    unawaited(
+      showDialog(
+        context: _navigator.context,
+        barrierDismissible: false,
+        builder: (context) => MainMenuConfirmDialog(
+          onConfirm: () {
+            Navigator.of(context).pop();
+            unawaited(_audioProvider.playMenuMusic());
+            _navigator.pop();
+          },
+          onCancel: () {
+            Navigator.of(context).pop();
+            if (!wasPaused) {
+              _game.togglePause();
+            }
+          },
+        ),
       ),
-    ));
+    );
   }
 }

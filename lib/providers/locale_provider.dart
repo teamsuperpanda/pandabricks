@@ -13,9 +13,16 @@ class LocaleProvider with ChangeNotifier {
   }
   Locale? _locale;
   bool _disposed = false;
+  int _localeRevision = 0;
   final bool _enablePersistence;
+  SharedPreferences? _prefs;
 
   Locale? get locale => _locale;
+
+  /// Returns the cached [SharedPreferences] instance (fetched once and reused).
+  Future<SharedPreferences> _prefsInstance() async {
+    return _prefs ??= await SharedPreferences.getInstance();
+  }
 
   static Locale? _buildLocale(
     String? languageCode,
@@ -45,16 +52,18 @@ class LocaleProvider with ChangeNotifier {
   Future<void> _loadLocale() async {
     if (!_enablePersistence) return;
 
+    final loadRevision = _localeRevision;
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = await _prefsInstance();
       final languageCode = prefs.getString('locale_language');
       final countryCode = prefs.getString('locale_country');
       final scriptCode = prefs.getString('locale_script');
+      if (_localeRevision != loadRevision) return;
       _locale = _buildLocale(languageCode, countryCode, scriptCode);
     } catch (e) {
       logError('LocaleProvider', e);
     } finally {
-      if (!_disposed) {
+      if (!_disposed && _localeRevision == loadRevision) {
         notifyListeners();
       }
     }
@@ -63,6 +72,7 @@ class LocaleProvider with ChangeNotifier {
   /// Sets the locale. Persistence errors are silently logged; UI updates optimistically.
   Future<void> setLocale(Locale? locale) async {
     if (_locale == locale) return;
+    _localeRevision++;
 
     _locale = locale;
     if (!_disposed) {
@@ -72,7 +82,7 @@ class LocaleProvider with ChangeNotifier {
     if (!_enablePersistence) return;
 
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = await _prefsInstance();
       if (locale != null) {
         await prefs.setString('locale_language', locale.languageCode);
         if (locale.countryCode != null) {

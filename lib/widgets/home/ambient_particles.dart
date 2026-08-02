@@ -10,7 +10,7 @@ class AmbientParticles extends StatefulWidget {
 }
 
 class _AmbientParticlesState extends State<AmbientParticles>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController _controller;
   late List<_Particle> _particles;
   final int _count = 24;
@@ -18,6 +18,7 @@ class _AmbientParticlesState extends State<AmbientParticles>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
@@ -27,7 +28,17 @@ class _AmbientParticlesState extends State<AmbientParticles>
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      unawaited(_controller.repeat());
+    } else {
+      _controller.stop();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     super.dispose();
   }

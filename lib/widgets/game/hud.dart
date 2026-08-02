@@ -44,6 +44,13 @@ class GameHUD extends StatelessWidget {
     );
   }
 
+  static final TextStyle _labelStyle = TextStyle(
+    fontSize: 12,
+    color: Colors.cyanAccent.withValues(alpha: 200 / 255.0),
+    fontWeight: FontWeight.w800,
+    letterSpacing: 1.2,
+  );
+
   Widget _hudItem(String label, String value) {
     return Semantics(
       label: '$label $value',
@@ -51,12 +58,7 @@ class GameHUD extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.cyanAccent.withValues(alpha: 200 / 255.0),
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.2,
-            ),
+            style: _labelStyle,
           ),
           const SizedBox(height: 4),
           Text(

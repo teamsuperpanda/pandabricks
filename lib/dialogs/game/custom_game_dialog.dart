@@ -217,7 +217,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             final isSelected = config.boardWidth == w;
             return Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsetsDirectional.only(end: 8),
                 child: GestureDetector(
                   onTap: () => setState(
                     () => config = config.copyWith(boardWidth: w),
@@ -266,7 +266,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
             final isSelected = config.boardHeight == h;
             return Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsetsDirectional.only(end: 8),
                 child: GestureDetector(
                   onTap: () => setState(
                     () => config = config.copyWith(boardHeight: h),

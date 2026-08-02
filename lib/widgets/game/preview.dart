@@ -32,6 +32,33 @@ class _PreviewPainter extends CustomPainter {
   _PreviewPainter(this.next);
   final game.FallingBlock? next;
 
+  // Bounded static cache: painter instances are recreated on rebuild, so the
+  // cache lives at class level (mirrors BoardPainter's emoji cache).
+  static const int _cacheMaxEntries = 20;
+  static final Map<String, TextPainter> _emojiPainters = {};
+
+  static TextPainter _emojiPainter(String emoji, double fontSize) {
+    final cacheKey = '$emoji-$fontSize';
+    final cached = _emojiPainters[cacheKey];
+    if (cached != null) return cached;
+    final tp = TextPainter(
+      text: TextSpan(
+        text: emoji,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'],
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    tp.layout();
+    if (_emojiPainters.length >= _cacheMaxEntries) {
+      _emojiPainters.remove(_emojiPainters.keys.first)?.dispose();
+    }
+    _emojiPainters[cacheKey] = tp;
+    return tp;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     if (next == null) return;
@@ -91,22 +118,10 @@ class _PreviewPainter extends CustomPainter {
       if (isSpecial) {
         final emoji = kSpecialBlockEmojis[colorIndex] ?? '';
         if (emoji.isNotEmpty) {
-          final textStyle = TextStyle(
-            fontSize: cellSize * 0.7,
-            fontFamilyFallback: ['Noto Color Emoji', 'Apple Color Emoji'],
-          );
-          final tp = TextPainter(
-            text: TextSpan(text: emoji, style: textStyle),
-            textDirection: TextDirection.ltr,
-          );
-          try {
-            tp.layout();
-            final dx = x + (cellSize - tp.width) / 2;
-            final dy = y + (cellSize - tp.height) / 2;
-            tp.paint(canvas, Offset(dx, dy));
-          } finally {
-            tp.dispose();
-          }
+          final tp = _emojiPainter(emoji, cellSize * 0.7);
+          final dx = x + (cellSize - tp.width) / 2;
+          final dy = y + (cellSize - tp.height) / 2;
+          tp.paint(canvas, Offset(dx, dy));
         }
       }
     }

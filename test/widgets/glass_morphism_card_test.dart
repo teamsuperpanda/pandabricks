@@ -20,7 +20,7 @@ void main() {
       expect(find.text(testText), findsOneWidget);
     });
 
-    testWidgets('applies blur effect', (tester) async {
+    testWidgets('uses faux-glass without blur by default', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -31,7 +31,22 @@ void main() {
         ),
       );
 
-      // Verify BackdropFilter is present
+      // Default path is the cheap faux-glass look: no BackdropFilter.
+      expect(find.byType(BackdropFilter), findsNothing);
+    });
+
+    testWidgets('applies real blur when opted in', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: GlassMorphismCard(
+              blur: true,
+              child: Text('Test'),
+            ),
+          ),
+        ),
+      );
+
       expect(find.byType(BackdropFilter), findsOneWidget);
     });
 

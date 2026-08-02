@@ -22,6 +22,7 @@ class GameDialogWrapper extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: GlassMorphismCard(
+        blur: true,
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(

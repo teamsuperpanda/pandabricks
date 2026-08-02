@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('LocaleProvider', () {
@@ -127,6 +128,20 @@ void main() {
 
       expect(notificationCount, locales.length);
       expect(localeProvider.locale, equals(locales.last));
+    });
+
+    test('startup load does not overwrite a newer locale choice', () async {
+      SharedPreferences.setMockInitialValues({
+        'locale_language': 'fr',
+        'locale_country': 'FR',
+      });
+      final loadingProvider = LocaleProvider();
+
+      await loadingProvider.setLocale(const Locale('de', 'DE'));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(loadingProvider.locale, const Locale('de', 'DE'));
+      loadingProvider.dispose();
     });
 
     test('should properly dispose without errors', () {

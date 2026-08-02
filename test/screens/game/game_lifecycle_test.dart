@@ -82,6 +82,21 @@ void main() {
 
       expect(timeGame.timeRemaining, greaterThan(const Duration(seconds: 100)));
     });
+
+    test('reset restores custom starting level and cleared lines', () {
+      final customGame = Game(
+        audioProvider: mockAudio,
+        gameMode: GameMode.custom,
+        customConfig: const CustomGameConfig(startingLevel: 7),
+      );
+
+      customGame.level = 12;
+      customGame.linesCleared = 119;
+      customGame.reset();
+
+      expect(customGame.level, 7);
+      expect(customGame.linesCleared, 60);
+    });
   });
 
   group('Game Bag System', () {

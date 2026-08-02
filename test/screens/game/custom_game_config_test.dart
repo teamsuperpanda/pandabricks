@@ -198,5 +198,88 @@ void main() {
         expect(config.timeLimit, isNull);
       });
     });
+
+    group('validation', () {
+      test('preserves values at every supported boundary', () {
+        const minimum = CustomGameConfig(
+          speedMultiplier: 0.1,
+          scoreMultiplier: 0.1,
+          boardWidth: 4,
+          boardHeight: 8,
+        );
+        const maximum = CustomGameConfig(
+          startingLevel: 20,
+          speedMultiplier: 10,
+          scoreMultiplier: 10,
+          boardWidth: 20,
+          boardHeight: 40,
+        );
+
+        expect(minimum.startingLevel, 1);
+        expect(minimum.speedMultiplier, 0.1);
+        expect(minimum.scoreMultiplier, 0.1);
+        expect(minimum.boardWidth, 4);
+        expect(minimum.boardHeight, 8);
+        expect(maximum.startingLevel, 20);
+        expect(maximum.speedMultiplier, 10);
+        expect(maximum.scoreMultiplier, 10);
+        expect(maximum.boardWidth, 20);
+        expect(maximum.boardHeight, 40);
+      });
+
+      test('rejects starting levels outside the supported range in debug', () {
+        expect(() => CustomGameConfig(startingLevel: 0), throwsAssertionError);
+        expect(
+          () => CustomGameConfig(startingLevel: 21),
+          throwsAssertionError,
+        );
+      });
+
+      test('rejects board dimensions outside supported ranges in debug', () {
+        expect(() => CustomGameConfig(boardWidth: 3), throwsAssertionError);
+        expect(() => CustomGameConfig(boardWidth: 21), throwsAssertionError);
+        expect(() => CustomGameConfig(boardHeight: 7), throwsAssertionError);
+        expect(() => CustomGameConfig(boardHeight: 41), throwsAssertionError);
+      });
+
+      test('rejects invalid speed multipliers in debug', () {
+        expect(
+          () => CustomGameConfig(speedMultiplier: 0),
+          throwsAssertionError,
+        );
+        expect(
+          () => CustomGameConfig(speedMultiplier: double.nan),
+          throwsAssertionError,
+        );
+        expect(
+          () => CustomGameConfig(speedMultiplier: double.infinity),
+          throwsAssertionError,
+        );
+      });
+
+      test('rejects invalid score multipliers in debug', () {
+        expect(
+          () => CustomGameConfig(scoreMultiplier: -1),
+          throwsAssertionError,
+        );
+        expect(
+          () => CustomGameConfig(scoreMultiplier: double.nan),
+          throwsAssertionError,
+        );
+        expect(
+          () => CustomGameConfig(scoreMultiplier: double.infinity),
+          throwsAssertionError,
+        );
+      });
+
+      test('copyWith retains constructor validation in debug', () {
+        const config = CustomGameConfig();
+
+        expect(
+          () => config.copyWith(boardHeight: 41),
+          throwsAssertionError,
+        );
+      });
+    });
   });
 }

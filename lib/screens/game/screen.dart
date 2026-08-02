@@ -21,8 +21,15 @@ import 'package:pandabricks/widgets/home/animated_background.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 import 'package:provider/provider.dart';
 
+part 'game_view.dart';
+
 class GameScreen extends StatefulWidget {
-  const GameScreen({super.key});
+  const GameScreen({
+    super.key,
+    this.settings = const GameSettings.classic(),
+  });
+
+  final GameSettings settings;
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -69,22 +76,19 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     super.didChangeDependencies();
     if (!_initialized) {
       _audioProvider = context.read<AudioProvider>();
-      unawaited(_audioProvider.stopMusic());
       if (_audioProvider.musicEnabled) {
         unawaited(_audioProvider.playGameMusic());
         _musicStarted = true;
+      } else {
+        unawaited(_audioProvider.stopMusic());
       }
-
-      final args = ModalRoute.of(context)?.settings.arguments;
-      final settings =
-          (args is GameSettings ? args : null) ?? const GameSettings.classic();
 
       _game = Game(
         audioProvider: _audioProvider,
-        gameMode: settings.mode,
-        customConfig: settings.customConfig,
-        width: settings.boardWidth,
-        height: settings.boardHeight,
+        gameMode: widget.settings.mode,
+        customConfig: widget.settings.customConfig,
+        width: widget.settings.boardWidth,
+        height: widget.settings.boardHeight,
       );
       _tick = _game.currentSpeed();
       _restartTimer();
@@ -107,7 +111,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _restartTimer();
     }
     _dialogMediator.checkGameOver();
-    setState(() {});
   }
 
   void _restartTimer() {
@@ -131,6 +134,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   void dispose() {
     _timer?.cancel();
     _game.removeListener(_onGameChanged);
+    _dialogMediator.dispose();
     _bgController.dispose();
     _inputHandler.dispose();
     _game.dispose();
@@ -140,7 +144,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return ChangeNotifierProvider<Game>.value(
       value: _game,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -151,245 +154,21 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           focusNode: _inputHandler.focusNode,
           autofocus: true,
           onKeyEvent: _inputHandler.handleKeyEvent,
-          child: Scaffold(
-            body: GestureDetector(
-              onHorizontalDragStart: _inputHandler.onHorizontalDragStart,
-              onHorizontalDragUpdate: _inputHandler.onHorizontalDragUpdate,
-              onVerticalDragUpdate: _inputHandler.onVerticalDragUpdate,
-              onVerticalDragEnd: _inputHandler.onVerticalDragEnd,
-              child: Stack(
-                children: [
-                  Semantics(
-                    label: 'Background',
-                    child: AnimatedBackground(gradientAnimation: _bgAnim),
-                  ),
-                  Semantics(
-                    label: 'Ambient particles',
-                    child: const AmbientParticles(),
-                  ),
-                  SafeArea(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                              child: Semantics(
-                                label: 'Game controls header',
-                                child: Row(
-                                  children: [
-                                    Semantics(
-                                      button: true,
-                                      label: '${l10n.mainMenu} button',
-                                      child: HeaderButton(
-                                        icon: Icons.home,
-                                        label: l10n.mainMenu,
-                                        onPressed: _dialogMediator
-                                            .showMainMenuConfirmDialog,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Semantics(
-                                      button: true,
-                                      label: '${l10n.restart} button',
-                                      child: HeaderButton(
-                                        icon: Icons.refresh,
-                                        label: l10n.restart,
-                                        onPressed: () => _withMusic(
-                                          _dialogMediator.showRestartDialog,
-                                        ),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Consumer<Game>(
-                                      builder: (context, game, _) => Semantics(
-                                        button: true,
-                                        label: game.isPaused
-                                            ? '${l10n.resume} button'
-                                            : '${l10n.pause} button',
-                                        child: HeaderButton(
-                                          icon: game.isPaused
-                                              ? Icons.play_arrow_rounded
-                                              : Icons.pause_rounded,
-                                          label: game.isPaused
-                                              ? l10n.resume
-                                              : l10n.pause,
-                                          onPressed: () => _withMusic(() {
-                                            _game.togglePause();
-            if (_game.isPaused) {
-              _dialogMediator.showPauseDialog();
-            }
-                                          }),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Semantics(
-                              label: 'Score display',
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: GameHUD(
-                                  score: _game.score,
-                                  level: _game.level,
-                                  lines: _game.linesCleared,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: Center(
-                                  child: ConstrainedBox(
-                                    constraints: const BoxConstraints(
-                                      maxWidth: 500,
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 5,
-                                          child: _buildPlayfield(context),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Semantics(
-                                            label: 'Side panel',
-                                            child: Column(
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    l10n.next,
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.white
-                                                          .withValues(
-                                                            alpha: 220 / 255.0,
-                                                          ),
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Semantics(
-                                                  label: 'Next piece preview',
-                                                  child: PiecePreview(
-                                                    next: _game.next,
-                                                  ),
-                                                ),
-                                                if ((_game.gameMode ==
-                                                            GameMode
-                                                                .timeChallenge ||
-                                                        (_game.gameMode ==
-                                                                GameMode
-                                                                    .custom &&
-                                                            _game
-                                                                    .customConfig
-                                                                    ?.timeLimit !=
-                                                                null)) &&
-                                                    _game.timeRemaining !=
-                                                        null) ...[
-                                                  const SizedBox(height: 16),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      l10n.timeLeft,
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.white
-                                                            .withValues(
-                                                              alpha:
-                                                                  220 / 255.0,
-                                                            ),
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Semantics(
-                                                    label:
-                                                        'Time remaining: ${_game.timeRemaining!.inMinutes}:${(_game.timeRemaining!.inSeconds % 60).toString().padLeft(2, '0')}',
-                                                    child: TimerDisplay(
-                                                      timeRemaining:
-                                                          _game.timeRemaining!,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Semantics(
-                              label: 'Game controls',
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  8,
-                                  16,
-                                  32,
-                                ),
-                                child: GameControls(callbacks: _inputCallbacks),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+          child: _GameView(
+            backgroundAnimation: _bgAnim,
+            inputHandler: _inputHandler,
+            inputCallbacks: _inputCallbacks,
+            onMainMenu: _dialogMediator.showMainMenuConfirmDialog,
+            onRestart: () => _withMusic(
+              _dialogMediator.showRestartDialog,
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPlayfield(BuildContext context) {
-    return Semantics(
-      label: 'Game board',
-      child: GestureDetector(
-        onTap: () => _withMusic(_game.rotateCW),
-        child: GlassMorphismCard(
-          child: SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: AspectRatio(
-                aspectRatio: _game.width / _game.height,
-                child: CustomPaint(
-                  painter: BoardPainter(
-                    width: _game.width,
-                    height: _game.height,
-                    cells: _game.filledCellsWithGhost(),
-                    effects: _game.currentEffects(),
-                    palette: kGamePalette,
-                    version: _game.version,
-                  ),
-                  size: Size.infinite,
-                ),
-              ),
-            ),
+            onPause: () => _withMusic(() {
+              _game.togglePause();
+              if (_game.isPaused) {
+                _dialogMediator.showPauseDialog();
+              }
+            }),
+            onRotate: () => _withMusic(_game.rotateCW),
           ),
         ),
       ),

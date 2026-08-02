@@ -37,7 +37,7 @@ void main() {
         enablePlatformAudio: false,
       ); // Prevent internal AudioPlayer creation
       audioProvider.player = mockPlayer;
-      audioProvider.sfxPlayer = mockSfxPlayer;
+      audioProvider.sfxPlayers = {GameSfx.rowClear: mockSfxPlayer};
       await audioProvider.loadPreferences(
         mockSharedPreferences,
       ); // Manually load preferences
@@ -105,6 +105,48 @@ void main() {
       verifyNever(mockPlayer.play(any, volume: anyNamed('volume')));
     });
 
+    test('resumeMusic restores menu music context', () async {
+      await audioProvider.playMenuMusic();
+      await audioProvider.stopMusic();
+      clearInteractions(mockPlayer);
+
+      await audioProvider.resumeMusic();
+
+      verify(
+        mockPlayer.play(
+          argThat(
+            isA<AssetSource>().having(
+              (source) => source.path,
+              'path',
+              AudioProvider.menuTrack,
+            ),
+          ),
+          volume: 0.5,
+        ),
+      ).called(1);
+    });
+
+    test('resumeMusic restores game music context', () async {
+      await audioProvider.playGameMusic();
+      await audioProvider.stopMusic();
+      clearInteractions(mockPlayer);
+
+      await audioProvider.resumeMusic();
+
+      verify(
+        mockPlayer.play(
+          argThat(
+            isA<AssetSource>().having(
+              (source) => source.path,
+              'path',
+              isIn(AudioProvider.gameTracks),
+            ),
+          ),
+          volume: 0.5,
+        ),
+      ).called(1);
+    });
+
     test(
       'stopMusic stops the player and clears currently playing track',
       () async {
@@ -113,6 +155,15 @@ void main() {
         expect(audioProvider.currentlyPlaying, isNull);
       },
     );
+
+    test('stopMusic contains player errors and clears track state', () async {
+      await audioProvider.playMenuMusic();
+      when(mockPlayer.stop()).thenThrow(StateError('stop failed'));
+
+      await expectLater(audioProvider.stopMusic(), completes);
+
+      expect(audioProvider.currentlyPlaying, isNull);
+    });
 
     test('playSfx plays sfx when sfx is enabled', () async {
       await audioProvider.playSfx(GameSfx.rowClear);

@@ -8,6 +8,7 @@ import 'package:pandabricks/navigation/app_router.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
 import 'package:pandabricks/services/logging.dart';
+import 'package:pandabricks/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,7 +54,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _appRouter = AppRouter();
     WidgetsBinding.instance.addObserver(this);
     Future.delayed(const Duration(seconds: 1), FlutterNativeSplash.remove);
-    unawaited(SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]));
+    unawaited(
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
+    );
   }
 
   @override
@@ -71,7 +74,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       unawaited(audio.stopMusic());
     } else if (state == AppLifecycleState.resumed) {
       if (audio.musicEnabled) {
-        unawaited(audio.playMenuMusic());
+        unawaited(audio.resumeMusic());
       }
     }
   }
@@ -84,96 +87,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           onGenerateTitle: (context) =>
               AppLocalizations.of(context)?.appTitle ?? _defaultTitle,
           routerConfig: _appRouter.router,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-            fontFamily: 'Fredoka',
-            textTheme: const TextTheme(
-              bodyLarge: TextStyle(
-                fontFamily: 'Fredoka',
-                fontFamilyFallback: [
-                  'NotoSans',
-                  'NotoSansArabic',
-                  'NotoSansDevanagari',
-                  'NotoSansBengali',
-                  'NotoSansSC',
-                  'NotoSansJP',
-                  'NotoSansKR',
-                ],
-              ),
-              bodyMedium: TextStyle(
-                fontFamily: 'Fredoka',
-                fontFamilyFallback: [
-                  'NotoSans',
-                  'NotoSansArabic',
-                  'NotoSansDevanagari',
-                  'NotoSansBengali',
-                  'NotoSansSC',
-                  'NotoSansJP',
-                  'NotoSansKR',
-                ],
-              ),
-              bodySmall: TextStyle(
-                fontFamily: 'Fredoka',
-                fontFamilyFallback: [
-                  'NotoSans',
-                  'NotoSansArabic',
-                  'NotoSansDevanagari',
-                  'NotoSansBengali',
-                  'NotoSansSC',
-                  'NotoSansJP',
-                  'NotoSansKR',
-                ],
-              ),
-              titleLarge: TextStyle(
-                fontFamily: 'Fredoka',
-                fontWeight: FontWeight.w700,
-                fontFamilyFallback: [
-                  'NotoSans',
-                  'NotoSansArabic',
-                  'NotoSansDevanagari',
-                  'NotoSansBengali',
-                  'NotoSansSC',
-                  'NotoSansJP',
-                  'NotoSansKR',
-                ],
-              ),
-              titleMedium: TextStyle(
-                fontFamily: 'Fredoka',
-                fontWeight: FontWeight.w600,
-                fontFamilyFallback: [
-                  'NotoSans',
-                  'NotoSansArabic',
-                  'NotoSansDevanagari',
-                  'NotoSansBengali',
-                  'NotoSansSC',
-                  'NotoSansJP',
-                  'NotoSansKR',
-                ],
-              ),
-              labelLarge: TextStyle(
-                fontFamily: 'Fredoka',
-                fontFamilyFallback: [
-                  'NotoSans',
-                  'NotoSansArabic',
-                  'NotoSansDevanagari',
-                  'NotoSansBengali',
-                  'NotoSansSC',
-                  'NotoSansJP',
-                  'NotoSansKR',
-                ],
-              ),
-            ),
-          ),
+          theme: AppTheme.dark,
           locale: localeProvider.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          builder: (context, child) {
-            return Directionality(
-              textDirection: TextDirection.ltr,
-              child: child!,
-            );
-          },
         );
       },
     );

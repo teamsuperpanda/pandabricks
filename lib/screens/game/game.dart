@@ -42,10 +42,6 @@ class Game extends ChangeNotifier {
       timeRemaining = initialTimeLimit;
       gameStartTime = DateTime.now();
     }
-    if (customConfig != null && customConfig!.startingLevel > 1) {
-      level = customConfig!.startingLevel;
-      linesCleared = (level - 1) * 10;
-    }
   }
   final int width;
   final int height;
@@ -133,6 +129,10 @@ class Game extends ChangeNotifier {
     score = 0;
     linesCleared = 0;
     level = 1;
+    if (customConfig case CustomGameConfig(:final startingLevel)) {
+      level = startingLevel;
+      linesCleared = (startingLevel - 1) * 10;
+    }
     final initialTimeLimit = configuredTimeLimitFor(gameMode, customConfig);
     if (initialTimeLimit != null) {
       timeRemaining = initialTimeLimit;
@@ -595,11 +595,15 @@ class Game extends ChangeNotifier {
     }
     if (current != null) {
       final ghost = calculateGhost(this);
-      for (final c in cells(current!)) {
+      final colorIndex = colorFor[current!.type]!;
+      final position = current!.position;
+      final offsets = shapes[current!.type]![current!.rotation]!;
+      for (final offset in offsets) {
+        final c = position + offset;
         yield CellRender(
           x: c.x,
           y: c.y,
-          colorIndex: colorFor[current!.type]!,
+          colorIndex: colorIndex,
           isGhost: false,
         );
       }
@@ -607,7 +611,7 @@ class Game extends ChangeNotifier {
         yield CellRender(
           x: c.x,
           y: c.y,
-          colorIndex: colorFor[current!.type]!,
+          colorIndex: colorIndex,
           isGhost: true,
         );
       }
@@ -639,6 +643,10 @@ class Game extends ChangeNotifier {
 
   List<PointInt> cells(ActivePiece piece) {
     final offsets = shapes[piece.type]![piece.rotation]!;
-    return offsets.map((o) => piece.position + o).toList(growable: false);
+    final result = List<PointInt>.filled(offsets.length, piece.position);
+    for (var i = 0; i < offsets.length; i++) {
+      result[i] = piece.position + offsets[i];
+    }
+    return result;
   }
 }
