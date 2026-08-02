@@ -156,6 +156,17 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> resumeMusic() async {
+    if (!_musicEnabled) return;
+    final current = _currentlyPlaying;
+    if (current != null) {
+      try {
+        await _player?.play(AssetSource(current), volume: 0.5);
+        await _player?.setReleaseMode(ReleaseMode.loop);
+      } catch (e) {
+        logError('AudioProvider', e);
+      }
+      return;
+    }
     if (_isGameMusic) {
       await playGameMusic();
     } else {

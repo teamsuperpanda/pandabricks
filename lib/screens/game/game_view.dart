@@ -126,13 +126,14 @@ class _GameHeader extends StatelessWidget {
               onTap: onRestart,
             ),
             const Spacer(),
-            Consumer<Game>(
-              builder: (context, game, _) => DialogButton(
+            Selector<Game, bool>(
+              selector: (context, game) => game.isPaused,
+              builder: (context, isPaused, _) => DialogButton(
                 shrinkWrap: true,
-                icon: game.isPaused
+                icon: isPaused
                     ? Icons.play_arrow_rounded
                     : Icons.pause_rounded,
-                label: game.isPaused ? l10n.resume : l10n.pause,
+                label: isPaused ? l10n.resume : l10n.pause,
                 onTap: onPause,
               ),
             ),
