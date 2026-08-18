@@ -29,7 +29,7 @@ dev_dependencies:
   dart_code_linter: ^4.2.0
   flutter_launcher_icons: ^0.14.2
   mockito: ^5.8.1
-  build_runner: ^2.15.1
+  build_runner: ^2.16.0
 
 flutter:
   generate: true
