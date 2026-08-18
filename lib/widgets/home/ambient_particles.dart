@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 
@@ -23,14 +22,14 @@ class _AmbientParticlesState extends State<AmbientParticles>
       vsync: this,
       duration: const Duration(seconds: 20),
     );
-    unawaited(_controller.repeat());
+    _controller.repeat();
     _particles = List.generate(_count, (i) => _Particle.random());
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      unawaited(_controller.repeat());
+      _controller.repeat();
     } else {
       _controller.stop();
     }

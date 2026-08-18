@@ -56,7 +56,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       duration: const Duration(seconds: 10),
       vsync: this,
     );
-    unawaited(_bgController.repeat(reverse: true));
+    _bgController.repeat(reverse: true);
     _bgAnim = CurvedAnimation(parent: _bgController, curve: Curves.easeInOut);
 
     final callbacks = GameInputCallbacks(
