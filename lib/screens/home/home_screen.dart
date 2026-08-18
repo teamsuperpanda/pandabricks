@@ -40,13 +40,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       duration: const Duration(seconds: 10),
       vsync: this,
     );
-    unawaited(_gradientController.repeat(reverse: true));
+    _gradientController.repeat(reverse: true);
 
     _floatingController = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
     );
-    unawaited(_floatingController.repeat(reverse: true));
+    _floatingController.repeat(reverse: true);
 
     _gradientAnimation =
         Tween<double>(
