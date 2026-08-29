@@ -102,6 +102,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get timeLeft => 'باقی وقت';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => 'گیم ختم';
 
   @override

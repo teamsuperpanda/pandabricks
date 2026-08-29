@@ -1,3 +1,4 @@
+import 'package:flame/game.dart' show GameWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pandabricks/dialogs/game/pause_dialog.dart';
@@ -5,7 +6,7 @@ import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/models/game_settings.dart';
 import 'package:pandabricks/navigation/app_router.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
-import 'package:pandabricks/screens/game/game.dart';
+import 'package:pandabricks/screens/game/flame/panda_game.dart';
 import 'package:pandabricks/screens/game/screen.dart';
 import 'package:pandabricks/widgets/game/controls.dart';
 import 'package:pandabricks/widgets/game/dialog_button.dart';
@@ -56,10 +57,10 @@ void main() {
         tester.widget<GameScreen>(find.byType(GameScreen)).settings,
         settings,
       );
-      final game = Provider.of<Game>(
-        tester.element(find.byType(GameHUD)),
-        listen: false,
-      );
+      final game = tester
+          .widget<GameWidget<PandaGame>>(find.byType(GameWidget<PandaGame>))
+          .game!
+          .sim;
       expect(game.gameMode, settings.mode);
       expect(game.customConfig, settings.customConfig);
       expect(game.width, settings.boardWidth);
@@ -124,15 +125,15 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
 
     expect(find.byType(GameHUD), findsOneWidget);
-    expect(find.byType(PiecePreview), findsOneWidget);
+    expect(find.byType(PiecePreview), findsNWidgets(2));
     expect(find.byType(TimerDisplay), findsOneWidget);
     expect(find.byType(GameControls), findsOneWidget);
     expect(find.byType(DialogButton), findsNWidgets(3));
 
-    final game = Provider.of<Game>(
-      tester.element(find.byType(GameHUD)),
-      listen: false,
-    );
+    final game = tester
+        .widget<GameWidget<PandaGame>>(find.byType(GameWidget<PandaGame>))
+        .game!
+        .sim;
     expect(game.isPaused, isFalse);
 
     await tester.tap(find.widgetWithIcon(DialogButton, Icons.pause_rounded));

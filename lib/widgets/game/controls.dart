@@ -38,6 +38,33 @@ class GameControls extends StatelessWidget {
       ),
     );
 
+    // Hold button: pressing starts the held direction (immediate move + DAS
+    // repeat), releasing cancels it, mirroring the keyboard hold behavior.
+    Widget holdBtn(IconData icon, int direction, String label) => Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        child: Semantics(
+          button: true,
+          label: label,
+          child: GlassMorphismCard(
+            child: GestureDetector(
+              onTapDown: (_) => callbacks.onHoldDirection?.call(direction),
+              onTapUp: (_) => callbacks.onHoldDirection?.call(0),
+              onTapCancel: () => callbacks.onHoldDirection?.call(0),
+              child: Container(
+                height: 56,
+                alignment: Alignment.center,
+                child: Icon(
+                  icon,
+                  color: Colors.white.withValues(alpha: 230 / 255.0),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
     return Column(
       children: [
         Row(
@@ -62,15 +89,20 @@ class GameControls extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            btn(
+            holdBtn(
               Icons.chevron_left_rounded,
-              callbacks.onMoveLeft,
+              -1,
               l10n.moveLeft,
             ),
-            btn(
+            holdBtn(
               Icons.chevron_right_rounded,
-              callbacks.onMoveRight,
+              1,
               l10n.moveRight,
+            ),
+            btn(
+              Icons.swap_horiz_rounded,
+              callbacks.onHold ?? () {},
+              l10n.holdPiece,
             ),
           ],
         ),

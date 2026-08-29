@@ -303,6 +303,12 @@ abstract class AppLocalizations {
   /// **'Time Left'**
   String get timeLeft;
 
+  /// No description provided for @holdPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold'**
+  String get holdPiece;
+
   /// No description provided for @gameOver.
   ///
   /// In en, this message translates to:

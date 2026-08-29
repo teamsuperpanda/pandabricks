@@ -102,6 +102,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get timeLeft => 'الوقت المتبقي';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => 'انتهت اللعبة';
 
   @override

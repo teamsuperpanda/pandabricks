@@ -25,6 +25,9 @@ class GameInputHandler {
     if (!focusNode.hasFocus) {
       _keyboardDownTimer?.cancel();
       _keyboardDownTimer = null;
+      // Drop any held direction so DAS/ARR does not repeat forever when the
+      // key-up is swallowed by a lost focus (system dialog, notification).
+      _callbacks.onHoldDirection?.call(0);
     }
   }
 
@@ -39,11 +42,11 @@ class GameInputHandler {
       final key = event.logicalKey;
       if (key == LogicalKeyboardKey.arrowLeft) {
         _callbacks.onStartMusic?.call();
-        _callbacks.onMoveLeft();
+        _callbacks.onHoldDirection?.call(-1);
         return KeyEventResult.handled;
       } else if (key == LogicalKeyboardKey.arrowRight) {
         _callbacks.onStartMusic?.call();
-        _callbacks.onMoveRight();
+        _callbacks.onHoldDirection?.call(1);
         return KeyEventResult.handled;
       } else if (key == LogicalKeyboardKey.arrowUp) {
         _callbacks.onStartMusic?.call();
@@ -66,11 +69,23 @@ class GameInputHandler {
         _callbacks.onStartMusic?.call();
         _callbacks.onHardDrop();
         return KeyEventResult.handled;
+      } else if (key == LogicalKeyboardKey.shiftLeft ||
+          key == LogicalKeyboardKey.shiftRight ||
+          key == LogicalKeyboardKey.keyC) {
+        _callbacks.onStartMusic?.call();
+        _callbacks.onHold?.call();
+        return KeyEventResult.handled;
       }
     } else if (event is KeyUpEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+      final key = event.logicalKey;
+      if (key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.arrowRight) {
+        _callbacks.onHoldDirection?.call(0);
+        return KeyEventResult.handled;
+      } else if (key == LogicalKeyboardKey.arrowDown) {
         _keyboardDownTimer?.cancel();
         _keyboardDownTimer = null;
+        return KeyEventResult.handled;
       }
     }
     return KeyEventResult.ignored;

@@ -99,6 +99,43 @@ void main() {
     });
   });
 
+  group('Row Clear Flash', () {
+    test('cleared rows get a fading rowFlash effect', () {
+      final game = Game(audioProvider: MockAudioProvider());
+      game.board[game.height - 1] = List<int?>.filled(game.width, 1);
+
+      game.clearLines();
+
+      final flashes = game
+          .currentEffects(0)
+          .where((e) => e.type == EffectType.rowFlash)
+          .toList();
+      expect(flashes, isNotEmpty);
+      expect(flashes.every((e) => e.y == game.height - 1), isTrue);
+    });
+
+    test('rowFlash fades out via pruneEffects', () {
+      final game = Game(audioProvider: MockAudioProvider());
+      game.board[game.height - 1] = List<int?>.filled(game.width, 1);
+      game.clearLines();
+
+      expect(
+        game.currentEffects(0).where((e) => e.type == EffectType.rowFlash),
+        isNotEmpty,
+      );
+      // Effects age off the clock and are pruned after the duration.
+      game.pruneEffects(Game.effectDurationMs + 1);
+      expect(
+        game
+            .currentEffects(Game.effectDurationMs + 1)
+            .where(
+              (e) => e.type == EffectType.rowFlash,
+            ),
+        isEmpty,
+      );
+    });
+  });
+
   group('Game Bag System', () {
     late Game game;
     late MockAudioProvider mockAudio;
@@ -152,7 +189,7 @@ void main() {
 
       // Simulate some time passing
       await Future.delayed(const Duration(milliseconds: 100));
-      timeGame.tick();
+      timeGame.tick(0);
 
       // Time should still be set (might not have decreased yet depending on implementation)
       expect(timeGame.timeRemaining, isNotNull);
@@ -285,7 +322,7 @@ void main() {
     test('tick handles rapid calls', () {
       for (var i = 0; i < 20; i++) {
         if (!game.isGameOver) {
-          game.tick();
+          game.tick(0);
         }
       }
 

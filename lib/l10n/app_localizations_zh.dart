@@ -102,6 +102,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get timeLeft => '剩余时间';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => '游戏结束';
 
   @override

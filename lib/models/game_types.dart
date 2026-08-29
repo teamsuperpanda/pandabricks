@@ -170,7 +170,7 @@ enum FallingBlock {
   BOMB,
 }
 
-enum EffectType { column, row }
+enum EffectType { column, row, rowFlash }
 
 class CellRender {
   const CellRender({

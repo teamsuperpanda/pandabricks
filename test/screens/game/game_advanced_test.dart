@@ -55,14 +55,14 @@ void main() {
       test('tick does not move piece when paused', () {
         game.togglePause();
         final initialY = game.current?.position.y;
-        game.tick();
+        game.tick(0);
         expect(game.current?.position.y, initialY);
       });
 
       test('tick does not progress when game is over', () {
         game.isGameOver = true;
         final initialScore = game.score;
-        game.tick();
+        game.tick(0);
         expect(game.score, initialScore);
       });
     });
@@ -257,7 +257,7 @@ void main() {
 
     group('Effects System', () {
       test('effects are empty initially', () {
-        expect(game.currentEffects(), isEmpty);
+        expect(game.currentEffects(0), isEmpty);
       });
     });
 

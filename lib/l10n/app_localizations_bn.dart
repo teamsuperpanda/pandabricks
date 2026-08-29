@@ -102,6 +102,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get timeLeft => 'বাকি সময়';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => 'খেলা শেষ';
 
   @override

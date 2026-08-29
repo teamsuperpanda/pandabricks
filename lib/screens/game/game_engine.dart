@@ -17,7 +17,6 @@ bool applyMove(Game game, PointInt delta) {
   );
   if (collidesWithBoard(game, nextPiece)) return false;
   game.current = nextPiece;
-  game.notifyListeners();
   return true;
 }
 

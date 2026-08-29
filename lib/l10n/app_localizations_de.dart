@@ -102,6 +102,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get timeLeft => 'Verbleibende Zeit';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => 'Spiel vorbei';
 
   @override

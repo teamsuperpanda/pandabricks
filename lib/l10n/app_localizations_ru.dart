@@ -102,6 +102,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get timeLeft => 'Оставшееся время';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => 'Игра окончена';
 
   @override

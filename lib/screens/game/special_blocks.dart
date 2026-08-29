@@ -80,6 +80,7 @@ void handleSpecialBlockEffects(Game game) {
       }
       game.score += Game.bombBrickBonus;
       unawaited(game.audioProvider.playSfx(GameSfx.bombExplosion));
+      game.recordBombClear();
 
     case FallingBlock.GHOST:
     case FallingBlock.CAT:
@@ -111,6 +112,8 @@ void clearRow(Game game, int y) {
 
 void lockCurrentPiece(Game game) {
   if (game.current == null) return;
+  game.holdUsed = false;
+  final lockedCells = game.cells(game.current!);
   if (game.current!.isSpecialBlock) {
     handleSpecialBlockEffects(game);
   } else {
@@ -130,4 +133,5 @@ void lockCurrentPiece(Game game) {
     game.level = 1 + (game.linesCleared ~/ 10);
   }
   game._spawn();
+  game.onPieceLocked?.call(lockedCells);
 }

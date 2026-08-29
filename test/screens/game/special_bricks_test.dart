@@ -34,7 +34,7 @@ void main() {
       }
 
       // Effects should contain column entries for x == 3
-      final effects = game.currentEffects().toList();
+      final effects = game.currentEffects(0).toList();
       expect(
         effects.where((e) => e.type == EffectType.column && e.x == 3),
         isNotEmpty,
@@ -74,7 +74,7 @@ void main() {
         expect(game.board[y][targetX], isNull);
       }
 
-      final effects = game.currentEffects().toList();
+      final effects = game.currentEffects(0).toList();
       // Look for at least one column effect for targetX and one row effect for targetY
       expect(
         effects.where((e) => e.type == EffectType.column && e.x == targetX),
@@ -120,7 +120,7 @@ void main() {
           isSpecialBlock: true,
         );
 
-        game.tick();
+        game.tick(0);
 
         // After tick, lastMoveY should be set to the current y
         expect(game.current!.lastMoveY, equals(1));
@@ -137,7 +137,7 @@ void main() {
         isSpecialBlock: true,
       );
 
-      game.tick();
+      game.tick(0);
 
       // Tornado should have rotated clockwise once
       expect(game.current!.rotation, equals(Rotation.right));
@@ -179,7 +179,7 @@ void main() {
       );
 
       // Effects should contain row clear sparkles
-      final effects = game.currentEffects().toList();
+      final effects = game.currentEffects(0).toList();
       expect(
         effects.where((e) => e.type == EffectType.row),
         isNotEmpty,

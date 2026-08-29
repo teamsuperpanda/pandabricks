@@ -5,6 +5,9 @@ class _GameView extends StatelessWidget {
     required this.backgroundAnimation,
     required this.inputHandler,
     required this.inputCallbacks,
+    required this.pandaGame,
+    required this.hud,
+    required this.overlayBuilders,
     required this.onMainMenu,
     required this.onRestart,
     required this.onPause,
@@ -14,6 +17,9 @@ class _GameView extends StatelessWidget {
   final Animation<double> backgroundAnimation;
   final GameInputHandler inputHandler;
   final GameInputCallbacks inputCallbacks;
+  final PandaGame pandaGame;
+  final ValueNotifier<HudSnapshot> hud;
+  final Map<String, Widget Function(BuildContext, PandaGame)> overlayBuilders;
   final VoidCallback onMainMenu;
   final VoidCallback onRestart;
   final VoidCallback onPause;
@@ -46,6 +52,7 @@ class _GameView extends StatelessWidget {
                     children: [
                       _GameHeader(
                         l10n: l10n,
+                        hud: hud,
                         onMainMenu: onMainMenu,
                         onRestart: onRestart,
                         onPause: onPause,
@@ -54,23 +61,25 @@ class _GameView extends StatelessWidget {
                         label: 'Score display',
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Selector<Game, (int, int, int)>(
-                            selector: (context, game) => (
-                              game.score,
-                              game.level,
-                              game.linesCleared,
-                            ),
-                            builder: (context, values, _) => GameHUD(
-                              score: values.$1,
-                              level: values.$2,
-                              lines: values.$3,
+                          child: ValueListenableBuilder<HudSnapshot>(
+                            valueListenable: hud,
+                            builder: (context, snapshot, _) => GameHUD(
+                              score: snapshot.score,
+                              level: snapshot.level,
+                              lines: snapshot.lines,
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 14),
                       Expanded(
-                        child: _GameBody(l10n: l10n, onRotate: onRotate),
+                        child: _GameBody(
+                          l10n: l10n,
+                          onRotate: onRotate,
+                          pandaGame: pandaGame,
+                          hud: hud,
+                          overlayBuilders: overlayBuilders,
+                        ),
                       ),
                       Semantics(
                         label: 'Game controls',
@@ -94,12 +103,14 @@ class _GameView extends StatelessWidget {
 class _GameHeader extends StatelessWidget {
   const _GameHeader({
     required this.l10n,
+    required this.hud,
     required this.onMainMenu,
     required this.onRestart,
     required this.onPause,
   });
 
   final AppLocalizations l10n;
+  final ValueNotifier<HudSnapshot> hud;
   final VoidCallback onMainMenu;
   final VoidCallback onRestart;
   final VoidCallback onPause;
@@ -126,14 +137,14 @@ class _GameHeader extends StatelessWidget {
               onTap: onRestart,
             ),
             const Spacer(),
-            Selector<Game, bool>(
-              selector: (context, game) => game.isPaused,
-              builder: (context, isPaused, _) => DialogButton(
+            ValueListenableBuilder<HudSnapshot>(
+              valueListenable: hud,
+              builder: (context, snapshot, _) => DialogButton(
                 shrinkWrap: true,
-                icon: isPaused
+                icon: snapshot.isPaused
                     ? Icons.play_arrow_rounded
                     : Icons.pause_rounded,
-                label: isPaused ? l10n.resume : l10n.pause,
+                label: snapshot.isPaused ? l10n.resume : l10n.pause,
                 onTap: onPause,
               ),
             ),
@@ -148,10 +159,16 @@ class _GameBody extends StatelessWidget {
   const _GameBody({
     required this.l10n,
     required this.onRotate,
+    required this.pandaGame,
+    required this.hud,
+    required this.overlayBuilders,
   });
 
   final AppLocalizations l10n;
   final VoidCallback onRotate;
+  final PandaGame pandaGame;
+  final ValueNotifier<HudSnapshot> hud;
+  final Map<String, Widget Function(BuildContext, PandaGame)> overlayBuilders;
 
   @override
   Widget build(BuildContext context) {
@@ -165,12 +182,19 @@ class _GameBody extends StatelessWidget {
             children: [
               Expanded(
                 flex: 5,
-                child: _GamePlayfield(onRotate: onRotate),
+                child: _GamePlayfield(
+                  onRotate: onRotate,
+                  pandaGame: pandaGame,
+                  overlayBuilders: overlayBuilders,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 flex: 2,
-                child: _GameSidePanel(l10n: l10n),
+                child: _GameSidePanel(
+                  l10n: l10n,
+                  hud: hud,
+                ),
               ),
             ],
           ),
@@ -181,49 +205,59 @@ class _GameBody extends StatelessWidget {
 }
 
 class _GameSidePanel extends StatelessWidget {
-  const _GameSidePanel({required this.l10n});
+  const _GameSidePanel({
+    required this.l10n,
+    required this.hud,
+  });
 
   final AppLocalizations l10n;
+  final ValueNotifier<HudSnapshot> hud;
 
   @override
   Widget build(BuildContext context) {
-    final game = context.watch<Game>();
-    final showTimer =
-        (game.gameMode == GameMode.timeChallenge ||
-            (game.gameMode == GameMode.custom &&
-                game.customConfig?.timeLimit != null)) &&
-        game.timeRemaining != null;
-
-    return Semantics(
-      label: 'Side panel',
-      child: Column(
-        children: [
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Text(l10n.next, style: _labelStyle),
+    return ValueListenableBuilder<HudSnapshot>(
+      valueListenable: hud,
+      builder: (context, snapshot, _) {
+        final showTimer = snapshot.timeRemaining != null;
+        return Semantics(
+          label: 'Side panel',
+          child: Column(
+            children: [
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(l10n.holdPiece, style: _labelStyle),
+              ),
+              const SizedBox(height: 8),
+              Semantics(
+                label: 'Hold piece preview',
+                child: HoldPreview(hold: snapshot.hold),
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(l10n.next, style: _labelStyle),
+              ),
+              const SizedBox(height: 8),
+              Semantics(
+                label: 'Next piece preview',
+                child: PiecePreview(next: snapshot.next),
+              ),
+              if (showTimer) ...[
+                const SizedBox(height: 16),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(l10n.timeLeft, style: _labelStyle),
+                ),
+                const SizedBox(height: 8),
+                Semantics(
+                  label: _timerSemanticsLabel(snapshot.timeRemaining!),
+                  child: TimerDisplay(timeRemaining: snapshot.timeRemaining!),
+                ),
+              ],
+            ],
           ),
-          const SizedBox(height: 8),
-          Selector<Game, FallingBlock?>(
-            selector: (context, game) => game.next,
-            builder: (context, next, _) => Semantics(
-              label: 'Next piece preview',
-              child: PiecePreview(next: next),
-            ),
-          ),
-          if (showTimer) ...[
-            const SizedBox(height: 16),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Text(l10n.timeLeft, style: _labelStyle),
-            ),
-            const SizedBox(height: 8),
-            Semantics(
-              label: _timerSemanticsLabel(game.timeRemaining!),
-              child: TimerDisplay(timeRemaining: game.timeRemaining!),
-            ),
-          ],
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -240,13 +274,18 @@ class _GameSidePanel extends StatelessWidget {
 }
 
 class _GamePlayfield extends StatelessWidget {
-  const _GamePlayfield({required this.onRotate});
+  const _GamePlayfield({
+    required this.onRotate,
+    required this.pandaGame,
+    required this.overlayBuilders,
+  });
 
   final VoidCallback onRotate;
+  final PandaGame pandaGame;
+  final Map<String, Widget Function(BuildContext, PandaGame)> overlayBuilders;
 
   @override
   Widget build(BuildContext context) {
-    final game = context.watch<Game>();
     return Semantics(
       label: 'Game board',
       child: GestureDetector(
@@ -257,19 +296,11 @@ class _GamePlayfield extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: AspectRatio(
-                aspectRatio: game.width / game.height,
-                child: RepaintBoundary(
-                  child: CustomPaint(
-                    painter: BoardPainter(
-                      width: game.width,
-                      height: game.height,
-                      cells: game.filledCellsWithGhost(),
-                      effects: game.currentEffects(),
-                      palette: kGamePalette,
-                      version: game.version,
-                    ),
-                    size: Size.infinite,
-                  ),
+                aspectRatio: pandaGame.sim.width / pandaGame.sim.height,
+                child: GameWidget<PandaGame>(
+                  game: pandaGame,
+                  overlayBuilderMap: overlayBuilders,
+                  autofocus: false,
                 ),
               ),
             ),

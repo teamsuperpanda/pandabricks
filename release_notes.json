@@ -78,5 +78,85 @@
   {
     "language": "zh-TW",
     "text": "版本 2.3.0 更新內容：\n• 錯誤修復和效能改進\n• 整體穩定性增強\n敬請體驗！"
+  },
+  {
+    "language": "ar",
+    "text": "الجديد في الإصدار 2.4.0:\n• الترقية إلى محرك Flame للعب أكثر سلاسة وأداء أفضل\n• ميزة الاحتفاظ بالقطعة: خزّن قطعتك الحالية واستبدلها\n• عناصر تحكم أسرع وأكثر استجابة في الحركة\n• مكافآت الكومبو والمتتالية مع نوافذ منبثقة\n• تأثيرات جديدة للتثبيت ومسح الخطوط مع اهتزاز الشاشة عند المسح الكبير\nاستمتع!"
+  },
+  {
+    "language": "de-DE",
+    "text": "Neu in Version 2.4.0:\n• Upgrade auf die Flame-Engine für flüssigeres Spiel und bessere Leistung\n• Halten-Funktion: Block ablegen und mit dem aktuellen Block tauschen\n• Schnellere, reaktionsfreudigere Bewegungssteuerung\n• Combo- und Back-to-Back-Boni mit Popups\n• Neue Lock- und Line-Clear-Effekte mit Bildschirmwackeln bei großen Clears\nViel Spaß!"
+  },
+  {
+    "language": "en-GB",
+    "text": "What's new in version 2.4.0:\n• Upgraded to the Flame engine for smoother play and better performance\n• Hold piece: stash and swap your current block\n• Snappier, responsive movement controls\n• Combo and back-to-back bonuses with popups\n• New lock and line-clear effects with screen shake on big clears\nEnjoy!"
+  },
+  {
+    "language": "en-US",
+    "text": "What's new in version 2.4.0:\n• Upgraded to the Flame engine for smoother play and better performance\n• Hold piece: stash and swap your current block\n• Snappier, responsive movement controls\n• Combo and back-to-back bonuses with popups\n• New lock and line-clear effects with screen shake on big clears\nEnjoy!"
+  },
+  {
+    "language": "es-ES",
+    "text": "Novedades en la versión 2.4.0:\n• Actualización al motor Flame para un juego más fluido y mejor rendimiento\n• Pieza en espera: guarda e intercambia tu bloque actual\n• Controles de movimiento más rápidos y con mayor respuesta\n• Bonificaciones por combos y seguidos con ventanas emergentes\n• Nuevos efectos de bloqueo y de limpieza de líneas con vibración de pantalla en limpiezas grandes\n¡Disfruta!"
+  },
+  {
+    "language": "fr-FR",
+    "text": "Nouveautés de la version 2.4.0 :\n• Passage au moteur Flame pour un jeu plus fluide et de meilleures performances\n• Pièce en attente : rangez et échangez votre bloc actuel\n• Commandes de mouvement plus réactives et plus nerveuses\n• Bonus de combo et de back-to-back avec fenêtres pop-up\n• Nouveaux effets de verrouillage et de suppression de lignes avec secousse d'écran sur les grosses suppressions\nProfitez-en !"
+  },
+  {
+    "language": "hi-IN",
+    "text": "संस्करण 2.4.0 में नया क्या है:\n• स्मूथ गेमप्ले और बेहतर प्रदर्शन के लिए Flame इंजन में अपग्रेड\n• होल्ड पीस: अपने मौजूदा ब्लॉक को रखें और बदलें\n• तेज़ और अधिक उत्तरदायी मूवमेंट कंट्रोल\n• पॉपअप के साथ कॉम्बो और बैक-टू-बैक बोनस\n• बड़े क्लियर पर स्क्रीन शेक के साथ नए लॉक और लाइन-क्लियर इफेक्ट\nआनंद लें!"
+  },
+  {
+    "language": "id",
+    "text": "Yang baru di versi 2.4.0:\n• Peningkatan ke mesin Flame untuk permainan yang lebih lancar dan performa lebih baik\n• Fitur hold: simpan dan tukar blok Anda saat ini\n• Kontrol gerakan yang lebih responsif dan gesit\n• Bonus kombo dan back-to-back dengan popup\n• Efek lock dan line-clear baru dengan guncangan layar saat clear besar\nSelamat menikmati!"
+  },
+  {
+    "language": "it-IT",
+    "text": "Novità nella versione 2.4.0:\n• Aggiornamento al motore Flame per un gioco più fluido e prestazioni migliori\n• Pezzo in attesa: metti da parte e scambia il tuo blocco attuale\n• Controlli di movimento più rapidi e reattivi\n• Bonus combo e back-to-back con finestre popup\n• Nuovi effetti di blocco e di cancellazione righe con scossa dello schermo sulle cancellazioni grandi\nBuon divertimento!"
+  },
+  {
+    "language": "ja-JP",
+    "text": "バージョン 2.4.0 の新機能：\n• Flame エンジンにアップグレードし、より滑らかなプレイとパフォーマンス向上を実現\n• ホールド機能：現在のブロックを保管して入れ替え可能\n• より機敏で応答性の高い移動操作\n• ポップアップ付きのコンボ＆バック・トゥ・バックボーナス\n• 新しいロック＆ライン消去エフェクト、大量消去時は画面が揺れる\nお楽しみください！"
+  },
+  {
+    "language": "ko-KR",
+    "text": "버전 2.4.0의 새로운 기능:\n• 더 부드러운 플레이와 향상된 성능을 위한 Flame 엔진 업그레이드\n• 홀드 기능: 현재 블록을 보관하고 교체하세요\n• 더 빠르고 반응 좋은 이동 컨트롤\n• 팝업과 함께 제공되는 콤보 및 백투백 보너스\n• 큰 클리어 시 화면 흔들림과 함께하는 새로운 잠금 및 라인 클리어 효과\n즐기세요!"
+  },
+  {
+    "language": "nl-NL",
+    "text": "Wat is er nieuw in versie 2.4.0:\n• Upgrade naar de Flame-engine voor vloeiender spelen en betere prestaties\n• Hold-functie: bewaar en wissel je huidige blok\n• Snellere, responsievere besturing\n• Combo- en back-to-back-bonussen met pop-ups\n• Nieuwe lock- en line-clear-effecten met schermtrilling bij grote clears\nVeel plezier!"
+  },
+  {
+    "language": "pl-PL",
+    "text": "Co nowego w wersji 2.4.0:\n• Ulepszenie do silnika Flame dla płynniejszej gry i lepszej wydajności\n• Funkcja hold: schowaj i zamień swój obecny klocek\n• Szybsze i bardziej responsywne sterowanie ruchem\n• Bonusy za combo i back-to-back z wyskakującymi okienkami\n• Nowe efekty blokowania i czyszczenia linii z wstrząsem ekranu przy dużych czyszczeniach\nMiłej zabawy!"
+  },
+  {
+    "language": "pt-BR",
+    "text": "Novidades na versão 2.4.0:\n• Atualização para o motor Flame para um jogo mais fluido e melhor desempenho\n• Peça em espera: guarde e troque seu bloco atual\n• Controles de movimento mais rápidos e responsivos\n• Bônus de combo e back-to-back com popups\n• Novos efeitos de trava e de limpeza de linhas com tremor de tela em limpezas grandes\nAproveite!"
+  },
+  {
+    "language": "ru-RU",
+    "text": "Что нового в версии 2.4.0:\n• Переход на движок Flame для более плавной игры и лучшей производительности\n• Функция удержания: отложите и замените текущий блок\n• Более быстрые и отзывчивые элементы управления движением\n• Бонусы за комбо и бэк-ту-бэк с всплывающими окнами\n• Новые эффекты фиксации и очистки линий с тряской экрана при крупных очистках\nНаслаждайтесь!"
+  },
+  {
+    "language": "sv-SE",
+    "text": "Vad är nytt i version 2.4.0:\n• Uppgraderat till Flame-motorn för smidigare spel och bättre prestanda\n• Håll-funktion: lägg undan och byt ut din nuvarande block\n• Snabbare och mer responsiva rörelsekontroller\n• Combo- och back-to-back-bonusar med popup-fönster\n• Nya lock- och radrensningseffekter med skakning på skärmen vid stora rensningar\nNjut!"
+  },
+  {
+    "language": "tr-TR",
+    "text": "Sürüm 2.4.0'daki yenilikler:\n• Daha akıcı oyun ve daha iyi performans için Flame motoruna yükseltme\n• Bekletme özelliği: mevcut bloğunuzu saklayın ve değiştirin\n• Daha hızlı ve duyarlı hareket kontrolleri\n• Açılır pencerelerle kombo ve back-to-back bonusları\n• Büyük temizliklerde ekran sarsıntısıyla yeni kilit ve satır temizleme efektleri\nKeyfini çıkarın!"
+  },
+  {
+    "language": "vi",
+    "text": "Có gì mới trong phiên bản 2.4.0:\n• Nâng cấp lên engine Flame để chơi mượt mà hơn và hiệu suất tốt hơn\n• Tính năng giữ khối: cất và hoán đổi khối hiện tại của bạn\n• Điều khiển di chuyển nhanh hơn và phản hồi tốt hơn\n• Thưởng combo và back-to-back kèm cửa sổ bật lên\n• Hiệu ứng khóa và xóa dòng mới kèm rung màn hình khi xóa lớn\nChúc bạn vui vẻ!"
+  },
+  {
+    "language": "zh-CN",
+    "text": "版本 2.4.0 更新内容：\n• 升级至 Flame 引擎，游戏更流畅，性能更佳\n• 暂存方块：保存并交换你当前的方块\n• 更灵敏、响应更快的移动控制\n• 连击和连续消除奖励，附弹出提示\n• 新增锁定和消行特效，大规模消除时屏幕震动\n敬请体验！"
+  },
+  {
+    "language": "zh-TW",
+    "text": "版本 2.4.0 更新內容：\n• 升級至 Flame 引擎，遊戲更流暢，效能更佳\n• 暫存方塊：儲存並交換你目前的方塊\n• 更靈敏、回應更快的移動控制\n• 連擊和連續消除獎勵，附彈出提示\n• 新增鎖定和消行特效，大規模消除時螢幕震動\n敬請體驗！"
   }
 ]

@@ -102,6 +102,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get timeLeft => '残り時間';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => 'ゲームオーバー';
 
   @override

@@ -1,18 +1,23 @@
 import 'dart:async';
 
+import 'package:flame/game.dart' show GameWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pandabricks/dialogs/game/game_over_dialog.dart';
+import 'package:pandabricks/dialogs/game/main_menu_confirm_dialog.dart';
+import 'package:pandabricks/dialogs/game/pause_dialog.dart';
+import 'package:pandabricks/dialogs/game/restart_confirm_dialog.dart';
 import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/models/game_input_callbacks.dart';
 import 'package:pandabricks/models/game_settings.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
+import 'package:pandabricks/screens/game/flame/panda_game.dart';
 import 'package:pandabricks/screens/game/game.dart';
-import 'package:pandabricks/screens/game/game_dialog_mediator.dart';
 import 'package:pandabricks/screens/game/game_input_handler.dart';
-import 'package:pandabricks/widgets/game/board_painter.dart';
 import 'package:pandabricks/widgets/game/controls.dart';
 import 'package:pandabricks/widgets/game/dialog_button.dart';
-import 'package:pandabricks/widgets/game/game_palette.dart';
+import 'package:pandabricks/widgets/game/hold_preview.dart';
 import 'package:pandabricks/widgets/game/hud.dart';
 import 'package:pandabricks/widgets/game/preview.dart';
 import 'package:pandabricks/widgets/game/timer_display.dart';
@@ -38,12 +43,10 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late final AnimationController _bgController;
   late final Animation<double> _bgAnim;
-  late Game _game;
-  Timer? _timer;
-  Duration _tick = Duration(milliseconds: Game.baseSpeedMs);
+  late final ValueNotifier<HudSnapshot> _hud;
+  late PandaGame _pandaGame;
   late GameInputCallbacks _inputCallbacks;
   late GameInputHandler _inputHandler;
-  late GameDialogMediator _dialogMediator;
 
   late AudioProvider _audioProvider;
   bool _musicStarted = false;
@@ -58,13 +61,19 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     );
     _bgController.repeat(reverse: true);
     _bgAnim = CurvedAnimation(parent: _bgController, curve: Curves.easeInOut);
+    _hud = ValueNotifier<HudSnapshot>(
+      const HudSnapshot(score: 0, level: 1, lines: 0, timeRemaining: null),
+    );
 
     final callbacks = GameInputCallbacks(
-      onMoveLeft: () => _withMusic(_game.moveLeft),
-      onMoveRight: () => _withMusic(_game.moveRight),
-      onRotate: () => _withMusic(_game.rotateCW),
-      onSoftDrop: () => _withMusic(_game.softDrop),
-      onHardDrop: () => _withMusic(_game.hardDrop),
+      onMoveLeft: () => _withMusic(_pandaGame.sim.moveLeft),
+      onMoveRight: () => _withMusic(_pandaGame.sim.moveRight),
+      onRotate: () => _withMusic(_pandaGame.sim.rotateCW),
+      onSoftDrop: () => _withMusic(_pandaGame.sim.softDrop),
+      onHardDrop: () => _withMusic(_pandaGame.sim.hardDrop),
+      onHold: () => _withMusic(_pandaGame.sim.swapHold),
+      onHoldDirection: (direction) =>
+          _withMusic(() => _pandaGame.setHeldDirection(direction)),
       onStartMusic: _startMusicOnFirstInteraction,
     );
     _inputHandler = GameInputHandler(callbacks);
@@ -83,44 +92,22 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         unawaited(_audioProvider.stopMusic());
       }
 
-      _game = Game(
+      final sim = Game(
         audioProvider: _audioProvider,
         gameMode: widget.settings.mode,
         customConfig: widget.settings.customConfig,
         width: widget.settings.boardWidth,
         height: widget.settings.boardHeight,
       );
-      _tick = _game.currentSpeed();
-      _restartTimer();
-      _game.addListener(_onGameChanged);
-
-      _dialogMediator = GameDialogMediator(
-        navigator: Navigator.of(context),
-        game: _game,
+      _pandaGame = PandaGame(
+        sim: sim,
         audioProvider: _audioProvider,
+        hud: _hud,
       );
+      PandaGame.current = _pandaGame;
 
       _initialized = true;
     }
-  }
-
-  void _onGameChanged() {
-    if (_game.isPaused || _game.isGameOver) {
-      _timer?.cancel();
-      _timer = null;
-    } else {
-      final newTick = _game.currentSpeed();
-      if (newTick != _tick || _timer == null) {
-        _tick = newTick;
-        _restartTimer();
-      }
-    }
-    _dialogMediator.checkGameOver();
-  }
-
-  void _restartTimer() {
-    _timer?.cancel();
-    _timer = Timer.periodic(_tick, (_) => _game.tick());
   }
 
   void _startMusicOnFirstInteraction() {
@@ -135,18 +122,101 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     action();
   }
 
+  void _onPause() {
+    _withMusic(() {
+      _pandaGame.sim.togglePause();
+      if (_pandaGame.sim.isPaused) {
+        _pandaGame.overlays.add('pause');
+      } else {
+        _pandaGame.overlays.remove('pause');
+      }
+      _pandaGame.pushHud();
+    });
+  }
+
+  void _showRestartConfirm() {
+    _withMusic(() {
+      if (!_pandaGame.sim.isPaused && !_pandaGame.sim.isGameOver) {
+        _pandaGame.sim.togglePause();
+      }
+      _pandaGame.overlays.add('restart');
+    });
+  }
+
+  void _showMainMenuConfirm() {
+    if (!_pandaGame.sim.isPaused && !_pandaGame.sim.isGameOver) {
+      _pandaGame.sim.togglePause();
+    }
+    _pandaGame.overlays.add('mainmenu');
+  }
+
+  Map<String, Widget Function(BuildContext, PandaGame)> _overlayBuilders() {
+    return {
+      'pause': (ctx, game) => PauseDialog(
+        onResume: () {
+          game.overlays.remove('pause');
+          game.sim.togglePause();
+          game.pushHud();
+          _startMusicOnFirstInteraction();
+        },
+        onRestart: () {
+          game.overlays.remove('pause');
+          game.restart();
+          _startMusicOnFirstInteraction();
+        },
+        onMainMenu: () {
+          game.overlays.remove('pause');
+          _showMainMenuConfirm();
+        },
+      ),
+      'gameover': (ctx, game) => GameOverDialog(
+        score: game.sim.score,
+        level: game.sim.level,
+        lines: game.sim.linesCleared,
+        onRestart: () {
+          game.restart();
+          _startMusicOnFirstInteraction();
+        },
+        onMainMenu: _showMainMenuConfirm,
+      ),
+      'restart': (ctx, game) => RestartConfirmDialog(
+        onConfirm: () {
+          game.overlays.remove('restart');
+          game.restart();
+          _startMusicOnFirstInteraction();
+        },
+        onCancel: () {
+          game.overlays.remove('restart');
+          if (game.sim.isPaused) game.sim.togglePause();
+          game.pushHud();
+        },
+      ),
+      'mainmenu': (ctx, game) => MainMenuConfirmDialog(
+        onConfirm: () {
+          unawaited(_audioProvider.playMenuMusic());
+          context.go('/');
+        },
+        onCancel: () {
+          game.overlays.remove('mainmenu');
+          if (game.sim.isPaused) game.sim.togglePause();
+          game.pushHud();
+        },
+      ),
+    };
+  }
+
   @override
   void dispose() {
-    _timer?.cancel();
     _inputHandler.dispose();
     _bgController.dispose();
     if (!_initialized) {
       super.dispose();
       return;
     }
-    _game.removeListener(_onGameChanged);
-    _dialogMediator.dispose();
-    _game.dispose();
+    if (PandaGame.current == _pandaGame) {
+      PandaGame.current = null;
+    }
+    _hud.dispose();
     unawaited(_audioProvider.playMenuMusic());
     super.dispose();
   }
@@ -156,34 +226,27 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) _dialogMediator.showMainMenuConfirmDialog();
+        if (!didPop) _showMainMenuConfirm();
       },
-      child: ChangeNotifierProvider<Game>.value(
-        value: _game,
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: const SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.light,
-          ),
-          child: KeyboardListener(
-            focusNode: _inputHandler.focusNode,
-            autofocus: true,
-            onKeyEvent: _inputHandler.handleKeyEvent,
-            child: _GameView(
-              backgroundAnimation: _bgAnim,
-              inputHandler: _inputHandler,
-              inputCallbacks: _inputCallbacks,
-              onMainMenu: _dialogMediator.showMainMenuConfirmDialog,
-              onRestart: () => _withMusic(
-                _dialogMediator.showRestartDialog,
-              ),
-              onPause: () => _withMusic(() {
-                _game.togglePause();
-                if (_game.isPaused) {
-                  _dialogMediator.showPauseDialog();
-                }
-              }),
-              onRotate: () => _withMusic(_game.rotateCW),
-            ),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: KeyboardListener(
+          focusNode: _inputHandler.focusNode,
+          autofocus: true,
+          onKeyEvent: _inputHandler.handleKeyEvent,
+          child: _GameView(
+            backgroundAnimation: _bgAnim,
+            inputHandler: _inputHandler,
+            inputCallbacks: _inputCallbacks,
+            pandaGame: _pandaGame,
+            hud: _hud,
+            overlayBuilders: _overlayBuilders(),
+            onMainMenu: _showMainMenuConfirm,
+            onRestart: _showRestartConfirm,
+            onPause: _onPause,
+            onRotate: () => _withMusic(_pandaGame.sim.rotateCW),
           ),
         ),
       ),

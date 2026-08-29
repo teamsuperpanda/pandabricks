@@ -44,7 +44,6 @@ void main() {
 
         expect(game.gameMode, equals(GameMode.timeChallenge));
         expect(game.timeRemaining, isNotNull);
-        expect(game.gameStartTime, isNotNull);
       });
 
       test('initializes with blitz mode', () {
@@ -336,7 +335,7 @@ void main() {
         final initialY = game.current!.position.y;
 
         // Tick should not move the piece when game is over
-        game.tick();
+        game.tick(0);
 
         expect(game.current!.position.y, equals(initialY));
       });
@@ -429,7 +428,7 @@ void main() {
         final game = Game(audioProvider: mockAudio);
         final initialY = game.current!.position.y;
 
-        game.tick();
+        game.tick(0);
 
         expect(game.current!.position.y, equals(initialY + 1));
       });
@@ -441,7 +440,7 @@ void main() {
         while (game.softDrop()) {}
 
         final beforeTick = game.current;
-        game.tick();
+        game.tick(0);
 
         // Piece should be locked and new piece spawned
         expect(game.current, isNot(equals(beforeTick)));
@@ -503,74 +502,20 @@ void main() {
       });
     });
 
-    group('Version / Change Notification', () {
-      test('version starts at 0', () {
-        final game = Game(audioProvider: mockAudio);
-        // version is incremented at init by _spawn(), so it won't be 0.
-        // What matters is that it increments on each notifyListeners call.
-        expect(game.version, isA<int>());
-      });
-
-      test('version increments on moveLeft', () {
-        final game = Game(audioProvider: mockAudio);
-        final before = game.version;
-        game.moveLeft();
-        expect(game.version, greaterThan(before));
-      });
-
-      test('version increments on moveRight', () {
-        final game = Game(audioProvider: mockAudio);
-        final before = game.version;
-        game.moveRight();
-        expect(game.version, greaterThan(before));
-      });
-
-      test('version increments on togglePause', () {
-        final game = Game(audioProvider: mockAudio);
-        final before = game.version;
-        game.togglePause();
-        expect(game.version, greaterThan(before));
-      });
-
-      test('version increments on hardDrop', () {
-        final game = Game(audioProvider: mockAudio);
-        final before = game.version;
-        game.hardDrop();
-        expect(game.version, greaterThan(before));
-      });
-
-      test(
-        'version does NOT increment on failed moveLeft (wall collision)',
-        () {
-          final game = Game(audioProvider: mockAudio);
-          while (game.moveLeft()) {}
-          final before = game.version;
-          game.moveLeft(); // blocked by wall
-          expect(game.version, equals(before));
-        },
-      );
-    });
-
     group('Time Challenge Expiry', () {
-      test('tick sets isGameOver when time runs out', () {
+      test('advanceTime sets isGameOver when time runs out', () {
         final game = Game(
           audioProvider: mockAudio,
           gameMode: GameMode.timeChallenge,
         );
 
-        // Manually exhaust the time
-        game.timeRemaining = Duration.zero;
-        // Set gameStartTime so elapsed calculation yields zero remaining
-        game.gameStartTime = DateTime.now().subtract(
-          const Duration(minutes: 10),
-        );
-
-        game.tick();
+        // Time challenge runs for 5 minutes; advance far beyond that.
+        game.advanceTime(const Duration(minutes: 10).inMilliseconds);
 
         expect(game.isGameOver, isTrue);
       });
 
-      test('tick does not set isGameOver when time remains', () {
+      test('advanceTime does not set isGameOver when time remains', () {
         final game = Game(
           audioProvider: mockAudio,
           gameMode: GameMode.timeChallenge,
@@ -580,7 +525,7 @@ void main() {
         expect(game.timeRemaining, isNotNull);
         expect(game.timeRemaining!.inSeconds, greaterThan(200));
 
-        game.tick();
+        game.advanceTime(1000); // 1 second
 
         expect(game.isGameOver, isFalse);
       });
@@ -596,11 +541,7 @@ void main() {
 
         expect(game.timeRemaining, isNotNull);
         // Exhaust time
-        game.gameStartTime = DateTime.now().subtract(
-          const Duration(minutes: 5),
-        );
-
-        game.tick();
+        game.advanceTime(const Duration(minutes: 5).inMilliseconds);
 
         expect(game.isGameOver, isTrue);
       });

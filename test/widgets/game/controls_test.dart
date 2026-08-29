@@ -37,11 +37,10 @@ void main() {
     testWidgets('calls callbacks when buttons are tapped', (
       tester,
     ) async {
-      var leftCalled = false;
-      var rightCalled = false;
       var rotateCalled = false;
       var softDropCalled = false;
       var hardDropCalled = false;
+      final heldDirections = <int>[];
 
       await tester.pumpWidget(
         MaterialApp(
@@ -50,11 +49,12 @@ void main() {
           home: Scaffold(
             body: GameControls(
               callbacks: GameInputCallbacks(
-                onMoveLeft: () => leftCalled = true,
-                onMoveRight: () => rightCalled = true,
+                onMoveLeft: _void,
+                onMoveRight: _void,
                 onRotate: () => rotateCalled = true,
                 onSoftDrop: () => softDropCalled = true,
                 onHardDrop: () => hardDropCalled = true,
+                onHoldDirection: heldDirections.add,
               ),
             ),
           ),
@@ -70,11 +70,20 @@ void main() {
       await tester.tap(find.byIcon(Icons.vertical_align_bottom_rounded));
       expect(hardDropCalled, isTrue);
 
+      // Left/right buttons drive DAS/ARR via hold-direction: press starts the
+      // direction, release cancels it. A quick tap still moves once.
       await tester.tap(find.byIcon(Icons.chevron_left_rounded));
-      expect(leftCalled, isTrue);
+      expect(heldDirections, contains(-1));
 
       await tester.tap(find.byIcon(Icons.chevron_right_rounded));
-      expect(rightCalled, isTrue);
+      expect(heldDirections, contains(1));
+
+      // Releasing cancels the held direction.
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byIcon(Icons.chevron_right_rounded)),
+      );
+      await gesture.up();
+      expect(heldDirections.last, 0);
     });
 
     testWidgets('has proper structure with columns and rows', (

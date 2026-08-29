@@ -9,7 +9,7 @@ void _triggerEffect(
   game._effects.removeWhere(
     (e) => e.type == type && (type == EffectType.column ? e.x : e.y) == fixed,
   );
-  final start = DateTime.now().millisecondsSinceEpoch;
+  final start = game._clock;
   for (var i = 0; i < max; i++) {
     game._effects.add(
       _Effect(
@@ -20,22 +20,6 @@ void _triggerEffect(
       ),
     );
   }
-  game.notifyListeners();
-  final generation = game._effectGeneration;
-  for (var i = 1; i <= 5; i++) {
-    Future.delayed(Duration(milliseconds: Game.effectDurationMs * i ~/ 5), () {
-      if (game._disposed || game._effectGeneration != generation) return;
-      if (i == 5) {
-        game._effects.removeWhere(
-          (e) =>
-              e.type == type &&
-              (type == EffectType.column ? e.x : e.y) == fixed &&
-              e.start == start,
-        );
-      }
-      game.notifyListeners();
-    });
-  }
 }
 
 void triggerColumnEffect(Game game, int x) =>
@@ -43,3 +27,12 @@ void triggerColumnEffect(Game game, int x) =>
 
 void triggerRowEffect(Game game, int y) =>
     _triggerEffect(game, fixed: y, type: EffectType.row, max: game.width);
+
+/// Adds a single fading white flash over a cleared row. Ages off the game
+/// clock like the other effects, so it pauses correctly.
+void triggerRowFlashEffect(Game game, int y) {
+  game._effects.removeWhere((e) => e.type == EffectType.rowFlash && e.y == y);
+  game._effects.add(
+    _Effect(x: 0, y: y, type: EffectType.rowFlash, start: game._clock),
+  );
+}

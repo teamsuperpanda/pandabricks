@@ -30,6 +30,7 @@
   "resume": "Resume",
   "next": "Next",
   "timeLeft": "Time Left",
+  "holdPiece": "Hold",
   "gameOver": "Game Over",
   "finalScore": "Final Score",
   "score": "Score",

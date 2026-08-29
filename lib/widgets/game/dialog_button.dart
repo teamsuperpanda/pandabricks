@@ -36,14 +36,19 @@ class DialogButton extends StatelessWidget {
                 mainAxisSize: shrinkWrap ? MainAxisSize.min : MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, color: Colors.white),
+                  Icon(icon, color: Colors.white, size: 20),
                   SizedBox(width: shrinkWrap ? 6 : 8),
-                  Text(
-                    label,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: shrinkWrap || compact ? null : 16,
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: shrinkWrap || compact ? null : 16,
+                        ),
+                      ),
                     ),
                   ),
                 ],

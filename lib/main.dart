@@ -7,6 +7,7 @@ import 'package:pandabricks/l10n/app_localizations.dart';
 import 'package:pandabricks/navigation/app_router.dart';
 import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/providers/locale_provider.dart';
+import 'package:pandabricks/screens/game/flame/panda_game.dart';
 import 'package:pandabricks/services/logging.dart';
 import 'package:pandabricks/theme.dart';
 import 'package:provider/provider.dart';
@@ -72,10 +73,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       unawaited(audio.stopMusic());
+      // Freeze the Flame engine so the game clock never advances in the
+      // background.
+      PandaGame.current?.pauseEngine();
     } else if (state == AppLifecycleState.resumed) {
       if (audio.musicEnabled) {
         unawaited(audio.resumeMusic());
       }
+      PandaGame.current?.resumeEngine();
     }
   }
 

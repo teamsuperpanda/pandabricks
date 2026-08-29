@@ -102,6 +102,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get timeLeft => '남은 시간';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => '게임 종료';
 
   @override

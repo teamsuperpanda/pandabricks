@@ -102,6 +102,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get timeLeft => 'शेष समय';
 
   @override
+  String get holdPiece => 'Hold';
+
+  @override
   String get gameOver => 'खेल खत्म';
 
   @override

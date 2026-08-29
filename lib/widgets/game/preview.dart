@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandabricks/models/game_types.dart' as game_data;
-import 'package:pandabricks/widgets/game/board_painter.dart';
+import 'package:pandabricks/widgets/game/draw_board.dart';
 import 'package:pandabricks/widgets/game/game_palette.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
@@ -94,7 +94,7 @@ class _PreviewPainter extends CustomPainter {
       if (isSpecial) {
         final emoji = kSpecialBlockEmojis[colorIndex] ?? '';
         if (emoji.isNotEmpty) {
-          final tp = BoardPainter.cachedEmojiPainter(
+          final tp = cachedEmojiPainter(
             emoji: emoji,
             sizeFactor: 0.7,
             cellSize: cellSize,
