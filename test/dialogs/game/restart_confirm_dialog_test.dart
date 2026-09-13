@@ -10,7 +10,7 @@ void main() {
     late LocaleProvider localeProvider;
 
     setUp(() {
-      localeProvider =         LocaleProvider(enablePersistence: false);
+      localeProvider = LocaleProvider(enablePersistence: false);
     });
 
     testWidgets('should display restart confirmation content correctly', (
@@ -24,10 +24,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
-              body: RestartConfirmDialog(
-                onConfirm: () {},
-                onCancel: () {},
-              ),
+              body: RestartConfirmDialog(onConfirm: () {}, onCancel: () {}),
             ),
           ),
         ),
@@ -115,9 +112,7 @@ void main() {
       expect(cancelCalled, isFalse);
     });
 
-    testWidgets('should have proper widget hierarchy', (
-      tester,
-    ) async {
+    testWidgets('should have proper widget hierarchy', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -126,10 +121,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
-              body: RestartConfirmDialog(
-                onConfirm: () {},
-                onCancel: () {},
-              ),
+              body: RestartConfirmDialog(onConfirm: () {}, onCancel: () {}),
             ),
           ),
         ),
@@ -156,10 +148,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
-              body: RestartConfirmDialog(
-                onConfirm: () {},
-                onCancel: () {},
-              ),
+              body: RestartConfirmDialog(onConfirm: () {}, onCancel: () {}),
             ),
           ),
         ),
@@ -191,10 +180,7 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
-              body: RestartConfirmDialog(
-                onConfirm: () {},
-                onCancel: () {},
-              ),
+              body: RestartConfirmDialog(onConfirm: () {}, onCancel: () {}),
             ),
           ),
         ),

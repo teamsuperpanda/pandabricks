@@ -4,10 +4,7 @@ import 'package:pandabricks/models/game_input_callbacks.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class GameControls extends StatelessWidget {
-  const GameControls({
-    required this.callbacks,
-    super.key,
-  });
+  const GameControls({required this.callbacks, super.key});
 
   final GameInputCallbacks callbacks;
 

@@ -22,9 +22,7 @@ void main() {
       });
 
       test('copyWith updates every field independently', () {
-        const original = CustomGameConfig(
-          timeLimit: Duration(minutes: 3),
-        );
+        const original = CustomGameConfig(timeLimit: Duration(minutes: 3));
 
         final updated = original.copyWith(
           startingLevel: 5,
@@ -229,10 +227,7 @@ void main() {
 
       test('rejects starting levels outside the supported range in debug', () {
         expect(() => CustomGameConfig(startingLevel: 0), throwsAssertionError);
-        expect(
-          () => CustomGameConfig(startingLevel: 21),
-          throwsAssertionError,
-        );
+        expect(() => CustomGameConfig(startingLevel: 21), throwsAssertionError);
       });
 
       test('rejects board dimensions outside supported ranges in debug', () {
@@ -275,10 +270,7 @@ void main() {
       test('copyWith retains constructor validation in debug', () {
         const config = CustomGameConfig();
 
-        expect(
-          () => config.copyWith(boardHeight: 41),
-          throwsAssertionError,
-        );
+        expect(() => config.copyWith(boardHeight: 41), throwsAssertionError);
       });
     });
   });

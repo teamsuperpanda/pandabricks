@@ -104,18 +104,14 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
               '10',
               config.startingLevel == 10,
               Colors.purple,
-              () => setState(
-                () => config = config.copyWith(startingLevel: 10),
-              ),
+              () => setState(() => config = config.copyWith(startingLevel: 10)),
             ),
             const SizedBox(width: 8),
             _optionChip(
               '15',
               config.startingLevel == 15,
               Colors.purple,
-              () => setState(
-                () => config = config.copyWith(startingLevel: 15),
-              ),
+              () => setState(() => config = config.copyWith(startingLevel: 15)),
             ),
           ],
         ),
@@ -128,9 +124,8 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           min: 0.5,
           max: 2,
           divisions: 6,
-          onChanged: (value) => setState(
-            () => config = config.copyWith(speedMultiplier: value),
-          ),
+          onChanged: (value) =>
+              setState(() => config = config.copyWith(speedMultiplier: value)),
         ),
       ],
     );
@@ -165,9 +160,8 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
                   '$h',
                   config.boardHeight == h,
                   Colors.purple,
-                  () => setState(
-                    () => config = config.copyWith(boardHeight: h),
-                  ),
+                  () =>
+                      setState(() => config = config.copyWith(boardHeight: h)),
                   outerPadding: const EdgeInsetsDirectional.only(end: 8),
                 ),
               )
@@ -197,9 +191,8 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
           min: 0.5,
           max: 3,
           divisions: 10,
-          onChanged: (value) => setState(
-            () => config = config.copyWith(scoreMultiplier: value),
-          ),
+          onChanged: (value) =>
+              setState(() => config = config.copyWith(scoreMultiplier: value)),
         ),
       ],
     );
@@ -234,11 +227,7 @@ class _CustomGameDialogState extends State<CustomGameDialog> {
                     : Colors.white.withValues(alpha: 50 / 255.0),
               ),
             ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: style,
-            ),
+            child: Text(label, textAlign: TextAlign.center, style: style),
           ),
         ),
       ),

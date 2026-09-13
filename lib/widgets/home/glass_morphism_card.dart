@@ -46,9 +46,7 @@ class GlassMorphismCard extends StatelessWidget {
           boxShadow: showShadow
               ? [
                   BoxShadow(
-                    color: primary.withValues(
-                      alpha: 25 / 255.0,
-                    ),
+                    color: primary.withValues(alpha: 25 / 255.0),
                     blurRadius: 10,
                     spreadRadius: 5,
                   ),

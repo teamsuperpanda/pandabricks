@@ -55,11 +55,8 @@ class _GameView extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Selector<Game, (int, int, int)>(
-                            selector: (context, game) => (
-                              game.score,
-                              game.level,
-                              game.linesCleared,
-                            ),
+                            selector: (context, game) =>
+                                (game.score, game.level, game.linesCleared),
                             builder: (context, values, _) => GameHUD(
                               score: values.$1,
                               level: values.$2,
@@ -130,9 +127,7 @@ class _GameHeader extends StatelessWidget {
               selector: (context, game) => game.isPaused,
               builder: (context, isPaused, _) => DialogButton(
                 shrinkWrap: true,
-                icon: isPaused
-                    ? Icons.play_arrow_rounded
-                    : Icons.pause_rounded,
+                icon: isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
                 label: isPaused ? l10n.resume : l10n.pause,
                 onTap: onPause,
               ),
@@ -145,10 +140,7 @@ class _GameHeader extends StatelessWidget {
 }
 
 class _GameBody extends StatelessWidget {
-  const _GameBody({
-    required this.l10n,
-    required this.onRotate,
-  });
+  const _GameBody({required this.l10n, required this.onRotate});
 
   final AppLocalizations l10n;
   final VoidCallback onRotate;
@@ -163,15 +155,9 @@ class _GameBody extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 5,
-                child: _GamePlayfield(onRotate: onRotate),
-              ),
+              Expanded(flex: 5, child: _GamePlayfield(onRotate: onRotate)),
               const SizedBox(width: 12),
-              Expanded(
-                flex: 2,
-                child: _GameSidePanel(l10n: l10n),
-              ),
+              Expanded(flex: 2, child: _GameSidePanel(l10n: l10n)),
             ],
           ),
         ),

@@ -6,11 +6,7 @@ class AnimatedTitle extends StatelessWidget {
   final Animation<double> floatingAnimation;
 
   static final LinearGradient _textGradient = LinearGradient(
-    colors: [
-      Colors.white,
-      Colors.cyan.withValues(alpha: 0.7),
-      Colors.white,
-    ],
+    colors: [Colors.white, Colors.cyan.withValues(alpha: 0.7), Colors.white],
     stops: const [0.0, 0.5, 1.0],
   );
 

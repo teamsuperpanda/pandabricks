@@ -9,11 +9,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: GlassMorphismCard(
-              child: Text(testText),
-            ),
-          ),
+          home: Scaffold(body: GlassMorphismCard(child: Text(testText))),
         ),
       );
 
@@ -23,11 +19,7 @@ void main() {
     testWidgets('uses faux-glass without blur by default', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: GlassMorphismCard(
-              child: Text('Test'),
-            ),
-          ),
+          home: Scaffold(body: GlassMorphismCard(child: Text('Test'))),
         ),
       );
 
@@ -39,10 +31,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: GlassMorphismCard(
-              blur: true,
-              child: Text('Test'),
-            ),
+            body: GlassMorphismCard(blur: true, child: Text('Test')),
           ),
         ),
       );
@@ -50,16 +39,10 @@ void main() {
       expect(find.byType(BackdropFilter), findsOneWidget);
     });
 
-    testWidgets('uses ClipRRect for rounded corners', (
-      tester,
-    ) async {
+    testWidgets('uses ClipRRect for rounded corners', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: GlassMorphismCard(
-              child: Text('Test'),
-            ),
-          ),
+          home: Scaffold(body: GlassMorphismCard(child: Text('Test'))),
         ),
       );
 
@@ -69,11 +52,7 @@ void main() {
     testWidgets('wraps content in Container', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: GlassMorphismCard(
-              child: Text('Test'),
-            ),
-          ),
+          home: Scaffold(body: GlassMorphismCard(child: Text('Test'))),
         ),
       );
 

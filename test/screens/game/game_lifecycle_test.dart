@@ -162,9 +162,7 @@ void main() {
       final customGame = Game(
         audioProvider: MockAudioProvider(),
         gameMode: GameMode.custom,
-        customConfig: const CustomGameConfig(
-          timeLimit: Duration(minutes: 5),
-        ),
+        customConfig: const CustomGameConfig(timeLimit: Duration(minutes: 5)),
       );
 
       expect(customGame.timeRemaining, isNotNull);
@@ -239,11 +237,7 @@ void main() {
     });
 
     test('handles very small board', () {
-      final smallGame = Game(
-        audioProvider: mockAudio,
-        width: 4,
-        height: 10,
-      );
+      final smallGame = Game(audioProvider: mockAudio, width: 4, height: 10);
 
       expect(smallGame.board.length, 10);
       expect(smallGame.board[0].length, 4);
@@ -251,11 +245,7 @@ void main() {
     });
 
     test('handles large board', () {
-      final largeGame = Game(
-        audioProvider: mockAudio,
-        width: 20,
-        height: 40,
-      );
+      final largeGame = Game(audioProvider: mockAudio, width: 20, height: 40);
 
       expect(largeGame.board.length, 40);
       expect(largeGame.board[0].length, 20);
@@ -323,9 +313,7 @@ void main() {
     });
 
     test('classic mode uses standard pieces only', () {
-      final classicGame = Game(
-        audioProvider: mockAudio,
-      );
+      final classicGame = Game(audioProvider: mockAudio);
 
       final standardPieces = {
         FallingBlock.I,

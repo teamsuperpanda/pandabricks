@@ -350,22 +350,12 @@ class Game extends ChangeNotifier {
       for (final offset in offsets) {
         final c = position + offset;
         result.add(
-          CellRender(
-            x: c.x,
-            y: c.y,
-            colorIndex: colorIndex,
-            isGhost: false,
-          ),
+          CellRender(x: c.x, y: c.y, colorIndex: colorIndex, isGhost: false),
         );
       }
       for (final c in ghost) {
         result.add(
-          CellRender(
-            x: c.x,
-            y: c.y,
-            colorIndex: colorIndex,
-            isGhost: true,
-          ),
+          CellRender(x: c.x, y: c.y, colorIndex: colorIndex, isGhost: true),
         );
       }
     }

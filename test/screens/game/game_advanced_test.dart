@@ -200,9 +200,7 @@ void main() {
 
     group('Game Modes', () {
       test('classic mode initializes correctly', () {
-        final classicGame = Game(
-          audioProvider: mockAudio,
-        );
+        final classicGame = Game(audioProvider: mockAudio);
         expect(classicGame.gameMode, GameMode.classic);
         expect(classicGame.timeRemaining, isNull);
       });

@@ -49,10 +49,7 @@ class _AmbientParticlesState extends State<AmbientParticles>
         animation: _controller,
         builder: (context, child) {
           return CustomPaint(
-            painter: _ParticlePainter(
-              _particles,
-              _controller.value,
-            ),
+            painter: _ParticlePainter(_particles, _controller.value),
             size: Size.infinite,
           );
         },

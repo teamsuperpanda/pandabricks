@@ -16,13 +16,11 @@ void main() {
 
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>(
-          create: (_) =>         LocaleProvider(enablePersistence: false),
+          create: (_) => LocaleProvider(enablePersistence: false),
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: AnimatedTitle(floatingAnimation: anim),
-            ),
+            home: Scaffold(body: AnimatedTitle(floatingAnimation: anim)),
           ),
         ),
       );

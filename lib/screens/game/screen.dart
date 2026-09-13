@@ -24,10 +24,7 @@ import 'package:provider/provider.dart';
 part 'game_view.dart';
 
 class GameScreen extends StatefulWidget {
-  const GameScreen({
-    super.key,
-    this.settings = const GameSettings.classic(),
-  });
+  const GameScreen({super.key, this.settings = const GameSettings.classic()});
 
   final GameSettings settings;
 
@@ -173,9 +170,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               inputHandler: _inputHandler,
               inputCallbacks: _inputCallbacks,
               onMainMenu: _dialogMediator.showMainMenuConfirmDialog,
-              onRestart: () => _withMusic(
-                _dialogMediator.showRestartDialog,
-              ),
+              onRestart: () => _withMusic(_dialogMediator.showRestartDialog),
               onPause: () => _withMusic(() {
                 _game.togglePause();
                 if (_game.isPaused) {

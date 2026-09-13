@@ -13,9 +13,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: AnimatedBackground(gradientAnimation: anim),
-          ),
+          home: Scaffold(body: AnimatedBackground(gradientAnimation: anim)),
         ),
       );
 
