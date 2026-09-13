@@ -47,27 +47,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
     _floatingController.repeat(reverse: true);
 
-    _gradientAnimation =
-        Tween<double>(
-          begin: 0,
-          end: 1,
-        ).animate(
-          CurvedAnimation(
-            parent: _gradientController,
-            curve: Curves.easeInOut,
-          ),
-        );
+    _gradientAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _gradientController, curve: Curves.easeInOut),
+    );
 
-    _floatingAnimation =
-        Tween<double>(
-          begin: -8,
-          end: 8,
-        ).animate(
-          CurvedAnimation(
-            parent: _floatingController,
-            curve: Curves.easeInOut,
-          ),
-        );
+    _floatingAnimation = Tween<double>(begin: -8, end: 8).animate(
+      CurvedAnimation(parent: _floatingController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -221,10 +207,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void _showHelp(BuildContext context) {
     unawaited(
-      showDialog(
-        context: context,
-        builder: (context) => const HelpDialog(),
-      ),
+      showDialog(context: context, builder: (context) => const HelpDialog()),
     );
   }
 

@@ -120,9 +120,7 @@ void main() {
       expect(mainMenuCalled, isTrue);
     });
 
-    testWidgets('should format large scores with commas', (
-      tester,
-    ) async {
+    testWidgets('should format large scores with commas', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -147,9 +145,7 @@ void main() {
       expect(find.text('1,234,567'), findsOneWidget);
     });
 
-    testWidgets('should display zero values correctly', (
-      tester,
-    ) async {
+    testWidgets('should display zero values correctly', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,

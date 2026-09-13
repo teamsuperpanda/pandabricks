@@ -47,10 +47,7 @@ class GameDialogWrapper extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ],
-              if (child != null) ...[
-                const SizedBox(height: 20),
-                child!,
-              ],
+              if (child != null) ...[const SizedBox(height: 20), child!],
               if (actions.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 ...actions,

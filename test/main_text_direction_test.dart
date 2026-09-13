@@ -27,10 +27,7 @@ void main() {
   TextDirection appTextDirection(WidgetTester tester) {
     final materialApp = find.byType(MaterialApp);
     final context = tester.element(
-      find.descendant(
-        of: materialApp,
-        matching: find.byType(Navigator),
-      ),
+      find.descendant(of: materialApp, matching: find.byType(Navigator)),
     );
     return Directionality.of(context);
   }

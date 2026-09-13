@@ -4,10 +4,7 @@ import 'package:pandabricks/models/game_input_callbacks.dart';
 import 'package:pandabricks/widgets/home/glass_morphism_card.dart';
 
 class GameControls extends StatelessWidget {
-  const GameControls({
-    required this.callbacks,
-    super.key,
-  });
+  const GameControls({required this.callbacks, super.key});
 
   final GameInputCallbacks callbacks;
 
@@ -89,16 +86,8 @@ class GameControls extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            holdBtn(
-              Icons.chevron_left_rounded,
-              -1,
-              l10n.moveLeft,
-            ),
-            holdBtn(
-              Icons.chevron_right_rounded,
-              1,
-              l10n.moveRight,
-            ),
+            holdBtn(Icons.chevron_left_rounded, -1, l10n.moveLeft),
+            holdBtn(Icons.chevron_right_rounded, 1, l10n.moveRight),
             btn(
               Icons.swap_horiz_rounded,
               callbacks.onHold ?? () {},

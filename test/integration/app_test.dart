@@ -31,9 +31,7 @@ void main() {
       expect(AppLocalizations.localizationsDelegates, isNotEmpty);
     });
 
-    testWidgets('app launches and shows home screen', (
-      tester,
-    ) async {
+    testWidgets('app launches and shows home screen', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [

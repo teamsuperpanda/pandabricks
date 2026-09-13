@@ -18,9 +18,7 @@ void main() {
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: AudioSettings(),
-            ),
+            home: Scaffold(body: AudioSettings()),
           ),
         ),
       );
@@ -43,9 +41,7 @@ void main() {
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: AudioSettings(),
-            ),
+            home: Scaffold(body: AudioSettings()),
           ),
         ),
       );

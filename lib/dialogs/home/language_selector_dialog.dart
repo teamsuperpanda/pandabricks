@@ -69,10 +69,7 @@ class LanguageSelectorDialog extends StatelessWidget {
 }
 
 class _LanguageCard extends StatelessWidget {
-  const _LanguageCard({
-    required this.languageName,
-    required this.onTap,
-  });
+  const _LanguageCard({required this.languageName, required this.onTap});
 
   final String languageName;
   final VoidCallback onTap;

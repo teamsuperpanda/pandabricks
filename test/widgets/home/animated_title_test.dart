@@ -20,9 +20,7 @@ void main() {
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: AnimatedTitle(floatingAnimation: anim),
-            ),
+            home: Scaffold(body: AnimatedTitle(floatingAnimation: anim)),
           ),
         ),
       );

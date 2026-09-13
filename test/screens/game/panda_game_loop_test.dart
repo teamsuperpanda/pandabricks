@@ -17,12 +17,7 @@ void main() {
       mockAudio = MockAudioProvider();
       sim = Game(audioProvider: mockAudio);
       hud = ValueNotifier<HudSnapshot>(
-        const HudSnapshot(
-          score: 0,
-          level: 1,
-          lines: 0,
-          timeRemaining: null,
-        ),
+        const HudSnapshot(score: 0, level: 1, lines: 0, timeRemaining: null),
       );
       game = PandaGame(sim: sim, hud: hud);
       // onLoad is async: it builds the gradient cache used by render.

@@ -33,10 +33,7 @@ void main() {
     await tester.pump();
 
     final nextLabelAlign = tester.widget<Align>(
-      find.ancestor(
-        of: find.text('التالي'),
-        matching: find.byType(Align),
-      ),
+      find.ancestor(of: find.text('التالي'), matching: find.byType(Align)),
     );
 
     expect(nextLabelAlign.alignment, AlignmentDirectional.centerStart);

@@ -155,20 +155,7 @@ class ActivePiece {
   }
 }
 
-enum FallingBlock {
-  I,
-  O,
-  T,
-  S,
-  Z,
-  J,
-  L,
-  PANDA,
-  GHOST,
-  CAT,
-  TORNADO,
-  BOMB,
-}
+enum FallingBlock { I, O, T, S, Z, J, L, PANDA, GHOST, CAT, TORNADO, BOMB }
 
 enum EffectType { column, row, rowFlash }
 
@@ -221,12 +208,7 @@ const Map<Rotation, List<PointInt>> _singleCell = {
 };
 
 const Map<Rotation, List<PointInt>> _squareCell = {
-  Rotation.up: [
-    PointInt(0, 0),
-    PointInt(1, 0),
-    PointInt(0, 1),
-    PointInt(1, 1),
-  ],
+  Rotation.up: [PointInt(0, 0), PointInt(1, 0), PointInt(0, 1), PointInt(1, 1)],
   Rotation.right: [
     PointInt(0, 0),
     PointInt(1, 0),

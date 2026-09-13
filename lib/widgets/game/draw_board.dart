@@ -130,10 +130,7 @@ void drawBoard(
   // drawn in a translated local space. That allows one shader per palette
   // color and a single inner shader to be reused across all cells.
   final fillRect = Rect.fromLTWH(0, 0, cellSize - 3, cellSize - 3);
-  final fillRRect = RRect.fromRectAndRadius(
-    fillRect,
-    const Radius.circular(6),
-  );
+  final fillRRect = RRect.fromRectAndRadius(fillRect, const Radius.circular(6));
   final innerRRect = fillRRect.deflate(2);
   final innerShader = _innerHighlightGradient.createShader(
     innerRRect.outerRect,

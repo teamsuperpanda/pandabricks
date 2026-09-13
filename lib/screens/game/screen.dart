@@ -29,10 +29,7 @@ import 'package:provider/provider.dart';
 part 'game_view.dart';
 
 class GameScreen extends StatefulWidget {
-  const GameScreen({
-    super.key,
-    this.settings = const GameSettings.classic(),
-  });
+  const GameScreen({super.key, this.settings = const GameSettings.classic()});
 
   final GameSettings settings;
 
@@ -99,10 +96,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         width: widget.settings.boardWidth,
         height: widget.settings.boardHeight,
       );
-      _pandaGame = PandaGame(
-        sim: sim,
-        hud: _hud,
-      );
+      _pandaGame = PandaGame(sim: sim, hud: _hud);
       PandaGame.current = _pandaGame;
 
       _initialized = true;

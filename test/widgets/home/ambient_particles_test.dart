@@ -6,11 +6,7 @@ void main() {
   group('AmbientParticles', () {
     testWidgets('renders particles', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: AmbientParticles(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: AmbientParticles())),
       );
 
       expect(find.byType(AmbientParticles), findsOneWidget);

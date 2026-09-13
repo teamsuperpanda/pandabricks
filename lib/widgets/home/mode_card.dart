@@ -65,11 +65,7 @@ class ModeCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Icon(
-                      icon,
-                      color: Colors.grey[200],
-                      size: 30,
-                    ),
+                    child: Icon(icon, color: Colors.grey[200], size: 30),
                   ),
                   const SizedBox(width: 16),
                   Expanded(

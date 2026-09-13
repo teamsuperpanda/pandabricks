@@ -29,11 +29,7 @@ class TimerDisplay extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.timer,
-                  color: timeColor,
-                  size: 32,
-                ),
+                Icon(Icons.timer, color: timeColor, size: 32),
                 const SizedBox(height: 8),
                 Text(
                   timeString,

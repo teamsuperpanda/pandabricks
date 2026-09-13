@@ -13,9 +13,7 @@ void main() {
       localeProvider = LocaleProvider(enablePersistence: false);
     });
 
-    testWidgets('displays score, level, and lines', (
-      tester,
-    ) async {
+    testWidgets('displays score, level, and lines', (tester) async {
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
           value: localeProvider,
@@ -46,9 +44,7 @@ void main() {
             locale: localeProvider.locale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const Scaffold(
-              body: GameHUD(score: 0, level: 1, lines: 0),
-            ),
+            home: const Scaffold(body: GameHUD(score: 0, level: 1, lines: 0)),
           ),
         ),
       );

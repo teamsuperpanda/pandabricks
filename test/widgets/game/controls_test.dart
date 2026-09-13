@@ -34,9 +34,7 @@ void main() {
       expect(find.byIcon(Icons.chevron_right_rounded), findsOneWidget);
     });
 
-    testWidgets('calls callbacks when buttons are tapped', (
-      tester,
-    ) async {
+    testWidgets('calls callbacks when buttons are tapped', (tester) async {
       var rotateCalled = false;
       var softDropCalled = false;
       var hardDropCalled = false;
@@ -86,9 +84,7 @@ void main() {
       expect(heldDirections.last, 0);
     });
 
-    testWidgets('has proper structure with columns and rows', (
-      tester,
-    ) async {
+    testWidgets('has proper structure with columns and rows', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

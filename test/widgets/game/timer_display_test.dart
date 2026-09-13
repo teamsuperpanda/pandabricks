@@ -18,9 +18,7 @@ void main() {
       expect(find.text('05:30'), findsOneWidget);
     });
 
-    testWidgets('displays zero-padded minutes and seconds', (
-      tester,
-    ) async {
+    testWidgets('displays zero-padded minutes and seconds', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -47,9 +45,7 @@ void main() {
     testWidgets('displays zero time correctly', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: TimerDisplay(timeRemaining: Duration.zero),
-          ),
+          home: Scaffold(body: TimerDisplay(timeRemaining: Duration.zero)),
         ),
       );
 

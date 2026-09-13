@@ -56,10 +56,7 @@ class GameHUD extends StatelessWidget {
       label: '$label $value',
       child: Column(
         children: [
-          Text(
-            label,
-            style: _labelStyle,
-          ),
+          Text(label, style: _labelStyle),
           const SizedBox(height: 4),
           Text(
             value,
@@ -68,14 +65,8 @@ class GameHUD extends StatelessWidget {
               color: Colors.white,
               fontWeight: FontWeight.w900,
               shadows: [
-                Shadow(
-                  color: Colors.cyanAccent,
-                  blurRadius: 8,
-                ),
-                Shadow(
-                  color: Colors.blueAccent,
-                  blurRadius: 16,
-                ),
+                Shadow(color: Colors.cyanAccent, blurRadius: 8),
+                Shadow(color: Colors.blueAccent, blurRadius: 16),
               ],
             ),
           ),

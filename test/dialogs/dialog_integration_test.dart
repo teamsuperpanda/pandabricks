@@ -16,9 +16,7 @@ void main() {
       localeProvider = LocaleProvider(enablePersistence: false);
     });
 
-    testWidgets('all dialogs should be non-dismissible', (
-      tester,
-    ) async {
+    testWidgets('all dialogs should be non-dismissible', (tester) async {
       // Test Game Over Dialog
       await tester.pumpWidget(
         ChangeNotifierProvider<LocaleProvider>.value(
@@ -61,9 +59,7 @@ void main() {
       expect(find.text('Game Over'), findsOneWidget);
     });
 
-    testWidgets('all dialogs should use GlassMorphismCard', (
-      tester,
-    ) async {
+    testWidgets('all dialogs should use GlassMorphismCard', (tester) async {
       final dialogs = [
         GameOverDialog(
           score: 1000,
@@ -72,19 +68,9 @@ void main() {
           onRestart: () {},
           onMainMenu: () {},
         ),
-        PauseDialog(
-          onResume: () {},
-          onRestart: () {},
-          onMainMenu: () {},
-        ),
-        RestartConfirmDialog(
-          onConfirm: () {},
-          onCancel: () {},
-        ),
-        MainMenuConfirmDialog(
-          onConfirm: () {},
-          onCancel: () {},
-        ),
+        PauseDialog(onResume: () {}, onRestart: () {}, onMainMenu: () {}),
+        RestartConfirmDialog(onConfirm: () {}, onCancel: () {}),
+        MainMenuConfirmDialog(onConfirm: () {}, onCancel: () {}),
       ];
 
       for (final dialog in dialogs) {
@@ -106,9 +92,7 @@ void main() {
       }
     });
 
-    testWidgets('all dialogs should have consistent styling', (
-      tester,
-    ) async {
+    testWidgets('all dialogs should have consistent styling', (tester) async {
       final dialogs = [
         (
           'Game Over',
@@ -122,25 +106,15 @@ void main() {
         ),
         (
           'Game Paused',
-          PauseDialog(
-            onResume: () {},
-            onRestart: () {},
-            onMainMenu: () {},
-          ),
+          PauseDialog(onResume: () {}, onRestart: () {}, onMainMenu: () {}),
         ),
         (
           'Restart Game?',
-          RestartConfirmDialog(
-            onConfirm: () {},
-            onCancel: () {},
-          ),
+          RestartConfirmDialog(onConfirm: () {}, onCancel: () {}),
         ),
         (
           'Return to Main Menu?',
-          MainMenuConfirmDialog(
-            onConfirm: () {},
-            onCancel: () {},
-          ),
+          MainMenuConfirmDialog(onConfirm: () {}, onCancel: () {}),
         ),
       ];
 
@@ -207,10 +181,7 @@ void main() {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               home: Scaffold(
-                body: RestartConfirmDialog(
-                  onConfirm: () {},
-                  onCancel: () {},
-                ),
+                body: RestartConfirmDialog(onConfirm: () {}, onCancel: () {}),
               ),
             ),
           ),

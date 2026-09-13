@@ -8,9 +8,7 @@ void main() {
     testWidgets('renders with a piece', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: PiecePreview(next: game.FallingBlock.T),
-          ),
+          home: Scaffold(body: PiecePreview(next: game.FallingBlock.T)),
         ),
       );
 
@@ -19,11 +17,7 @@ void main() {
 
     testWidgets('renders with null piece', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: PiecePreview(next: null),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: PiecePreview(next: null))),
       );
 
       expect(find.byType(PiecePreview), findsOneWidget);
@@ -32,9 +26,7 @@ void main() {
     testWidgets('renders special block piece', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: PiecePreview(next: game.FallingBlock.PANDA),
-          ),
+          home: Scaffold(body: PiecePreview(next: game.FallingBlock.PANDA)),
         ),
       );
 

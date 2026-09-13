@@ -10,10 +10,7 @@ class AppRouter {
         initialLocation: '/',
         observers: const <NavigatorObserver>[],
         routes: [
-          GoRoute(
-            path: '/',
-            builder: (context, state) => const HomeScreen(),
-          ),
+          GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
           GoRoute(
             path: '/game',
             builder: (context, state) => GameScreen(

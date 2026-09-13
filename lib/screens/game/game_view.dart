@@ -191,10 +191,7 @@ class _GameBody extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 flex: 2,
-                child: _GameSidePanel(
-                  l10n: l10n,
-                  hud: hud,
-                ),
+                child: _GameSidePanel(l10n: l10n, hud: hud),
               ),
             ],
           ),
@@ -205,10 +202,7 @@ class _GameBody extends StatelessWidget {
 }
 
 class _GameSidePanel extends StatelessWidget {
-  const _GameSidePanel({
-    required this.l10n,
-    required this.hud,
-  });
+  const _GameSidePanel({required this.l10n, required this.hud});
 
   final AppLocalizations l10n;
   final ValueNotifier<HudSnapshot> hud;

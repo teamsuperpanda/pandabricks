@@ -45,25 +45,15 @@ class HudSnapshot {
       other.isPaused == isPaused;
 
   @override
-  int get hashCode => Object.hash(
-    score,
-    level,
-    lines,
-    timeRemaining,
-    next,
-    hold,
-    isPaused,
-  );
+  int get hashCode =>
+      Object.hash(score, level, lines, timeRemaining, next, hold, isPaused);
 }
 
 /// Flame game wrapper around the pure `Game` simulation. Owns the loop
 /// (gravity accumulator, clock, effect pruning) and renders the board through
 /// `drawBoard`. Widget overlays (HUD, dialogs) live outside of Flame.
 class PandaGame extends FlameGame {
-  PandaGame({
-    required this.sim,
-    required this.hud,
-  }) {
+  PandaGame({required this.sim, required this.hud}) {
     _wireSimCallbacks();
   }
 
