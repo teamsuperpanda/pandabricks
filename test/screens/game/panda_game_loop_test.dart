@@ -24,7 +24,7 @@ void main() {
           timeRemaining: null,
         ),
       );
-      game = PandaGame(sim: sim, audioProvider: mockAudio, hud: hud);
+      game = PandaGame(sim: sim, hud: hud);
       // onLoad is async: it builds the gradient cache used by render.
       await game.onLoad();
     });

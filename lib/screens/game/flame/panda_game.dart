@@ -8,7 +8,6 @@ import 'package:flame/game.dart' hide Game;
 import 'package:flame/particles.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
-import 'package:pandabricks/providers/audio_provider.dart';
 import 'package:pandabricks/screens/game/game.dart';
 import 'package:pandabricks/widgets/game/draw_board.dart';
 import 'package:pandabricks/widgets/game/game_palette.dart';
@@ -63,7 +62,6 @@ class HudSnapshot {
 class PandaGame extends FlameGame {
   PandaGame({
     required this.sim,
-    required this.audioProvider,
     required this.hud,
   }) {
     _wireSimCallbacks();
@@ -83,7 +81,6 @@ class PandaGame extends FlameGame {
   static PandaGame? current;
 
   final Game sim;
-  final AudioProvider audioProvider;
   final ValueNotifier<HudSnapshot> hud;
 
   /// Delay before a held direction starts auto-repeating (DAS).

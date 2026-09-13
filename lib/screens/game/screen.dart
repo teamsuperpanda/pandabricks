@@ -44,11 +44,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late final AnimationController _bgController;
   late final Animation<double> _bgAnim;
   late final ValueNotifier<HudSnapshot> _hud;
-  late PandaGame _pandaGame;
-  late GameInputCallbacks _inputCallbacks;
-  late GameInputHandler _inputHandler;
+  late final PandaGame _pandaGame;
+  late final GameInputCallbacks _inputCallbacks;
+  late final GameInputHandler _inputHandler;
 
-  late AudioProvider _audioProvider;
+  late final AudioProvider _audioProvider;
   bool _musicStarted = false;
   bool _initialized = false;
 
@@ -101,7 +101,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       );
       _pandaGame = PandaGame(
         sim: sim,
-        audioProvider: _audioProvider,
         hud: _hud,
       );
       PandaGame.current = _pandaGame;

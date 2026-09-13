@@ -69,7 +69,7 @@ class _Particle {
     r = rand.nextDouble() * 2.5 + 1.5;
     speed = rand.nextDouble() * 0.2 + 0.05;
     phase = rand.nextDouble() * 2 * pi;
-    opacity = rand.nextDouble() * 0.3 + 0.2;
+    final opacity = rand.nextDouble() * 0.3 + 0.2;
     final baseColor = [
       Colors.cyanAccent,
       Colors.white,
@@ -83,7 +83,6 @@ class _Particle {
   late double r;
   late double speed;
   late double phase;
-  late double opacity;
   late Color color;
 }
 

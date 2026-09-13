@@ -10,7 +10,7 @@ void main() {
     late LocaleProvider localeProvider;
 
     setUp(() {
-      localeProvider =         LocaleProvider(enablePersistence: false);
+      localeProvider = LocaleProvider(enablePersistence: false);
     });
 
     testWidgets('should display game over information correctly', (

@@ -25,11 +25,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  late AnimationController _gradientController;
-  late AnimationController _floatingController;
-  late Animation<double> _gradientAnimation;
-  late Animation<double> _floatingAnimation;
-  AudioProvider? _audioProvider;
+  late final AnimationController _gradientController;
+  late final AnimationController _floatingController;
+  late final Animation<double> _gradientAnimation;
+  late final Animation<double> _floatingAnimation;
   bool _audioInitialized = false;
 
   @override
@@ -75,13 +74,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_audioInitialized) {
-      _audioProvider = context.read<AudioProvider>();
-      if (_audioProvider!.musicEnabled) {
-        unawaited(_audioProvider!.playMenuMusic());
+      final audioProvider = context.read<AudioProvider>();
+      if (audioProvider.musicEnabled) {
+        unawaited(audioProvider.playMenuMusic());
       }
       _audioInitialized = true;
     }
-
   }
 
   @override
@@ -213,24 +211,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _showLanguageSelector(BuildContext context) {
-    unawaited(showDialog(
-      context: context,
-      builder: (context) => const LanguageSelectorDialog(),
-    ));
+    unawaited(
+      showDialog(
+        context: context,
+        builder: (context) => const LanguageSelectorDialog(),
+      ),
+    );
   }
 
   void _showHelp(BuildContext context) {
-    unawaited(showDialog(
-      context: context,
-      builder: (context) => const HelpDialog(),
-    ));
+    unawaited(
+      showDialog(
+        context: context,
+        builder: (context) => const HelpDialog(),
+      ),
+    );
   }
 
   void _showCustomGameDialog(BuildContext context) {
-    unawaited(showDialog(
-      context: context,
-      builder: (context) => const CustomGameDialog(),
-    ));
+    unawaited(
+      showDialog(
+        context: context,
+        builder: (context) => const CustomGameDialog(),
+      ),
+    );
   }
 }
 
