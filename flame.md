@@ -151,11 +151,9 @@ class HudSnapshot {
 class PandaGame extends FlameGame {
   PandaGame({
     required this.sim,
-    required this.audioProvider,
     required this.hud,
   });
-  final Game sim;
-  final AudioProvider audioProvider; // already constructor-injected into sim
+  final Game sim; // owns the injected AudioProvider
   final ValueNotifier<HudSnapshot> hud;
 
   double _dropAccumulator = 0;
